@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-from datetime import datetime
-
-db = DAL('postgres://beardcode:qazWSX11@localhost/fayol')
-
-now = datetime.now()
 
 db.define_table('language',
     Field('name', 'string', required=True, notnull=True),
@@ -15,7 +10,7 @@ db.define_table('language',
     Field('sort_order', 'integer', default=1),
     Field('status', 'boolean', default=True),
     Field('date_added', 'datetime'),
-    Field('date_modified', 'datetime', default=now),
+    Field('date_modified', 'datetime', default=request.now),
     migrate=False
 )
 

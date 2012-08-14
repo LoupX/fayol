@@ -41,5 +41,11 @@ ehthumbs.db
 Thumbs.db
 
 # Editor stuff #
-###############
+################
 .idea
+
+# Framework stuff #
+###################
+/sessions
+/errors
+/cache
