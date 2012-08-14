@@ -1,5 +1,9 @@
-{{extend 'layout.html'}}
+{{extend 'login.html'}}
 
-<h1>Welcome to my new app</h1>
-
+{{block my_form}}
 {{=form}}
+{{end}}
+
+{{block my_footer}}
+<span>{{=T('Copyright')}} &#169; {{=request.now.year}} BeardCode. Derechos reservados.</span>
+{{end}}
