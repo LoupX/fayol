@@ -2,25 +2,9 @@
 
 /***** Screen 960px *****/
 
-<<<<<<< HEAD
 body 									{ margin:0; padding:0; background: #FFF url("../images/bg2.png"); font: 12px 'Maven Pro', Helvetica; color:#333; -webkit-font-smoothing:antialiased; -webkit-text-size-adjust:none; background-repeat: repeat-x; }
-=======
-body 									{ margin:0; padding:0; background: #FFF url("../images/bg2.png"); font: 12px 'Maven Pro', Helvetica; color:#333; -webkit-font-smoothing:antialiased; -webkit-text-size-adjust:none; background-repeat: repeat; }
->>>>>>> cambios en el css
 
 .titulo h1								{ font-size:36px; }
-
-
-.vertical {     position:absolute;  
-    width:700px;  
-    height:500px;  
-    top:50%;  
-    left:50%;  
-    margin-top:-250px;  
-    margin-left:-450px;   }
-
-.footer {  }
-
 
 #inputs input:-webkit-autofill {
 	background: #f1f1f1 url(../images/login-sprite.png) no-repeat !important;
