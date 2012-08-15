@@ -1,10 +1,7 @@
-<<<<<<< HEAD
+
 # Compiled source #
 ################
-=======
-compiled source #
-###################
->>>>>>> fixed last commit
+
 *.com
 *.class
 *.dll
