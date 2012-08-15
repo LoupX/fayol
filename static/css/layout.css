@@ -2,7 +2,7 @@
 
 /***** Screen 960px *****/
 
-body 									{ margin:0; padding:0; background: #FFF url("../images/bg2.png"); font: 12px 'Maven Pro', Helvetica; color:#333; -webkit-font-smoothing:antialiased; -webkit-text-size-adjust:none; background-repeat: repeat-x; }
+body 									{ margin:0; padding:0; background: #FFF url("../images/bg2.png"); font: 12px 'Maven Pro', Helvetica; color:#333; -webkit-font-smoothing:antialiased; -webkit-text-size-adjust:none; background-repeat: repeat; }
 
 .titulo h1								{ font-size:36px; }
 
