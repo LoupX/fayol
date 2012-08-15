@@ -4,8 +4,13 @@
 def index():
 	form = FORM(
 				FIELDSET(
+<<<<<<< HEAD
 						INPUT(_id="usr", _name='usr', _class='input_usr', _type='text', _placeholder='Usuario', _required='required'),
 						INPUT(_id="pwd", _name='pwd',_class='input_pwd', _type='password', _placeholder='Contraseña', _required='required')
+=======
+						INPUT(_id="usr", _class='input_usr', _type='text', _placeholder='Usuario', _required='required'),
+						INPUT(_id="pwd", _class='input_pwd', _type='password', _placeholder='Contraseña', _required='required')
+>>>>>>> design
 				,_id='inputs'),
 				FIELDSET(
 						INPUT(_type='submit', _id='submit', _value='Entrar')
