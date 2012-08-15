@@ -30,12 +30,18 @@ def login():
     if valid:
 
         #If the login fields are not complete, the request is dumped
-        if not request.vars.usr or not request.vars.pwd:
+        if not request.vars.usr or not request.vars.pwd or not request.vars.tkn:
             attempts(1)
             return 0
 
         usr = request.vars.usr
         pwd = request.vars.pwd
+        tkn = request.vars.tkn
+
+        #Checks the form token.
+        if not tkn == session.tkn:
+            attempts(1)
+            return 0
 
         #Checks the password length.
         if len(pwd) < 6:
