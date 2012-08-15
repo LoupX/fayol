@@ -16,7 +16,7 @@ form :focus {
 }
 
 	
-#inputs input {  /*formato para los inputs*/
+.input_usr, .input_pwd {  /*formato para los inputs*/
     font-size: 14px;
     color: #4A8BF4;
 	background: #f1f1f1 url(../images/login-sprite.png) no-repeat;
@@ -34,7 +34,7 @@ form :focus {
 	-webkit-box-shadow: 0 1px 1px #ccc inset, 0 1px 0 #fff;	
 }
 
-#inputs input:focus { /*formato cuando el input esta seleccionado*/
+.input_usr:focus, .input_usr:focus  { /*formato cuando el input esta seleccionado*/
 	background-color: #fff;
 	border: 1px solid #4A8BF4;
 	outline: none;
@@ -45,19 +45,27 @@ form :focus {
 	color: #4A8BF4;
 }
 
-.border_error {
-	background-color: #fff;
-	border: 1px solid #ab2c2c;
-	outline: none;
-	box-shadow: 0 0 0 1px #ab2c2c inset;
-	-o-box-shadow: 0 0 0 1px #ab2c2c inset;
-	-moz-box-shadow: 0 0 0 1px #ab2c2c inset;
-    -webkit-box-shadow: 0 0 0 1px #ab2c2c inset;    
+.usr_error, .pwd_error {
+	font-size: 14px;
+    color: #4A8BF4;
+	background: #f1f1f1 url(../images/login-sprite.png) no-repeat;
+	padding: 15px 15px 15px 50px;
+	margin: 0 0 10px 0;
+	width: 353px;
+	border-radius: 5px;
+	-o-border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border: 1px solid #e84141;
+	box-shadow: 0 0 0 1px #e84141 inset;
+	-o-box-shadow: 0 0 0 1px #e84141 inset;
+	-moz-box-shadow: 0 0 0 1px #e84141 inset;
+	-webkit-box-shadow: 0 0 0 1px #e84141 inset;    
 }
 
 /*mostrar el bg segun posicion*/
-#inputs input[type="text"] 									{ background-position: 15px -2px !important;  }
-#inputs input[type="password"] 									{ background-position: 15px -52px !important; }
+.input_usr, .usr_error 									{ background-position: 15px -2px !important;  }
+.input_pwd, .pwd_error 									{ background-position: 15px -52px !important; }
 
 #actions 								{ margin: 25px 0 0 0; }
 

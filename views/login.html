@@ -39,7 +39,7 @@
 		        {{end}}
 	        	<br>
 	        	<span style="color:#999999; font-size:12px;">¿Se te olvidó la contraseña?.
-	        		<a href="#">Sigue los siguientes pasos lara.</a></span><br><br>
+	        		<a href="#">Sigue los siguientes pasos.</a></span><br><br>
 	        		<span id="err"></span>
 	   		</div>
 	    </div>
@@ -50,14 +50,6 @@
 			</div>
 	    </div>    
 	</div>
-
-
-
-	<!-- <div class="row" style="height:200px;">
-		<div class="grid_12 text-big text-center titulo" style="margin-top:60px;">
-	    	<h3>Inicie sesión para administrar el sitio</h3>
-	    </div>
-	 </div> -->
 	 
 	 <div class="row" style="margin:auto auto;">
 		<div class="grid_12 text-center pie">
@@ -67,135 +59,29 @@
 	    </div>
 	 </div>
 
-	
-    <script type="text/javascript" src="{{=URL('static','js/utf8.js')}}"></script>
-    <script type="text/javascript" src="{{=URL('static','js/sh.js')}}"></script>		
+	<script type="text/javascript" src="{{=URL('static','js/message.js')}}"></script>
+	<script type="text/javascript" src="{{=URL('static','js/validate.js')}}"></script>	
 	<script>
-		jQuery('#inputs input').first().focus() 		//focus al primer input
-		var h = (jQuery(document).height()/2)-100;		//coordenadas de la notificacion
-		var w = (jQuery(document).width()/2)-150;
-		jQuery('#mensaje').css({'margin-left': w, 'margin-top': h});
-
-		//sdfsdfgsdfgsdfg
 		jQuery('#submit').live('click', function(e) {
 			e.preventDefault();
-
-			
 			var usr = jQuery('#usr'),
 				pwd = jQuery('#pwd'),
 				tkn = jQuery('div.hidden input').val(),
-				b_u = false,
-				b_p = false;
+				bol = null;
+			bol =  validate(usr, pwd, tkn); 
+			console.log(bol);
+		});
 
-
-			if ( usr.val() == "" ) 
-			{
-				//usr.css({border: '2px solid #e84141'});
-				usr
-					.attr('placeholder','No puedes dejar vacio este campo')
-					.css({
-						border: '1px solid #e84141',
-						'box-shadow': '0 0 0 1px #e84141 inset',
-						'-o-box-shadow': '0 0 0 1px #e84141 inset',
-						'-moz-box-shadow': '0 0 0 1px #e84141 inset',
-						'-webkit-box-shadow': '0 0 0 1px #e84141 inset',
-					});
-				b_u = false;
-			} 
-			else 
-			{
-				usr
-					.attr('placeholder','Usuario')
-					.css({
-						border: '1px solid #ccc',
-						'box-shadow': '0 1px 1px #ccc inset, 0 1px 0 #fff',
-						'-o-box-shadow': '0 1px 1px #ccc inset, 0 1px 0 #fff',
-						'-moz-box-shadow': '0 1px 1px #ccc inset, 0 1px 0 #fff',
-						'-webkit-box-shadow': '0 1px 1px #ccc inset, 0 1px 0 #fff',
-					});
-
-				b_u = true;
-				usr = sha1( utf8_encode( usr.val() ) ) 
-			}
-
-			if ( pwd.val() == "" ) 
-			{
-				pwd
-					.attr('placeholder','No puedes dejar vacio este campo')
-					.css({
-						border: '1px solid #e84141',
-						'box-shadow': '0 0 0 1px #e84141 inset',
-						'-o-box-shadow': '0 0 0 1px #e84141 inset',
-						'-moz-box-shadow': '0 0 0 1px #e84141 inset',
-						'-webkit-box-shadow': '0 0 0 1px #e84141 inset',
-					});
-				b_p = false;
-			} 
-			else 
-			{ 
-				pwd
-					.attr('placeholder','Contraseña')
-					.css({
-						border: '1px solid #ccc',
-						'box-shadow': '0 1px 1px #ccc inset, 0 1px 0 #fff',
-						'-o-box-shadow': '0 1px 1px #ccc inset, 0 1px 0 #fff',
-						'-moz-box-shadow': '0 1px 1px #ccc inset, 0 1px 0 #fff',
-						'-webkit-box-shadow': '0 1px 1px #ccc inset, 0 1px 0 #fff',
-					});
-
-				pwd = sha1( utf8_encode( pwd.val() ) )
-				b_p = true; 
-			}
-
-			if( b_u  && b_p ) 
-			{
-				jQuery.ajax({
-					type: 	'POST',
-					url: 	'{{=URL('data')}}',
-					data: 	{ usr: usr, pwd: pwd, tkn: tkn },
-		          	success: function(data) {
-			            if(data == 1) 
-			            {
-			            	jQuery('#fondo').fadeIn("fast");
-							jQuery("#mensaje")
-								.stop(true)
-								.effect("puff", { mode: 'show', percent: 50 }, 200)
-								.effect("bounce", { mode: 'show', distance: 25, times: 6, direction: 'down'}, 200);
-								//.effect("puff", { mode: 'show', percent: 50 }, 300);
-			            }
-		          	}
-		        });
-				//console.log('usr: '+usr+' pwd: '+pwd+' tkn: '+tkn);
-			}
-
-			
-
-			//ajax('{{=URL('data')}}', [usr, pwd, tkn], 'actions');
-
-			/*
-			*/
-		});  
-		
-		/******************************/		
-		
-		// Codigo para las notificaciones
-		
-		
-		jQuery('a').click( function() {	
-			jQuery('#fondo').fadeIn("fast");
-			jQuery("#mensaje")
-				.stop(true)
-				.effect("puff", { mode: 'show', percent: 50 }, 200)
-				.effect("bounce", { mode: 'show', distance: 25, times: 6, direction: 'down'}, 200);
-				//.effect("puff", { mode: 'show', percent: 50 }, 300);
+		jQuery('a').click( function() {
+			var h = (jQuery(document).height()/2)-100,
+				w = (jQuery(document).width()/2)-150;
+				//console.log(h+' '+w);
+			message_show(h,w);	
 		});
 		
 		jQuery('#btn').click(function(){
-				jQuery('#fondo').fadeOut('fast');
-				jQuery("#mensaje").slideUp( function() {
-				});
+			message_hide();
 		});
-		/*************************************************/
 	</script>
 </body>
 </html>
