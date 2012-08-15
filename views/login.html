@@ -151,7 +151,7 @@
 			{
 				jQuery.ajax({
 					type: 	'POST',
-					url: 	'{{=URL('data')}}',
+					url: 	'{{=URL('user','login')}}',
 					data: 	{ usr: usr, pwd: pwd, tkn: tkn },
 		          	success: function(data) {
 			            if(data == 1) 
