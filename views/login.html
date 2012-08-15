@@ -3,6 +3,9 @@
 <head>
 	<meta charset="utf-8" />
 	<title>Administración de Fayol</title>
+	<!-- fav -->
+	<link rel="shortcut icon" href="{{=URL('static','favicon.ico')}}" type="image/x-icon">
+  	<link rel="apple-touch-icon" href="{{=URL('static','favicon.png')}}">
 	{{include 'web2py_ajax.html'}}
 	<!--[if lt IE 9]>
 		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -68,8 +71,14 @@
 				pwd = jQuery('#pwd'),
 				tkn = jQuery('div.hidden input').val(),
 				bol = null;
-			bol =  validate(usr, pwd, tkn); 
-			console.log(bol);
+				
+			bol = validate(usr, pwd, tkn);
+
+			if (bol) 
+			{
+				ajax('{{=URL('data')}}', ['usr','pwd','_formkey'],'err');
+			}
+			
 		});
 
 		jQuery('a').click( function() {
