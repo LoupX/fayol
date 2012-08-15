@@ -39,7 +39,7 @@
 		        {{end}}
 	        	<br>
 	        	<span style="color:#999999; font-size:12px;">¿Se te olvidó la contraseña?.
-	        		<a href="#">Sigue los siguientes pasos lara.</a></span><br><br>
+	        		<a href="#">Sigue los siguientes pasos.</a></span><br><br>
 	        		<span id="err"></span>
 	   		</div>
 	    </div>
@@ -50,14 +50,6 @@
 			</div>
 	    </div>    
 	</div>
-
-
-
-	<!-- <div class="row" style="height:200px;">
-		<div class="grid_12 text-big text-center titulo" style="margin-top:60px;">
-	    	<h3>Inicie sesión para administrar el sitio</h3>
-	    </div>
-	 </div> -->
 	 
 	 <div class="row" style="margin:auto auto;">
 		<div class="grid_12 text-center pie">
@@ -67,23 +59,15 @@
 	    </div>
 	 </div>
 
-	
-    <script type="text/javascript" src="{{=URL('static','js/utf8.js')}}"></script>
-    <script type="text/javascript" src="{{=URL('static','js/sh.js')}}"></script>		
+	<script type="text/javascript" src="{{=URL('static','js/message.js')}}"></script>
+	<script type="text/javascript" src="{{=URL('static','js/validate.js')}}"></script>	
 	<script>
-		jQuery('#inputs input').first().focus() 		//focus al primer input
-		var h = (jQuery(document).height()/2)-100;		//coordenadas de la notificacion
-		var w = (jQuery(document).width()/2)-150;
-		jQuery('#mensaje').css({'margin-left': w, 'margin-top': h});
-
-		//sdfsdfgsdfgsdfg
 		jQuery('#submit').live('click', function(e) {
 			e.preventDefault();
-
-			
 			var usr = jQuery('#usr'),
 				pwd = jQuery('#pwd'),
 				tkn = jQuery('div.hidden input').val(),
+<<<<<<< HEAD
 				b_u = false,
 				b_p = false;
 
@@ -171,31 +155,23 @@
 			
 
 			//ajax('{{=URL('data')}}', [usr, pwd, tkn], 'actions');
+=======
+				bol = null;
+			bol =  validate(usr, pwd, tkn); 
+			console.log(bol);
+		});
+>>>>>>> functions for notification and validate.
 
-			/*
-			*/
-		});  
-		
-		/******************************/		
-		
-		// Codigo para las notificaciones
-		
-		
-		jQuery('a').click( function() {	
-			jQuery('#fondo').fadeIn("fast");
-			jQuery("#mensaje")
-				.stop(true)
-				.effect("puff", { mode: 'show', percent: 50 }, 200)
-				.effect("bounce", { mode: 'show', distance: 25, times: 6, direction: 'down'}, 200);
-				//.effect("puff", { mode: 'show', percent: 50 }, 300);
+		jQuery('a').click( function() {
+			var h = (jQuery(document).height()/2)-100,
+				w = (jQuery(document).width()/2)-150;
+				//console.log(h+' '+w);
+			message_show(h,w);	
 		});
 		
 		jQuery('#btn').click(function(){
-				jQuery('#fondo').fadeOut('fast');
-				jQuery("#mensaje").slideUp( function() {
-				});
+			message_hide();
 		});
-		/*************************************************/
 	</script>
 </body>
 </html>
