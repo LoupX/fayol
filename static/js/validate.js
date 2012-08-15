@@ -3,7 +3,8 @@ function validate(usr, pwd, tkn) {
 		pwd = pwd, //jQuery('#pwd'),
 		tkn = tkn, //jQuery('div.hidden input').val(),
 		b_u = false,
-		b_p = false;
+		b_p = false,
+		bol = null;
 
 	if ( usr.val() == "" ) 
 	{
@@ -30,15 +31,18 @@ function validate(usr, pwd, tkn) {
 			.attr('placeholder','No puedes dejar vacio este campo')
 			.removeClass('input_usr')
 			.addClass('usr_error');
-			b_u = false;
+			b_p = false;
 	} 
 	else 
 		{
 		pwd
-			.attr('placeholder','Usuario')
+			.attr('placeholder','Contraseña')
 			.removeClass('usr_error')
 			.addClass('input_usr');
-		b_u = true;
-	}		
+		b_p = true;
+	}
 
+	//console.log(b_u+''+b_p);
+	if( b_u  && b_p ) { bol = true; } else { bol = false; }		
+	return bol
 }
