@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 # Compiled source #
 ################
+=======
+compiled source #
+###################
+>>>>>>> fixed last commit
 *.com
 *.class
 *.dll
@@ -49,7 +54,4 @@ Thumbs.db
 sessions
 errors
 cache
-<<<<<<< HEAD
-=======
 
->>>>>>> functions for notification and validate.

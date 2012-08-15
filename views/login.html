@@ -70,95 +70,6 @@
 			var usr = jQuery('#usr'),
 				pwd = jQuery('#pwd'),
 				tkn = jQuery('div.hidden input').val(),
-<<<<<<< HEAD
-				b_u = false,
-				b_p = false;
-
-
-			if ( usr.val() == "" ) 
-			{
-				//usr.css({border: '2px solid #e84141'});
-				usr
-					.attr('placeholder','No puedes dejar vacio este campo')
-					.css({
-						border: '1px solid #e84141',
-						'box-shadow': '0 0 0 1px #e84141 inset',
-						'-o-box-shadow': '0 0 0 1px #e84141 inset',
-						'-moz-box-shadow': '0 0 0 1px #e84141 inset',
-						'-webkit-box-shadow': '0 0 0 1px #e84141 inset',
-					});
-				b_u = false;
-			} 
-			else 
-			{
-				usr
-					.attr('placeholder','Usuario')
-					.css({
-						border: '1px solid #ccc',
-						'box-shadow': '0 1px 1px #ccc inset, 0 1px 0 #fff',
-						'-o-box-shadow': '0 1px 1px #ccc inset, 0 1px 0 #fff',
-						'-moz-box-shadow': '0 1px 1px #ccc inset, 0 1px 0 #fff',
-						'-webkit-box-shadow': '0 1px 1px #ccc inset, 0 1px 0 #fff',
-					});
-
-				b_u = true;
-				usr = sha1( utf8_encode( usr.val() ) ) 
-			}
-
-			if ( pwd.val() == "" ) 
-			{
-				pwd
-					.attr('placeholder','No puedes dejar vacio este campo')
-					.css({
-						border: '1px solid #e84141',
-						'box-shadow': '0 0 0 1px #e84141 inset',
-						'-o-box-shadow': '0 0 0 1px #e84141 inset',
-						'-moz-box-shadow': '0 0 0 1px #e84141 inset',
-						'-webkit-box-shadow': '0 0 0 1px #e84141 inset',
-					});
-				b_p = false;
-			} 
-			else 
-			{ 
-				pwd
-					.attr('placeholder','Contraseña')
-					.css({
-						border: '1px solid #ccc',
-						'box-shadow': '0 1px 1px #ccc inset, 0 1px 0 #fff',
-						'-o-box-shadow': '0 1px 1px #ccc inset, 0 1px 0 #fff',
-						'-moz-box-shadow': '0 1px 1px #ccc inset, 0 1px 0 #fff',
-						'-webkit-box-shadow': '0 1px 1px #ccc inset, 0 1px 0 #fff',
-					});
-
-				pwd = sha1( utf8_encode( pwd.val() ) )
-				b_p = true; 
-			}
-
-			if( b_u  && b_p ) 
-			{
-				jQuery.ajax({
-					type: 	'POST',
-					url: 	'{{=URL('user','login')}}',
-					data: 	{ usr: usr, pwd: pwd, tkn: tkn },
-		          	success: function(data) {
-			            if(data == 1) 
-			            {
-			            	jQuery('#fondo').fadeIn("fast");
-							jQuery("#mensaje")
-								.stop(true)
-								.effect("puff", { mode: 'show', percent: 50 }, 200)
-								.effect("bounce", { mode: 'show', distance: 25, times: 6, direction: 'down'}, 200);
-								//.effect("puff", { mode: 'show', percent: 50 }, 300);
-			            }
-		          	}
-		        });
-				//console.log('usr: '+usr+' pwd: '+pwd+' tkn: '+tkn);
-			}
-
-			
-
-			//ajax('{{=URL('data')}}', [usr, pwd, tkn], 'actions');
-=======
 				bol = null;
 				
 			bol = validate(usr, pwd, tkn);
@@ -169,7 +80,6 @@
 			}
 			
 		});
->>>>>>> functions for notification and validate.
 
 		jQuery('a').click( function() {
 			var h = (jQuery(document).height()/2)-100,
