@@ -45,7 +45,7 @@ form :focus {
 	-webkit-box-shadow: 0 1px 1px #ccc inset, 0 1px 0 #fff;	
 }
 
-.input_usr:focus, .input_usr:focus  { /*formato cuando el input esta seleccionado*/
+.input_usr:focus, .input_pwd:focus  { /*formato cuando el input esta seleccionado*/
 	background-color: #fff;
 	border: 1px solid #4A8BF4;
 	outline: none;
