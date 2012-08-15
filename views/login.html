@@ -71,7 +71,6 @@
 				pwd = jQuery('#pwd'),
 				tkn = jQuery('div.hidden input').val(),
 				bol = null;
-<<<<<<< HEAD
 				
 			bol = validate(usr, pwd, tkn);
 
@@ -80,10 +79,6 @@
 				ajax('{{=URL('data')}}', ['usr','pwd','_formkey'],'err');
 			}
 			
-=======
-			bol =  validate(usr, pwd, tkn); 
-			console.log(bol);
->>>>>>> design
 		});
 
 		jQuery('a').click( function() {
