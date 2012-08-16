@@ -1,9 +1,3 @@
-/* 
-* Amazium V1.0.0
-* Copyright 2011, Mike Ballan
-* www.amazium.co.uk
-*/
-
 
 /***** Standard 960px *****/
 	
@@ -25,21 +19,13 @@
 
 	@media only screen and (min-width: 768px) and (max-width: 959px) {
 
-	.error-404								{ font-size:135px; line-height:89px; color: #232323; }
-	.error									{ font-size:178px; line-height:150px; color:#0072a6; }
-	.error-link								{ font-size:26px; }
-	body									{ text-align: center; }
-	
+
 	}
 	
 /***** iPhone (portrait 300px) *****/
 
 	@media only screen and (max-width: 767px) {
 
-	.error-404								{ font-size:135px; line-height:89px; color: #232323; }
-	.error									{ font-size:178px; line-height:150px; color:#0072a6; }
-	.error-link								{ font-size:26px; }
-	.row									{ margin-left: -20px; }
 
 	}
 	
@@ -47,9 +33,7 @@
 
 	@media only screen and (min-width: 480px) and (max-width: 767px) {
 	
-	.error-404								{ font-size:135px; line-height:89px; color: #232323; }
-	.error									{ font-size:178px; line-height:150px; color:#0072a6; }
-	.error-link								{ font-size:26px; }
+
 	
 
 	}
