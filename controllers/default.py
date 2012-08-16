@@ -21,13 +21,11 @@ def index():
 
     return dict(form=form)
 
-<<<<<<< HEAD
 def error404():
 
 	return dict()
-=======
+
 def ajax_token():
     tkn = web2py_uuid()
     session.tkn = tkn
     return tkn
->>>>>>> Token validation for login.
