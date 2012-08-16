@@ -6,4 +6,5 @@ DB_PASS = 'qazWSX11'
 DB_PORT = 5432
 
 #Site constants
+HOST = 'web2py.glados'
 
