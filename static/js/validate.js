@@ -30,14 +30,14 @@ function validate(usr, pwd, tkn) {
 		pwd
 			.attr('placeholder','No puedes dejar vacio este campo')
 			.removeClass('input_pwd')
-			.addClass('usr_error');
+			.addClass('pwd_error');
 			b_p = false;
 	} 
 	else 
 		{
 		pwd
 			.attr('placeholder','Contraseña')
-			.removeClass('usr_error')
+			.removeClass('pwd_error')
 			.addClass('input_pwd');
 		b_p = true;
 	}
