@@ -4,8 +4,7 @@ from gluon.utils import web2py_uuid
 
 def index():
 
-    tkn = web2py_uuid()
-    session.tkn = tkn
+    tkn = ajax_token()
 
     form = FORM(
         FIELDSET(
@@ -21,3 +20,8 @@ def index():
     )
 
     return dict(form=form)
+
+def ajax_token():
+    tkn = web2py_uuid()
+    session.tkn = tkn
+    return tkn
