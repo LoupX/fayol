@@ -29,16 +29,16 @@ function validate(usr, pwd, tkn) {
 		//usr.css({border: '2px solid #e84141'});
 		pwd
 			.attr('placeholder','No puedes dejar vacio este campo')
-			.removeClass('input_usr')
-			.addClass('usr_error');
+			.removeClass('input_pwd')
+			.addClass('pwd_error');
 			b_p = false;
 	} 
 	else 
 		{
 		pwd
 			.attr('placeholder','Contraseña')
-			.removeClass('usr_error')
-			.addClass('input_usr');
+			.removeClass('pwd_error')
+			.addClass('input_pwd');
 		b_p = true;
 	}
 
