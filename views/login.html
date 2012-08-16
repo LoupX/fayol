@@ -25,12 +25,7 @@
 </head>
 <body>
 	<!-- Notificaciones del sistema -->
-	<div id="fondo">	
-    	<div id="mensaje" class="grid_4 text-center">
-        	Error<br>Contrasena o usuario incorrecto.<br><br>
-        	<input id="btn" type="button" style="width:90%;" value="Aceptar">
-    	</div>
-    </div>
+
 
     <!-- Sistema -->
     <div class="vertical">
@@ -69,6 +64,7 @@
 	<script type="text/javascript" src="{{=URL('static','js/message.js')}}"></script>
 	<script type="text/javascript" src="{{=URL('static','js/validate.js')}}"></script>	
 	<script>
+        jQuery('.vertical').before("<div id='fondo'><div id='mensaje' class='grid_4 text-center'> Error<br>Contraseña o usuario incorrecto.<br><br><input id='btn' type='button' style='width:90%;' value='Aceptar'></div></div>");
 		jQuery('#submit').live('click', function(e) {
 			e.preventDefault();
 			var usr = jQuery('#usr'),
@@ -80,7 +76,7 @@
 
 			if (bol) 
 			{
-				ajax('{{=URL('user', 'login')}}', ['usr','pwd','tkn'],'err');
+				ajax('{{=URL('user', 'login')}}', ['usr','pwd','tkn']);
 			}
 			
 		});
@@ -89,7 +85,8 @@
 			var h = (jQuery(document).height()/2)-100,
 				w = (jQuery(document).width()/2)-150;
 				//console.log(h+' '+w);
-			message_show(h,w);	
+            message_show(h,w);
+
 		});
 		
 		jQuery('#btn').click(function(){
