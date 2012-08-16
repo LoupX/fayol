@@ -59,11 +59,10 @@
 			{{end}}	    	
 	    </div>
 	 </div>
-
 	 </div>
 
 	<script type="text/javascript" src="{{=URL('static','js/message.js')}}"></script>
-	<script type="text/javascript" src="{{=URL('static','js/validate.js')}}"></script>	
+	<script type="text/javascript" src="{{=URL('static','js/validate.js')}}"></script>
 	<script>
         jQuery('.vertical').before("<div id='fondo'><div id='mensaje' class='grid_4 text-center'> Error<br>Contraseña o usuario incorrecto.<br><br><input id='btn' type='button' style='width:90%;' value='Aceptar'></div></div>");
 		jQuery('#submit').live('click', function(e) {
@@ -72,10 +71,10 @@
 				pwd = jQuery('#pwd'),
 				tkn = jQuery('div.hidden input').val(),
 				bol = null;
-				
+
 			bol = validate(usr, pwd, tkn);
 
-			if (bol) 
+			if (bol)
 			{
                 r = 0 //response returned
                 usr = $('#usr').val();
