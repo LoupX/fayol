@@ -16,7 +16,7 @@ def login():
         raise HTTP(404)
 
     #Validates that the http headers comes from the right server and right method. If not, the request is invalid.
-    if  request.env.request_method == 'POST' and HOST in request.env.http_referer:
+    if  request.env.request_method == 'POST' and HOST == request.env.http_referer:
         valid = True
     else:
         attempts(1)

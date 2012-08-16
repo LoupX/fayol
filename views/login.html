@@ -65,7 +65,7 @@
 	<script type="text/javascript" src="{{=URL('static','js/validate.js')}}"></script>
 	<script>
         var r = 0
-        jQuery('.vertical').before("<div id='fondo'><div id='mensaje' class='grid_4 text-center'> Error<br>Contraseña o usuario incorrecto.<br><br><input id='btn' type='button' style='width:90%;' value='Aceptar'></div></div>");
+        jQuery('.vertical').before("<div id='fondo'><div id='mensaje' class='grid_4 text-center'> </div></div>");
 		jQuery('#submit').live('click', function(e) {
 			e.preventDefault();
 			var usr = jQuery('#usr'),
@@ -86,6 +86,29 @@
                     type: 'POST',
                     success:function(data){
                         r = data;
+                        if(r == 0) {
+                            var h = (jQuery(document).height()/2)-100,
+                                w = (jQuery(document).width()/2)-150;
+
+                            message_show(h,w);
+                            jQuery('#mensaje').html("Error<br>Usuario y/o contraseña incorrectos.<br><br><input id='btn' type='button' style='width:90%;' value='Aceptar'>");
+                            jQuery('#btn').click(function(){
+                                message_hide();
+                            });
+                        } else if(r == 1) {
+                            console.log('logged');
+                        } else if(r == 2) {
+                            console.log('captcha');
+                        } else {
+                            var h = (jQuery(document).height()/2)-100,
+                                    w = (jQuery(document).width()/2)-150;
+
+                            message_show(h,w);
+                            jQuery('#mensaje').html("Petición invalida.<br><br><input id='btn' type='button' style='width:90%;' value='Aceptar'>");
+                            jQuery('#btn').click(function(){
+                                message_hide();
+                            });
+                        }
 
                         if(r!=1){
                             tkn = 0
@@ -103,17 +126,6 @@
 			}
 		});
 
-		jQuery('a').click( function() {
-			var h = (jQuery(document).height()/2)-100,
-				w = (jQuery(document).width()/2)-150;
-				//console.log(h+' '+w);
-            message_show(h,w);
-
-		});
-		
-		jQuery('#btn').click(function(){
-			message_hide();
-		});
 	</script>
 </body>
 </html>
