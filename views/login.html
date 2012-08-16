@@ -80,7 +80,7 @@
 
 			if (bol) 
 			{
-				ajax('{{=URL('data')}}', ['usr','pwd','_formkey'],'err');
+				ajax('{{=URL('user', 'login')}}', ['usr','pwd','tkn'],'err');
 			}
 			
 		});
