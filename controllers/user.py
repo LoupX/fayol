@@ -10,8 +10,6 @@ def login():
     """
     valid = False
 
-    return ' user:%(usr)s\n pwd:%(pwd)s\n tkn:%(tkn)s' % dict(usr=request.vars.usr, pwd=request.vars.pwd, tkn=request.vars.tkn)
-
     #If it's not an ajax request, tell the cliente the page does not exists.
     if not request.ajax:
         attempts(1)
