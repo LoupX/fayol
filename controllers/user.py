@@ -40,8 +40,8 @@ def login():
         pwd = request.vars.pwd
         tkn = request.vars.tkn
 
-        #Checks the form token.
-        if not tkn == session.tkn:
+        #Checks the form token. Also checks for a token value in the session in case the token request is deleted from the client side.
+        if not session.tkn and tkn != session.tkn:
             attempts(1)
             return 0
 
@@ -73,6 +73,7 @@ def attempts(num):
         session.attempts = 0
     elif num == 1:
         session.attempts += 1
+        session.forget(tkn)
     elif num == 0:
         session.forget(attempts)
         session.forget(tkn)

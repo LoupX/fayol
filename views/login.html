@@ -77,7 +77,29 @@
 
 			if (bol) 
 			{
-				ajax('{{=URL('user', 'login')}}', ['usr','pwd','tkn']);
+                r = 0 //response returned
+                usr = $('#usr').val();
+                pwd = $('#pwd').val();
+                tkn = $('#tkn').val();
+                $.ajax({
+                    url: '{{=URL('user', 'login')}}',
+                    data: 'usr='+usr+'&pwd='+pwd+'&tkn='+tkn,
+                    type: 'POST',
+                    success:function(data){
+                        r = data;
+                        alert(data);
+                    }
+                });
+                if(r!=1){
+                    tkn = 0
+                    $.ajax({
+                        url: '{{=URL('default', 'ajax_token')}}',
+                        type: 'POST',
+                        success: function(data){
+                            $('#tkn').val(data);
+                        }
+                    });
+                }
 			}
 		});
 
