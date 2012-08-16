@@ -23,5 +23,4 @@ def index():
     return dict(form=form)
 
 def error404():
-
-	return dict()
+    return dict()
