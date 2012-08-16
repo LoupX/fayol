@@ -22,8 +22,7 @@ def index():
     return dict(form=form)
 
 def error404():
-
-	return dict()
+    return dict()
 
 def ajax_token():
     tkn = web2py_uuid()
