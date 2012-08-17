@@ -6,6 +6,8 @@ body 									{ margin:0; padding:0; background: #FFF url("../images/bg2.png"); 
 
 .titulo h1								{ font-size:36px; }
 
+* { outline: none; }
+
 #inputs input:-webkit-autofill {
 	background: #f1f1f1 url(../images/login-sprite.png) no-repeat !important;
 	color: #4A8BF4 !important;
@@ -173,6 +175,7 @@ form :focus {
 }
 
 #mensaje {
+    position: absolute;
 	font-size: 18px;
 	width: 300px; 
 	height: 110px; 
