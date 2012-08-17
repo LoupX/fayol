@@ -16,13 +16,22 @@ def login():
         raise HTTP(404)
 
     #Validates that the http headers comes from the right server and right method. If not, the request is invalid.
-    if  request.env.request_method == 'POST' and HOST == request.env.http_referer:
-        valid = True
+    #It only does it when debug = False
+    if DEBUG:
+        if  request.env.request_method == 'POST':
+            valid = True
+        else:
+            attempts(1)
+            return 3
     else:
-        attempts(1)
-        return 3
+        if  request.env.request_method == 'POST' and HOST == request.env.http_referer:
+            valid = True
+        else:
+            attempts(1)
+            return 3
 
-    #Validates the Captcha code.
+            #Validates the Captcha code.
+
     if session.attempts and session.attempts >= 4:
         #Captcha stuff
         pass

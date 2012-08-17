@@ -8,3 +8,6 @@ DB_PORT = 5432
 #Site constants
 HOST = 'web2py.glados'
 
+#System constants
+DEBUG = True
+
