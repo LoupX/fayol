@@ -48,8 +48,8 @@ Thumbs.db
 
 # Framework stuff #
 ###################
-databases
-sessions
-errors
-cache
+databases/*
+sessions/*
+errors/*
+cache/*
 
