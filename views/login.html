@@ -25,10 +25,10 @@
 
 </head>
 <body>
-	<!-- Notificaciones del sistema -->
+	<!-- System's notifications -->
 
 
-    <!-- Sistema -->
+    <!-- System -->
     <div class="vertical">
     
 	<div class="row">
@@ -65,7 +65,7 @@
 	<script type="text/javascript" src="{{=URL('static','js/validate.js')}}"></script>
 	<script>
         var r = 0
-        jQuery('.vertical').before("<div id='fondo'><div id='mensaje' class='grid_4 text-center'> </div></div>");
+        //jQuery('.vertical').before("<div id='fondo'><div id='mensaje' class='grid_4 text-center'> </div></div>");
 		jQuery('#submit').live('click', function(e) {
 			e.preventDefault();
 			var usr = jQuery('#usr'),
@@ -87,27 +87,17 @@
                     success:function(data){
                         r = data;
                         if(r == 0) {
-                            var h = (jQuery(document).height()/2)-100,
-                                w = (jQuery(document).width()/2)-150;
+                            //
 
-                            message_show(h,w);
-                            jQuery('#mensaje').html("Error<br>Usuario y/o contraseña incorrectos.<br><br><input id='btn' type='button' style='width:90%;' value='Aceptar'>");
-                            jQuery('#btn').click(function(){
-                                message_hide();
-                            });
+                            message_show('error_0','Error<br>Usuario y/o contraseña incorrectos.');
+                            //console.log('asdas');
+
                         } else if(r == 1) {
                             console.log('logged');
                         } else if(r == 2) {
                             console.log('captcha');
                         } else {
-                            var h = (jQuery(document).height()/2)-100,
-                                    w = (jQuery(document).width()/2)-150;
-
-                            message_show(h,w);
-                            jQuery('#mensaje').html("Petición invalida.<br><br><input id='btn' type='button' style='width:90%;' value='Aceptar'>");
-                            jQuery('#btn').click(function(){
-                                message_hide();
-                            });
+                            message_show('error_n','Petición invalida');
                         }
 
                         if(r!=1){

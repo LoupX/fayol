@@ -74,6 +74,22 @@ form :focus {
 	-webkit-box-shadow: 0 0 0 1px #e84141 inset;    
 }
 
+.error_0 {
+    border: 1px solid #e84141;
+    box-shadow: 0 0 0 1px #e84141 inset;
+    -o-box-shadow: 0 0 0 1px #e84141 inset;
+    -moz-box-shadow: 0 0 0 1px #e84141 inset;
+    -webkit-box-shadow: 0 0 0 1px #e84141 inset;
+}
+
+.error_n {
+    border: 1px solid #e8b31c;
+    box-shadow: 0 0 0 1px #e8b31c inset;
+    -o-box-shadow: 0 0 0 1px #e8b31c inset;
+    -moz-box-shadow: 0 0 0 1px #e8b31c inset;
+    -webkit-box-shadow: 0 0 0 1px #e8b31c inset;
+}
+
 /*mostrar el bg segun posicion*/
 .input_usr, .usr_error 									{ background-position: 15px -2px !important;  }
 .input_pwd, .pwd_error 									{ background-position: 15px -52px !important; }
@@ -164,7 +180,7 @@ form :focus {
 	margin: 0 auto;
     background-color: #FFF;
     display: none;
-    z-index: 9999;
+    z-index: 99999;
     border-radius: 3px;
     -o-border-radius: 3px;
     -moz-border-radius: 3px;
