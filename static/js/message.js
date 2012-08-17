@@ -27,11 +27,21 @@ function message_show(c, m) {
 		.effect("puff", { mode: 'show', percent: 50 }, 200)
 		.effect("bounce", { mode: 'show', distance: 25, times: 6, direction: 'down'}, 200);
 		//.effect("puff", { mode: 'show', percent: 50 }, 300);
+    jQuery('#btn').focus();
 
     btn.live('click',function(){
         fon.fadeOut('fast');
         men
             .slideUp( function() {})
             .removeClass(c);
+    });
+
+    men.bind('keydown', 'enter', function() {
+        fon.fadeOut('fast').hide();
+        men
+            .slideUp( function() {})
+            .removeClass(c)
+            .hide();
+        men.unbind();
     });
 }
