@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from gluon.utils import web2py_uuid
+from gluon.tools import Recaptcha
 
 
 def index():
@@ -10,6 +11,7 @@ def index():
         FIELDSET(
             INPUT(_id="usr", _name='usr', _class='input_usr', _type='text', _placeholder='Usuario', _required='required'),
             INPUT(_id="pwd", _name='pwd',_class='input_pwd', _type='password', _placeholder='Contraseña', _required='required'),
+            Recaptcha(request, CAPTCHA_PUBLIC, CAPTCHA_PRIVATE),
             _id='inputs'
         ),
         FIELDSET(
