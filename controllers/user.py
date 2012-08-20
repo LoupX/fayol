@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from urllib import urlencode
 from urllib2 import Request, urlopen
+
 def login():
     """
     Login states (responses):
@@ -9,30 +10,18 @@ def login():
     2. Invalid captcha.
     3. Invalid request.
     """
-    valid = False
+    responses = [T('Invalid credentials'), T('Logged in'), T('Invalid captcha'), T('Invalid request')]
 
-    #If it's not an ajax request, tell the cliente the page does not exists.
     if not request.ajax:
         attempts()
         raise HTTP(404)
 
-    #Validates that the http headers comes from the right server and right method. If not, the request is invalid.
-    #It only does it when debug = False
-    if DEBUG:
-        if  request.env.request_method == 'POST':
-            valid = True
-        else:
-            attempts()
-            return 3
-    else:
-        if  request.env.request_method == 'POST' and HOST == request.env.http_referer:
-            valid = True
-        else:
-            attempts()
-            return 3
+    if  request.env.request_method != 'POST':
+        attempts()
+        response.flash = responses[3]
 
     #Validates the Captcha code.
-    if session.attempts and session.attempts >= 0:
+    if session.attempts >= 4:
         if request.vars.r_challenge and request.vars.r_response:
             values = {
                      'privatekey':CAPTCHA_PRIVATE_KEY,
@@ -46,44 +35,39 @@ def login():
                 data
             )
             res = urlopen(req)
-            if res.read(1) == 't':
-                return 'successful captcha'
-            else:
-                return 2
+            if res.read(1) != 't':
+                response.flash = responses[2]
         else:
             attempts()
-            return 2
+            response.flash = responses[2]
 
-    if valid:
 
-        #If the login fields are not complete, the request is dumped
-        if not request.vars.usr or not request.vars.pwd or not request.vars.tkn:
-            attempts()
-            return 0
+    #If the login fields are not complete, the request is dumped
+    if not request.vars.usr or not request.vars.pwd or not request.vars.tkn:
+        attempts()
+        response.flash = responses[0]
 
-        usr = request.vars.usr
-        pwd = request.vars.pwd
-        tkn = request.vars.tkn
+    #Checks the form token. Also checks for a token value in the session in case the token request is deleted from the client side.
+    if not session.tkn and tkn != session.tkn:
+        attempts()
+        response.flash = responses[0]
 
-        #Checks the form token. Also checks for a token value in the session in case the token request is deleted from the client side.
-        if not session.tkn and tkn != session.tkn:
-            attempts()
-            return 0
+    usr = request.vars.usr 
+    pwd = request.vars.pwd
+    tkn = request.vars.tkn
 
-        #Checks the password length.
-        if len(pwd) < 6:
-            attempts()
-            return 0
+    if len(pwd) < 6:
+        attempts()
+        response.flash = responses[0]
 
-        #Check the user credentials
-        auth.login_bare(usr, pwd)
+    auth.login_bare(usr, pwd)
 
-        if auth.is_logged_in():
-            attempts(0)
-            return 1
-        else:
-            attempts()
-            return 0
+    if auth.is_logged_in():
+        attempts(0)
+        response.flash = responses[1]
+    else:
+        attempts()
+        response.flash = responses[0]
 
 def logout():
     auth.logout()
