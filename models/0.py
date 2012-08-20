@@ -11,3 +11,8 @@ HOST = 'web2py.glados'
 #System constants
 DEBUG = True
 
+#Recaptcha API
+CAPTCHA_URL = 'http://www.google.com/recaptcha/api/verify'
+CAPTCHA_PUBLIC_KEY = '6LfGZdUSAAAAAI9xYz4MIkDz5RZHZCGrCll2xKLP'
+CAPTCHA_PRIVATE_KEY = '6LfGZdUSAAAAAHx4IPGFKz_GXjyp4oomYk8v6RAx'
+

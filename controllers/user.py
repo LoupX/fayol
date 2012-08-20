@@ -1,86 +1,88 @@
 # -*- coding: utf-8 -*-
+from urllib import urlencode
+from urllib2 import Request, urlopen
 
 def login():
     """
     Login states (responses):
     0. Not logged in, invalid credentials.
     1. Logged in.
-    2. Attempts limit reached. Captcha is now required.
+    2. Invalid captcha.
     3. Invalid request.
     """
-    valid = False
+    responses = [T('Invalid credentials'), T('Logged in'), T('Invalid captcha'), T('Invalid request')]
 
-    #If it's not an ajax request, tell the cliente the page does not exists.
     if not request.ajax:
-        attempts(1)
+        attempts()
         raise HTTP(404)
 
-    #Validates that the http headers comes from the right server and right method. If not, the request is invalid.
-    #It only does it when debug = False
-    if DEBUG:
-        if  request.env.request_method == 'POST':
-            valid = True
+    if  request.env.request_method != 'POST':
+        attempts()
+        response.flash = responses[3]
+
+    #Validates the Captcha code.
+    if session.attempts >= 4:
+        if request.vars.r_challenge and request.vars.r_response:
+            values = {
+                     'privatekey':CAPTCHA_PRIVATE_KEY,
+                     'remoteip':request.env.remote_addr,
+                     'challenge':request.vars.r_challenge,
+                     'response':request.vars.r_response
+            }
+            data = urlencode(values)
+            req = Request(
+                CAPTCHA_URL,
+                data
+            )
+            res = urlopen(req)
+            if res.read(1) != 't':
+                response.flash = responses[2]
         else:
-            attempts(1)
-            return 3
+            attempts()
+            response.flash = responses[2]
+
+
+    #If the login fields are not complete, the request is dumped
+    if not request.vars.usr or not request.vars.pwd or not request.vars.tkn:
+        attempts()
+        response.flash = responses[0]
+
+    #Checks the form token. Also checks for a token value in the session in case the token request is deleted from the client side.
+    if not session.tkn and tkn != session.tkn:
+        attempts()
+        response.flash = responses[0]
+
+    usr = request.vars.usr 
+    pwd = request.vars.pwd
+    tkn = request.vars.tkn
+
+    if len(pwd) < 6:
+        attempts()
+        response.flash = responses[0]
+
+    auth.login_bare(usr, pwd)
+
+    if auth.is_logged_in():
+        attempts(0)
+        response.flash = responses[1]
     else:
-        if  request.env.request_method == 'POST' and HOST == request.env.http_referer:
-            valid = True
-        else:
-            attempts(1)
-            return 3
-
-            #Validates the Captcha code.
-
-    if session.attempts and session.attempts >= 4:
-        #Captcha stuff
-        pass
-
-    if valid:
-
-        #If the login fields are not complete, the request is dumped
-        if not request.vars.usr or not request.vars.pwd or not request.vars.tkn:
-            attempts(1)
-            return 0
-
-        usr = request.vars.usr
-        pwd = request.vars.pwd
-        tkn = request.vars.tkn
-
-        #Checks the form token. Also checks for a token value in the session in case the token request is deleted from the client side.
-        if not session.tkn and tkn != session.tkn:
-            attempts(1)
-            return 0
-
-        #Checks the password length.
-        if len(pwd) < 6:
-            attempts(1)
-            return 0
-
-        #Check the user credentials
-        auth.login_bare(usr, pwd)
-
-        if auth.is_logged_in():
-            attempts(0)
-            return 1
-        else:
-            attempts(1)
-            return 0
+        attempts()
+        response.flash = responses[0]
 
 def logout():
     auth.logout()
 
 
-def attempts(num):
+def attempts(code=1):
     """
     0 = reset attempts.
     1 = attempts++
     """
     if not session.attempts:
-        session.attempts = 0
-    elif num == 1:
+        session.attempts = 1
+    elif code == 1:
         session.attempts += 1
-        session.forget(tkn)
-    elif num == 0:
-        session.forget(attempts)
-        session.forget(tkn)
+        session.tkn = None
+    elif code == 0:
+        session.attempts = None
+        session.tkn = None
