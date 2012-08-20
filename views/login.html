@@ -80,9 +80,12 @@
                 usr = $('#usr').val();
                 pwd = $('#pwd').val();
                 tkn = $('#tkn').val();
+                var r_challenge = $('#recaptcha_challenge_field').val()
+                var r_responce = $('#recaptcha_response_field').val()
+
                 $.ajax({
                     url: '{{=URL('user', 'login')}}',
-                    data: 'usr='+usr+'&pwd='+pwd+'&tkn='+tkn,
+                    data: 'usr='+usr+'&pwd='+pwd+'&tkn='+tkn+'&r_challenge='+r_challenge+'&r_response='+r_responce,
                     type: 'POST',
                     success:function(data){
                         r = data;
