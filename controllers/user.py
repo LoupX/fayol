@@ -14,7 +14,9 @@ def login():
 
     if not request.ajax:
         attempts()
-        raise HTTP(404)
+        error = T('The following address tried to acces the system via with no ajax: {}'.format(request.env.remote_addr))
+        send_error(error)
+        raise HTTP(400)
 
     if  request.env.request_method != 'POST':
         attempts()
@@ -34,9 +36,13 @@ def login():
                 CAPTCHA_URL,
                 data
             )
-            res = urlopen(req)
-            if res.read(1) != 't':
-                return responses[2]
+            try:
+                res = urlopen(req)
+                if res.read(1) != 't':
+                    return responses[2]
+            except Exception as e:
+                error = T('The captcha server may be down :[\n'.format(e))
+                send_error(e)
         else:
             attempts()
             return responses[2]
@@ -46,14 +52,14 @@ def login():
         attempts()
         return responses[0]
 
-    #Checks the form token. Also checks for a token value in the session in case the token request is deleted from the client side.
-    if not session.tkn and tkn != session.tkn:
-        attempts()
-        return responses[0]
-
-    usr = request.vars.usr 
+    usr = request.vars.usr
     pwd = request.vars.pwd
     tkn = request.vars.tkn
+
+    #Checks the form token. Also checks for a token value in the session in case the token request is deleted from the client side.
+    if not session.tkn or tkn != session.tkn:
+        attempts()
+        return responses[0]
 
     if len(pwd) < 6:
         attempts()
@@ -86,4 +92,9 @@ def attempts(code=1):
         session.tkn = None
 
 def check_attempts():
-    return session.attempts
+    if not request.ajax:
+        error = 'We\'ve got a bad voy trying to check attempts without ajax\nIP: {}'.format(request.env.remote_addr)
+        send_error(error)
+        raise HTTP(400)
+    else:
+        return session.attempts

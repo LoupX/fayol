@@ -1,15 +1,22 @@
-#Database constants
+#Database
 DB = 'fayol'
 DB_HOST = '127.0.0.1'
 DB_USER = 'beardcode'
 DB_PASS = 'qazWSX11'
 DB_PORT = 5432
 
-#Site constants
+#Site
 HOST = 'web2py.glados'
+ADMIN_MAIL = 'jd@beardcode.mx'
 
-#System constants
+#System
 DEBUG = True
+
+#Mail
+MAIL_SERVER = 'smtp.gmail.com:587'
+MAIL_SENDER = 'no-reply@beardcode.mx'
+MAIL_USER = 'no-reply@beardcode.mx'
+MAIL_PASSWORD = 'qazWSX11'
 
 #Recaptcha API
 CAPTCHA_URL = 'http://www.google.com/recaptcha/api/verify'
