@@ -48,10 +48,11 @@ function web2py_event_handlers() {
 
 jQuery(function() {
    var flash = jQuery('.flash'),
+       flasm = jQuery('.flash .flash_m'),
        w     = (jQuery(document).width()/2)-150;
    flash.css({'margin-left': w});
    flash.hide();
-   if(flash.html()) {
+   if(flasm.html()) {
        //fondo.show();
        flash.effect("puff", { mode: 'show', percent: 50 }, 200)
        flash.effect("bounce", { mode: 'show', distance: 25, times: 6, direction: 'down'}, 200);

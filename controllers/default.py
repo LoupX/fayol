@@ -4,7 +4,6 @@ from gluon.tools import Recaptcha
 
 
 def index():
-
     tkn = ajax_token()
 
     form = FORM(

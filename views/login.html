@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="{{=lng}}">
+<html lang="">
 <head>
 	<meta charset="utf-8" />
 	<title>{{=T("Fayol's Administration")}}</title>
@@ -29,7 +29,7 @@
 
         <div class="flash text-center">
             <div class="img_c"></div>
-            <span style="overflow: hidden;">{{=response.flash or ''}}</span>
+            <span style="overflow: hidden;" class="flash_m">{{=response.flash or ''}}</span>
         </div>
 
 
