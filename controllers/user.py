@@ -21,8 +21,7 @@ def login():
         return responses[3]
 
     #Validates the Captcha code.
-    """
-    if session.attempts >= 4:
+    if session.attempts > 3:
         if request.vars.r_challenge and request.vars.r_response:
             values = {
                      'privatekey':CAPTCHA_PRIVATE_KEY,
@@ -41,7 +40,6 @@ def login():
         else:
             attempts()
             return responses[2]
-    """
 
     #If the login fields are not complete, the request is dumped
     if not request.vars.usr or not request.vars.pwd or not request.vars.tkn:
@@ -73,7 +71,6 @@ def login():
 def logout():
     auth.logout()
 
-
 def attempts(code=1):
     """
     0 = reset attempts.
@@ -87,3 +84,6 @@ def attempts(code=1):
     elif code == 0:
         session.attempts = None
         session.tkn = None
+
+def check_attempts():
+    return session.attempts
