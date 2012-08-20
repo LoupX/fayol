@@ -47,9 +47,15 @@ function web2py_event_handlers() {
 };
 
 jQuery(function() {
-   var flash = jQuery('.flash');
+   var flash = jQuery('.flash'),
+       w     = (jQuery(document).width()/2)-150;
+   flash.css({'margin-left': w});
    flash.hide();
-   if(flash.html()) flash.slideDown();
+   if(flash.html()) {
+       //fondo.show();
+       flash.effect("puff", { mode: 'show', percent: 50 }, 200)
+       flash.effect("bounce", { mode: 'show', distance: 25, times: 6, direction: 'down'}, 200);
+   }
    web2py_ajax_init(document);
    web2py_event_handlers();
 });

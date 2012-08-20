@@ -5,14 +5,14 @@
 *
 *
 */
-jQuery('body').prepend("<div id='fondo'><div id='mensaje' class='grid_4 text-center'> </div></div>");
+//jQuery('body').prepend("<div id='fondo'><div id='mensaje' class='grid_4 text-center'> </div></div>");
 
 var h   = (jQuery(document).height()/2)-100,
     w   = (jQuery(document).width()/2)-150,
     men = jQuery('#mensaje'),
     fon = jQuery('#fondo'),
-    btn = jQuery('#btn');
-
+    btn = jQuery('#btn'),
+    ste = jQuery('#btn_enter').val();
 
 function message_show(c, m) {
     var m = m,
@@ -22,7 +22,7 @@ function message_show(c, m) {
 	men
         .addClass(c)
         .html('')
-        .prepend(m+"<br><br><input id='btn' type='button' style='width:90%;' value='Aceptar'>")
+        .prepend(m+'<br><br><input id="btn" type="button" style="width:90%;" value="'+ste+'">')
 		.stop(true)
 		.effect("puff", { mode: 'show', percent: 50 }, 200)
 		.effect("bounce", { mode: 'show', distance: 25, times: 6, direction: 'down'}, 200);

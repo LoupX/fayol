@@ -1,3 +1,7 @@
+var pce = jQuery('#placeholder_empty').val(),
+    pus = jQuery('#placeholder_user').val(),
+    ppa = jQuery('#placeholder_pass').val();
+
 function validate(usr, pwd, tkn) {
 	var usr = usr, //jQuery('#usr'),
 		pwd = pwd, //jQuery('#pwd'),
@@ -10,7 +14,7 @@ function validate(usr, pwd, tkn) {
 	{
 		//usr.css({border: '2px solid #e84141'});
 		usr
-			.attr('placeholder','No puedes dejar vacio este campo')
+			.attr('placeholder',pce)
 			.removeClass('input_usr')
 			.addClass('usr_error');
 			b_u = false;
@@ -18,7 +22,7 @@ function validate(usr, pwd, tkn) {
 	else 
 		{
 		usr
-			.attr('placeholder','Usuario')
+			.attr('placeholder',pus)
 			.removeClass('usr_error')
 			.addClass('input_usr');
 		b_u = true;
@@ -28,7 +32,7 @@ function validate(usr, pwd, tkn) {
 	{
 		//usr.css({border: '2px solid #e84141'});
 		pwd
-			.attr('placeholder','No puedes dejar vacio este campo')
+			.attr('placeholder',pce)
 			.removeClass('input_pwd')
 			.addClass('pwd_error');
 			b_p = false;
@@ -36,7 +40,7 @@ function validate(usr, pwd, tkn) {
 	else 
 		{
 		pwd
-			.attr('placeholder','Contraseña')
+			.attr('placeholder',ppa)
 			.removeClass('pwd_error')
 			.addClass('input_pwd');
 		b_p = true;

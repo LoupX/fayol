@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="es">
+<html lang="{{=lng}}">
 <head>
 	<meta charset="utf-8" />
-	<title>Administración de Fayol</title>
-	<!-- fav -->
+	<title>{{=T("Fayol's Administration")}}</title>
+	<!-- fav {{=T.accepted_language or 'en'}} -->
 	<link rel="shortcut icon" href="{{=URL('static','favicon.ico')}}" type="image/x-icon">
   	<link rel="apple-touch-icon" href="{{=URL('static','favicon.png')}}">
 	{{include 'web2py_ajax.html'}}
@@ -20,12 +20,17 @@
 	<link rel="stylesheet" href="{{=URL('static','css/amazium.css')}}">
 	<link rel="stylesheet" href="{{=URL('static','css/layout.css')}}">
 	<link href='http://fonts.googleapis.com/css?family=Maven+Pro' rel='stylesheet' type='text/css'>
-    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js"></script>
+    <script src="{{=URL('static','js/jquery-ui.min.js')}}"></script>
     
 
 </head>
 <body>
-	<!-- System's notifications -->
+	<!-- System's notifications  -->
+
+        <div class="flash text-center">
+            <div class="img_c"></div>
+            <span style="overflow: hidden;">{{=response.flash or ''}}</span>
+        </div>
 
 
     <!-- System -->
@@ -33,14 +38,14 @@
     
 	<div class="row">
 		<div class="grid_6 text-left titulo" style="height:490px; margin-top:10px;">
-			<h1 style="margin-top:80px;">Refaccionaria del Hogar</h1>
+			<h1 style="margin-top:80px;">{{=T("Refaccionaria del Hogar")}}</h1>
 	    	<div style="margin-top:60px;">
 				{{block my_form}}
 		        {{include}}
 		        {{end}}
 	        	<br>
-	        	<span style="color:#999999; font-size:12px;">¿Se te olvidó la contraseña?.
-	        		<a href="#">Sigue los siguientes pasos.</a></span><br><br>
+	        	<span style="color:#999999; font-size:12px;">{{=T("Password lost?")}}.
+	        		<a href="#">{{=T("Follow next steps")}}.</a></span><br><br>
 	        		<span id="err"></span>
 	   		</div>
 	    </div>
@@ -56,10 +61,26 @@
 		<div class="grid_12 text-center pie">
 			{{block my_footer}}
 			{{include}}
-			{{end}}	    	
+			{{end}}
+
+            {{if hasattr(T,'get_possible_languages'):}}
+            <span>
+              {{=T('Language')}}
+              <select name="my_lng" onchange="var date = new Date();cookieDate=date.setTime(date.getTime()+(100*24*60*60*1000));document.cookie='my_lng='+this.options[this.selectedIndex].value+'; expires='+cookieDate+'; path=/';window.location.reload()">
+                  {{for language in T.get_possible_languages():}}
+                  <option {{=T.accepted_language==language and 'selected' or ''}} >{{=language}}</option>
+                  {{pass}}
+              </select>
+            </span>
+            {{pass}}
 	    </div>
 	 </div>
 	 </div>
+    <input type="hidden" id="btn_enter" value="{{=T('Enter')}}">
+    <input type="hidden" id="placeholder_empty" value="{{=T('This field can not be empty')}}">
+    <input type="hidden" id="placeholder_user" value="{{=T('User')}}">
+    <input type="hidden" id="placeholder_pass" value="{{=T('Password')}}">
+
 
 	<script type="text/javascript" src="{{=URL('static','js/message.js')}}"></script>
 	<script type="text/javascript" src="{{=URL('static','js/validate.js')}}"></script>
