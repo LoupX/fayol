@@ -18,10 +18,10 @@ def login():
 
     if  request.env.request_method != 'POST':
         attempts()
-        response.flash = responses[3]
+        return responses[3]
 
     #Validates the Captcha code.
-    if session.attempts >= 4:
+    if session.attempts > 3:
         if request.vars.r_challenge and request.vars.r_response:
             values = {
                      'privatekey':CAPTCHA_PRIVATE_KEY,
@@ -36,21 +36,20 @@ def login():
             )
             res = urlopen(req)
             if res.read(1) != 't':
-                response.flash = responses[2]
+                return responses[2]
         else:
             attempts()
-            response.flash = responses[2]
-
+            return responses[2]
 
     #If the login fields are not complete, the request is dumped
     if not request.vars.usr or not request.vars.pwd or not request.vars.tkn:
         attempts()
-        response.flash = responses[0]
+        return responses[0]
 
     #Checks the form token. Also checks for a token value in the session in case the token request is deleted from the client side.
     if not session.tkn and tkn != session.tkn:
         attempts()
-        response.flash = responses[0]
+        return responses[0]
 
     usr = request.vars.usr 
     pwd = request.vars.pwd
@@ -58,20 +57,19 @@ def login():
 
     if len(pwd) < 6:
         attempts()
-        response.flash = responses[0]
+        return responses[0]
 
     auth.login_bare(usr, pwd)
 
     if auth.is_logged_in():
         attempts(0)
-        response.flash = responses[1]
+        return responses[1]
     else:
         attempts()
-        response.flash = responses[0]
+        return responses[0]
 
 def logout():
     auth.logout()
-
 
 def attempts(code=1):
     """
@@ -86,3 +84,6 @@ def attempts(code=1):
     elif code == 0:
         session.attempts = None
         session.tkn = None
+
+def check_attempts():
+    return session.attempts
