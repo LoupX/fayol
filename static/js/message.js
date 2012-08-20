@@ -5,20 +5,20 @@
 *
 *
 */
-//jQuery('body').prepend("<div id='fondo'><div id='mensaje' class='grid_4 text-center'> </div></div>");
+jQuery('body').prepend("<div id='mensaje' class='grid_4 text-center'> </div>");
 
 var h   = (jQuery(document).height()/2)-100,
     w   = (jQuery(document).width()/2)-150,
     men = jQuery('#mensaje'),
-    fon = jQuery('#fondo'),
+    //fon = jQuery('#fondo'),
     btn = jQuery('#btn'),
     ste = jQuery('#btn_enter').val();
 
 function message_show(c, m) {
     var m = m,
         c = c;
-	men.css({'margin-left': w, 'margin-top': h});
-    fon.fadeIn("fast");
+	men.css({'margin-left': w});
+    //fon.fadeIn("fast");
 	men
         .addClass(c)
         .html('')
@@ -30,14 +30,14 @@ function message_show(c, m) {
     jQuery('#btn').focus();
 
     btn.live('click',function(){
-        fon.fadeOut('fast');
+        //fon.fadeOut('fast');
         men
             .slideUp( function() {})
             .removeClass(c);
     });
 
     men.bind('keydown', 'enter', function() {
-        fon.fadeOut('fast').hide();
+        //fon.fadeOut('fast').hide();
         men
             .slideUp( function() {})
             .removeClass(c)

@@ -206,6 +206,8 @@ div.flash .img_c {
     margin: 10% auto;
 }
 
+div.captcha                             { display: none; }
+
 .titulo h3								{ font-size:36px; color:#ACABAB; }
 .pie 									{ font-size:14px; color:#999999; }
 

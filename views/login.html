@@ -25,12 +25,11 @@
 
 </head>
 <body>
-	<!-- System's notifications  -->
-
+	<!-- System's notifications
         <div class="flash text-center">
             <div class="img_c"></div>
             <span style="overflow: hidden;" class="flash_m">{{=response.flash or ''}}</span>
-        </div>
+        </div> -->
 
 
     <!-- System -->
@@ -85,19 +84,23 @@
 	<script type="text/javascript" src="{{=URL('static','js/message.js')}}"></script>
 	<script type="text/javascript" src="{{=URL('static','js/validate.js')}}"></script>
 	<script>
-        var r = 0
+        var att = 0,
+            r   = 0,
+            cap = jQuery('.captcha');
         //jQuery('.vertical').before("<div id='fondo'><div id='mensaje' class='grid_4 text-center'> </div></div>");
-		jQuery('#submit').live('click', function(e) {
-			e.preventDefault();
-			var usr = jQuery('#usr'),
-				pwd = jQuery('#pwd'),
-				tkn = jQuery('div.hidden input').val(),
-				bol = null;
+        n_attempts();
 
-			bol = validate(usr, pwd, tkn);
+        jQuery('#submit').live('click', function(e) {
+            e.preventDefault();
+            var usr = jQuery('#usr'),
+                    pwd = jQuery('#pwd'),
+                    tkn = jQuery('div.hidden input').val(),
+                    bol = null;
 
-			if (bol)
-			{
+            bol = validate(usr, pwd, tkn);
+
+            if (bol)
+            {
                 usr = $('#usr').val();
                 pwd = $('#pwd').val();
                 tkn = $('#tkn').val();
@@ -109,20 +112,11 @@
                     data: 'usr='+usr+'&pwd='+pwd+'&tkn='+tkn+'&r_challenge='+r_challenge+'&r_response='+r_responce,
                     type: 'POST',
                     success:function(data){
-                        r = data;
-                        if(r == 0) {
-                            //
+                        //console.log(data);
+                        message_show('', data);
+                        n_attempts();
 
-                            message_show('error_0','Error<br>Usuario y/o contraseña incorrectos.');
-                            //console.log('asdas');
 
-                        } else if(r == 1) {
-                            console.log('logged');
-                        } else if(r == 2) {
-                            console.log('captcha');
-                        } else {
-                            message_show('error_n','Petición invalida');
-                        }
 
                         if(r!=1){
                             tkn = 0
@@ -137,8 +131,25 @@
 
                     }
                 });
-			}
-		});
+            }
+        });
+
+        function n_attempts() {
+            var na = false
+            $.ajax({
+                url: '{{=URL('user','check_attempts')}}',
+                type: 'POST',
+                success: function(data){
+                    if( data > 3) {
+                        //Recaptcha.widget.reload();
+                        window.location=$("#recaptcha_reload_btn").get(0).href;
+                        cap.slideDown();
+                        na = true;
+                    }
+                }
+            });
+        }
+
 
 	</script>
 </body>
