@@ -30,6 +30,7 @@ def index():
     return dict(form=form)
 
 def error404():
+    T.force(session.lng)
     return dict()
 
 def ajax_token():

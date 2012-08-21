@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="es">
+<html lang="{{=T.accepted_language or 'es-mx'}}">
 <head>
     <meta charset="utf-8" />
     <title>Error 404</title>
@@ -32,8 +32,8 @@
     <div class="column grid_12 tex-center" style="margin-top: 10%;">
         <p class="error-404">Error</p>
         <p class="error">404</p>
-        <p class="error-link">Página no encontrada</p>
-        <p><a href="index.html">Regrese a la página principal</a> o contacte al administrador</p>
+        <p class="error-link">{{=T('Page not found')}}</p>
+        <p><a href="index.html">{{=T('Back to the main page')}}</a>{{=T(' or contact the administrator')}}</p>
     </div>
 </div>
 

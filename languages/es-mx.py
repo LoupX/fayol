@@ -41,4 +41,7 @@
 'Logged in': 'Ha iniciado sesión',
 'Invalid captcha': 'Captcha incorrecto',
 'Invalid request': 'Solicitud inválida',
+'Page not found': 'Página no encontrada',
+'Back to the main page': 'Regresar a la página principal',
+' or contact the administrator': ' o contacte con el administrador',
 }
