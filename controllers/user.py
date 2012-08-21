@@ -10,6 +10,8 @@ def login():
     2. Invalid captcha.
     3. Invalid request.
     """
+    T.force(session.lng)
+
     responses = [T('Invalid credentials'), T('Logged in'), T('Invalid captcha'), T('Invalid request')]
 
     if not request.ajax:

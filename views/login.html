@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="">
+<html lang="{{=T.accepted_language or 'es-mx'}}">
 <head>
 	<meta charset="utf-8" />
 	<title>{{=T("Fayol's Administration")}}</title>
@@ -44,8 +44,8 @@
 		        {{end}}
 	        	<br>
 	        	<span style="color:#999999; font-size:12px;">{{=T("Password lost?")}}.
-	        		<a href="#">{{=T("Follow next steps")}}.</a></span><br><br>
-	        		<span id="err"></span>
+	        		<a href="#">{{=T("Follow next steps")}}.</a>
+                </span><br><br>
 	   		</div>
 	    </div>
 
@@ -109,7 +109,7 @@
 
                 $.ajax({
                     url: '{{=URL('user', 'login')}}',
-                    data: 'usr='+usr+'&pwd='+pwd+'&tkn='+tkn+'&r_challenge='+r_challenge+'&r_response='+r_responce,
+                    data: { usr: usr, pwd: pwd, tkn: tkn, r_challenge: r_challenge, r_response: r_responce},
                     type: 'POST',
                     success:function(data){
                         //console.log(data);
@@ -141,7 +141,7 @@
                 type: 'POST',
                 success: function(data){
                     if( data > 3) {
-                        //Recaptcha.widget.reload();
+                        //Recaptcha.reload();
                         window.location=$("#recaptcha_reload_btn").get(0).href;
                         cap.slideDown();
                         na = true;

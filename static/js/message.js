@@ -1,7 +1,7 @@
 /*
 * Notifications for user's errors
 * append a div into first place of the body and calculate the center of the document
-* message_show receive 2 parameters, the first one is a css class and the next one is the message error.
+* message_show receive 2 parameters, the first one is a css class and the next one is a message error.
 *
 *
 */
@@ -24,20 +24,21 @@ function message_show(c, m) {
         .html('')
         .prepend(m+'<br><br><input id="btn" type="button" style="width:90%;" value="'+ste+'">')
 		.stop(true)
-		.effect("puff", { mode: 'show', percent: 50 }, 200)
-		.effect("bounce", { mode: 'show', distance: 25, times: 6, direction: 'down'}, 200);
+        .slideDown();
+		//.effect("puff", { mode: 'show', percent: 50 }, 200)
+		//.effect("bounce", { mode: 'show', distance: 25, times: 6, direction: 'down'}, 200);
 		//.effect("puff", { mode: 'show', percent: 50 }, 300);
     jQuery('#btn').focus();
 
     btn.live('click',function(){
-        //fon.fadeOut('fast');
+        //if the button is pressed hide the message
         men
-            .slideUp( function() {})
+            .slideUp()
             .removeClass(c);
     });
 
     men.bind('keydown', 'enter', function() {
-        //fon.fadeOut('fast').hide();
+        //if the intro key is pressed hide the message;
         men
             .slideUp( function() {})
             .removeClass(c)
