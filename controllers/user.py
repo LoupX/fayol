@@ -14,8 +14,6 @@ def login():
 
     if not request.ajax:
         attempts()
-        error = T('The following address tried to acces the system via with no ajax: {}'.format(request.env.remote_addr))
-        send_error(error)
         raise HTTP(400)
 
     if  request.env.request_method != 'POST':
@@ -36,13 +34,9 @@ def login():
                 CAPTCHA_URL,
                 data
             )
-            try:
-                res = urlopen(req)
-                if res.read(1) != 't':
-                    return responses[2]
-            except Exception as e:
-                error = T('The captcha server may be down :[\n'.format(e))
-                send_error(e)
+            res = urlopen(req)
+            if res.read(1) != 't':
+                return responses[2]
         else:
             attempts()
             return responses[2]
@@ -93,8 +87,6 @@ def attempts(code=1):
 
 def check_attempts():
     if not request.ajax:
-        error = 'We\'ve got a bad voy trying to check attempts without ajax\nIP: {}'.format(request.env.remote_addr)
-        send_error(error)
         raise HTTP(400)
     else:
         return session.attempts

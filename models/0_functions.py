@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-def send_error(error):
+def mail_error(error):
     from gluon.tools import Mail
     mail = Mail()
     mail.settings.server = MAIL_SERVER
@@ -9,7 +9,27 @@ def send_error(error):
 
     to = [ADMIN_MAIL]
     subject = 'An error ocurred in {}'.format(HOST)
-    message = error
+    message = error #Just for semantic reasons.
 
-    if not mail.send(to, subject, message):
-        pass
+    sended = mail.send(to, subject, message)
+    return sended
+
+def write_error(error):
+    from os import path
+    from datetime import date
+    d = date.today().isoformat()
+    fp = path.join(request.folder, 'errors', 'error-{}.log'.format(d))
+
+    try:
+        f = open(fp, 'a')
+        f.write(error)
+        f.write('\n')
+        f.close()
+        writed = True
+    except :
+        writed = False
+
+    return writed
+
+def error_handler(error):
+    write_error(error)
