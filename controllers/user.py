@@ -16,7 +16,7 @@ def login():
 
     if not request.ajax:
         attempts()
-        raise HTTP(404)
+        raise HTTP(400)
 
     if  request.env.request_method != 'POST':
         attempts()
@@ -48,14 +48,14 @@ def login():
         attempts()
         return responses[0]
 
-    #Checks the form token. Also checks for a token value in the session in case the token request is deleted from the client side.
-    if not session.tkn and tkn != session.tkn:
-        attempts()
-        return responses[0]
-
-    usr = request.vars.usr 
+    usr = request.vars.usr
     pwd = request.vars.pwd
     tkn = request.vars.tkn
+
+    #Checks the form token. Also checks for a token value in the session in case the token request is deleted from the client side.
+    if not session.tkn or tkn != session.tkn:
+        attempts()
+        return responses[0]
 
     if len(pwd) < 6:
         attempts()
@@ -88,4 +88,7 @@ def attempts(code=1):
         session.tkn = None
 
 def check_attempts():
-    return session.attempts
+    if not request.ajax:
+        raise HTTP(400)
+    else:
+        return session.attempts
