@@ -32,6 +32,18 @@ def index():
 def error404():
     T.force(session.lng)
     return dict()
+    
+def error400():
+    T.force(session.lng)
+    return dict()
+    
+def error500():
+    T.force(session.lng)
+    return dict()
+
+def error503():
+    T.force(session.lng)
+    return dict()
 
 def ajax_token():
     tkn = web2py_uuid()
