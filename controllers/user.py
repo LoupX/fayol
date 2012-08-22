@@ -65,7 +65,7 @@ def login():
 
     if auth.is_logged_in():
         attempts(0)
-        return responses[1]
+        redirect(URL('test', 'index'))
     else:
         attempts()
         return responses[0]

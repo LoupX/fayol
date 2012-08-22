@@ -11,6 +11,8 @@ ADMIN_MAIL = 'jd@beardcode.mx'
 
 #System
 DEBUG = True
+IMAGE_PATH = 'img'
+LANG_IMG_PATH = '{}/lang'.format(IMAGE_PATH)
 
 #Mail
 MAIL_SERVER = 'smtp.gmail.com:587'
