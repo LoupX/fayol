@@ -6,7 +6,7 @@ from gluon.tools import Recaptcha
 def index():
 
     if auth.is_logged_in():
-        redirect(URL(c='default'))
+        redirect(URL(c='dashboard'))
 
     session.lng = T.accepted_language or 'es-mx'
     if request.cookies.has_key('my_lng'):

@@ -33,13 +33,18 @@ function web2py_ajax_fields(target) {
 
 function web2py_ajax_init(target) {
   jQuery('.hidden', target).hide();
-  jQuery('.error', target).hide().slideDown('slow');
+  jQuery('.error', target).hide();
   web2py_ajax_fields(target);
 };
 
 function web2py_event_handlers() {
   var doc = jQuery(document)
   doc.on('click', '.flash', function(e){jQuery(this).fadeOut('slow'); e.preventDefault();});
+  doc.keydown(function(tecla){
+      if (tecla.keyCode == 27) {
+          jQuery('.flash').fadeOut('slow');
+      }
+  });
   doc.on('keyup', 'input.integer', function(){this.value=this.value.reverse().replace(/[^0-9\-]|\-(?=.)/g,'').reverse();});
   doc.on('keyup', 'input.double, input.decimal', function(){this.value=this.value.reverse().replace(/[^0-9\-\.,]|[\-](?=.)|[\.,](?=[0-9]*[\.,])/g,'').reverse();});
   var confirm_message = (typeof w2p_ajax_confirm_message != 'undefined') ? w2p_ajax_confirm_message : "Are you sure you want to delete this object?";
