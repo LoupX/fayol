@@ -15,6 +15,8 @@ db.define_table('vendor',
     Field('clabe', 'integer', length=18, label='CLABE'),
     Field('date_added', 'datetime', default=request.now, writable=False, readable=False),
     Field('date_modified', 'datetime', update=request.now, writable=False, readable=False),
+    Field('added_by', 'references auth_user', default=auth.user.id),
+    Field('modified_by', 'references auth_user', update=auth.user.id),
     format='%(name)s'
 )
 
@@ -30,6 +32,8 @@ db.define_table('vendor_agents',
     Field('last_name', 'string', label=T('Apellidos')),
     Field('date_added', 'datetime', default=request.now, writable=False, readable=False),
     Field('date_modified', 'datetime', update=request.now, writable=False, readable=False),
+    Field('added_by', 'references auth_user', default=auth.user.id),
+    Field('modified_by', 'references auth_user', update=auth.user.id),
     format='%(name)s %(last_name)s'
 )
 
