@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
 db.define_table('vendors',
-    Field('name', 'string', required=True, notnull=True, label=T('Nombre')),
+    Field('name', 'string', required=True, notnull=True, label=T('Nombre'),
+        unique=True),
     Field('address', 'string', label=T('Dirección')),
     Field('city', 'string', label=T('Ciudad')),
     Field('municipality', 'string', label=T('Municipio')),
