@@ -2,21 +2,17 @@
 from gluon.utils import web2py_uuid
 from gluon.tools import Recaptcha
 
-
 def index():
 
     if auth.is_logged_in():
-        redirect(URL(c='dashboard'))
-
+        redirect(URL(c='default'))
     session.lng = T.accepted_language or 'es-mx'
     if request.cookies.has_key('my_lng'):
         session.lng = request.cookies['my_lng'].value
         T.force(session.lng)
     else:
         T.force(session.lng)
-
     tkn = ajax_token()
-
     form = FORM(
         FIELDSET(
             INPUT(_id="usr", _name='usr', _class='input_usr', _type='text', _placeholder=T('User'), _required='required'),
@@ -30,7 +26,6 @@ def index():
             _id='actions'
         )
     )
-
     return dict(form=form)
 
 def error404():
