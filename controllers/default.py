@@ -4,5 +4,4 @@ from gluon.tools import Recaptcha
 
 @auth.requires_login()
 def index():
-
     return dict()
