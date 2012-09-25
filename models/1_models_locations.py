@@ -66,12 +66,15 @@ if db(db.localities).isempty():
             Field('name'),
             Field('inegi', length=4),
             migrate=False)
-        rows = sqlite().select(sqlite.localities.ALL).as_list()
-        insert = []
-        for row in rows:
-            del row['id']
-            insert.append(row)
-        db.localities.bulk_insert(insert)
+        count = 0
+        last = int(sqlite(sqlite.localities).count())
+        while count < (last+1):
+            rows = sqlite().select(sqlite.localities.municipality_id,
+                sqlite.localities.name,
+                sqlite.municipalities.inegi,
+                limitby=(count,count+100)).as_list()
+            db.localities.bulk_insert(rows)
+            count += 100
     except Exception as e:
         db.rollback()
         raise HTTP(503)
