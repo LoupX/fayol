@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 db.define_table('vendors',
     Field('name', 'string', required=True, notnull=True, label=T('Nombre'),
         unique=True),
@@ -22,8 +21,7 @@ db.define_table('vendors',
     Field('added_by', 'references auth_user',
       default=auth.user.id if auth.user else 0),
     Field('modified_by', 'references auth_user',
-      update=auth.user.id if auth.user else 0),
-    format='%(name)s')
+      update=auth.user.id if auth.user else 0))
 
 db.define_table('vendor_contact_info',
     Field('vendor_id', 'references vendors', notnull=True),
