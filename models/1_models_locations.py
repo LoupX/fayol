@@ -69,10 +69,12 @@ if db(db.localities).isempty():
         count = 0
         last = int(sqlite(sqlite.localities).count())
         while count < (last+1):
-            rows = sqlite().select(sqlite.localities.municipality_id,
-                sqlite.localities.name,
-                sqlite.municipalities.inegi,
+            insert = []
+            rows = sqlite().select(sqlite.localities.ALL,
                 limitby=(count,count+100)).as_list()
+            for row in rows:
+                del row['id']
+                insert.append(row)
             db.localities.bulk_insert(rows)
             count += 100
     except Exception as e:
