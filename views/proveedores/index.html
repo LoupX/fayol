@@ -1,0 +1,87 @@
+{{extend 'template_fayol.html'}}
+<style type="text/css">
+    .btna {
+        width: 200px;
+        height: 40px;   
+        background: #4A8BF4;
+        border-radius: 3px;
+        -o-border-radius: 3px;
+        -moz-border-radius: 3px;
+        -webkit-border-radius: 3px;    
+        text-shadow: 0px 1px 0 rgba(168,162,162,0.5);
+        box-shadow: 0 0 1px rgba(0, 0, 0, 0.3), 0 1px 0 rgba(255, 255, 255, 0.3) inset;
+        -o-box-shadow: 0 0 1px rgba(0, 0, 0, 0.3), 0 1px 0 rgba(255, 255, 255, 0.3) inset;
+        -moz-box-shadow: 0 0 1px rgba(0, 0, 0, 0.3), 0 1px 0 rgba(255, 255, 255, 0.3) inset;
+        -webkit-box-shadow: 0 0 1px rgba(0, 0, 0, 0.3), 0 1px 0 rgba(255, 255, 255, 0.3) inset;        
+        border: 0px solid #4A8BF4;  
+        color: #FFF;
+        font-weight: bolder;
+        outline: none;
+}
+.btna:focus, .btna:active                            { outline: none; }
+
+.btna:hover {
+    background: -moz-linear-gradient(top, rgba(73,155,234,1) 0%, rgba(32,124,229,1) 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(73,155,234,1)), color-stop(100%,rgba(32,124,229,1)));
+    background: -webkit-linear-gradient(top, rgba(73,155,234,1) 0%,rgba(32,124,229,1) 100%);
+    background: -o-linear-gradient(top, rgba(73,155,234,1) 0%,rgba(32,124,229,1) 100%);
+    background: -ms-linear-gradient(top, rgba(73,155,234,1) 0%,rgba(32,124,229,1) 100%);
+    background: linear-gradient(top, rgba(73,155,234,1) 0%,rgba(32,124,229,1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#499bea', endColorstr='#207ce5',GradientType=0 );
+    border-radius: 3px;
+    -o-border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    text-shadow: 0px 1px 0 rgba(168,162,162,0.5);
+    -o-box-shadow: 0 0 10px rgba(0, 0, 0, 0.3), 0 1px 0 rgba(255, 255, 255, 0.3) inset;
+    -moz-box-shadow: 0 0 10px rgba(0, 0, 0, 0.3), 0 1px 0 rgba(255, 255, 255, 0.3) inset;
+    -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.3), 0 1px 0 rgba(255, 255, 255, 0.3) inset;
+    cursor: pointer;
+}
+</style>
+
+{{block main_content}}
+<div class="row" style="margin:auto auto; height: 490px">
+    <div class="grid_12">
+        <a href="{{=URL('proveedores','nuevoproveedor')}}" style="float:left;" >
+            <div>Agregar nuevo</div>
+        </a>
+        <input style="float: right;">
+    </div>
+    <div class="grid_12">
+        <table>
+            <tr>
+            <td>Proveedor1</td>
+            <td><button>Nuevo agente de venta</button></td>
+            <td><button>Ver</button></td>
+            <td><button>Deshabilitar</button></td>
+            </tr>
+            <tr>
+            <td>Proveedor1</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            </tr>
+            <tr>
+            <td>Proveedor1</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            </tr>
+            <tr>
+            <td>Proveedor1</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            </tr>
+            <tr>
+            <td>Proveedor1</td>
+            <td></td>
+            <td></td>
+            <td></td> 
+            </tr>
+        </table>
+    </div>
+</div>
+{{end}}
+

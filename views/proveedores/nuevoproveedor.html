@@ -1,0 +1,159 @@
+{{extend 'template_fayol.html'}}
+
+{{block main_content}}
+<div class="row" style="margin:auto auto; height: auto;">
+    <div class="grid_12 text-center">
+    <h1>Nuevo proveedor</h1> 
+    </div>
+    {{=BEAUTIFY(request.vars)}}
+</div>
+<div class="row" style="margin:auto auto; height: auto;">
+    <div class="grid_12">
+        <div id="menu_opt">
+            <ul>
+                <li><a href="#" data-mg="0">Informacion General</a></li>
+                <li><a href="#" data-mg="1">Formas de Contacto</a></li>
+                <li><a href="#" data-mg="2">Formas de Pago</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="row" style="margin:auto auto; height: auto;">
+    <div class="grid_12">
+    <form action="{{=URL()}}" method="post">        
+        <div class="main_content">
+            
+            <ul>
+                <li id="0">
+                    <table width="618" height="137">
+                        <tr>
+                            <td width="94">Empresa (nombre): *</td>
+                            <td width="255"><input name="empresa" required></td>
+                            <td width="61">Direccion:</td>
+                            <td width="188"><input name="direccion"></td>
+                        </tr>
+                        <tr>
+                            <td>Estado:</td>
+                            <td><select name="estado">
+                            <option>Seleccionar</option>
+                            </select></td>
+                            <td>Código postal: </td>
+                            <td><input name='cp' maxlength='5'></td>
+                        </tr>
+                        <tr>
+                            <td>Ciudad:</td>
+                            <td><select name="ciudad">
+                    <option>Seleccionar</option>
+                    </select></td>
+                            <td>RFC:</td>
+                            <td><input name='rfc' maxlength='14'></td>
+                        </tr>
+                        <tr>
+                            <td>Municipio:</td>
+                            <td><select name="municipio">
+                    <option>Seleccionar</option>
+                    </select></td>
+                            <td>Pagina web:</td>
+                            <td><input name='sitio'></td>
+                        </tr>
+                    </table>
+                </li>
+                <li id="620">
+                    <a href="#" id="addc">Agregar contacto</a><br><br>
+                    <table id="area-contacto"></table>
+                </li>
+                <li id="1240">
+                    <h5>Deposito</h5><br>
+                    Banco:
+                    <select name="banco">
+                    <option>Ninguno</option>
+                    </select><br><br>
+                    Numero de cuenta:                         
+                    <input class='iptn' name='cuenta' maxlength='11'><br>
+                        <br>
+                    Sucursal:                         
+                    <input class='iptn' name='sucursal' maxlength='4'>
+                    <br><br><br><br>
+                    <h5>Tranferencia</h5><br>
+                    CLABE:  
+                    <input class='iptn' name='clabe' maxlength='18'><br>
+                    <br><br><br>
+                </li>
+            </ul>
+        </div>
+    <input type='submit' id='btng' name='btng' value='Guardar'>
+    <button id="btnc">Cancelar</button>
+    </form>
+    </div>
+</div>
+{{end}}
+
+{{block jq_shit}}
+<script>
+    /*
+    *Funciones para mostrar el menu
+    *
+    */
+    var uls = jQuery('.main_content').find('ul'),
+        cont = 0;
+
+    jQuery('#menu_opt').find('a').live('click', function(e) {
+         e.preventDefault();
+         cont = parseInt(jQuery(this).attr('data-mg'))*620;
+         uls.find('li#'+cont)
+                 .animate({opacity: 1},500)
+                 .siblings().animate({opacity: 0},100);
+         uls.animate({marginLeft: -cont+'px'},500);
+        //console.log(cont);
+         //console.log(uls.find('li#'+cur).siblings() );
+    });
+
+    //Funcion para usar el teclado con las opciones del menu
+    $(document).keydown(function(tecla){
+        if(tecla.keyCode == 39) {
+            cont += cont <= 1239 ? 620 : 0;
+            //console.log(cont);
+        }
+        else if(tecla.keyCode == 37) {
+            cont -= cont >= 1 ? 620 : 0;
+            //console.log(cont);
+        }
+        uls.find('li#'+cont)
+                .animate({opacity: 1}, 500)
+                .siblings().animate({opacity: 0},100);;
+        uls.animate({marginLeft: -cont+'px'}, 500);
+    });
+
+    /*
+    *Validacion del formulario
+    *
+    */
+
+    jQuery('#btnc').live('click', function(e) {
+        e.preventDefault();
+    });
+
+    var idel = 0;
+    jQuery('#addc').live('click', function(e) {
+        e.preventDefault();
+        jQuery('#area-contacto').append('<tr id="contacto-'+idel+'" class="form-contacto"><td>Tipo:</td><td><select onchange="cambiar('+idel+')" name="tipo-contacto-'+idel+'"><option value="nin">Ninguno</option><option value="tel">Telefono</option><option value="cor">Correo</option></select></td><td>Descripcion:</td><td><input type="text" name="campo-contacto-'+idel+'" disabled></td><td><input type="button" value="Borrar" onclick="borrarc('+idel+')"></td></tr>');
+        idel+=1;
+    });
+
+
+    function borrarc(quien) {
+        jQuery('#contacto-'+quien).remove();
+    }
+
+    function cambiar(esto) {
+        if(jQuery('select[name=tipo-contacto-'+esto+']').val() != 'nin') {
+            jQuery('input[name=campo-contacto-'+esto+']').removeAttr('disabled');
+        } else {
+            jQuery('input[name=campo-contacto-'+esto+']').attr('disabled','disabled').val('');
+        }
+        
+    }
+
+
+</script>
+{{end}}

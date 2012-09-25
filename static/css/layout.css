@@ -121,7 +121,7 @@ form :focus {
 	font-weight: bolder;
 	outline: none;
 }
-#submit:focus, #submit:active  							{ outline: none; }
+#submit:focus, #submit:active 							{ outline: none; }
 
 #submit:hover {
 	background: -moz-linear-gradient(top, rgba(73,155,234,1) 0%, rgba(32,124,229,1) 100%);
@@ -219,19 +219,24 @@ div.captcha                             { display: none; }
 
 /*** Proveedores ***/
 
+#form_pro { line-height: 1.5em; }
+
 none#form_pro input:required {
     background-image: url('../images/required.png');
     background-position: right center;
     background-repeat: no-repeat;
 }
 
-#form_pro input.invalidinput, #form_prod input.invalidinput {
-    background-image: url('../images/wrong.png');
+li div { margin-left: 150px; }
+
+
+input:blur:required {
+    background: #FFF url('../images/wrong.png');
     background-position: right center;
     background-repeat: no-repeat;
 }
 
-select { width: 210px; height: 25px; }
+select { width: 210px; height: 25px;}
 
 #form_pro input:required:valid {
     background-image: url('../images/right.png');
@@ -246,7 +251,6 @@ select { width: 210px; height: 25px; }
 .iptn {
     font-size: 12px;
     color: #4A8BF4;
-    background: #f1f1f1;
     padding: 5px;
     margin: 0 0 8px 0;
     width: 200px;
@@ -260,7 +264,6 @@ select { width: 210px; height: 25px; }
     -moz-box-shadow: 0 1px 1px #ccc inset, 0 1px 0 #fff;
     -webkit-box-shadow: 0 1px 1px #ccc inset, 0 1px 0 #fff;
     float: right;
-    margin-right: 250px;
 }
 
 .input_error {
@@ -285,13 +288,15 @@ select { width: 210px; height: 25px; }
 }
 
 .main_content div {
-    height: 35px;
+    height: auto;
+    margin-left: 0px;
 }
 
 #menu_opt {
-    margin: 0px;
+    margin: 0px 35%;
     width: inherit;
     height: 30px;
+    width: 400px;
 }
 
 #menu_opt ul {
@@ -306,7 +311,7 @@ select { width: 210px; height: 25px; }
 
 .main_content {
     width: inherit;
-    height: 620px;
+    height: auto;
     overflow: hidden;
 }
 

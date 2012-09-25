@@ -138,15 +138,9 @@ a.btn-form, input.btn-form				{ margin:5px 0 5px 150px; padding:4px 28px 4px 8px
 
 /***** Tables  *****/
 
-table									{ margin:0 0 20px 0; width:100%; }
-table th 								{ padding:10px 8px 10px 8px; background-color:#e2e2e2; color:#333; font-weight:bold; border:1px solid #999; }
-table td 								{ padding:10px 8px 10px 8px; background-color:#e2e2e2; color:#333; border:1px solid #999; }
-table tr.even td 						{ background-color:#fff; }
-table tr.odd td 						{ background-color:#f3f3f3; }
-table td.highlight 						{ color:#FFF; font-weight:bold; }
-table tr td.highlight					{ background-color:#333;  }
 
-/***** Back to Top *****/
+
+/***** Back to Top *****
 
 #toTop 									{ display:none; text-decoration:none; position:fixed; bottom:10px; right:10px; overflow:hidden; width:51px; height:51px; border:none; text-indent:-999px; background:url(../images/ui.totop.png) no-repeat left top; }
 #toTopHover 							{ background:url(../images/ui.totop.png) no-repeat left -51px; width:51px; height:51px; display:block; overflow:hidden; float:left; opacity: 0; -moz-opacity: 0; filter:alpha(opacity=0); }
