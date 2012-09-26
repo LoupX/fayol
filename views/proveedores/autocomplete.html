@@ -121,10 +121,10 @@
         <form>
             <div class="cont_ajax"> 
                 <input type="text" id="month" name="month" class="ajax_prov"   autocomplete="off"/>
+                <select id="my-select"></select>
                 <div class="results">
                     <ul>
                         <div class="tit">Buscando...</div>
-                        
                     </ul>
                 </div>
             </div>
@@ -140,10 +140,10 @@
                 if(word != '') {
                     jQuery.ajax({
                         type: "POST",
-                        url: '{{=URL('dashboard', 'month_selector')}}',
+                        url: '{{=URL('proveedores', 'month_selector')}}',
                         data: {month: word},
                         success: function(results) {
-                            jQuery(".results").html(results);
+                            jQuery("#my-select").html(results);
                             jQuery(".results ul").prepend('<div class="tit">Buscando...</div>');
                         }
                     });

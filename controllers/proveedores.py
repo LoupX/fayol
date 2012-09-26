@@ -13,8 +13,93 @@ def proveedor():
     return dict(nombre=nombre, nombre_vista=nombre_vista)
 
 def nuevoproveedor():
+    if request.vars:
+        #vars for ventors
+        company = request.vars['empresa']
+        address = request.vars['direccion']
+        state = request.vars['estado']
+        code = request.vars['cp']
+        municipality = request.vars['municipio']
+        rfc = request.vars['rfc']
+        city = request.vars['ciudad']
+        site = request.vars['sitio']
+
+        #vars for paid method
+        bank = request.vars['banco']
+        account = request.vars['cuenta']
+        branch = request.vars['sucursal']
+        clabe = request.vars['clabe']
+
+        shit = dict(address=address, state=state, zip_code=code,
+                    municipality=municipality, rfc=rfc, city=city, website=site,
+                    bank=bank, bank_account_number=account, branch=branch,
+                    clabe=clabe)
+
+        inserto = create_vendor(company, **shit)
+        sin = str(inserto)
+
+        #contact's method
+        my_list = []
+        my_lisd = []
+        for n in request.vars:
+            if n.startswith('tipo-contacto-'):
+                #my_list.append(request.vars[n])
+                my_list.append(n)
+                #create_vendor_contact(7, request, description)
+            if n.startswith('campo-contacto-'):
+                #my_list.append(request.vars[n])
+                my_lisd.append(n)
+
+        my_list.sort()
+        my_lisd.sort()
+        l = len(my_list)
+
+
+        if sin != 'None':
+            for c in range(0, l):
+                inserto_con = create_vendor_contact(inserto,
+                                                    1,
+                                                    request.vars[my_lisd[c]])
+                response.write(str(inserto) + request.vars[my_list[c]] +
+                               request.vars[my_lisd[c]])
+
+        sinc = str(inserto_con)
+        response.write("Respuesta: {}".format(inserto_con))
+
+        if sin != 'None' and sinc != 'None':
+            response.flash = 'Se ha guardado.'
+        else:
+            response.flash = 'Ocurrio un error.'
+
     nombre_vista = 'Proveedores'
-    return dict(nombre=nombre, nombre_vista=nombre_vista)
+    estados = db(db.states).select(db.states.name,
+        db.states.id, orderby='name').as_list()
+    estado = DIV(*[OPTION(k['name'], _value=k['id']) for k in estados])
+    bancos = db(db.banks).select(db.banks.short_name,
+        db.banks.id, orderby='short_name').as_list()
+    banco = DIV(*[OPTION(b['short_name'], _value=b['id']) for b in bancos])
+    return dict(nombre=nombre, nombre_vista=nombre_vista, estado=estado,
+        banco=banco)
+
+def sel_municipio():
+    id = request.vars.id
+    municipios = db(db.municipalities.state_id==id).select(db.municipalities.id,
+        db.municipalities.name, orderby='name').as_list()
+    municipio = DIV(*[OPTION(k['name'], _value=k['id']) for k in municipios])
+
+    return municipio;
+
+def sel_ciudad():
+    id = request.vars.id
+    ciudades = db(db.localities.municipality_id==id).select(db.localities.id,
+        db.localities.name, orderby='name').as_list()
+    ciudad = DIV(*[OPTION(k['name'], _value=k['id']) for k in ciudades])
+    return ciudad;
+
+def guardar():
+    name = request.vars.empresa
+    create_vendor(request.vars);
+    return dict();
 
 def productos():
     nombre_vista = 'Productos'
@@ -103,10 +188,11 @@ def autocomplete():
 
 def month_selector():
     if not request.vars.month: return ''
-    months = ['January', 'February', 'March', 'April', 'May',
-              'June', 'July', 'August', 'September' ,'October',
-              'November', 'December']
+    #months = ['January', 'February', 'March', 'April', 'May',
+    #          'June', 'July', 'August', 'September' ,'October',
+    #          'November', 'December']
+    months = db(db.states).select(db.states.name, db.states.id).as_list()
     month_start = request.vars.month.capitalize()
-    selected = [m for m in months if m.startswith(month_start)]
-    return UL(*[LI(k) for k in selected])
+    selected = [m for m in months if m['name'].startswith(month_start)]
+    return DIV(*[OPTION(k['name'], _value=k['id']) for k in selected])
 
