@@ -10,9 +10,9 @@ db.define_table('vendors',
     Field('rfc', 'string', length=13, label='RFC'),
     Field('website', 'string', label=T('Sitio web')),
     Field('bank', 'string', label=T('Banco')),
-    Field('bank_account_number', 'integer', label=T('Número de cuenta')),
+    Field('bank_account_number', 'string', label=T('Número de cuenta')),
     Field('branch', 'string', label=T('Sucursal')),
-    Field('clabe', 'integer', length=18, label='CLABE'),
+    Field('clabe', 'string', length=18, label='CLABE'),
     Field('status', 'boolean', default=True, label=T('Estado')),
     Field('date_added', 'datetime', default=request.now, writable=False,
       readable=False),
@@ -111,6 +111,9 @@ def create_vendor_contact(vendor_id, contact_type_id, description):
     except Exception as e:
         db.rollback()
         return None
+    else:
+        db.commit()
+        return id
 
 def create_agent(vendor_id, name):
     """
