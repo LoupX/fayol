@@ -1,6 +1,11 @@
 # -*- coding: utf-8 -*-
 
+db.define_table('countries',
+    Field('name')
+)
+
 db.define_table('states',
+    Field('country_id', 'references countries'),
     Field('name'),
     Field('hasc', length=5),
     Field('iso', length=3),
