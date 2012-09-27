@@ -196,3 +196,8 @@ def month_selector():
     selected = [m for m in months if m['name'].startswith(month_start)]
     return DIV(*[OPTION(k['name'], _value=k['id']) for k in selected])
 
+
+def nuevoagente():
+    nombre_vista = 'Proveedores'
+    nombre = 'Jose'
+    return dict(nombre=nombre, nombre_vista=nombre_vista)
