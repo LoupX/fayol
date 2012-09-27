@@ -2,14 +2,15 @@
 db.define_table('company_addresses',
     Field('address', 'string', notnull=True),
     Field('suburb', 'string', comment='colonia', notnull=True),
-    Field('country_id', 'references countries', notnull=True),
+    Field('country_id', 'references countries', notnull=True, default=1),
     Field('state_id', 'references states', notnull=True),
-    Field('municipality_id', 'references municipalities', notnull=True),
+    Field('municipality_id', 'references municipalities'),
     Field('locality_id', 'references localities', notnull=True),
     Field('zip_code', 'integer', length=5))
 
 db.define_table('company_tax_info',
     Field('business_name', 'string', comment='razón social'),
+    Field('rfc', 'string', lenght='13', unique=True)
     Field('tax', 'string', comment='régimen fiscal'))
 
 db.define_table('branches',
