@@ -2,23 +2,117 @@
 db.define_table('company_addresses',
     Field('address', 'string', notnull=True),
     Field('suburb', 'string', comment='colonia', notnull=True),
-    Field('country_id', 'references countries', notnull=True, default=1),
-    Field('state_id', 'references states', notnull=True),
-    Field('municipality_id', 'references municipalities'),
-    Field('locality_id', 'references localities', notnull=True),
-    Field('zip_code', 'integer', length=5))
+    Field('country_id', 'reference countries', default=1),
+    Field('state_id', 'reference states', notnull=True),
+    Field('municipality_id', 'reference municipalities'),
+    Field('locality_id', 'reference localities', notnull=True),
+    Field('zip_code', 'integer', length=5),
+    Field('status', 'boolean', default=True, label=T('Estado')),
+    Field('date_added', 'datetime', default=request.now, writable=False,
+      readable=False),
+    Field('date_modified', 'datetime', update=request.now, writable=False,
+      readable=False),
+    Field('added_by', 'reference auth_user',
+      default=auth.user.id if auth.user else 0),
+    Field('modified_by', 'reference auth_user',
+      update=auth.user.id if auth.user else 0))
 
 db.define_table('company_tax_info',
     Field('business_name', 'string', comment='razón social'),
-    Field('rfc', 'string', lenght='13', unique=True)
-    Field('tax', 'string', comment='régimen fiscal'))
+    Field('rfc', 'string', length='13', unique=True),
+    Field('tax', 'string', comment='régimen fiscal'),
+    Field('status', 'boolean', default=True, label=T('Estado')),
+    Field('date_added', 'datetime', default=request.now, writable=False,
+      readable=False),
+    Field('date_modified', 'datetime', update=request.now, writable=False,
+      readable=False),
+    Field('added_by', 'reference auth_user',
+      default=auth.user.id if auth.user else 0),
+    Field('modified_by', 'reference auth_user',
+      update=auth.user.id if auth.user else 0))
 
 db.define_table('branches',
     Field('name', 'string', notnull=True, unique=True),
-    Field('address_id', 'references addresses'),
-    Field('tax_information_id', 'references tax_information'))
+    Field('address_id', 'reference company_addresses'),
+    Field('tax_information_id', 'reference company_tax_info'),
+    Field('status', 'boolean', default=True, label=T('Estado')),
+    Field('date_added', 'datetime', default=request.now, writable=False,
+      readable=False),
+    Field('date_modified', 'datetime', update=request.now, writable=False,
+      readable=False),
+    Field('added_by', 'reference auth_user',
+      default=auth.user.id if auth.user else 0),
+    Field('modified_by', 'reference auth_user',
+      update=auth.user.id if auth.user else 0))
 
-db.define_table('warehouse',
+db.define_table('warehouses',
     Field('name', 'string', notnull=True, unique=True),
-    Field('address_id', 'references addresses'))
+    Field('address_id', 'reference company_addresses'),
+    Field('status', 'boolean', default=True, label=T('Estado')),
+    Field('date_added', 'datetime', default=request.now, writable=False,
+      readable=False),
+    Field('date_modified', 'datetime', update=request.now, writable=False,
+      readable=False),
+    Field('added_by', 'reference auth_user',
+      default=auth.user.id if auth.user else 0),
+    Field('modified_by', 'reference auth_user',
+      update=auth.user.id if auth.user else 0))
 
+def create_company_address(**kwargs):
+    company_addresses_id = None
+    for key in kwargs:
+        if key not in db.company_addresses.fields:
+            del kwargs[key]
+
+    try:
+        id = db.company_addresses.insert(**kwargs)
+    except Exception as e:
+        db.rollback()
+        return None
+    else:
+        db.commit()
+        return company_addresses_id
+
+
+def create_company_tax_info(**kwargs):
+    company_tax_info_id = None
+    for key in kwargs:
+        if key not in db.company_tax_info.fields:
+            del kwargs[key]
+    try:
+        company_tax_info_id = db.company_tax_info.insert(**kwargs)
+    except Exception as e:
+        db.rollback()
+        return None
+    else:
+        db.commit()
+        return company_tax_info_id
+
+def create_branche(**kwargs):
+    branch_id = None
+    for key in kwargs:
+        if key not in db.branches.fields:
+            del kwargs[key]
+
+    try:
+        branch_id = db.branches.insert(**kwargs)
+    except Exception as e:
+        db.rollback()
+        return None
+    else:
+        db.commit()
+        return branch_id
+
+def create_warehouse(**kwargs):
+    warehouse_id = None
+    for key in kwargs:
+        if key not in db.warehouses.fields:
+            del kwargs[key]
+    try:
+        warehouse_id = db.warehouses.insert(**kwargs)
+    except Exception as e:
+        db.rollback()
+        return None
+    else:
+        db.commit()
+        return warehouse_id

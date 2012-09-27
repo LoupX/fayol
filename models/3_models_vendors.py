@@ -18,25 +18,25 @@ db.define_table('vendors',
       readable=False),
     Field('date_modified', 'datetime', update=request.now, writable=False,
       readable=False),
-    Field('added_by', 'references auth_user',
+    Field('added_by', 'reference auth_user',
       default=auth.user.id if auth.user else 0),
-    Field('modified_by', 'references auth_user',
+    Field('modified_by', 'reference auth_user',
       update=auth.user.id if auth.user else 0))
 
 db.define_table('vendor_contact_info',
-    Field('vendor_id', 'references vendors', notnull=True),
-    Field('contact_type_id', 'references contact_types', notnull=True,
+    Field('vendor_id', 'reference vendors', notnull=True),
+    Field('contact_type_id', 'reference contact_types', notnull=True,
         label=T('Tipo')),
     Field('description', 'string', notnull=True, label=T('Descripción')))
 
 db.define_table('vendor_agents',
-    Field('vendor_id', 'references vendors', notnull=True),
+    Field('vendor_id', 'reference vendors', notnull=True),
     Field('name', 'string', required=True, notnull=True, label=T('Nombre')),
     format='%(name)s')
 
 db.define_table('vendor_agent_contact_info',
-    Field('vendor_agent_id', 'references vendor_agents', notnull=True),
-    Field('contact_type_id', 'references contact_types', notnull=True,
+    Field('vendor_agent_id', 'reference vendor_agents', notnull=True),
+    Field('contact_type_id', 'reference contact_types', notnull=True,
         label=T('Tipo')),
     Field('description', 'string', notnull=True, label=T('descripción')))
 

@@ -9,9 +9,9 @@ db.define_table('brands',
 	  readable=False),
     Field('date_modified', 'datetime', update=request.now, writable=False,
 	  readable=False),
-    Field('added_by', 'references auth_user', 
+    Field('added_by', 'reference auth_user',
 	  default=auth.user.id if auth.user else None),
-    Field('modified_by', 'references auth_user', 
+    Field('modified_by', 'reference auth_user',
 	  update=auth.user.id if auth.user else None))
 
 db.define_table('brand_descriptions',

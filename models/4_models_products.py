@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 db.define_table('products',
-    Field('brand_id', 'references brands', required=True, notnull=True,
+    Field('brand_id', 'reference brands', required=True, notnull=True,
 	  label=T('Marca')),
-    Field('unit_id', 'references units', required=True, notnull=True, 
+    Field('unit_id', 'reference units', required=True, notnull=True,
 	  label=T('Unidad')),
     Field('code', 'string', required=True, notnull=True,
         unique=True, label=T('Código')),
@@ -20,13 +20,13 @@ db.define_table('products',
 	  readable=False),
     Field('date_modified', 'datetime', update=request.now, writable=False,
 	  readable=False),
-    Field('added_by', 'references auth_user',
+    Field('added_by', 'reference auth_user',
 	  default=auth.user.id if auth.user else 0),
-    Field('modified_by', 'references auth_user',
+    Field('modified_by', 'reference auth_user',
 	  update=auth.user.id if auth.user else 0))
 
 db.define_table('product_descriptions',
-    Field('product_id', 'references products', required=True, notnull=True),
+    Field('product_id', 'reference products', required=True, notnull=True),
     Field('name', 'string', required=True, notnull=True, label=T('Nombre')),
     Field('alternative_name', 'string', label=T('Nombre alternativo')),
     Field('description', 'text', label=T('Descripción')),
@@ -34,15 +34,15 @@ db.define_table('product_descriptions',
     Field('meta_keywords', 'string', label=T('Palabras clave')))
 
 db.define_table('product_to_vendor',
-    Field('product_id', 'references products'),
-    Field('vendor_id', 'references vendors'))
+    Field('product_id', 'reference products'),
+    Field('vendor_id', 'reference vendors'))
 
 db.define_table('product_to_category',
-    Field('product_id', 'references products'),
-    Field('category_id', 'references categories'))
+    Field('product_id', 'reference products'),
+    Field('category_id', 'reference categories'))
 
 db.define_table('product_price_lists',
-    Field('product_id', 'references products', required=True, notnull=True),
+    Field('product_id', 'reference products', required=True, notnull=True),
     Field('name', 'string', required=True, notnull=True),
     Field('price', 'decimal(10,2)', default=0.00),
     Field('is_default', 'boolean', default=False),
@@ -51,9 +51,9 @@ db.define_table('product_price_lists',
 	  readable=False),
     Field('date_modified', 'datetime', update=request.now, writable=False,
 	  readable=False),
-    Field('added_by', 'references auth_user',
+    Field('added_by', 'reference auth_user',
 	  default=auth.user.id if auth.user else 0),
-    Field('modified_by', 'references auth_user',
+    Field('modified_by', 'reference auth_user',
 	  update=auth.user.id if auth.user else 0))
 
 db.products.date_added.represent = lambda date_added, row: date_added.strftime('%d - %m - %Y')

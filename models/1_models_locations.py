@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 
 db.define_table('countries',
-    Field('name')
-)
+    Field('name'))
 
 db.define_table('states',
-    Field('country_id', 'references countries'),
+    Field('country_id', 'reference countries'),
     Field('name'),
     Field('hasc', length=5),
     Field('iso', length=3),
@@ -26,6 +25,7 @@ db.define_table('localities',
 if db(db.states).isempty():
     try:
         sqlite.define_table('states',
+            Field('contry_id', 'reference countries'),
             Field('name'),
             Field('hasc', length=5),
             Field('iso', length=3),
