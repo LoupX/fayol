@@ -54,5 +54,11 @@
 'Username': 'Username',
 'Verify Password': 'Verify Password',
 'enter an integer between min)g and max)g': 'enter an integer between min)g and max)g',
+<<<<<<< HEAD
 'please input your password again': 'please input your password again',
+=======
+'invalid expression': 'invalid expression',
+'please input your password again': 'please input your password again',
+'too short': 'too short',
+>>>>>>> Productos
 }
