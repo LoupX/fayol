@@ -3,80 +3,144 @@ nombre = 'Emir Salazar'
 nombre_vista = ''
 
 def index():
-    dum = 'Aqui va las apps'
-    dum1 = 'notificaciones'
     nombre_vista = 'Dashboard'
-    return dict(dum=dum, dum1=dum1, nombre=nombre, nombre_vista=nombre_vista)
+    form = FORM(INPUT(_name='u', requires=IS_NOT_EMPTY()),INPUT(_name='p'),
+                INPUT(_type='submit'))
+    if form.accepts(request,session):
+        #option 1
+        response.flash = 'good'
+    elif form.errors:
+        #option 2
+        response.flash = 'wrong'
+    return dict(nombre=nombre, nombre_vista=nombre_vista, form=form)
 
 def proveedor():
     nombre_vista = 'Proveedores'
     return dict(nombre=nombre, nombre_vista=nombre_vista)
 
 def nuevoproveedor():
-    if request.vars:
-        #vars for ventors
-        company = request.vars['empresa']
-        address = request.vars['direccion']
-        state = request.vars['estado']
-        code = request.vars['cp']
-        municipality = request.vars['municipio']
-        rfc = request.vars['rfc']
-        city = request.vars['ciudad']
-        site = request.vars['sitio']
+    if request.post_vars['btng'] == 'Guardar':
 
-        #vars for paid method
-        bank = request.vars['banco']
-        account = request.vars['cuenta']
-        branch = request.vars['sucursal']
-        clabe = request.vars['clabe']
-
-        shit = dict(address=address, state=state, zip_code=code,
-                    municipality=municipality, rfc=rfc, city=city, website=site,
-                    bank=bank, bank_account_number=account, branch=branch,
-                    clabe=clabe)
-
-        inserto = create_vendor(company, **shit)
-        sin = str(inserto)
-
-        #contact's method
-        my_list = []
-        my_lisd = []
-        for n in request.vars:
-            if n.startswith('tipo-contacto-'):
-                #my_list.append(request.vars[n])
-                my_list.append(n)
-                #create_vendor_contact(7, request, description)
-            if n.startswith('campo-contacto-'):
-                #my_list.append(request.vars[n])
-                my_lisd.append(n)
-
-        my_list.sort()
-        my_lisd.sort()
-        l = len(my_list)
-
-
-        if sin != 'None':
-            for c in range(0, l):
-                inserto_con = create_vendor_contact(inserto,
-                                                    1,
-                                                    request.vars[my_lisd[c]])
-                response.write(str(inserto) + request.vars[my_list[c]] +
-                               request.vars[my_lisd[c]])
-
-        sinc = str(inserto_con)
-        response.write("Respuesta: {}".format(inserto_con))
-
-        if sin != 'None' and sinc != 'None':
-            response.flash = 'Se ha guardado.'
+        #bolempresa = True if request.post_vars['empresa'] else False
+        #if not bolempresa:
+        #    response.flash = 'Favor de ingresar el nombre del Proveedor.'
+        #check if request.post_vars['empresa'] then search in db for
+        # duplicates
+        bolempresa = False
+        if request.post_vars['empresa']:
+            estaa = db(db.vendors.name==request.post_vars['empresa']).select(db.vendors.name)
+            if estaa:
+                response.flash = 'Ya existe un Proveedor con ese nombre.'
+            else:
+                bolempresa = True
         else:
-            response.flash = 'Ocurrio un error.'
+            bolempresa = False
 
-    nombre_vista = 'Proveedores'
-    estados = db(db.states).select(db.states.name,
-        db.states.id, orderby='name').as_list()
+        bolcode = True
+        #response.write(len(request.vars['cp']))
+        if request.post_vars['cp']:
+            try:
+                code = int(request.post_vars['cp'])
+                #response.write(request.vars['cp'])
+                if len(request.post_vars['cp']) == 5:
+                    bolcode = True
+                else:
+                    bolcode = False
+                    response.flash = 'Código postal inválido.'
+            except:
+                bolcode = False
+                response.flash = 'Código postal inválido.'
+
+
+        if bolempresa == True and bolcode == True :
+            #save
+            #vars for vendors
+            company = request.post_vars['empresa']
+            address = request.post_vars['direccion']
+            state = request.post_vars['estado']
+            code = request.post_vars['cp']
+            municipality = request.post_vars['municipio']
+            rfc = request.post_vars['rfc']
+            city = request.post_vars['ciudad']
+            site = request.post_vars['sitio']
+
+            #vars for paid method
+            bank = request.post_vars['banco']
+            account = request.post_vars['cuenta']
+            branch = request.post_vars['sucursal']
+            clabe = request.post_vars['clabe']
+
+            shit = dict(address=address, state=state, zip_code=code,
+                municipality=municipality, rfc=rfc, city=city, website=site,
+                bank=bank, bank_account_number=account, branch=branch,
+                clabe=clabe)
+
+            #contact's method
+            my_list = []
+            my_lisd = []
+            for n in request.post_vars:
+                if n.startswith('tipo-contacto-'):
+                    try:
+                        nint = int(request.post_vars[n])
+                        if type(nint) is int:
+                            my_list.append(n)
+                            #response.write(type(int(request.post_vars[n])))
+                    except:
+                        response.write('oops!')
+                if n.startswith('campo-contacto-'):
+                    my_lisd.append(n)
+            my_list.sort()
+            my_lisd.sort()
+            l = len(my_list)
+            nos = []
+
+            #insert vendor's name and shit
+            inserto = create_vendor(company, **shit)
+            sin = str(inserto)
+            #sin = str(inserto) if inserto is int else 'None'
+            insertocon = 0
+            if sin != 'None':
+                for c in range(0, l):
+                    nos.append(request.post_vars[my_list[c]]+'-'+request.post_vars[my_lisd[c]])
+                    insertocon = create_vendor_contact(inserto, int(request.post_vars[my_list[c]]), request.post_vars[my_lisd[c]])
+            else:
+                response.flash = 'No se guardo los datos del Proveedor.'
+            sinc = str(insertocon)
+            #sinc = str(insertocon) if insertocon is int else 'None'
+
+            if sin != 'None' and sinc != 'None':
+                if sinc != '0':
+                    response.flash = 'Se han guardado los datos.'
+                else:
+                    sup = True #delete_vendor(insertocon)
+                    if sup:
+                        response.flash = 'Ocurrio un error con los datos de '\
+                                         'contacto.'
+                    else:
+                        response.flash = 'Fatal error. :S'
+            else:
+                response.flash = 'Ocurrio un error al guardar los datos.'
+
+                #response.write(company)
+                #response.write('<br>', escape=False)
+                #response.write(shit)
+                #response.write('<br>', escape=False)
+                #response.write(my_list)
+                #response.write('<br>', escape=False)
+                #response.write(nos)
+                #response.write('<br>', escape=False)
+                #response.write('proveedor: '+sin)
+                #response.write('<br>', escape=False)
+                #response.write('contacto: '+sinc)
+                #else:
+                #response.flash = 'Favor de ingresar el nombre del Proveedor.'
+
+    nombre_vista = 'Agregar Proveedor'
+    estados = db(db.states).select(db.states.name, db.states.id,
+        orderby='name').as_list()
     estado = DIV(*[OPTION(k['name'], _value=k['id']) for k in estados])
-    bancos = db(db.banks).select(db.banks.short_name,
-        db.banks.id, orderby='short_name').as_list()
+    bancos = db(db.banks).select(db.banks.short_name, db.banks.id,
+        orderby='short_name').as_list()
     banco = DIV(*[OPTION(b['short_name'], _value=b['id']) for b in bancos])
     return dict(nombre=nombre, nombre_vista=nombre_vista, estado=estado,
         banco=banco)

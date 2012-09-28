@@ -236,7 +236,7 @@ input:blur:required {
     background-repeat: no-repeat;
 }
 
-select { width: 210px; height: 25px;}
+/*select { width: 210px; height: 25px;}*/
 
 #form_pro input:required:valid {
     background-image: url('../images/right.png');

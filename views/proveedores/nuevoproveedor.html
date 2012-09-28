@@ -5,7 +5,6 @@
     <div class="grid_12 text-center">
     <h1>Nuevo proveedor</h1> 
     </div>
-    {{=request.vars}}
 </div>
 <div class="row" style="margin:auto auto; height: auto;">
     <div class="grid_12">
@@ -28,7 +27,11 @@
                     <table width="618" height="137">
                         <tr>
                             <td width="94">Empresa (nombre): *</td>
-                            <td width="255"><input name="empresa" required></td>
+                            <td width="255">
+                                <input name="empresa"
+                                       oninvalid="setCustomValidity('Ingresar el nombre del Proveedor a guardar.')"
+                                       onchange="try{setCustomValidity('')}catch(e){}"
+                                       required></td>
                             <td width="61">Direccion:</td>
                             <td width="188"><input name="direccion"></td>
                         </tr>
@@ -40,7 +43,13 @@
                             </select>
                             </td>
                             <td>Código postal: </td>
-                            <td><input name='cp' maxlength='5'></td>
+                            <td><input name="cp"
+                                 pattern="^([1-9]{2}|[0-9][1-9]|[1-9][0-9])[0-9]{3}$"
+                                 maxlength="5"
+                                 minlength="5" placeholder="5 digitos"
+                                 oninvalid="setCustomValidity('Código Postal inválido.')"
+                                 onchange="try{setCustomValidity('')}catch(e){}">
+                            </td>
                         </tr>
                         <tr>
                             <td>Municipio:</td>
@@ -48,7 +57,14 @@
                             <option value="">Seleccionar</option>
                             </select></td>
                             <td>RFC:</td>
-                            <td><input name='rfc' maxlength='14'></td>
+                            <td><input name='rfc'
+                                 placeholder="Ejemplo JASA890303001"
+                                 maxlength="13"
+                                 minlenght="10"
+                                 pattern="^[a-zA-Z]{3,4}(\d{6})((\D|\d){3})?$"
+                                 oninvalid="setCustomValidity('RFC inválido.')"
+                                 onchange="try{setCustomValidity('')}catch(e){}">
+                            </td>
                             </tr>
                             <tr>
                             <td>Ciudad:</td>
@@ -56,7 +72,12 @@
                             <option value="">Seleccionar</option>
                             </select></td>
                             <td>Pagina web:</td>
-                            <td><input name='sitio'></td>
+                            <td><input name='sitio'
+                                 placeholder="www.ejemplo.com"
+                                 pattern="^(www.)[0-9a-zA-Z]+.(com|org|net|gob|mx)(.mx)?$"
+                                 oninvalid="setCustomValidity('URL inválido.')"
+                                 onchange="try{setCustomValidity('')}catch(e){}">
+                            </td>
                         </tr>
                     </table>
                 </li>
@@ -71,14 +92,28 @@
                     {{=banco}}
                     </select><br><br>
                     Numero de cuenta:                         
-                    <input class='iptn' name='cuenta' maxlength='11'><br>
+                    <input class='iptn' name='cuenta' maxlength="11"
+                           placeholder="11 digitos"
+                           pattern="^[0-9]{11}$"
+                           oninvalid="setCustomValidity('Número de cuenta inválido.')"
+                           onchange="try{setCustomValidity('')}catch(e){}">
+                    <br>
                         <br>
                     Sucursal:                         
-                    <input class='iptn' name='sucursal' maxlength='4'>
+                    <input class='iptn' name='sucursal' maxlength="4"
+                           placeholder="Maximo 4 digitos"
+                           pattern="^[0-9]{1,4}$"
+                           oninvalid="setCustomValidity('Sucursal inválido.')"
+                           onchange="try{setCustomValidity('')}catch(e){}">
                     <br><br><br><br>
                     <h5>Tranferencia</h5><br>
                     CLABE:  
-                    <input class='iptn' name='clabe' maxlength='18'><br>
+                    <input class='iptn' name='clabe' maxlength='18'
+                           placeholder="Maximo 18 digitos"
+                           pattern="^[0-9]{18}$"
+                           oninvalid="setCustomValidity('CLABE inválido.')"
+                           onchange="try{setCustomValidity('')}catch(e){}">
+                    <br>
                     <br><br><br>
                 </li>
             </ul>
@@ -188,24 +223,53 @@
     var idel = 0;
     jQuery('#addc').live('click', function(e) {
         e.preventDefault();
-        jQuery('#area-contacto').append('<tr id="contacto-'+idel+'" class="form-contacto"><td>Tipo:</td><td><select onchange="cambiar('+idel+')" name="tipo-contacto-'+idel+'"><option value="">Ninguno</option><option value="1">Telefono</option><option value="0">Correo</option></select></td><td>Descripcion:</td><td><input type="text" name="campo-contacto-'+idel+'" disabled></td><td><input type="button" value="Borrar" onclick="borrarc('+idel+')"></td></tr>');
+        jQuery('#area-contacto').append(acon(idel));
         idel+=1;
     });
-
 
     function borrarc(quien) {
         jQuery('#contacto-'+quien).remove();
     }
 
     function cambiar(esto) {
+        var quien = jQuery('select[name=tipo-contacto-'+esto+']');
+            tiene = quien.find(':selected').val()
+        console.log(quien.attr('name')+' : '+tiene);
+
+        jQuery('td#campo-contacto-'+esto+'').html('');
+        if(tiene == 1) {
+            jQuery('td#campo-contacto-'+esto+'').append(nuevoTel(esto));
+        }
+        if(tiene == 2) {
+            jQuery('td#campo-contacto-'+esto+'').append(nuevoCorreo(esto));
+        }
+    }
+
+    function acon(idel) {
+        var str ='<tr id="contacto-'+idel+'"><td>Tipo:</td><td><select onchange="cambiar('+idel+')" name="tipo-contacto-'+idel+'"><option value="">Ninguno</option><option value="1">Telefono</option><option value="2">Correo</option></select></td><td>Descripcion:</td><td id="campo-contacto-'+idel+'" width="127px"></td><td><input type="button" value="Borrar" onclick="borrarc('+idel+')"></td></tr>'
+
+        return str
+    }
+
+    function nuevoCorreo(q) {
+        var cor =
+                '<input type="email" name="campo-contacto-'+q+'" placeholder="ejemplo@dominio.com">'
+        return cor
+    }
+    function nuevoTel(q) {
+        var tel =
+                '<input type="text" name="campo-contacto-'+q+'" placeholder="Ejemplo: 9992895389" pattern="^[0-9]{3}[0-9]{7}$" maxlength="10" title="Ingresa un telefono de 10 digitos." >'
+        return tel
+    }
+
+    /*function cambiar(esto) {
         if(jQuery('select[name=tipo-contacto-'+esto+']').val() != 'nin') {
             jQuery('input[name=campo-contacto-'+esto+']').removeAttr('disabled');
         } else {
             jQuery('input[name=campo-contacto-'+esto+']').attr('disabled','disabled').val('');
         }
         
-    }
-
+    }*/
 
 </script>
 {{end}}
