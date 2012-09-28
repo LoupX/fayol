@@ -174,13 +174,19 @@ def create_warehouse(name, company_address_id=None):
 
 def update_company_address(company_address_id, **kwargs):
     """
-    Updates a company_address
+    Updates a company's address information with the given identifier.
+    Returns True on success.
+
     @param company_address_id: identifier for company_addresses.
     @type company_address_id: int
     @param kwargs: Keywords in db.company_addresses.fields
     @type kwargs: keywords
     @return: True on succed, False otherwise
     @rtype: bool
+
+    Example:
+        >>>update_company_address(1, address='5th street')
+        True
     """
     try:
         db.company_addresses[company_address_id] = kwargs
@@ -192,6 +198,21 @@ def update_company_address(company_address_id, **kwargs):
         return True
 
 def update_company_tax_info(company_tax_info_id, **kwargs):
+    """
+    Updates a comany's tax info with the given identifier. Returns True on
+    success.
+
+    @param company_tax_info_id: An identifier in db.company_tax_info.id.
+    @type company_tax_info_id: int
+    @param kwargs: Keywords in db.company_tax_info.fields.
+    @type kwargs: keywords
+    @return: True on success, False otherwise.
+    @rtype: bool
+
+    Example:
+        >>>update_company_tax_info(1, rfc='XXXX000000XXX')
+        True
+    """
     id = company_tax_info_id
     try:
         db.company_tax_info[id] = kwargs
@@ -203,6 +224,20 @@ def update_company_tax_info(company_tax_info_id, **kwargs):
         return None
 
 def update_branch(branch_id, **kwargs):
+    """
+    Updates branch's information with the given identifier. Returns True on
+    success.
+    @param branch_id: An identifier in db.branches.id.
+    @type branch_id: int
+    @param kwargs: Keywords in db.branches.fields.
+    @type kwargs: keywords
+    @return: True on success, False otherwise.
+    @rtype: bool
+
+    Example:
+        >>>update_branch(1, name='Apple iShop')
+        True
+    """
     try:
         db.branches[branch_id] = kwargs
     except Exception as e:
@@ -213,6 +248,21 @@ def update_branch(branch_id, **kwargs):
         return True
 
 def update_warehouse(warehouse_id, **kwargs):
+    """
+    Updates warehouse's information with the given identifier. Returns True
+    on success.
+
+    @param warehouse_id: An identifier in db.warehouses.id.
+    @type warehouse_id: int
+    @param kwargs: Keywords in db.warehouses.fields.
+    @type kwargs: keywords
+    @return: True on success, False otherwise.
+    @rtype: bool
+
+    Example:
+        >>>update_warehouse(1, name='Blender's stock')
+        True
+    """
     try:
         db.warehouses[warehouse_id] = kwargs
     except Exception as e:
