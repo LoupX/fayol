@@ -61,21 +61,10 @@ def create_vendor(name, **kwargs):
         >>>create_vendor('Company Name')
         1
     """
-    vendor = dict()
     v = db.vendors
-
-    if not name:
-        return None
-    if type(kwargs) is dict:
-        vendor = kwargs
-    vendor['name'] = name
-
-    for key in vendor:
-        if not key in v.fields:
-            del vendor[key]
-
+    kwargs['name'] = name
     try:
-        id = v.bulk_insert([vendor])[0]
+        id = v.insert(**kwargs)
     except Exception as e:
         db.rollback()
         return None
@@ -102,9 +91,6 @@ def create_vendor_contact(vendor_id, contact_type_id, description):
         1
     """
     vci = db.vendor_contact_info
-    if not vendor_id or not contact_type_id or not description:
-        return None
-
     try:
         id = vci.insert(vendor_id=vendor_id, contact_type_id=contact_type_id,
             description=description)
@@ -132,11 +118,6 @@ def create_agent(vendor_id, name):
         1
     """
     va = db.vendor_agents
-    id = None
-
-    if not vendor_id or not name:
-        return None
-
     try:
         id = va.insert(vendor_id=vendor_id, name=name)
     except Exception as e:
@@ -165,11 +146,6 @@ def create_agent_contact(agent_id, contact_type_id, description):
         1
     """
     vaci = db.vendor_agent_contact_info
-    id = None
-
-    if not agent_id or not contact_type_id or not description:
-        return None
-
     try:
         id = vaci.insert(vendor_agent_id = agent_id,
             contact_type_id=contact_type_id, description=description)
@@ -180,57 +156,24 @@ def create_agent_contact(agent_id, contact_type_id, description):
         db.commit()
         return id
 
-def read_vendors(min, max):
-    rows = db().select(db.vendors.ALL, limitby=(0, 2))
-    return rows.as_list()
-
-def read_vendor_contacts(vendor_id, min, max):
-    rows = db(db.vendor)
-
-def update_vendor(table, id, **kwargs):
+def update_vendor(vendor_id, **kwargs):
     """
-    Updates the given vendor information according to the table. Returns True
-    on succed, False if not.
-    @type table: int
-    @param table: It is used to select the table to update. It can be any of
-    the following values:
-        1. vendors
+    Updates vendor's information with the given identifies. Returns True on
+    success.
 
-        2. vendor_contact_info
-
-        3. vendor_agents
-
-        4. vendor_agent_contact_info
-    @type id: int
-    @param id: The id of the record to update.
+    @param vendor_id: vendor's identifier.
+    @type vendor_id: int
+    @param kwargs: Keywords in db.vendors.fields.
     @type kwargs: keywords
-    @param kwargs: Must be in db.table.fields. I{table} stands for the
-    selected table identidicator.
+    @return: True on success, False otherwise.
     @rtype: bool
-    @return: True or False.
 
     Example:
-        >>>update_vendor(1, 1, name='Another Company Name')
+        >>>update_vendor(1, name='Apple')
         True
     """
-    if table == 1:
-        t = db.vendors
-    elif table == 2:
-        t = db.vendor_contact_info
-    elif table == 3:
-        t = db.vendor_agents
-    elif table == 4:
-        t = db.vendor_agent_contact_info
-    else:
-        return False
-    if not kwargs:
-        return False
-
     try:
-        for key in kwargs:
-            if not key in t.fields:
-                del kwargs[key]
-        t[id] = kwargs
+        db.vendors[vendor_id] = kwargs
     except Exception as e:
         db.rollback()
         return False
@@ -238,42 +181,179 @@ def update_vendor(table, id, **kwargs):
         db.commit()
         return True
 
-def delete_vendor(table, id):
+
+def update_vendor_contact_info(vendor_contact_info_id, **kwargs):
     """
-    Deletes the given vendor information according to the table. Returns True
-    on succed, False if not.
+    Updates vendor's information with the given identifies. Returns True on
+    success.
 
-    @type table: int
-    @param table: It is used to select the table to update. It can be any of
-    the following values:
-        2. vendor_contact_info
-
-        3. vendor_agents
-
-        4. vendor_agent_contact_info
-    @type id: int
-    @param id: The id of the record to delete.
+    @param vendor_contact_info_id: contact's identifier
+    @type vendor_contact_info_id: int
+    @param kwargs: Keywords in db.vendor_contact_info.fields.
+    @type kwargs: keywords
+    @return: True on success, False otherwise.
     @rtype: bool
-    @return: True or False
 
     Example:
-        >>>delete_vendor(2, 1)
+        >>>kwargs = dict(contact_type_id=1, description='steve@apple.com')
+        >>>update_vendor_contact_info(1, **kwargs)
         True
     """
-    if table == 2:
-        t = db.vendor_contact_info
-    elif table == 3:
-        t = db.vendor_agents
-    elif table == 4:
-        t = db.vendor_agent_contact_info
-    else:
-        return False
-
     try:
-        del t[id]
+        db.vendor_contact_info[vendor_contact_info_id] = kwargs
     except Exception as e:
         db.rollback()
         return False
     else:
         db.commit()
         return True
+
+
+def update_vendor_agent(vendor_agent_id, **kwargs):
+    """
+    Updates agent's information with the given identifier. Returns True on
+    success.
+
+    @param vendor_agent_id: vendor's agent identifier in db.vendor_agents.id.
+    @type vendor_agent_id: int
+    @param kwargs: Keywords in db.vendor_agents.fields.
+    @type kwargs: keywords
+    @return: True on success, False otherwise.
+    @rtype: bool
+
+    Example:
+        >>>update_vendor_agent(1, name='John Doe')
+    """
+    try:
+        db.vendor_agents[vendor_agent_id] = kwargs
+    except Exception as e:
+        db.rollback()
+        return False
+    else:
+        db.commit()
+        return True
+
+
+def update_vendor_agent_contact_info(vendor_agent_contact_info_id, **kwargs):
+    """
+    Updates the contact information of a vendor's agent with the given
+    identifier. Returns True on success.
+
+    @param vendor_agent_contact_info_id: The identifier of an agent's contact
+    information in db.vendor_agent_contact_info.id.
+    @type vendor_agent_contact_info_id: int
+    @param kwargs: Keywords in db.vendor_agent_contact_info.fields
+    @type kwargs: keywords
+    @return: True on success, False otherwise.
+    @rtype: bool
+
+    Example:
+        >>>update_vendor_agent_contact_info(1)
+        True
+    """
+    try:
+        db.vendor_agent_contact_info[vendor_agent_contact_info_id] = kwargs
+    except Exception as e:
+        db.rollback()
+        return False
+    else:
+        db.commit()
+        return True
+
+def delete_vendor(vendor_id):
+    """
+    Deletes a vendor with the given id. Return True on success.
+
+    B{Note:}
+    B{Using this function may end in the deletion of ALL records attached
+    with the given vendor id.}
+
+    @param vendor_id: record's id of the vendor to delete.
+    @type vendor_id:int
+    @return: True on success, False otherwise.
+    @rtype: bool
+
+    Example:
+        >>>delete_vendor(1)
+        True
+    """
+    try:
+        del db.vendors[vendor_id]
+    except Exception as e:
+        db.rollback()
+        return False
+    else:
+        db.commit()
+        return True
+
+def delete_vendor_contact_info(vendor_contact_info_id):
+    """
+    Deletes the vendor contact info with de given id. Returns True on success.
+
+    @param vendor_contact_info_id: The identifier of the vendor contact info.
+    @type vendor_contact_info_id: int
+    @return: True on success, False otherwise.
+    @rtype: bool
+
+    Example:
+        >>>delete_vendor_contact_info(1)
+        True
+    """
+    try:
+        del db.vendor_contact_info[vendor_contact_info_id]
+    except Exception as e:
+        db.rollback()
+        return False
+    else:
+        db.commit()
+        return True
+
+def delete_vendor_agent(vendor_agent_id):
+    """
+    Deletes an agent with the given id. Return True on success.
+
+    B{Note:}
+    B{Using this function may end in the deletion of ALL records attached
+    with the given agent id.}
+
+    @param vendor_agent_id: The identifier of the agent.
+    @type vendor_agent_id: int
+    @return: True on success, False otherwise.
+    @rtype: bool
+
+    Example:
+        >>>delete_vendor_agent(1)
+        True
+    """
+    try:
+        del db.vendor_agents[vendor_agent_id]
+    except Exception as e:
+        db.rollback()
+        return False
+    else:
+        db.commit()
+        return True
+
+def delete_vendor_agent_contact_info(vendor_agent_contact_info_id):
+    """
+    Deletes the agent's contact information with the given id. Returns True
+    on success.
+
+    @param vendor_agent_contact_info_id:
+    @type vendor_agent_contact_info_id:
+    @return: True on success. False otherwise.
+    @rtype: bool
+
+    Example:
+        >>>delete_vendor_agent_contact_info(1)
+        True
+    """
+    try:
+        del db.vendor_agent_contact_info[vendor_agent_contact_info_id]
+    except Exception as e:
+        db.rollback()
+        return False
+    else:
+        db.commit()
+        return True
+
