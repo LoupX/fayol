@@ -6,7 +6,7 @@ DB_PASS = 'qazWSX11'
 DB_PORT = 5432
 
 #Site
-HOST = 'web2py.glados'
+HOST = 'web2py'
 ADMIN_MAIL = 'jd@beardcode.mx'
 
 #System
@@ -22,6 +22,6 @@ MAIL_PASSWORD = 'qazWSX11'
 
 #Recaptcha API
 CAPTCHA_URL = 'http://www.google.com/recaptcha/api/verify'
-CAPTCHA_PUBLIC_KEY = '6LfGZdUSAAAAAI9xYz4MIkDz5RZHZCGrCll2xKLP'
-CAPTCHA_PRIVATE_KEY = '6LfGZdUSAAAAAHx4IPGFKz_GXjyp4oomYk8v6RAx'
+CAPTCHA_PUBLIC_KEY = '6LfgfNUSAAAAAInvYO8nTIAZgv9DvHZv-89QB-88'
+CAPTCHA_PRIVATE_KEY = '6LfgfNUSAAAAACpq8SmJPxN-T7_1Ggnr6Zufw_sN'
 

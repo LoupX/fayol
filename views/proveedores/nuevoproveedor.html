@@ -1,0 +1,275 @@
+{{extend 'template_fayol.html'}}
+
+{{block main_content}}
+<div class="row" style="margin:auto auto; height: auto;">
+    <div class="grid_12 text-center">
+    <h1>Nuevo proveedor</h1> 
+    </div>
+</div>
+<div class="row" style="margin:auto auto; height: auto;">
+    <div class="grid_12">
+        <div id="menu_opt">
+            <ul>
+                <li><a href="#" data-mg="0">Informacion General</a></li>
+                <li><a href="#" data-mg="1">Formas de Contacto</a></li>
+                <li><a href="#" data-mg="2">Formas de Pago</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="row" style="margin:auto auto; height: auto;">
+    <div class="grid_12">
+    <form action="{{=URL()}}" method="post">        
+        <div class="main_content">
+            
+            <ul>
+                <li id="0">
+                    <table width="618" height="137">
+                        <tr>
+                            <td width="94">Empresa (nombre): *</td>
+                            <td width="255">
+                                <input name="empresa"
+                                       oninvalid="setCustomValidity('Ingresar el nombre del Proveedor a guardar.')"
+                                       onchange="try{setCustomValidity('')}catch(e){}"
+                                       required></td>
+                            <td width="61">Direccion:</td>
+                            <td width="188"><input name="direccion"></td>
+                        </tr>
+                        <tr>
+                            <td>Estado:</td>
+                            <td>
+                            <select name="estado">
+                            {{=estado}}
+                            </select>
+                            </td>
+                            <td>Código postal: </td>
+                            <td><input name="cp"
+                                 pattern="^([1-9]{2}|[0-9][1-9]|[1-9][0-9])[0-9]{3}$"
+                                 maxlength="5"
+                                 minlength="5" placeholder="5 digitos"
+                                 oninvalid="setCustomValidity('Código Postal inválido.')"
+                                 onchange="try{setCustomValidity('')}catch(e){}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Municipio:</td>
+                            <td><select name="municipio">
+                            <option value="">Seleccionar</option>
+                            </select></td>
+                            <td>RFC:</td>
+                            <td><input name='rfc'
+                                 placeholder="Ejemplo JASA890303001"
+                                 maxlength="13"
+                                 minlenght="10"
+                                 pattern="^[a-zA-Z]{3,4}(\d{6})((\D|\d){3})?$"
+                                 oninvalid="setCustomValidity('RFC inválido.')"
+                                 onchange="try{setCustomValidity('')}catch(e){}">
+                            </td>
+                            </tr>
+                            <tr>
+                            <td>Ciudad:</td>
+                            <td><select name="ciudad">
+                            <option value="">Seleccionar</option>
+                            </select></td>
+                            <td>Pagina web:</td>
+                            <td><input name='sitio'
+                                 placeholder="www.ejemplo.com"
+                                 pattern="^(www.)[0-9a-zA-Z]+.(com|org|net|gob|mx)(.mx)?$"
+                                 oninvalid="setCustomValidity('URL inválido.')"
+                                 onchange="try{setCustomValidity('')}catch(e){}">
+                            </td>
+                        </tr>
+                    </table>
+                </li>
+                <li id="620">
+                    <a href="#" id="addc">Agregar contacto</a><br><br>
+                    <table id="area-contacto"></table>
+                </li>
+                <li id="1240">
+                    <h5>Deposito</h5><br>
+                    Banco:
+                    <select name="banco">
+                    {{=banco}}
+                    </select><br><br>
+                    Numero de cuenta:                         
+                    <input class='iptn' name='cuenta' maxlength="11"
+                           placeholder="11 digitos"
+                           pattern="^[0-9]{11}$"
+                           oninvalid="setCustomValidity('Número de cuenta inválido.')"
+                           onchange="try{setCustomValidity('')}catch(e){}">
+                    <br>
+                        <br>
+                    Sucursal:                         
+                    <input class='iptn' name='sucursal' maxlength="4"
+                           placeholder="Maximo 4 digitos"
+                           pattern="^[0-9]{1,4}$"
+                           oninvalid="setCustomValidity('Sucursal inválido.')"
+                           onchange="try{setCustomValidity('')}catch(e){}">
+                    <br><br><br><br>
+                    <h5>Tranferencia</h5><br>
+                    CLABE:  
+                    <input class='iptn' name='clabe' maxlength='18'
+                           placeholder="Maximo 18 digitos"
+                           pattern="^[0-9]{18}$"
+                           oninvalid="setCustomValidity('CLABE inválido.')"
+                           onchange="try{setCustomValidity('')}catch(e){}">
+                    <br>
+                    <br><br><br>
+                </li>
+            </ul>
+        </div>
+    <input type='submit' id='btng' name='btng' value='Guardar'>
+    <button id="btnc">Cancelar</button>
+    </form>
+    </div>
+</div>
+{{end}}
+
+{{block jq_shit}}
+<script>
+    /*
+    *Funciones para mostrar el menu
+    *
+    */
+    var uls = jQuery('.main_content').find('ul'),
+        cont = 0,
+        estado = jQuery('select[name=estado]'),
+        municipio = jQuery('select[name=municipio]'),
+        ciudad = jQuery('select[name=ciudad]');
+
+    estado.prepend('<option value="">Selecccionar</option>');
+    jQuery('select[name=banco]').prepend('<option value="">Selecccionar</option>');
+
+    estado.change( function() {
+        var id = jQuery(this).find(':selected').val();
+        if(id != '') {
+            //console.log(id);
+            jQuery.ajax({
+                type: "POST",
+                url: '{{=URL('proveedores', 'sel_municipio')}}',
+                data: {id: id},
+                success: function(results) {
+                    municipio
+                            .html(results)
+                            .prepend('<option value="">Selecccionar</option>');
+                }
+            });
+        }
+        else {
+            municipio
+                    .html('')
+                    .prepend('<option value="">Selecccionar</option>');
+            ciudad
+                    .html('')
+                    .prepend('<option value="">Selecccionar</option>');
+        }
+    });
+
+    municipio.change( function() {
+        var id = jQuery(this).find(':selected').val();
+        if(id != '') {
+            //console.log(id);
+            jQuery.ajax({
+                type: "POST",
+                url: '{{=URL('proveedores', 'sel_ciudad')}}',
+                data: {id: id},
+                success: function(results) {
+                    ciudad
+                            .html(results)
+                            .prepend('<option value="">Selecccionar</option>');
+                    //jQuery('.flash').fadeIn();
+                    //jQuery('.flash_m').html('sdfgsdfgsdfg');
+                }
+            });
+        }
+    });
+
+    jQuery('#menu_opt').find('a').live('click', function(e) {
+         e.preventDefault();
+         cont = parseInt(jQuery(this).attr('data-mg'))*620;
+         uls.find('li#'+cont)
+                 .animate({opacity: 1},500)
+                 .siblings().animate({opacity: 0},100);
+         uls.animate({marginLeft: -cont+'px'},500);
+        //console.log(cont);
+         //console.log(uls.find('li#'+cur).siblings() );
+    });
+
+    //Funcion para usar el teclado con las opciones del menu
+    $(document).keydown(function(tecla){
+        if(tecla.keyCode == 39) {
+            cont += cont <= 1239 ? 620 : 0;
+            //console.log(cont);
+        }
+        else if(tecla.keyCode == 37) {
+            cont -= cont >= 1 ? 620 : 0;
+            //console.log(cont);
+        }
+        uls.find('li#'+cont)
+                .animate({opacity: 1}, 500)
+                .siblings().animate({opacity: 0},100);;
+        uls.animate({marginLeft: -cont+'px'}, 500);
+    });
+
+    /*
+    *Validacion del formulario
+    *
+    */
+
+    jQuery('#btnc').live('click', function(e) {
+        e.preventDefault();
+    });
+
+    var idel = 0;
+    jQuery('#addc').live('click', function(e) {
+        e.preventDefault();
+        jQuery('#area-contacto').append(acon(idel));
+        idel+=1;
+    });
+
+    function borrarc(quien) {
+        jQuery('#contacto-'+quien).remove();
+    }
+
+    function cambiar(esto) {
+        var quien = jQuery('select[name=tipo-contacto-'+esto+']');
+            tiene = quien.find(':selected').val()
+        console.log(quien.attr('name')+' : '+tiene);
+
+        jQuery('td#campo-contacto-'+esto+'').html('');
+        if(tiene == 1) {
+            jQuery('td#campo-contacto-'+esto+'').append(nuevoTel(esto));
+        }
+        if(tiene == 2) {
+            jQuery('td#campo-contacto-'+esto+'').append(nuevoCorreo(esto));
+        }
+    }
+
+    function acon(idel) {
+        var str ='<tr id="contacto-'+idel+'"><td>Tipo:</td><td><select onchange="cambiar('+idel+')" name="tipo-contacto-'+idel+'"><option value="">Ninguno</option><option value="1">Telefono</option><option value="2">Correo</option></select></td><td>Descripcion:</td><td id="campo-contacto-'+idel+'" width="127px"></td><td><input type="button" value="Borrar" onclick="borrarc('+idel+')"></td></tr>'
+
+        return str
+    }
+
+    function nuevoCorreo(q) {
+        var cor =
+                '<input type="email" name="campo-contacto-'+q+'" placeholder="ejemplo@dominio.com">'
+        return cor
+    }
+    function nuevoTel(q) {
+        var tel =
+                '<input type="text" name="campo-contacto-'+q+'" placeholder="Ejemplo: 9992895389" pattern="^[0-9]{3}[0-9]{7}$" maxlength="10" title="Ingresa un telefono de 10 digitos." >'
+        return tel
+    }
+
+    /*function cambiar(esto) {
+        if(jQuery('select[name=tipo-contacto-'+esto+']').val() != 'nin') {
+            jQuery('input[name=campo-contacto-'+esto+']').removeAttr('disabled');
+        } else {
+            jQuery('input[name=campo-contacto-'+esto+']').attr('disabled','disabled').val('');
+        }
+        
+    }*/
+
+</script>
+{{end}}
