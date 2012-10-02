@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 
 db.define_table('brands',
-    Field('image', 'upload', required=True, notnull=True, uploadfield=True,
-	  label=T('Imagen')),
+    Field('image', 'upload', uploadfield=True, label=T('Imagen')),
     Field('sort_order', 'integer', length=4, label=T('Orden')),
     Field('status', 'boolean', default=True, label=T('Estado')),
     Field('date_added', 'datetime', default=request.now, writable=False,
@@ -17,7 +16,7 @@ db.define_table('brands',
 db.define_table('brand_descriptions',
     Field('brand_id', 'reference brands', required=True, notnull=True,
 	  readable=False, writable=False),
-    Field('name', 'string', required=True, notnull=True, label=T('Nombre')),
+    Field('name', 'string', notnull=True, unique=True),
     Field('description', label=T('Descripción')),
     Field('meta_description', readable=False, writable=False,
 	  label=T('Meta descripción')),

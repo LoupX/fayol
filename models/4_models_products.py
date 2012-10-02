@@ -1,21 +1,18 @@
 # -*- coding: utf-8 -*-
 
 db.define_table('products',
-    Field('brand_id', 'reference brands', required=True, notnull=True,
-	  label=T('Marca')),
-    Field('unit_id', 'reference units', required=True, notnull=True,
-	  label=T('Unidad')),
-    Field('code', 'string', required=True, notnull=True,
-        unique=True, label=T('Código')),
-    Field('alternative_code', 'string', label=T('Código alternativo')),
-    Field('location', 'string', label=T('Ubicación')),
-    Field('part_number', 'string', label=T('Número de parte')),
-    Field('serial_number', 'string', label=T('Número de serie')),
-    Field('model', 'string', label=T('Modelo')),
-    Field('image', 'upload', uploadfield=True, label=T('Imagen')),
-    Field('standard_cost', 'decimal(10,2)', label=T('Costo estandar')),
-    Field('markup', 'decimal(3,2)', label=T('Margen de utilidad')),
-    Field('status', 'boolean', label=T('Estado')),
+    Field('brand_id', 'reference brands', required=True, notnull=True),
+    Field('unit_id', 'reference units', required=True, notnull=True),
+    Field('code', 'string', required=True, notnull=True, unique=True),
+    Field('alternative_code', 'string'),
+    Field('location', 'string'),
+    Field('part_number', 'string'),
+    Field('serial_number', 'string'),
+    Field('model', 'string'),
+    Field('image', 'upload', uploadfield=True),
+    Field('standard_cost', 'decimal(10,2)'),
+    Field('markup', 'decimal(3,2)'),
+    Field('status', 'boolean'),
     Field('date_added', 'datetime', default=request.now, writable=False,
 	  readable=False),
     Field('date_modified', 'datetime', update=request.now, writable=False,
@@ -27,11 +24,11 @@ db.define_table('products',
 
 db.define_table('product_descriptions',
     Field('product_id', 'reference products', required=True, notnull=True),
-    Field('name', 'string', required=True, notnull=True, label=T('Nombre')),
-    Field('alternative_name', 'string', label=T('Nombre alternativo')),
-    Field('description', 'text', label=T('Descripción')),
-    Field('meta_description', 'string', label=T('Meta descripción')),
-    Field('meta_keywords', 'string', label=T('Palabras clave')))
+    Field('name', 'string', required=True, notnull=True),
+    Field('alternative_name', 'string'),
+    Field('description', 'text'),
+    Field('meta_description', 'string'),
+    Field('meta_keywords', 'string'))
 
 db.define_table('product_to_vendor',
     Field('product_id', 'reference products'),
@@ -61,7 +58,7 @@ db.products.date_modified.represent = lambda date_modified, row: date_added.strf
 db.product_price_lists.date_added.represent = lambda date_added, row: date_added.strftime('%d - %m - %Y')
 db.product_price_lists.date_modified.represent = lambda date_modified, row: date_added.strftime('%d - %m - %Y')
 
-def create_product(name, code, brand_id, categories, **kwargs):
+def create_product(name, code, brand_id, unit_id, categories, **kwargs):
     """
     Insert all product values but prices an returns a dictionary with the
     inserted id's.
@@ -72,6 +69,8 @@ def create_product(name, code, brand_id, categories, **kwargs):
     @type code: str
     @param brand_id: Foreign key to db.brands.id.
     @type brand_id: int
+    @param unit_id: Foreign key to db.units.id.
+    @type unit_id: int
     @param categories: List of foreign keys to db.categories.id.
     @type categories: list
     @param kwargs: Product attributes in the following tables:
@@ -88,7 +87,7 @@ def create_product(name, code, brand_id, categories, **kwargs):
     product_to_category_ids = []
     product_to_vendor_ids = []
 
-    insert = dict(code=code, brand_id=brand_id)
+    insert = dict(code=code, brand_id=brand_id, unit_id=unit_id)
     for key in kwargs:
         if key in db.products.fields:
             insert[key] = kwargs[key]
