@@ -63,7 +63,7 @@
 			{{end}}
 
             {{if hasattr(T,'get_possible_languages'):}}
-            <span>
+            <span style="display: none;">
               {{=T('Language')}}
               <select name="my_lng" onchange="var date = new Date();cookieDate=date.setTime(date.getTime()+(100*24*60*60*1000));document.cookie='my_lng='+this.options[this.selectedIndex].value+'; expires='+cookieDate+'; path=/';window.location.reload()">
                   {{for language in T.get_possible_languages():}}
