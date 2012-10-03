@@ -1,8 +1,11 @@
-{{extend 'base/header.html'}}
+{{include 'base/header.html'}}
+{{include 'base/top_menu.html'}}
     <div class="centercontent">
     
         <div class="pageheader">
-            <h1 class="pagetitle">Dashboard</h1>
+            <h1 class="pagetitle">
+                {{include}}
+            </h1>
             <span class="pagedesc">This is a sample description of a page</span>
             
             <ul class="hornav">
@@ -381,3 +384,4 @@
 
 </body>
 </html>
+{{include 'base/sidebar_left.html'}}
