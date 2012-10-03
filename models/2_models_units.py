@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 
 db.define_table('units',
-    Field('name', 'string', required=True, notnull=True, label=T('Nombre')),
-    Field('abbreviation', 'string', required=True, notnull=True,
-	  label=T('Abreviación')),
+    Field('name', 'string', notnull=True),
+    Field('abbreviation', 'string', notnull=True),
     Field('sort_order', 'integer', label=T('Orden')),
     Field('status', 'boolean', default=True, label=T('Estado')),
     Field('date_added', 'datetime', default=request.now, writable=False,
@@ -14,7 +13,7 @@ db.define_table('units',
 	  default=auth.user.id if auth.user else 0),
     Field('modified_by', 'reference auth_user',
 	  update=auth.user.id if auth.user else 0),
-    format='%(name)s')
+    format='%(name)s', migrate=MIGRATE)
 
 db.units.date_added.represent = (lambda date_added, row:
 		                     date_added.strftime('%d - %m - %Y'))

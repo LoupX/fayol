@@ -15,7 +15,7 @@ db.define_table('company_addresses',
     Field('added_by', 'reference auth_user',
       default=auth.user.id if auth.user else 0),
     Field('modified_by', 'reference auth_user',
-      update=auth.user.id if auth.user else 0))
+      update=auth.user.id if auth.user else 0), migrate=MIGRATE)
 
 db.define_table('company_tax_info',
     Field('business_name', 'string', comment='razón social'),
@@ -29,7 +29,7 @@ db.define_table('company_tax_info',
     Field('added_by', 'reference auth_user',
       default=auth.user.id if auth.user else 0),
     Field('modified_by', 'reference auth_user',
-      update=auth.user.id if auth.user else 0))
+      update=auth.user.id if auth.user else 0), migrate=MIGRATE)
 
 db.define_table('branches',
     Field('name', 'string', notnull=True, unique=True),
@@ -43,7 +43,7 @@ db.define_table('branches',
     Field('added_by', 'reference auth_user',
       default=auth.user.id if auth.user else 0),
     Field('modified_by', 'reference auth_user',
-      update=auth.user.id if auth.user else 0))
+      update=auth.user.id if auth.user else 0), migrate=MIGRATE)
 
 db.define_table('warehouses',
     Field('name', 'string', notnull=True, unique=True),
@@ -56,7 +56,7 @@ db.define_table('warehouses',
     Field('added_by', 'reference auth_user',
       default=auth.user.id if auth.user else 0),
     Field('modified_by', 'reference auth_user',
-      update=auth.user.id if auth.user else 0))
+      update=auth.user.id if auth.user else 0), migrate=MIGRATE)
 
 def create_company_address(address, suburb, state_id,
                            locality_id,  **kwargs):

@@ -1,27 +1,22 @@
 # -*- coding: utf-8 -*-
 
 db.define_table('brands',
-    Field('image', 'upload', uploadfield=True, label=T('Imagen')),
-    Field('sort_order', 'integer', length=4, label=T('Orden')),
-    Field('status', 'boolean', default=True, label=T('Estado')),
-    Field('date_added', 'datetime', default=request.now, writable=False,
-	  readable=False),
-    Field('date_modified', 'datetime', update=request.now, writable=False,
-	  readable=False),
+    Field('image', 'upload', uploadfield=True),
+    Field('sort_order', 'integer', length=4),
+    Field('status', 'boolean', default=True),
+    Field('date_added', 'datetime', default=request.now),
+    Field('date_modified', 'datetime', update=request.now),
     Field('added_by', 'reference auth_user',
 	  default=auth.user.id if auth.user else None),
     Field('modified_by', 'reference auth_user',
-	  update=auth.user.id if auth.user else None))
+	  update=auth.user.id if auth.user else None), migrate=MIGRATE)
 
 db.define_table('brand_descriptions',
-    Field('brand_id', 'reference brands', required=True, notnull=True,
-	  readable=False, writable=False),
+    Field('brand_id', 'reference brands', notnull=True),
     Field('name', 'string', notnull=True, unique=True),
-    Field('description', label=T('Descripción')),
-    Field('meta_description', readable=False, writable=False,
-	  label=T('Meta descripción')),
-    Field('meta_keywords', readable=False, writable=False,
-	  label=T('Palabras clave')))
+    Field('description', 'text'),
+    Field('meta_description', 'string'),
+    Field('meta_keywords', 'string'), migrate=MIGRATE)
 
 db.brand_descriptions.format = '%(name)s'
 db.brands.date_added.represent = (lambda date_added, row:

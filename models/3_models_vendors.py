@@ -1,44 +1,40 @@
 # -*- coding: utf-8 -*-
 db.define_table('vendors',
-    Field('name', 'string', required=True, notnull=True, label=T('Nombre'),
-        unique=True),
-    Field('address', 'string', label=T('Dirección')),
-    Field('city', 'string', label=T('Ciudad')),
-    Field('municipality', 'string', label=T('Municipio')),
-    Field('state', 'string', label=T('Estado')),
-    Field('zip_code', 'integer', length=5, label=T('Código postal')),
-    Field('rfc', 'string', length=13, label='RFC'),
-    Field('website', 'string', label=T('Sitio web')),
-    Field('bank', 'string', label=T('Banco')),
-    Field('bank_account_number', 'string', label=T('Número de cuenta')),
-    Field('branch', 'string', label=T('Sucursal')),
-    Field('clabe', 'string', length=18, label='CLABE'),
-    Field('status', 'boolean', default=True, label=T('Estado')),
-    Field('date_added', 'datetime', default=request.now, writable=False,
-      readable=False),
-    Field('date_modified', 'datetime', update=request.now, writable=False,
-      readable=False),
+    Field('name', 'string', notnull=True, unique=True),
+    Field('address', 'string'),
+    Field('city', 'string'),
+    Field('municipality', 'string'),
+    Field('state', 'string'),
+    Field('zip_code', 'integer', length=5),
+    Field('rfc', 'string', length=13),
+    Field('website', 'string'),
+    Field('bank', 'string'),
+    Field('bank_account_number', 'string'),
+    Field('branch', 'string'),
+    Field('clabe', 'string', length=18),
+    Field('status', 'boolean', default=True),
+    Field('date_added', 'datetime', default=request.now),
+    Field('date_modified', 'datetime', update=request.now),
     Field('added_by', 'reference auth_user',
       default=auth.user.id if auth.user else 0),
     Field('modified_by', 'reference auth_user',
-      update=auth.user.id if auth.user else 0))
+      update=auth.user.id if auth.user else 0), migrate=MIGRATE)
 
 db.define_table('vendor_contact_info',
     Field('vendor_id', 'reference vendors', notnull=True),
     Field('contact_type_id', 'reference contact_types', notnull=True,
         label=T('Tipo')),
-    Field('description', 'string', notnull=True, label=T('Descripción')))
+    Field('description', 'string', notnull=True), migrate=MIGRATE)
 
 db.define_table('vendor_agents',
     Field('vendor_id', 'reference vendors', notnull=True),
-    Field('name', 'string', required=True, notnull=True, label=T('Nombre')),
-    format='%(name)s')
+    Field('name', 'string', required=True, notnull=True),
+    migrate=MIGRATE)
 
 db.define_table('vendor_agent_contact_info',
     Field('vendor_agent_id', 'reference vendor_agents', notnull=True),
-    Field('contact_type_id', 'reference contact_types', notnull=True,
-        label=T('Tipo')),
-    Field('description', 'string', notnull=True, label=T('descripción')))
+    Field('contact_type_id', 'reference contact_types', notnull=True),
+    Field('description', 'string', notnull=True), migrate=MIGRATE)
 
 db.vendors.date_added.represent = (
     lambda date_added, row: date_added.strftime('%d - %m - %Y'))

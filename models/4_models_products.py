@@ -20,7 +20,7 @@ db.define_table('products',
     Field('added_by', 'reference auth_user',
 	  default=auth.user.id if auth.user else 0),
     Field('modified_by', 'reference auth_user',
-	  update=auth.user.id if auth.user else 0))
+	  update=auth.user.id if auth.user else 0), migrate=MIGRATE)
 
 db.define_table('product_descriptions',
     Field('product_id', 'reference products', required=True, notnull=True),
@@ -28,15 +28,15 @@ db.define_table('product_descriptions',
     Field('alternative_name', 'string'),
     Field('description', 'text'),
     Field('meta_description', 'string'),
-    Field('meta_keywords', 'string'))
+    Field('meta_keywords', 'string'), migrate=MIGRATE)
 
 db.define_table('product_to_vendor',
     Field('product_id', 'reference products'),
-    Field('vendor_id', 'reference vendors'))
+    Field('vendor_id', 'reference vendors'), migrate=MIGRATE)
 
 db.define_table('product_to_category',
     Field('product_id', 'reference products'),
-    Field('category_id', 'reference categories'))
+    Field('category_id', 'reference categories'), migrate=MIGRATE)
 
 db.define_table('product_price_lists',
     Field('product_id', 'reference products', required=True, notnull=True),
@@ -44,14 +44,12 @@ db.define_table('product_price_lists',
     Field('price', 'decimal(10,2)', default=0.00),
     Field('is_default', 'boolean', default=False),
     Field('status', 'boolean', default=True),
-    Field('date_added', 'datetime', default=request.now, writable=False,
-	  readable=False),
-    Field('date_modified', 'datetime', update=request.now, writable=False,
-	  readable=False),
+    Field('date_added', 'datetime', default=request.now),
+    Field('date_modified', 'datetime', update=request.now),
     Field('added_by', 'reference auth_user',
 	  default=auth.user.id if auth.user else 0),
     Field('modified_by', 'reference auth_user',
-	  update=auth.user.id if auth.user else 0))
+	  update=auth.user.id if auth.user else 0), migrate=MIGRATE)
 
 db.products.date_added.represent = lambda date_added, row: date_added.strftime('%d - %m - %Y')
 db.products.date_modified.represent = lambda date_modified, row: date_added.strftime('%d - %m - %Y')

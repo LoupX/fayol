@@ -10,11 +10,11 @@ db.define_table('categories',
     Field('added_by', 'reference auth_user',
 	      default=auth.user.id if auth.user else None),
     Field('modified_by', 'reference auth_user',
-	  update=auth.user.id if auth.user else None))
+	  update=auth.user.id if auth.user else None), migrate=MIGRATE)
 
 db.define_table('category_descriptions',
     Field('category_id', 'reference categories', required=True, notnull=True),
     Field('name', 'string', required=True, notnull=True),
     Field('description', 'text'),
     Field('meta_description', 'string'),
-    Field('meta_keywords', 'string'))
+    Field('meta_keywords', 'string'), migrate=MIGRATE)
