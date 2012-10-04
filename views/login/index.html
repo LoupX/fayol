@@ -1,9 +1,3 @@
-{{extend 'login.html'}}
-
-{{block my_form}}
-{{=form}}
-{{end}}
-
-{{block my_footer}}
-<span>{{=T('Copyright')}} &#169; {{=request.now.year}} BeardCode. {{=T("Rights reserved")}}.</span>
-{{end}}
+{{include 'base/header.html'}}
+{{extend 'login/login.html'}}
+{{include 'login/scripts.html'}}

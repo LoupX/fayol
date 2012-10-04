@@ -7,7 +7,7 @@ Responsible for the user authentication via ajax.
 
 from urllib import urlencode
 from urllib2 import Request, urlopen
-
+from gluon.utils import web2py_uuid
 
 def login():
 
@@ -99,3 +99,8 @@ def check_attempts():
         raise HTTP(400)
     else:
         return session.attempts
+
+def ajax_token():
+    tkn = web2py_uuid()
+    session.tkn = tkn
+    return tkn

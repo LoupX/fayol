@@ -1,0 +1,15 @@
+<script type="text/javascript">
+    function ajax_token(){
+        jQuery.ajax({
+            type: 'POST',
+            url: '{{=URL('user', 'ajax_token')}}',
+            success: function(data){
+                jQuery('#tkn').val(data);
+                alert(data);
+            }
+        });
+    }
+    jQuery('#submit').live('click', function(e) {
+
+    });
+</script>
