@@ -1,15 +1,47 @@
 <script type="text/javascript">
-    function ajax_token(){
-        jQuery.ajax({
-            type: 'POST',
-            url: '{{=URL('user', 'ajax_token')}}',
-            success: function(data){
-                jQuery('#tkn').val(data);
-                alert(data);
-            }
-        });
-    }
-    jQuery('#submit').live('click', function(e) {
+var tkn = jQuery('#tkn').val(ajax_token());
 
+jQuery('#submit').live('click', function(e) {
+    e.preventDefault();
+    var usr = jQuery('#usr').val(),
+        pwd = jQuery('#pwd').val();
+        tkn = jQuery('#tkn').val()
+    //console.log(usr+" : "+pwd);
+
+    jQuery.ajax({
+        url: '{{=URL('user', 'login')}}',
+        data: { 
+            usr: usr, 
+            pwd: pwd,
+            tkn: tkn
+        },
+        type: 'POST',
+        success:function(data){
+            if(data == 'true') {
+                window.location = "{{=URL(c='default')}}";
+            }
+            if (data == 'Invalid credentials') {
+                console.log('bad');
+                jQuery('.nousername').fadeIn();
+                jQuery('.nopassword').hide();
+            } else {
+                jQuery('.nousername').hide();
+                jQuery('.nopassword').hide();
+            }
+        }
+    }); 
+
+    
+});
+
+function ajax_token(){
+    jQuery.ajax({
+        type: 'POST',
+        url: '{{=URL('user', 'ajax_token')}}',
+        success: function(data){
+            tkn.val(data);
+            //alert(data);
+        }
     });
+}
 </script>

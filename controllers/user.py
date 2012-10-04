@@ -30,6 +30,7 @@ def login():
         attempts()
         return responses[3]
     #Validate the Captcha code if any.
+    """
     if session.attempts > 3:
         if request.vars.r_challenge and request.vars.r_response:
             values = {
@@ -49,6 +50,7 @@ def login():
         else:
             attempts()
             return responses[2]
+    """
     #Validate fields and tries to do a login.
     if not request.vars.usr or not request.vars.pwd or not request.vars.tkn:
         attempts()
@@ -65,7 +67,8 @@ def login():
     auth.login_bare(usr, pwd)
     if auth.is_logged_in():
         attempts(0)
-        redirect(URL(c='dashboard'))
+        #redirect(URL(c='index'))
+        return 'true'
     else:
         attempts()
         return responses[0]
