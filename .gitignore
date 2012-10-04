@@ -45,6 +45,8 @@ Thumbs.db
 # Editor stuff #
 ################
 .idea
+*.sublime-project
+*.sublime-workspace
 
 # Framework stuff #
 ###################
