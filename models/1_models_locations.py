@@ -22,10 +22,27 @@ db.define_table('localities',
     Field('name'),
     Field('inegi', length=4), migrate=MIGRATE)
 
+if db(db.countries).isempty():
+    try:
+        sqlite.define_table('countries',
+            Field('name', 'string'),
+            migrate=False)
+        rows = sqlite().select(sqlite.countries.ALL).as_list()
+        insert = []
+        for row in rows:
+            del row['id']
+            insert.append(row)
+        db.countries.bulk_insert(insert)
+    except Exception as e:
+        db.rollback()
+        raise HTTP(500)
+    else:
+        db.commit()
+
 if db(db.states).isempty():
     try:
         sqlite.define_table('states',
-            Field('contry_id', 'reference countries'),
+            Field('country_id'),
             Field('name'),
             Field('hasc', length=5),
             Field('iso', length=3),
@@ -41,14 +58,14 @@ if db(db.states).isempty():
         db.states.bulk_insert(insert)
     except Exception as e:
         db.rollback()
-        raise HTTP(503)
+        raise HTTP(500)
     else:
         db.commit()
 
 if db(db.municipalities).isempty():
     try:
         sqlite.define_table('municipalities',
-            Field('state_id', 'reference states'),
+            Field('state_id'),
             Field('name'),
             Field('inegi', length=3),
             migrate=False)
@@ -60,14 +77,14 @@ if db(db.municipalities).isempty():
         db.municipalities.bulk_insert(insert)
     except Exception as e:
         db.rollback()
-        raise HTTP(503)
+        raise HTTP(500)
     else:
         db.commit()
 
 if db(db.localities).isempty():
     try:
         sqlite.define_table('localities',
-            Field('municipality_id', 'reference municipalities'),
+            Field('municipality_id'),
             Field('name'),
             Field('inegi', length=4),
             migrate=False)
@@ -84,6 +101,6 @@ if db(db.localities).isempty():
             count += 100
     except Exception as e:
         db.rollback()
-        raise HTTP(503)
+        raise HTTP(500)
     else:
         db.commit()
