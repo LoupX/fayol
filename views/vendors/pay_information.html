@@ -40,7 +40,30 @@
 						vendor: "Seleccione un proveedor",
 			
 					}
-				});
+				});                
+                
+                jQuery('#submit').click(function(){
+	                        e.preventDefault();
+	                        jQuery.ajax({
+                                url: '{{=URL('vendors', 'vendor_payinformation')}}',
+                                data: { 
+                                    bank:jQuery('#bank').val(),
+                                    branch:jQuery('#branch').val(),
+                                    acountnumber:jQuery('#acountnumber').val(),
+                                    clabe:jQuery('#clabe').val(),
+                                },
+                                type: 'POST',
+                                success:function(data){
+                                	if(data){
+                                		alert("Se a guardado exitosamente");    
+                                	}
+                                	else{
+	                                	alert("Se a producido un error al guardar")
+                                	}
+                                }
+                            }); 
+	                        
+                 });
 			
 			});
 			</script>
