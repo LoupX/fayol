@@ -26,9 +26,9 @@
                 </div><!--contenttitle-->
             	
             	<script type="text/javascript">
-	            	jQuery(document).ready(function(){
+                    jQuery(document).ready(function(){
 
-		            	jQuery("#form").validate({
+                    	jQuery("#form").validate({
 			            	rules: {
 				            	firstname: "required",
 				            	lastname: "required",
@@ -46,9 +46,40 @@
 							    zip_code: "Este campo debe tener sólo números."
 							}
 					  });
-					  
-				});
-				</script>
+
+                        jQuery('#state').change(function(){
+                            state_id = jQuery('#state').val();
+                            jQuery.ajax({
+                                url: '{{=URL('vendors', 'get_municipalities')}}',
+                                data: { 
+                                    state:state_id                            },
+                                type: 'POST',
+                                success:function(data){
+                                    jQuery('#municipality').remove();
+                                    jQuery('#municipality_container').append(data);
+                                }
+                            }); 
+                        });
+
+                        jQuery('#municipality_container').on('change', jQuery('#municipality'), function(){
+                            municipality_id = jQuery('#municipality').val();
+                            jQuery.ajax({
+                                url: '{{=URL('vendors', 'get_localities')}}',
+                                data: { 
+                                    municipality:municipality_id                           },
+                                type: 'POST',
+                                success:function(data){
+                                    jQuery('#locality').remove();
+                                    jQuery('#locality_container').append(data);
+                                }
+                            }); 
+                        });
+
+                    });
+
+
+                </script>
+>>>>>>> origin/vendors_to_db
             	
                     <form id="form" class="stdform stdform2" method="post" action="">
                     	<p>
@@ -60,42 +91,28 @@
                         	<label>Dirección</label>
                             <span class="field"><input type="text" name="adress" id="adress" class="smallinput" /></span>
                         </p>
-                        
+
                         <p style="margin-top: 1px;">
-                        	<label>Ciudad</label>
+                            <label>Estado</label>
                             <span class="field">
-                            <select name="city" id="city">
-                            	<option value="">Choose One</option>
-                                <option value="1">Selection One</option>
-                                <option value="2">Selection Two</option>
-                                <option value="3">Selection Three</option>
-                                <option value="4">Selection Four</option>
-                            </select>
+                                {{=states}}
                             </span>
                         </p>
                         
                         <p style="margin-top: 1px;">
                         	<label>Municipio</label>
-                            <span class="field">
+                            <span id="municipality_container"class="field">
                             <select name="municipality" id="municipality">
-                            	<option value="">Choose One</option>
-                                <option value="1">Selection One</option>
-                                <option value="2">Selection Two</option>
-                                <option value="3">Selection Three</option>
-                                <option value="4">Selection Four</option>
+                            	<option value="">Seleccionar</option>
                             </select>
                             </span>
                         </p>
-                        
+
                         <p style="margin-top: 1px;">
-                        	<label>Estado</label>
-                            <span class="field">
-                            <select name="state" id="state">
-                            	<option value="">Choose One</option>
-                                <option value="1">Selection One</option>
-                                <option value="2">Selection Two</option>
-                                <option value="3">Selection Three</option>
-                                <option value="4">Selection Four</option>
+                            <label>Ciudad</label>
+                            <span class="field" id="locality_container">
+                            <select name="locality" id="locality">
+                                <option value="">Seleccionar</option>
                             </select>
                             </span>
                         </p>
