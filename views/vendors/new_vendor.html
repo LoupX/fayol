@@ -38,7 +38,7 @@
 					            	zip_code: {
 						            	required: false,
 						            	digits: true
-						            },
+						            }
 						       	},
 						       	messages: {
 							    company: "Ingrese el nombre de la empresa",
@@ -76,8 +76,11 @@
                             }); 
                         });
 
-                        jQuery('#submit').click(function(){
-	                        e.preventDefault();
+                        jQuery('#form').submit(function(e){
+                            e.preventDefault();
+                        });
+
+                        jQuery('#submit').click(function(e){
 	                        jQuery.ajax({
                                 url: '{{=URL('vendors', 'create_vendor')}}',
                                 data: { 
@@ -88,7 +91,7 @@
                                     locality:jQuery('#locality').val(),
                                     zip_code:jQuery('#zip_code').val(),
                                     rfc:jQuery('#rfc').val(),
-                                    website:jQuery('#website').val(),
+                                    website:jQuery('#website').val()
                                 },
                                 type: 'POST',
                                 success:function(data){
@@ -96,7 +99,8 @@
                                 		alert("Se a guardado exitosamente");    
                                 	}
                                 	else{
-	                                	alert("Se a producido un error al guardar")
+	                                	alert("Se a producido un error al " +
+                                                "guardar");
                                 	}
                                 }
                             }); 
