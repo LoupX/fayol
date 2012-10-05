@@ -19,31 +19,55 @@
         
         <div id="contentwrapper" class="contentwrapper">
 	   		
+	   		<div class="contenttitle2">
+	              <h3>Selecciona un proveedor</h3>
+            </div><!--contenttitle-->
+            
+            <script type="text/javascript">
+			jQuery(document).ready(function(){
+			
+				jQuery("#form").validate({
+					rules: {
+						vendor: "required",
+						lastname: "required",
+						clabe: {
+							required: false,
+							digits: true
+						},
+					},
+					messages: {
+						clabe: "Este campo debe tener sólo números.",
+						vendor: "Seleccione un proveedor",
+			
+					}
+				});
+			
+			});
+			</script>
+            	
 				<div id="validation" class="subcontent">
+				
+				<form id="form_ventor" class="stdform stdform2" method="post" action="">
+                    	                        
+                        <p>
+                        	<label>Proveedor</label>
+                            <span class="field">
+                            <select name="vendor" id="vendor">
+                            	<option value="">Choose One</option>
+                                <option value="1">Selection One</option>
+                                <option value="2">Selection Two</option>
+                                <option value="3">Selection Three</option>
+                                <option value="4">Selection Four</option>
+                            </select>
+                            </span>
+                        </p>
+                        
+                    </form><br />
 				
 					<div class="contenttitle2">
                         <h3>Información de pago</h3>
                     </div><!--contenttitle-->
             	
-            	<script type="text/javascript">
-jQuery(document).ready(function(){
-
-	jQuery("#form").validate({
-		rules: {
-			lastname: "required",
-			clabe: {
-				required: false,
-				digits: true
-			},
-		},
-		messages: {
-			clabe: "Este campo debe tener sólo números.",
-
-		}
-	});
-
-});
-</script>
             	
                     <form id="form" class="stdform stdform2" method="post" action="">
                         

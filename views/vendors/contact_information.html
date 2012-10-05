@@ -66,25 +66,23 @@
                     </div><!--contenttitle-->   
                        
                     <form class="stdform stdform2" method="post" action="">
-                    	<p>
-                        	<label>Tipo</label>
-                            <span class="field"><select name="type" id="type" onchange="aparecediv()">
-                            	<option value="">Choose One</option>
-                                <option value="1">Selection One</option>
-                                <option value="2">Selection Two</option>
-                                <option value="3">Selection Three</option>
-                                <option value="4">Selection Four</option>
-                            </select></span>
-                        </p> 
-                        
-                        <p style="margin-top: 1px;">
-                        	<label>Descripción</label>
-                            <span class="field"><input type="text" name="description" id="description" class="longinput"/></span>
-                        </p>
-                        
-                        <div id="camposgenerados"></div>
-                        
-                        
+                    	<div id="camposgenerados">
+	                    	<p>
+	                        	<label>Tipo</label>
+	                            <span class="field"><select name="type" id="type">
+	                            	<option value="">Choose One</option>
+	                                <option value="1">Selection One</option>
+	                                <option value="2">Selection Two</option>
+	                                <option value="3">Selection Three</option>
+	                                <option value="4">Selection Four</option>
+	                            </select></span>
+	                        </p> 
+	                        
+	                        <p style="margin-top: 1px;">
+	                        	<label>Descripción</label>
+	                            <span class="field"><input type="text" name="description" id="description1" class="longinput" keydown="aparecediv()"/></span>
+	                        </p>
+                    	</div>
                         <p class="stdformbutton">
                         	<button class="submit radius2">Guardar</button>
                         </p>
@@ -103,15 +101,17 @@
 </div><!--bodywrapper-->
 
 <script type="text/javascript">
-
-function aparecediv(){
-
-var midiv = document.createElement("div");
+var cont = "2";
+jQuery('#camposgenerados').on('keyup', jQuery('#description'+(cont-1)), function(e){
+	var midiv = document.createElement("div");
 		midiv.setAttribute("id","hola");
 		midiv.setAttribute("class","holaclase");
-		midiv.innerHTML = "<p><label>Tipo</label><span class='field'><select name='type' id='type' onchange='aparecediv()'><option value=''>Choose One</option><option value='1'>Selection One</option><option value='2'>Selection Two</option><option value='3'>Selection Three</option><option value='4'>Selection Four</option></select></span></p><p style='margin-top: 1px;'><label>Descripción</label><span class='field'><input type='text' name='description' id='description' class='longinput'/></span></p>";
+		midiv.innerHTML = "<p><label>Tipo</label><span class='field'><select name='type' id='type'><option value=''>Choose One</option><option value='1'>Selection One</option><option value='2'>Selection Two</option><option value='3'>Selection Three</option><option value='4'>Selection Four</option></select></span></p><p style='margin-top: 1px;'><label>Descripción</label><span class='field'><input type='text' name='description' id='description"+cont+"' class='longinput' keydown='aparecediv()'/></span></p>";
 		jQuery('#camposgenerados').append(midiv);
-		}
+		cont++;
+		jQuery('#description'+(cont-2)).unbind('keyup', e);
+		
+});
 </script>
 
 </body>
