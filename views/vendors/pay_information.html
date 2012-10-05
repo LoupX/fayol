@@ -1,0 +1,97 @@
+{{extend 'base/layout.html'}}
+
+{{block scripts_extra}}	
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.validate.min.js')}}"></script>
+{{end}}
+
+{{block sidebar_menu}}
+{{include 'vendors/sidebar.html'}}
+{{end}}
+
+{{block content}}
+    <div class="centercontent">
+    
+        <div class="pageheader">
+        
+            <h1 class="pagetitle">{{=title}}</h1>
+            
+        </div><!--pageheader-->
+        
+        <div id="contentwrapper" class="contentwrapper">
+	   		
+				<div id="validation" class="subcontent">
+				
+					<div class="contenttitle2">
+                        <h3>Información de pago</h3>
+                    </div><!--contenttitle-->
+            	
+            	<script type="text/javascript">
+jQuery(document).ready(function(){
+
+	jQuery("#form").validate({
+		rules: {
+			firstname: "required",
+			lastname: "required",
+			email: {
+				required: true,
+				email: true,
+			},
+		},
+		messages: {
+			company: "Ingrese el nombre de la empresa",
+
+		}
+	});
+
+});
+</script>
+            	
+                    <form id="form" class="stdform stdform2" method="post" action="">
+                        
+                        <p>
+                        	<label>Banco</label>
+                            <span class="field">
+                            <select name="bank" id="bank">
+                            	<option value="">Choose One</option>
+                                <option value="1">Selection One</option>
+                                <option value="2">Selection Two</option>
+                                <option value="3">Selection Three</option>
+                                <option value="4">Selection Four</option>
+                            </select>
+                            </span>
+                        </p>
+                        
+                        <p style="margin-top: 1px;">
+                        	<label>Número de Sucursal</label>
+                            <span class="field"><input type="text" name="branch" id="branch" class="smallinput" /></span>
+                        </p>
+                        
+                        <p>
+                        	<label>Número de cuenta</label>
+                            <span class="field"><input type="text" name="acountnumber" id="acountnumber" class="smallinput" /></span>
+                        </p>
+                        
+                        <p>
+                        	<label>CLABE</label>
+                            <span class="field"><input type="text" name="clabe" id="clabe" class="smallinput" /></span>
+                        </p>
+                        
+                        <p class="stdformbutton">
+                        	<button class="submit radius2">Guardar</button>
+                        </p>
+                    </form>
+
+            </div><!--subcontent-->      
+        
+        </div><!--contentwrapper-->
+        
+        <br clear="all" />
+        
+	</div><!-- centercontent -->
+    
+    
+</div><!--bodywrapper-->
+
+</body>
+</html>
+{{end}}

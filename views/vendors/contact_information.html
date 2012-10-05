@@ -1,0 +1,85 @@
+{{extend 'base/layout.html'}}
+
+{{block scripts_extra}}	
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.validate.min.js')}}"></script>
+{{end}}
+
+{{block sidebar_menu}}
+{{include 'vendors/sidebar.html'}}
+{{end}}
+
+{{block content}}
+    <div class="centercontent">
+    
+        <div class="pageheader">
+        
+            <h1 class="pagetitle">{{=title}}</h1>
+            
+        </div><!--pageheader-->
+        
+        <div id="contentwrapper" class="contentwrapper">
+	   		
+				<div id="validation" class="subcontent">
+            	
+            		<div class="contenttitle2">
+                        <h3>Selecciona un proveedor</h3>
+                    </div><!--contenttitle-->
+            	
+                    <form id="form1" class="stdform stdform2" method="post" action="">
+                    	                        
+                        <p>
+                        	<label>Proveedor</label>
+                            <span class="field">
+                            <select name="vendor" id="vendor">
+                            	<option value="">Choose One</option>
+                                <option value="1">Selection One</option>
+                                <option value="2">Selection Two</option>
+                                <option value="3">Selection Three</option>
+                                <option value="4">Selection Four</option>
+                            </select>
+                            </span>
+                        </p>
+                        
+                    </form><br />
+                       
+                    <div class="contenttitle2">
+                        <h3>Información de contacto</h3>
+                    </div><!--contenttitle-->   
+                       
+                    <form class="stdform stdform2" method="post" action="">
+                    	<p>
+                        	<label>Tipo</label>
+                            <span class="field"><select name="type" id="type">
+                            	<option value="">Choose One</option>
+                                <option value="1">Selection One</option>
+                                <option value="2">Selection Two</option>
+                                <option value="3">Selection Three</option>
+                                <option value="4">Selection Four</option>
+                            </select></span>
+                        </p> 
+                        
+                        <p style="margin-top: 1px;">
+                        	<label>Descripción</label>
+                            <span class="field"><input type="text" name="description" id="description" class="longinput" /></span>
+                        </p>
+                        
+                        <p class="stdformbutton">
+                        	<button class="submit radius2">Guardar</button>
+                        </p>
+                    </form>
+                   
+
+            </div><!--subcontent-->      
+        
+        </div><!--contentwrapper-->
+        
+        <br clear="all" />
+        
+	</div><!-- centercontent -->
+    
+    
+</div><!--bodywrapper-->
+
+</body>
+</html>
+{{end}}

@@ -1,13 +1,11 @@
 <script type="text/javascript">
-var tkn = jQuery('#tkn').val(ajax_token());
-
+ajax_token()
 jQuery('#submit').live('click', function(e) {
     e.preventDefault();
     var usr = jQuery('#usr').val(),
         pwd = jQuery('#pwd').val();
-        tkn = jQuery('#tkn').val()
-    //console.log(usr+" : "+pwd);
-
+        tkn = jQuery('#tkn').val();
+        
     jQuery.ajax({
         url: '{{=URL('user', 'login')}}',
         data: { 
@@ -24,9 +22,11 @@ jQuery('#submit').live('click', function(e) {
                 console.log('bad');
                 jQuery('.nousername').fadeIn();
                 jQuery('.nopassword').hide();
+                ajax_token()
             } else {
                 jQuery('.nousername').hide();
                 jQuery('.nopassword').hide();
+                ajax_token()
             }
         }
     }); 
@@ -35,12 +35,12 @@ jQuery('#submit').live('click', function(e) {
 });
 
 function ajax_token(){
+	var tkn = jQuery('#tkn');
     jQuery.ajax({
         type: 'POST',
         url: '{{=URL('user', 'ajax_token')}}',
         success: function(data){
             tkn.val(data);
-            //alert(data);
         }
     });
 }

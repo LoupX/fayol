@@ -333,7 +333,7 @@ body.withmenucoll2 { background-position: 35px 0; } /* with menu style 2 in coll
 /*********************************/
 
 
-.pageheader { padding-top: 20px; padding-bottom: 10px; background: url(../images/default/noise.white.png); position: relative; }
+.pageheader { padding-top: 20px; padding-bottom: 10px; background: url(../images/default/noise.white.png); position: relative; border-bottom: 1px solid #D8D8D8; }
 .pageheader .pagetitle { 
 	margin: 0 10px; color: #485b79; font-weight: normal; font-size: 28px; font-family: 'RobotoBoldCondensed', Arial, Helvetica, sans-serif; 
 }

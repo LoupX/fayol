@@ -1,4 +1,9 @@
 {{include 'base/header.html'}}
+{{block scripts_extra}}
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.alerts.js')}}"></script>
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.jgrowl.js')}}"></script>
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.validate.min.js')}}"></script>
+{{end}}
 <body class="loginpage">
 
 	<div class="loginbox">
@@ -46,7 +51,7 @@
                 <div class="keep"><input type="checkbox" /> Keep me logged in</div>
             
             </form>
-            
+
         </div><!--loginboxinner-->
     </div><!--loginbox-->
     {{include 'login/scripts.html'}}
