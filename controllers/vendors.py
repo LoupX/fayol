@@ -9,8 +9,9 @@ def new_vendor():
     title = 'Proveedores'
     states = read_states()
     if states:
-        states = SELECT(_name='state', _id='state',
-            *[OPTION(s['name'], _value=s['id']) for s in states])
+        options = [OPTION('Seleccionar', _value='')]
+        options += [OPTION(s['name'], _value=s['id']) for s in states]
+        states = SELECT(_name='state', _id='state', *options)
     else:
         states = SELECT(_name='state', _id='state', *OPTION('Ninguno',
             _value=0))
@@ -28,13 +29,16 @@ def pay_information():
 #Ajax functions
 def get_municipalities():
     municipalities = None
-    #if not request.ajax or not request.env.request_method != 'POST':
-    #    raise HTTP(400)
+    if not request.ajax or request.env.request_method != 'POST':
+        raise HTTP(400)
     if request.vars.state:
         municipalities = read_municipalities(request.vars.state)
         if municipalities:
+            options = [OPTION('Seleccionar', _value='')]
+            options += [OPTION(m['name'], _value=m['id']) for m in
+                        municipalities]
             municipalities = SELECT(_name='municipality', _id='municipality',
-                *[OPTION(m['name'], _value=m['id']) for m in municipalities])
+                *options)
         else:
             municipalities = SELECT(_name='municipality', _id='municipality',
                 *OPTION('Seleccionar', _value=0))
@@ -44,14 +48,15 @@ def get_municipalities():
     return municipalities
 
 def get_localities():
-    #if not request.ajax or not request.env.request_method != 'POST':
-    #    raise HTTP(400)
+    if not request.ajax or request.env.request_method != 'POST':
+        raise HTTP(400)
     localities = None
     if request.vars.municipality:
         localities = read_localities(request.vars.municipality)
         if localities:
-            localities = SELECT(_name='locality', _id='locality',
-                *[OPTION(l['name'], _value=l['id']) for l in localities])
+            options = [OPTION('Seleccionar', _value='')]
+            options += [OPTION(l['name'], _value=l['id']) for l in localities]
+            localities = SELECT(_name='locality', _id='locality', *options)
         else:
             localities = SELECT(_name='locality', _id='locality',
                 *OPTION('Seleccionar', _value=0))
@@ -62,26 +67,7 @@ def get_localities():
 
 
 def create_vendor():
-    if not request.ajax or not request.env.request_method != 'POST':
-        raise HTTP(400)
-    vars = dict()
-    data = dict()
-    name = None
-    if request.vars:
-        vars = request.vars
-    for key in vars:
-        if not vars[key]:
-            del vars[key]
-    if vars.name:
-        name = vars.name
-    else:
-        return None
-    try:
-        data['']
-    except Exception as e:
-        pass
-    else:
-        pass
+    return 'alive'
 
 #Functions
 def _create_vendor(name, **kwargs):
