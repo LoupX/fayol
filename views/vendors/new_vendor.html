@@ -26,25 +26,29 @@
                 </div><!--contenttitle-->
             	
             	<script type="text/javascript">
-jQuery(document).ready(function(){
+	            	jQuery(document).ready(function(){
 
-	jQuery("#form").validate({
-		rules: {
-			firstname: "required",
-			lastname: "required",
-			email: {
-				required: true,
-				email: true,
-			},
-		},
-		messages: {
-			company: "Ingrese el nombre de la empresa",
-
-		}
-	});
-
-});
-</script>
+		            	jQuery("#form").validate({
+			            	rules: {
+				            	firstname: "required",
+				            	lastname: "required",
+				            	email: {
+					            	required: true,
+					            	email: true
+					            	},
+					            	zip_code: {
+						            	required: false,
+						            	digits: true
+						            },
+						       	},
+						       	messages: {
+							    company: "Ingrese el nombre de la empresa",
+							    zip_code: "Este campo debe tener sólo números."
+							}
+					  });
+					  
+				});
+				</script>
             	
                     <form id="form" class="stdform stdform2" method="post" action="">
                     	<p>
@@ -98,12 +102,12 @@ jQuery(document).ready(function(){
                         
                         <p style="margin-top: 1px;">
                         	<label>Código postal</label>
-                            <span class="field"><input type="text" name="zip_code" id="zip_code" class="smallinput" /></span>
+                            <span class="field"><input type="text" name="zip_code" id="zip_code" class="smallinput" maxlength="5"/></span>
                         </p>
                         
                         <p>
                         	<label>RFC</label>
-                            <span class="field"><input type="text" name="rfc" id="rfc" class="smallinput" /></span>
+                            <span class="field"><input type="text" name="rfc" id="rfc" class="smallinput" maxlength="13"/></span>
                         </p>
                         
                         <p>

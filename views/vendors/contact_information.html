@@ -25,7 +25,26 @@
                         <h3>Selecciona un proveedor</h3>
                     </div><!--contenttitle-->
             	
-                    <form id="form1" class="stdform stdform2" method="post" action="">
+            	<script type="text/javascript">
+				jQuery(document).ready(function()
+				{
+						jQuery("#form_ventor").validate({
+							rules: 
+							{
+								vendor: "required",
+							},
+							messages: 
+							{
+								vendor: "Seleccione un proveedor",
+					
+							}
+						});
+					
+				});
+				</script>
+					
+            	
+                    <form id="form_ventor" class="stdform stdform2" method="post" action="">
                     	                        
                         <p>
                         	<label>Proveedor</label>
@@ -49,7 +68,7 @@
                     <form class="stdform stdform2" method="post" action="">
                     	<p>
                         	<label>Tipo</label>
-                            <span class="field"><select name="type" id="type">
+                            <span class="field"><select name="type" id="type" onchange="aparecediv()">
                             	<option value="">Choose One</option>
                                 <option value="1">Selection One</option>
                                 <option value="2">Selection Two</option>
@@ -60,8 +79,11 @@
                         
                         <p style="margin-top: 1px;">
                         	<label>Descripción</label>
-                            <span class="field"><input type="text" name="description" id="description" class="longinput" /></span>
+                            <span class="field"><input type="text" name="description" id="description" class="longinput"/></span>
                         </p>
+                        
+                        <div id="camposgenerados"></div>
+                        
                         
                         <p class="stdformbutton">
                         	<button class="submit radius2">Guardar</button>
@@ -79,6 +101,18 @@
     
     
 </div><!--bodywrapper-->
+
+<script type="text/javascript">
+
+function aparecediv(){
+
+var midiv = document.createElement("div");
+		midiv.setAttribute("id","hola");
+		midiv.setAttribute("class","holaclase");
+		midiv.innerHTML = "<p><label>Tipo</label><span class='field'><select name='type' id='type' onchange='aparecediv()'><option value=''>Choose One</option><option value='1'>Selection One</option><option value='2'>Selection Two</option><option value='3'>Selection Three</option><option value='4'>Selection Four</option></select></span></p><p style='margin-top: 1px;'><label>Descripción</label><span class='field'><input type='text' name='description' id='description' class='longinput'/></span></p>";
+		jQuery('#camposgenerados').append(midiv);
+		}
+</script>
 
 </body>
 </html>
