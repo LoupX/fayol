@@ -29,22 +29,22 @@ def pay_information():
 #Ajax functions
 def get_municipalities():
     municipalities = None
+    options = [OPTION('Seleccionar', _value='')]
     if not request.ajax or request.env.request_method != 'POST':
         raise HTTP(400)
     if request.vars.state:
         municipalities = read_municipalities(request.vars.state)
         if municipalities:
-            options = [OPTION('Seleccionar', _value='')]
             options += [OPTION(m['name'], _value=m['id']) for m in
                         municipalities]
             municipalities = SELECT(_name='municipality', _id='municipality',
                 *options)
         else:
             municipalities = SELECT(_name='municipality', _id='municipality',
-                *OPTION('Seleccionar', _value=0))
+                *options)
     else:
         municipalities = SELECT(_name='municipality', _id='municipality',
-            *OPTION('Seleccionar', _value=0))
+            *options)
     return municipalities
 
 def get_localities():
@@ -59,15 +59,37 @@ def get_localities():
             localities = SELECT(_name='locality', _id='locality', *options)
         else:
             localities = SELECT(_name='locality', _id='locality',
-                *OPTION('Seleccionar', _value=0))
+                *OPTION('Seleccionar', _value=''))
     else:
         localities = SELECT(_name='locality', _id='locality',
-            *OPTION('Seleccionar', _value=0))
+            *OPTION('Seleccionar', _value=''))
     return localities
 
 
 def create_vendor():
-    return 'alive'
+    vars = None
+    name = None
+    vals = dict()
+    if not request.ajax or request.env.request_method != 'POST':
+        raise HTTP(400)
+    if request.vars and request.vars.company:
+        vars = request.vars
+        name = vars.company
+    else:
+        return ''
+
+    vals['address'] = vars.address
+    vals['state_id'] = vars.state
+    vals['municipality_id'] = vars.municipality
+    vals['locality_id'] = vars.locality
+    vals['zip_code'] = vars.zip_code
+    vals['rfc'] = vars.rfc
+    vals['website'] = vars.website
+    id = _create_vendor(name, **vals)
+    if id:
+        return str(id)
+    else:
+        return ''
 
 #Functions
 def _create_vendor(name, **kwargs):
