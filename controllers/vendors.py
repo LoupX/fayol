@@ -493,3 +493,7 @@ def delete_vendor_agent_contact_info(vendor_agent_contact_info_id):
 def sales_agents():
     title = 'Agentes de ventas'
     return dict(title=title)
+
+def new_agent():
+    title = 'Agentes de ventas'
+    return dict(title=title)
