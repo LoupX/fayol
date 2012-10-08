@@ -24,99 +24,10 @@
                 <div class="contenttitle2">
                         <h3>Datos generales</h3>
                 </div><!--contenttitle-->
-            	
-            	<script type="text/javascript">
-            	
-                    jQuery(document).ready(function(){
-                    	jQuery("#form").validate({
-			            	rules: {
-				            	firstname: "required",
-				            	lastname: "required",
-				            	email: {
-					            	required: true,
-					            	email: true
-					            	},
-					            	zip_code: {
-						            	required: false,
-						            	digits: true
-						            }
-						       	},
-						       	messages: {
-							    company: "Ingrese el nombre de la empresa",
-							    zip_code: "Este campo debe tener sólo números."
-							}
-					    });
-
-                        jQuery('#state').change(function(){
-                            //jQuery('#municipality').html('');
-                            state_id = jQuery('#state').val();
-                            jQuery.ajax({
-                                url: '{{=URL('vendors', 'get_municipalities')}}',
-                                data: { 
-                                    state:state_id                            
-                                },
-                                type: 'POST',
-                                success:function(data){
-                                    jQuery('#municipality').remove();
-                                    jQuery('#municipality_container').append(data);
-                                }
-                            }); 
-                        });
-
-                        jQuery('#municipality_container').on('change', jQuery('#municipality'), function(){
-                            municipality_id = jQuery('#municipality').val();
-                            jQuery.ajax({
-                                url: '{{=URL('vendors', 'get_localities')}}',
-                                data: { 
-                                    municipality:municipality_id                           
-                                },
-                                type: 'POST',
-                                success:function(data){
-                                    jQuery('#locality').remove();
-                                    jQuery('#locality_container').append(data);
-                                }
-                            }); 
-                        });
-
-                        jQuery('#form').submit(function(e){
-                            e.preventDefault();
-                        });
-                        
-                        jQuery('#submit').click(function(e){
-	                        jQuery.ajax({
-                                url: '{{=URL('vendors', 'create_vendor')}}',
-                                data: { 
-                                    company:jQuery('#company').val(),
-                                    address:jQuery('#address').val(),
-                                    state:jQuery('#state').val(),
-                                    municipality:jQuery('#municipality').val(),
-                                    locality:jQuery('#locality').val(),
-                                    zip_code:jQuery('#zip_code').val(),
-                                    rfc:jQuery('#rfc').val(),
-                                    website:jQuery('#website').val()
-                                },
-                                type: 'POST',
-                                success:function(data){
-                                	if(data){
-                                		alert("Se a guardado exitosamente");    
-                                	}
-                                	else{
-	                                	alert("Se a producido un error al " +
-                                                "guardar");
-                                	}
-                                }
-                            }); 
-	                        
-                        });
-
-                    });
-
-
-                </script>
-            	
-                    <form id="form" class="stdform stdform2" method="post" action="">
-                    	<p>
-                        	<label>Nombre de la empresa *</label>
+                
+                    <form id="form" class="stdform stdform2" method="POST" action="">
+                        <p>
+                            <label>Nombre de la empresa *</label>
                             <span class="field"><input type="text" name="company" id="company" class="smallinput" required/></span>
                         </p>
                         
