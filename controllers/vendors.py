@@ -418,3 +418,8 @@ def delete_vendor_agent_contact_info(vendor_agent_contact_info_id):
     else:
         db.commit()
         return True
+
+
+def sales_agents():
+    title = 'Agentes de ventas'
+    return dict(title=title)
