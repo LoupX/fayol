@@ -44,9 +44,10 @@
 							    company: "Ingrese el nombre de la empresa",
 							    zip_code: "Este campo debe tener sólo números."
 							}
-					    });
+					  });
 
                         jQuery('#state').change(function(){
+                            //jQuery('#municipality').html('');
                             state_id = jQuery('#state').val();
                             jQuery.ajax({
                                 url: '{{=URL('vendors', 'get_municipalities')}}',
@@ -79,13 +80,13 @@
                         jQuery('#form').submit(function(e){
                             e.preventDefault();
                         });
-                        
+
                         jQuery('#submit').click(function(e){
 	                        jQuery.ajax({
                                 url: '{{=URL('vendors', 'create_vendor')}}',
                                 data: { 
                                     company:jQuery('#company').val(),
-                                    adress:jQuery('#adress').val(),
+                                    address:jQuery('#address').val(),
                                     state:jQuery('#state').val(),
                                     municipality:jQuery('#municipality').val(),
                                     locality:jQuery('#locality').val(),
@@ -115,12 +116,12 @@
                     <form id="form" class="stdform stdform2" method="post" action="">
                     	<p>
                         	<label>Nombre de la empresa *</label>
-                            <span class="field"><input type="text" name="company" id="company" class="smallinput" required/></span>
+                            <span class="field"><input type="text" name="company" id="company" class="smallinput" value="{{=name}}" /></span>
                         </p>
                         
                         <p>
                         	<label>Dirección</label>
-                            <span class="field"><input type="text" name="adress" id="adress" class="smallinput" /></span>
+                            <span class="field"><input type="text" name="address" id="address" class="smallinput" value="{{=address}}" /></span>
                         </p>
 
                         <p style="margin-top: 1px;">
@@ -133,34 +134,30 @@
                         <p style="margin-top: 1px;">
                         	<label>Municipio</label>
                             <span id="municipality_container"class="field">
-                            <select name="municipality" id="municipality">
-                            	<option value="">Seleccionar</option>
-                            </select>
+                                {{=municipalities}}
                             </span>
                         </p>
 
                         <p style="margin-top: 1px;">
                             <label>Ciudad</label>
                             <span class="field" id="locality_container">
-                            <select name="locality" id="locality">
-                                <option value="">Seleccionar</option>
-                            </select>
+                                {{=localities}}
                             </span>
                         </p>
                         
                         <p style="margin-top: 1px;">
                         	<label>Código postal</label>
-                            <span class="field"><input type="text" name="zip_code" id="zip_code" class="smallinput" maxlength="5"/></span>
+                            <span class="field"><input type="text" name="zip_code" id="zip_code" class="smallinput" maxlength="5" value="{{=zip_code}}" /></span>
                         </p>
                         
                         <p>
                         	<label>RFC</label>
-                            <span class="field"><input type="text" name="rfc" id="rfc" class="smallinput" maxlength="13"/></span>
+                            <span class="field"><input type="text" name="rfc" id="rfc" class="smallinput" maxlength="13" value="{{=rfc}}" /></span>
                         </p>
                         
                         <p>
                         	<label>Sitio Web</label>
-                            <span class="field"><input type="text" name="website" id="website" class="smallinput" /></span>
+                            <span class="field"><input type="text" name="website" id="website" class="smallinput" value="{{=website}}" /></span>
                         </p>
                         
                         <p class="stdformbutton">

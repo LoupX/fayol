@@ -5,7 +5,7 @@ def index():
     title = 'Proveedores'
     return dict(title=title)
 
-def new_vendor():
+def new():
     title = 'Proveedores'
     states = read_states()
     if states:
@@ -18,6 +18,54 @@ def new_vendor():
 
     return dict(title=title, states=states)
 
+def update():
+    title = 'Proveedores'
+    vendor_id = None
+    if request.vars.id:
+        vendor_id = request.vars.id
+    else:
+        redirect(URL(c='vendors', f='new'))
+    row = db(db.vendors.id==vendor_id).select().as_list()
+    row = row[0]
+    if not row:
+        redirect(URL(c='vendors', f='new'))
+
+    options = [OPTION('Seleccionar', _value='')]
+    states = read_states()
+    if states:
+        for s in states:
+            if s['id']==row['state_id']:
+                options += [OPTION(s['name'], _value=s['id'],
+                    _selected='selected')]
+            else:
+                options += [OPTION(s['name'], _value=s['id'])]
+    states = SELECT(_name='state', _id='state', *options)
+
+    options = [OPTION('Seleccionar', _value='')]
+    municipalities = read_municipalities(row['state_id'])
+    if municipalities:
+        for m in municipalities:
+            if m['id']==row['municipality_id']:
+                options += [OPTION(m['name'], _value=m['id'],
+                    _selected='selected')]
+            else:
+                options += [OPTION(m['name'], _value=m['id'])]
+    municipalities = SELECT(_name='municipality', _id='municipality', *options)
+
+    options = [OPTION('Seleccionar', _value='')]
+    localities = read_localities(row['municipality_id'])
+    if localities:
+        for l in localities:
+            if l['id']==row['locality_id']:
+                options += [OPTION(l['name'], _value=l['id'],
+                    _selected='selected')]
+            else:
+                options += [OPTION(l['name'], _value=l['id'])]
+    localities = SELECT(_name='locality', _id='locality', *options)
+    return dict(title=title, states=states, municipalities=municipalities,
+        localities=localities, **row)
+
+
 def contact_information():
     title = 'Proveedores'
     return dict(title=title)
@@ -29,22 +77,22 @@ def pay_information():
 #Ajax functions
 def get_municipalities():
     municipalities = None
+    options = [OPTION('Seleccionar', _value='')]
     if not request.ajax or request.env.request_method != 'POST':
         raise HTTP(400)
     if request.vars.state:
         municipalities = read_municipalities(request.vars.state)
         if municipalities:
-            options = [OPTION('Seleccionar', _value='')]
             options += [OPTION(m['name'], _value=m['id']) for m in
                         municipalities]
             municipalities = SELECT(_name='municipality', _id='municipality',
                 *options)
         else:
             municipalities = SELECT(_name='municipality', _id='municipality',
-                *OPTION('Seleccionar', _value=0))
+                *options)
     else:
         municipalities = SELECT(_name='municipality', _id='municipality',
-            *OPTION('Seleccionar', _value=0))
+            *options)
     return municipalities
 
 def get_localities():
@@ -59,15 +107,37 @@ def get_localities():
             localities = SELECT(_name='locality', _id='locality', *options)
         else:
             localities = SELECT(_name='locality', _id='locality',
-                *OPTION('Seleccionar', _value=0))
+                *OPTION('Seleccionar', _value=''))
     else:
         localities = SELECT(_name='locality', _id='locality',
-            *OPTION('Seleccionar', _value=0))
+            *OPTION('Seleccionar', _value=''))
     return localities
 
 
 def create_vendor():
-    return 'alive'
+    vars = None
+    name = None
+    vals = dict()
+    if not request.ajax or request.env.request_method != 'POST':
+        raise HTTP(400)
+    if request.vars and request.vars.company:
+        vars = request.vars
+        name = vars.company
+    else:
+        return ''
+
+    vals['address'] = vars.address
+    vals['state_id'] = vars.state
+    vals['municipality_id'] = vars.municipality
+    vals['locality_id'] = vars.locality
+    vals['zip_code'] = vars.zip_code
+    vals['rfc'] = vars.rfc
+    vals['website'] = vars.website
+    id = _create_vendor(name, **vals)
+    if id:
+        return str(id)
+    else:
+        return ''
 
 #Functions
 def _create_vendor(name, **kwargs):

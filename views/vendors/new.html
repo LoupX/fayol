@@ -1,0 +1,185 @@
+{{extend 'base/layout.html'}}
+
+{{block scripts_extra}}	
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.validate.min.js')}}"></script>
+{{end}}
+
+{{block sidebar_menu}}
+{{include 'vendors/sidebar.html'}}
+{{end}}
+
+{{block content}}
+    <div class="centercontent">
+    
+        <div class="pageheader">
+        
+            <h1 class="pagetitle">{{=title}}</h1>
+            
+        </div><!--pageheader-->
+        
+        <div id="contentwrapper" class="contentwrapper">
+	   		
+				<div id="validation" class="subcontent">
+				
+				<div class="contenttitle2">
+                        <h3>Datos generales</h3>
+                </div><!--contenttitle-->
+            	
+            	<script type="text/javascript">
+                    jQuery(document).ready(function(){
+                    	jQuery("#form").validate({
+			            	rules: {
+				            	firstname: "required",
+				            	lastname: "required",
+				            	email: {
+					            	required: true,
+					            	email: true
+					            	},
+					            	zip_code: {
+						            	required: false,
+						            	digits: true
+						            }
+						       	},
+						       	messages: {
+							    company: "Ingrese el nombre de la empresa",
+							    zip_code: "Este campo debe tener sólo números."
+							}
+					    });
+
+                        jQuery('#state').change(function(){
+                            //jQuery('#municipality').html('');
+                            state_id = jQuery('#state').val();
+                            jQuery.ajax({
+                                url: '{{=URL('vendors', 'get_municipalities')}}',
+                                data: { 
+                                    state:state_id                            
+                                },
+                                type: 'POST',
+                                success:function(data){
+                                    jQuery('#municipality').remove();
+                                    jQuery('#municipality_container').append(data);
+                                }
+                            }); 
+                        });
+
+                        jQuery('#municipality_container').on('change', jQuery('#municipality'), function(){
+                            municipality_id = jQuery('#municipality').val();
+                            jQuery.ajax({
+                                url: '{{=URL('vendors', 'get_localities')}}',
+                                data: { 
+                                    municipality:municipality_id                           
+                                },
+                                type: 'POST',
+                                success:function(data){
+                                    jQuery('#locality').remove();
+                                    jQuery('#locality_container').append(data);
+                                }
+                            }); 
+                        });
+
+                        jQuery('#form').submit(function(e){
+                            e.preventDefault();
+                        });
+                        
+                        jQuery('#submit').click(function(e){
+	                        jQuery.ajax({
+                                url: '{{=URL('vendors', 'create_vendor')}}',
+                                data: { 
+                                    company:jQuery('#company').val(),
+                                    address:jQuery('#address').val(),
+                                    state:jQuery('#state').val(),
+                                    municipality:jQuery('#municipality').val(),
+                                    locality:jQuery('#locality').val(),
+                                    zip_code:jQuery('#zip_code').val(),
+                                    rfc:jQuery('#rfc').val(),
+                                    website:jQuery('#website').val()
+                                },
+                                type: 'POST',
+                                success:function(data){
+                                	if(data){
+                                		alert("Se a guardado exitosamente");    
+                                	}
+                                	else{
+	                                	alert("Se a producido un error al " +
+                                                "guardar");
+                                	}
+                                }
+                            }); 
+	                        
+                        });
+
+                    });
+
+
+                </script>
+            	
+                    <form id="form" class="stdform stdform2" method="post" action="">
+                    	<p>
+                        	<label>Nombre de la empresa *</label>
+                            <span class="field"><input type="text" name="company" id="company" class="smallinput" required/></span>
+                        </p>
+                        
+                        <p>
+                        	<label>Dirección</label>
+                            <span class="field"><input type="text" name="address" id="address" class="smallinput" /></span>
+                        </p>
+
+                        <p style="margin-top: 1px;">
+                            <label>Estado</label>
+                            <span class="field">
+                                {{=states}}
+                            </span>
+                        </p>
+                        
+                        <p style="margin-top: 1px;">
+                        	<label>Municipio</label>
+                            <span id="municipality_container"class="field">
+                            <select name="municipality" id="municipality">
+                            	<option value="">Seleccionar</option>
+                            </select>
+                            </span>
+                        </p>
+
+                        <p style="margin-top: 1px;">
+                            <label>Ciudad</label>
+                            <span class="field" id="locality_container">
+                            <select name="locality" id="locality">
+                                <option value="">Seleccionar</option>
+                            </select>
+                            </span>
+                        </p>
+                        
+                        <p style="margin-top: 1px;">
+                        	<label>Código postal</label>
+                            <span class="field"><input type="text" name="zip_code" id="zip_code" class="smallinput" maxlength="5"/></span>
+                        </p>
+                        
+                        <p>
+                        	<label>RFC</label>
+                            <span class="field"><input type="text" name="rfc" id="rfc" class="smallinput" maxlength="13"/></span>
+                        </p>
+                        
+                        <p>
+                        	<label>Sitio Web</label>
+                            <span class="field"><input type="text" name="website" id="website" class="smallinput" /></span>
+                        </p>
+                        
+                        <p class="stdformbutton">
+                        	<button id="submit" class="submit radius2">Guardar</button>
+                        </p>
+                    </form>
+
+            </div><!--subcontent-->      
+        
+        </div><!--contentwrapper-->
+        
+        <br clear="all" />
+        
+	</div><!-- centercontent -->
+    
+    
+</div><!--bodywrapper-->
+
+</body>
+</html>
+{{end}}
