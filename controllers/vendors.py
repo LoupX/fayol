@@ -467,3 +467,6 @@ def sales_agents():
 def new_agent():
     title = 'Agentes de ventas'
     return dict(title=title)
+    
+def quickedit():
+    return dict()
