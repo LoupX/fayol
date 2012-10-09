@@ -1,0 +1,74 @@
+{{extend 'base/layout.html'}}
+
+{{block scripts_extra}}
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.dataTables.min.js')}}"></script>
+<script type="text/javascript" src="{{=URL('static', 'js/custom/tables.js')}}"></script>	
+{{end}}
+
+{{block sidebar_menu}}
+{{include 'products/sidebar.html'}}
+{{end}}
+
+{{block content}}
+    <div class="centercontent">
+    
+        <div class="pageheader">
+        
+            <h1 class="pagetitle">{{=title}}</h1>
+            
+        </div><!--pageheader-->
+        
+        <div id="contentwrapper" class="contentwrapper">
+        
+        	<div id="validation" class="subcontent">
+            	
+            		<div class="contenttitle2">
+                        <h3>Nueva unidad de medida</h3>
+                    </div><!--contenttitle-->
+            						
+                    <form id="form_agent" class="stdform stdform2" method="post" action="">
+                    	                        
+                        <p>
+	                        <label>Nombre de la unidad de medida</label>
+	                        <span class="field"><input type="text" name="measuring_unit" id="measuring_unit" class="longinput"/></span>
+	                    </p>
+	                    <p style="margin-top: 1px;">
+	                       	<label>Abreviación</label>
+	                        <span class="field"><input type="text" name="abbreviation" id="abbreviation" class="longinput" keydown="aparecediv()"/></span>
+	                    </p>
+	                    <p class="stdformbutton">
+                        	<button class="submit radius2">Guardar</button>
+                        </p>
+                    </form>
+
+            </div><!--subcontent-->     
+        
+        </div><!--contentwrapper-->
+        
+        <br clear="all" />
+        
+	</div><!-- centercontent -->
+
+<script type="text/javascript">
+	jQuery(document).ready(function()
+	{
+		jQuery("#form_ventor").validate({
+			rules: 
+			{
+				measuring_unit: "required",
+				abbreviation: "required",
+			},
+			messages: 
+			{
+				measuring_unit: "Ingrese el nombre de la unidad de medida",
+				abbreviation: "Ingrese una abreviación de la unidad de medida",
+			}
+		});
+	});
+</script>    
+    
+</div><!--bodywrapper-->
+
+</body>
+</html>
+{{end}}

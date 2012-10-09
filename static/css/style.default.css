@@ -889,7 +889,7 @@ input.hasDatepicker {
 	-moz-border-radius: 2px; -webkit-border-radius: 2px; border-radius: 2px; margin: 0 5px;
 }
 .dataTables_wrapper input { border: 1px solid #ddd; padding: 7px 5px 8px 5px; width: 200px; background: #fff; }
-.dataTables_filter { position: absolute; top: 7px; right: 8px; }
+.dataTables_filter { position: absolute; top: 4px; right: 8px; }
 .dataTables_info { position: absolute; bottom: 13px; left: 8px; }
 .dataTables_paginate { text-align: right; line-height: 16px; }
 .dataTables_paginate span { display: inline-block; }
