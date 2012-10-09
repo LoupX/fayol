@@ -112,7 +112,9 @@
     function check(v) {
        if ( jQuery('input[name=description'+v+']').val().length <= 0 && 
             !jQuery('input[name=description'+v+']').hasClass('active') ) {
-            jQuery('#div'+v).slideToggle();
+            jQuery('#div'+v).slideToggle(function(){
+                jQuery(this).remove();
+            });
        };
     }
 
