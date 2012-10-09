@@ -3,15 +3,16 @@
 #Views
 def index():
     title = 'Proveedores'
-    return dict(title=title)
+    current = ['menu_catalogs', 'sidebar_vendors', 'sub_vendors_read']
+    return dict(title=title, current=current)
 
 def new():
     title = 'Proveedores'
+    current = ['menu_catalogs', 'sidebar_vendors', 'sub_vendors_new']
     states = db(db.states).select(db.states.name, db.states.id, 
                  orderby='name').as_list()
     state = DIV(*[OPTION(k['name'], _value=k['id']) for k in states])
-
-    return dict(title=title, state=state)
+    return dict(title=title, current=current, state=state)
 
 def update():
     title = 'Proveedores'
@@ -67,7 +68,19 @@ def contact_information():
 
 def pay_information():
     title = 'Proveedores'
+    current = ['menu_catalogs', 'sidebar_vendors', 'sub_vendors_pay']
+    return dict(title=title, current=current)
+
+def sales_agents():
+    title = 'Agentes de ventas'
     return dict(title=title)
+
+def new_agent():
+    title = 'Agentes de ventas'
+    return dict(title=title)
+
+def quickedit():
+    return dict()
 
 #Ajax functions
 def get_municipalities():
@@ -458,15 +471,3 @@ def delete_vendor_agent_contact_info(vendor_agent_contact_info_id):
     else:
         db.commit()
         return True
-
-
-def sales_agents():
-    title = 'Agentes de ventas'
-    return dict(title=title)
-
-def new_agent():
-    title = 'Agentes de ventas'
-    return dict(title=title)
-    
-def quickedit():
-    return dict()

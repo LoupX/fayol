@@ -1,9 +1,11 @@
 <body class="withvernav">
 
 <script type="text/javascript">
+    {{for item in current:}}
     jQuery(document).ready(function(){
-        jQuery("#{{=current}}").addClass("current");
+        jQuery("#{{=item}}").addClass("current");
     });
+    {{pass}}
 </script>
 
 <div class="bodywrapper">
