@@ -7,16 +7,11 @@ def index():
 
 def new():
     title = 'Proveedores'
-    states = read_states()
-    if states:
-        options = [OPTION('Seleccionar', _value='')]
-        options += [OPTION(s['name'], _value=s['id']) for s in states]
-        states = SELECT(_name='state', _id='state', *options)
-    else:
-        states = SELECT(_name='state', _id='state', *OPTION('Ninguno',
-            _value=0))
+    states = db(db.states).select(db.states.name, db.states.id, 
+                 orderby='name').as_list()
+    state = DIV(*[OPTION(k['name'], _value=k['id']) for k in states])
 
-    return dict(title=title, states=states)
+    return dict(title=title, state=state)
 
 def update():
     title = 'Proveedores'
@@ -76,43 +71,18 @@ def pay_information():
 
 #Ajax functions
 def get_municipalities():
-    municipalities = None
-    options = [OPTION('Seleccionar', _value='')]
-    if not request.ajax or request.env.request_method != 'POST':
-        raise HTTP(400)
-    if request.vars.state:
-        municipalities = read_municipalities(request.vars.state)
-        if municipalities:
-            options += [OPTION(m['name'], _value=m['id']) for m in
-                        municipalities]
-            municipalities = SELECT(_name='municipality', _id='municipality',
-                *options)
-        else:
-            municipalities = SELECT(_name='municipality', _id='municipality',
-                *options)
-    else:
-        municipalities = SELECT(_name='municipality', _id='municipality',
-            *options)
-    return municipalities
+    id = request.vars.id
+    municipalities = db(db.municipalities.state_id==id).select(db.municipalities.id,
+                        db.municipalities.name, orderby='name').as_list()
+    municipality = DIV(*[OPTION(k['name'], _value=k['id']) for k in municipalities])
+    return municipality
 
 def get_localities():
-    if not request.ajax or request.env.request_method != 'POST':
-        raise HTTP(400)
-    localities = None
-    if request.vars.municipality:
-        localities = read_localities(request.vars.municipality)
-        if localities:
-            options = [OPTION('Seleccionar', _value='')]
-            options += [OPTION(l['name'], _value=l['id']) for l in localities]
-            localities = SELECT(_name='locality', _id='locality', *options)
-        else:
-            localities = SELECT(_name='locality', _id='locality',
-                *OPTION('Seleccionar', _value=''))
-    else:
-        localities = SELECT(_name='locality', _id='locality',
-            *OPTION('Seleccionar', _value=''))
-    return localities
-
+    id = request.vars.id
+    localities = db(db.localities.municipality_id==id).select(db.localities.id,
+                    db.localities.name, orderby='name').as_list()
+    locality = DIV(*[OPTION(k['name'], _value=k['id']) for k in localities])
+    return locality
 
 def create_vendor():
     vars = None
@@ -488,3 +458,12 @@ def delete_vendor_agent_contact_info(vendor_agent_contact_info_id):
     else:
         db.commit()
         return True
+
+
+def sales_agents():
+    title = 'Agentes de ventas'
+    return dict(title=title)
+
+def new_agent():
+    title = 'Agentes de ventas'
+    return dict(title=title)

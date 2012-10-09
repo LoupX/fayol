@@ -20,124 +20,38 @@
         </div><!--pageheader-->
         
         <div id="contentwrapper" class="contentwrapper">
-	   		
-				<div id="validation" class="subcontent">
-				
-				<div class="contenttitle2">
+            
+                <div id="validation" class="subcontent">
+                
+                <div class="contenttitle2">
                         <h3>Datos generales</h3>
                 </div><!--contenttitle-->
-            	
-            	<script type="text/javascript">
-                    jQuery(document).ready(function(){
-                    	jQuery("#form").validate({
-			            	rules: {
-				            	firstname: "required",
-				            	lastname: "required",
-				            	email: {
-					            	required: true,
-					            	email: true
-					            	},
-					            	zip_code: {
-						            	required: false,
-						            	digits: true
-						            }
-						       	},
-						       	messages: {
-							    company: "Ingrese el nombre de la empresa",
-							    zip_code: "Este campo debe tener sólo números."
-							}
-					  });
-
-                        jQuery('#state').change(function(){
-                            //jQuery('#municipality').html('');
-                            state_id = jQuery('#state').val();
-                            jQuery.ajax({
-                                url: '{{=URL('vendors', 'get_municipalities')}}',
-                                data: { 
-                                    state:state_id                            
-                                },
-                                type: 'POST',
-                                success:function(data){
-                                    jQuery('#municipality').remove();
-                                    jQuery('#municipality_container').append(data);
-                                }
-                            }); 
-                        });
-
-                        jQuery('#municipality_container').on('change', jQuery('#municipality'), function(){
-                            municipality_id = jQuery('#municipality').val();
-                            jQuery.ajax({
-                                url: '{{=URL('vendors', 'get_localities')}}',
-                                data: { 
-                                    municipality:municipality_id                           
-                                },
-                                type: 'POST',
-                                success:function(data){
-                                    jQuery('#locality').remove();
-                                    jQuery('#locality_container').append(data);
-                                }
-                            }); 
-                        });
-
-                        jQuery('#form').submit(function(e){
-                            e.preventDefault();
-                        });
-
-                        jQuery('#submit').click(function(e){
-	                        jQuery.ajax({
-                                url: '{{=URL('vendors', 'create_vendor')}}',
-                                data: { 
-                                    company:jQuery('#company').val(),
-                                    address:jQuery('#address').val(),
-                                    state:jQuery('#state').val(),
-                                    municipality:jQuery('#municipality').val(),
-                                    locality:jQuery('#locality').val(),
-                                    zip_code:jQuery('#zip_code').val(),
-                                    rfc:jQuery('#rfc').val(),
-                                    website:jQuery('#website').val()
-                                },
-                                type: 'POST',
-                                success:function(data){
-                                	if(data){
-                                		alert("Se a guardado exitosamente");    
-                                	}
-                                	else{
-	                                	alert("Se a producido un error al " +
-                                                "guardar");
-                                	}
-                                }
-                            }); 
-	                        
-                        });
-
-                    });
-
-
-                </script>
-            	
-                    <form id="form" class="stdform stdform2" method="post" action="">
-                    	<p>
-                        	<label>Nombre de la empresa *</label>
+                
+                    <form id="form" class="stdform stdform2" method="POST" action="">
+                        <p>
+                            <label>Nombre de la empresa *</label>
                             <span class="field"><input type="text" name="company" id="company" class="smallinput" required/></span>
                         </p>
                         
                         <p>
-                        	<label>Dirección</label>
+                            <label>Dirección</label>
                             <span class="field"><input type="text" name="address" id="address" class="smallinput" /></span>
                         </p>
 
                         <p style="margin-top: 1px;">
                             <label>Estado</label>
                             <span class="field">
-                                {{=states}}
+                                <select name="states" id="states">
+                                {{=state}}
+                                </select>
                             </span>
                         </p>
                         
                         <p style="margin-top: 1px;">
-                        	<label>Municipio</label>
+                            <label>Municipio</label>
                             <span id="municipality_container"class="field">
                             <select name="municipality" id="municipality">
-                            	<option value="">Seleccionar</option>
+                                <option value="">Seleccionar</option>
                             </select>
                             </span>
                         </p>
@@ -152,22 +66,36 @@
                         </p>
                         
                         <p style="margin-top: 1px;">
-                        	<label>Código postal</label>
+                            <label>Código postal</label>
                             <span class="field"><input type="text" name="zip_code" id="zip_code" class="smallinput" maxlength="5"/></span>
                         </p>
                         
                         <p>
-                        	<label>RFC</label>
+                            <label>R.F.C.</label>
                             <span class="field"><input type="text" name="rfc" id="rfc" class="smallinput" maxlength="13"/></span>
                         </p>
                         
                         <p>
-                        	<label>Sitio Web</label>
+                            <label>Sitio Web</label>
                             <span class="field"><input type="text" name="website" id="website" class="smallinput" /></span>
                         </p>
                         
                         <p class="stdformbutton">
-                        	<button id="submit" class="submit radius2">Guardar</button>
+                            <button id="submit" class="submit radius2">Guardar </button>
+                            <span class="msg" style="
+                            display:none;
+                            background: #FFFCCC;
+                            color: #333;
+                            margin-bottom: 10px;
+                            padding: 5px;
+                            text-align: center;
+                            font-size: 13px;
+                            -moz-border-radius: 2px;
+                            -webkit-border-radius: 2px;
+                            border-radius: 2px;
+                            margin-left:30px;">
+                            something happened
+                            </span>
                         </p>
                     </form>
 
@@ -177,10 +105,142 @@
         
         <br clear="all" />
         
-	</div><!-- centercontent -->
+    </div><!-- centercontent -->
     
     
 </div><!--bodywrapper-->
+
+<script type="text/javascript">
+    //Ajax for selects
+    var state = jQuery('#states'),
+        municipality = jQuery('#municipality'),
+        locality = jQuery('#locality');
+
+    state.prepend('<option value="" selected>Selecccionar</option>');
+
+    state.change( function() {
+        var id = jQuery(this).find(':selected').val();
+        if(id != '') {
+            jQuery.ajax({
+                type: "POST",
+                url: '{{=URL('vendors', 'get_municipalities')}}',
+                data: {id: id},
+                success: function(results) {
+                    municipality
+                            .html(results)
+                            .prepend('<option value="">Selecccionar</option>');
+                }
+            });
+        }
+        else {
+            municipality
+                    .html('')
+                    .prepend('<option value="">Selecccionar</option>');
+            locality
+                    .html('')
+                    .prepend('<option value="">Selecccionar</option>');
+        }
+    });
+
+    municipality.change( function() {
+        var id = jQuery(this).find(':selected').val();
+        if(id != '') {
+            jQuery.ajax({
+                type: "POST",
+                url: '{{=URL('vendors', 'get_localities')}}',
+                data: {id: id},
+                success: function(results) {
+                    locality
+                            .html(results)
+                            .prepend('<option value="">Selecccionar</option>');
+                }
+            });
+        }
+        else {
+            locality
+                    .html('')
+                    .prepend('<option value="">Selecccionar</option>');
+        }
+    });
+
+    //form and shit
+    
+
+    //send form
+    jQuery('#submit').live('click', function(e) {
+        e.preventDefault();
+        // var company = jQuery('#company'),
+        //     zip_code = jQuery('#zip_code'),
+        //     val_zip = /^([1-9]{2}|[0-9][1-9]|[1-9][0-9])[0-9]{3}$/;
+
+        // if(company.val() != null && company.val().length != 0 
+        //    && company.val().indexOf(" ") != 0) {
+        //     if(zip_code.val().length > 0  ) {
+        //         if( val_zip.test( zip_code.val() ) ) {
+        //             zip_code = zip_code.val();
+        //             console.log('pressed'+zip_code.val());
+        //         }
+        //     } else{
+        //     console.log('pressed');
+
+        //     }
+        // }
+        
+        jQuery("#form").validate({
+            rules: {
+                company: "required",
+                zip_code: {
+                    required: false,
+                    digits: true,
+                    minlength: 5
+                },
+                website: {
+                    url: true,
+                    required: false
+                },
+                rfc: {
+                    minlength: 10,
+                    maxlength:13,
+                    required: false
+                }
+            },
+            messages: {
+                company: "Ingrese el nombre de la empresa",
+                zip_code: "Este campo debe tener 5 números.",
+                website: "Entre una url válida.",
+                rfc: "R.F.C. inválido."
+            }
+        });
+        
+
+        if(jQuery("#form").valid()) {
+             jQuery.ajax({
+                url: '{{=URL('vendors', 'create_vendor')}}',
+                data: { 
+                    company:jQuery('#company').val(),
+                    address:jQuery('#address').val(),
+                    state:jQuery('#states').val(),
+                    municipality:jQuery('#municipality').val(),
+                    locality:jQuery('#locality').val(),
+                    zip_code:jQuery('#zip_code').val(),
+                    rfc:jQuery('#rfc').val(),
+                    website:jQuery('#website').val()
+                },
+                type: 'POST',
+                success:function(data){
+                    if(data){
+                        jQuery('.msg').html('').fadeIn().html('Se han guardado los datos.').delay(1600).fadeOut();
+                    }
+                    else{
+                        jQuery('.msg').html('').fadeIn().html('Ocurrio un error.').delay(1600).fadeOut();
+                    }
+                }
+            }); 
+        }
+    });
+
+    
+</script>
 
 </body>
 </html>

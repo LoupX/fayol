@@ -1,0 +1,123 @@
+{{extend 'base/layout.html'}}
+
+{{block scripts_extra}}	
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.validate.min.js')}}"></script>
+{{end}}
+
+{{block sidebar_menu}}
+{{include 'vendors/sidebar.html'}}
+{{end}}
+
+{{block content}}
+    <div class="centercontent">
+    
+        <div class="pageheader">
+        
+            <h1 class="pagetitle">{{=title}}</h1>
+            
+        </div><!--pageheader-->
+        
+        <div id="contentwrapper" class="contentwrapper">
+	   		
+				<div id="validation" class="subcontent">
+            	
+            		<div class="contenttitle2">
+                        <h3>Nombre del agente de ventas</h3>
+                    </div><!--contenttitle-->            	
+                   <form id="form_agent2" class="stdform stdform2" method="post" action="">                  
+                        <p>
+	                        	<label>Nombre del agente de ventas</label>
+	                            <span class="field"><input type="text" name="sales_agent" id="sales_agent" class="longinput"/></span>
+	                    </p>
+                        
+                    <br />
+                       
+                    <div class="contenttitle2">
+                        <h3>Información de contacto</h3>
+                    </div><!--contenttitle-->   
+                    	<div id="camposgenerados">
+	                    	<p>
+	                        	<label>Tipo</label>
+	                            <span class="field"><select name="type" id="type">
+	                            	<option value="">Seleccionar</option>
+	                                <option value="1">Telefono</option>
+	                                <option value="2">Correo</option>
+	                            </select></span>
+	                        </p> 
+	                        
+	                        <p style="margin-top: 1px;">
+	                        	<label>Descripción</label>
+	                            <span class="field"><input type="text" name="description" class="longinput active"/></span>
+	                        </p>
+                    	</div>
+                        <p class="stdformbutton">
+                        	<button class="submit radius2">Guardar</button>
+                        </p>
+                    </form>
+                   
+
+            </div><!--subcontent-->      
+        
+        </div><!--contentwrapper-->
+        
+        <br clear="all" />
+        
+	</div><!-- centercontent -->
+    
+</div><!--bodywrapper-->
+
+<script type="text/javascript">
+    var res = jQuery('#camposgenerados'),
+        orig = jQuery('input[name=description]'),
+        cont = 0;
+
+    orig.keyup( function(tecla) {
+        if(tecla.keyCode != 8 && tecla.keyCode != 32 && orig.val().length >= 0) {
+            if(jQuery(this).hasClass('active')) {
+                jQuery(this).removeClass('active');
+                res.append(agregar(cont));
+                jQuery('#div'+cont).slideToggle();
+                cont+=1;
+            }
+            
+        } else if(orig.val().length <= 0 && jQuery(this).hasClass('active') ) {
+            jQuery(this).addClass('active');
+            jQuery(this).siblings().removeClass('active');
+        }
+    });
+
+    function agregar(name) {
+        var newi = '<div id="div'+name+'" style="display:none;"> <p> <label>Tipo</label> <span class="field"><select name="type'+name+'" id="type"> <option value="">Seleccionar</option> <option value="1">Telefono</option> <option value="2">Correo</option> </select></span> </p> <p style="margin-top: 1px;"> <label>Descripción</label> <span class="field"><input type="text" name="description'+name+'" class="longinput active" onkeyup="nuevo('+name+')" onblur="check('+name+')"/></span> </p></div>';
+        return newi
+    }
+
+    function nuevo(n){
+        jQuery('input[name=description'+n+']').keyup( function(tecla) {
+            if(tecla.keyCode != 8 && tecla.keyCode != 32 && 
+                jQuery(this).val().length >= 0) {
+                if(jQuery(this).hasClass('active')) {
+                    jQuery(this).removeClass('active');
+                    res.append(agregar(cont));
+                    jQuery('#div'+cont).slideToggle();
+                    cont+=1;
+                }
+                
+            } else if(jQuery(this).val().length <= 0 && jQuery(this).hasClass('active') ) {
+                jQuery(this).addClass('active');
+                jQuery(this).siblings().removeClass('active');
+            } 
+        })
+    }
+
+    function check(v) {
+       if ( jQuery('input[name=description'+v+']').val().length <= 0 && 
+            !jQuery('input[name=description'+v+']').hasClass('active') ) {
+            jQuery('#div'+v).slideToggle();
+       };
+    }
+
+</script>
+
+</body>
+</html>
+{{end}}

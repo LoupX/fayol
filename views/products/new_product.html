@@ -1,11 +1,12 @@
 {{extend 'base/layout.html'}}
 
-{{block scripts_extra}}	
-<script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.validate.min.js')}}"></script>
+{{block scripts_extra}}
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.dataTables.min.js')}}"></script>
+<script type="text/javascript" src="{{=URL('static', 'js/custom/tables.js')}}"></script>	
 {{end}}
 
 {{block sidebar_menu}}
-{{include 'vendors/sidebar.html'}}
+{{include 'products/sidebar.html'}}
 {{end}}
 
 {{block content}}
@@ -18,11 +19,11 @@
         </div><!--pageheader-->
         
         <div id="contentwrapper" class="contentwrapper">
-	   		
-				<div id="validation" class="subcontent">
+        
+        	<div id="validation" class="subcontent">
             	
             		<div class="contenttitle2">
-                        <h3>Selecciona un proveedor</h3>
+                        <h3>Nombre del agente de ventas</h3>
                     </div><!--contenttitle-->
             	
             	<script type="text/javascript">
@@ -31,11 +32,11 @@
 						jQuery("#form_ventor").validate({
 							rules: 
 							{
-								vendor: "required",
+								sales_agent: "required",
 							},
 							messages: 
 							{
-								vendor: "Seleccione un proveedor",
+								sales_agent: "Ingrese el nombre del agente de ventas",
 					
 							}
 						});
@@ -44,20 +45,12 @@
 				</script>
 					
             	
-                    <form id="form_ventor" class="stdform stdform2" method="post" action="">
+                    <form id="form_agent" class="stdform stdform2" method="post" action="">
                     	                        
                         <p>
-                        	<label>Proveedor</label>
-                            <span class="field">
-                            <select name="vendor" id="vendor">
-                            	<option value="">Choose One</option>
-                                <option value="1">Selection One</option>
-                                <option value="2">Selection Two</option>
-                                <option value="3">Selection Three</option>
-                                <option value="4">Selection Four</option>
-                            </select>
-                            </span>
-                        </p>
+	                        	<label>Nombre del agente de ventas</label>
+	                            <span class="field"><input type="text" name="sales_agent" id="sales_agent" class="longinput"/></span>
+	                    </p>
                         
                     </form><br />
                        
@@ -65,7 +58,7 @@
                         <h3>Información de contacto</h3>
                     </div><!--contenttitle-->   
                        
-                    <form class="stdform stdform2" method="post" action="">
+                    <form id="form_agent2" class="stdform stdform2" method="post" action="">
                     	<div id="camposgenerados">
 	                    	<p>
 	                        	<label>Tipo</label>
@@ -89,7 +82,7 @@
                     </form>
                    
 
-            </div><!--subcontent-->      
+            </div><!--subcontent-->     
         
         </div><!--contentwrapper-->
         
@@ -97,21 +90,8 @@
         
 	</div><!-- centercontent -->
     
+    
 </div><!--bodywrapper-->
-
-<script type="text/javascript">
-var cont = "2";
-jQuery('#camposgenerados').on('keyup', jQuery('#description'+(cont-1)), function(e){
-
-	var midiv = document.createElement("div");
-		midiv.setAttribute("id","hola");
-		midiv.setAttribute("class","holaclase");
-		midiv.innerHTML = "<p><label>Tipo</label><span class='field'><select name='type' id='type'><option value=''>Choose One</option><option value='1'>Selection One</option><option value='2'>Selection Two</option><option value='3'>Selection Three</option><option value='4'>Selection Four</option></select></span></p><p style='margin-top: 1px;'><label>Descripción</label><span class='field'><input type='text' name='description' id='description"+cont+"' class='longinput' keydown='aparecediv()'/></span></p>";
-		jQuery('#camposgenerados').append(midiv);
-		cont++;
-		jQuery('#description'+(cont-1)).unbind('keydown');
-});
-</script>
 
 </body>
 </html>
