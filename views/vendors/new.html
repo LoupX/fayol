@@ -24,6 +24,16 @@
                 <div class="contenttitle2">
                         <h3>Datos generales</h3>
                 </div><!--contenttitle-->
+
+                <div class="notibar msgerror" style="display:none;">
+                    <a class="close"></a>
+                    <p>Ocurrió un error con los datos del formulario.</p>
+                </div>
+
+                <div class="notibar msgsuccess" style="display:none;">
+                        <a class="close"></a>
+                        <p>Se han guardado los datos del formulario.</p>
+                    </div>
                 
                     <form id="form" class="stdform stdform2" method="POST" action="">
                         <p>
@@ -80,7 +90,7 @@
                         
                         <p class="stdformbutton">
                             <button id="submit" class="submit radius2">Guardar </button>
-                            <span class="msg" style="
+                            <!-- <span class="msg" style="
                             display:none;
                             background: #FFFCCC;
                             color: #333;
@@ -93,7 +103,8 @@
                             border-radius: 2px;
                             margin-left:30px;">
                             something happened
-                            </span>
+                            </span> -->
+                            
                         </p>
                     </form>
 
@@ -212,6 +223,9 @@
         
 
         if(jQuery("#form").valid()) {
+            jQuery('.msgerror').hide();
+            jQuery('.msgsuccess').hide();
+
              jQuery.ajax({
                 url: '{{=URL('vendors', 'create_vendor')}}',
                 data: { 
@@ -227,15 +241,32 @@
                 type: 'POST',
                 success:function(data){
                     if(data){
-                        jQuery('.msg').html('').fadeIn().html('Se han guardado los datos.').delay(1600).fadeOut();
+                        jQuery('.msgsuccess').fadeIn(1600);
+                        deleteFields();
                     }
                     else{
-                        jQuery('.msg').html('').fadeIn().html('Ocurrio un error.').delay(1600).fadeOut();
+                        jQuery('.msgerror').fadeIn(1600);
+                        //jQuery('html').scrollTop();
+                        //jQuery(window).scrollTop(0);
                     }
+                    jQuery('body','html',window).animate(
+                                                        {scrollTop:0}, 
+                                                        1000);
                 }
             }); 
         }
     });
+
+    function deleteFields() {
+        jQuery('#company').val('');
+        jQuery('#address').val('');
+        jQuery('#states option').first().attr('selected','selected');
+        jQuery('#municipality').html('').prepend('<option value="">Selecccionar</option>');
+        jQuery('#locality').html('').prepend('<option value="">Selecccionar</option>');
+        jQuery('#zip_code').val('');
+        jQuery('#rfc').val('');
+        jQuery('#website').val('');
+    }
 
     
 </script>
