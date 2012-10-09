@@ -23,56 +23,31 @@
             	
             		<div class="contenttitle2">
                         <h3>Nombre del agente de ventas</h3>
-                    </div><!--contenttitle-->
-            	
-            	<script type="text/javascript">
-				jQuery(document).ready(function()
-				{
-						jQuery("#form_ventor").validate({
-							rules: 
-							{
-								sales_agent: "required",
-							},
-							messages: 
-							{
-								sales_agent: "Ingrese el nombre del agente de ventas",
-					
-							}
-						});
-					
-				});
-				</script>
-					
-            	
-                    <form id="form_agent" class="stdform stdform2" method="post" action="">
-                    	                        
+                    </div><!--contenttitle-->            	
+                   <form id="form_agent2" class="stdform stdform2" method="post" action="">                  
                         <p>
 	                        	<label>Nombre del agente de ventas</label>
 	                            <span class="field"><input type="text" name="sales_agent" id="sales_agent" class="longinput"/></span>
 	                    </p>
                         
-                    </form><br />
+                    <br />
                        
                     <div class="contenttitle2">
                         <h3>Información de contacto</h3>
                     </div><!--contenttitle-->   
-                       
-                    <form id="form_agent2" class="stdform stdform2" method="post" action="">
                     	<div id="camposgenerados">
 	                    	<p>
 	                        	<label>Tipo</label>
 	                            <span class="field"><select name="type" id="type">
-	                            	<option value="">Choose One</option>
-	                                <option value="1">Selection One</option>
-	                                <option value="2">Selection Two</option>
-	                                <option value="3">Selection Three</option>
-	                                <option value="4">Selection Four</option>
+	                            	<option value="">Seleccionar</option>
+	                                <option value="1">Telefono</option>
+	                                <option value="2">Correo</option>
 	                            </select></span>
 	                        </p> 
 	                        
 	                        <p style="margin-top: 1px;">
 	                        	<label>Descripción</label>
-	                            <span class="field"><input type="text" name="description" id="description1" class="longinput" keydown="aparecediv()"/></span>
+	                            <span class="field"><input type="text" name="description" class="longinput active"/></span>
 	                        </p>
                     	</div>
                         <p class="stdformbutton">
@@ -92,17 +67,55 @@
 </div><!--bodywrapper-->
 
 <script type="text/javascript">
-var cont = "2";
-jQuery('#camposgenerados').on('keyup', jQuery('#description'+(cont-1)), function(e){
+    var res = jQuery('#camposgenerados'),
+        orig = jQuery('input[name=description]'),
+        cont = 0;
 
-	var midiv = document.createElement("div");
-		midiv.setAttribute("id","hola");
-		midiv.setAttribute("class","holaclase");
-		midiv.innerHTML = "<p><label>Tipo</label><span class='field'><select name='type' id='type'><option value=''>Choose One</option><option value='1'>Selection One</option><option value='2'>Selection Two</option><option value='3'>Selection Three</option><option value='4'>Selection Four</option></select></span></p><p style='margin-top: 1px;'><label>Descripción</label><span class='field'><input type='text' name='description' id='description"+cont+"' class='longinput' keydown='aparecediv()'/></span></p>";
-		jQuery('#camposgenerados').append(midiv);
-		cont++;
-		jQuery('#description'+(cont-1)).unbind('keydown');
-});
+    orig.keyup( function(tecla) {
+        if(tecla.keyCode != 8 && tecla.keyCode != 32 && orig.val().length >= 0) {
+            if(jQuery(this).hasClass('active')) {
+                jQuery(this).removeClass('active');
+                res.append(agregar(cont));
+                jQuery('#div'+cont).slideToggle();
+                cont+=1;
+            }
+            
+        } else if(orig.val().length <= 0 && jQuery(this).hasClass('active') ) {
+            jQuery(this).addClass('active');
+            jQuery(this).siblings().removeClass('active');
+        }
+    });
+
+    function agregar(name) {
+        var newi = '<div id="div'+name+'" style="display:none;"> <p> <label>Tipo</label> <span class="field"><select name="type'+name+'" id="type"> <option value="">Seleccionar</option> <option value="1">Telefono</option> <option value="2">Correo</option> </select></span> </p> <p style="margin-top: 1px;"> <label>Descripción</label> <span class="field"><input type="text" name="description'+name+'" class="longinput active" onkeyup="nuevo('+name+')" onblur="check('+name+')"/></span> </p></div>';
+        return newi
+    }
+
+    function nuevo(n){
+        jQuery('input[name=description'+n+']').keyup( function(tecla) {
+            if(tecla.keyCode != 8 && tecla.keyCode != 32 && 
+                jQuery(this).val().length >= 0) {
+                if(jQuery(this).hasClass('active')) {
+                    jQuery(this).removeClass('active');
+                    res.append(agregar(cont));
+                    jQuery('#div'+cont).slideToggle();
+                    cont+=1;
+                }
+                
+            } else if(jQuery(this).val().length <= 0 && jQuery(this).hasClass('active') ) {
+                jQuery(this).addClass('active');
+                jQuery(this).siblings().removeClass('active');
+            } 
+        })
+    }
+
+    function check(v) {
+       if ( jQuery('input[name=description'+v+']').val().length <= 0 && 
+            !jQuery('input[name=description'+v+']').hasClass('active') ) {
+            jQuery('#div'+v).slideToggle();
+       };
+    }
+
 </script>
 
 </body>
