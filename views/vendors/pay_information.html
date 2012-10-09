@@ -42,7 +42,7 @@
 					}
 				});                
                 
-                jQuery('#submit').click(function(){
+                jQuery('#submit').click(function(e){
 	                        e.preventDefault();
 	                        jQuery.ajax({
                                 url: '{{=URL('vendors', 'vendor_payinformation')}}',

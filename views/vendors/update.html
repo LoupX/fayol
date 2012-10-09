@@ -61,7 +61,7 @@
                         
                         <p style="margin-top: 1px;">
                             <label>Código postal</label>
-                            <span class="field"><input type="text" name="zip_code" id="zip_code" class="smallinput" maxlength="5" value="{{=zip_code}}" /></span>
+                            <span class="field"><input type="text" name="zip_code" id="zip_code" class="smallinput" maxlength="5" value="{{zip_code if zip_code else ''}}" /></span>
                         </p>
                         
                         <p>
@@ -162,23 +162,7 @@
 
     //send form
     jQuery('#submit').live('click', function(e) {
-        e.preventDefault();
-        // var company = jQuery('#company'),
-        //     zip_code = jQuery('#zip_code'),
-        //     val_zip = /^([1-9]{2}|[0-9][1-9]|[1-9][0-9])[0-9]{3}$/;
-
-        // if(company.val() != null && company.val().length != 0 
-        //    && company.val().indexOf(" ") != 0) {
-        //     if(zip_code.val().length > 0  ) {
-        //         if( val_zip.test( zip_code.val() ) ) {
-        //             zip_code = zip_code.val();
-        //             console.log('pressed'+zip_code.val());
-        //         }
-        //     } else{
-        //     console.log('pressed');
-
-        //     }
-        // }
+        e.preventDefault(); 
         
         jQuery("#form").validate({
             rules: {

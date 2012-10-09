@@ -4,7 +4,9 @@
 def index():
     title = 'Proveedores'
     current = ['menu_catalogs', 'sidebar_vendors', 'sub_vendors_read']
-    return dict(title=title, current=current)
+    vendors = get_vendors()
+    vendor_info = get_vendor_info()
+    return dict(title=title, current=current, vendors=vendors, **vendor_info)
 
 def new():
     title = 'Proveedores'
@@ -64,6 +66,7 @@ def update():
             else:
                 options += [OPTION(l['name'], _value=l['id'])]
     localities = SELECT(_name='locality', _id='locality', *options)
+
     return dict(title=title, current=current, states=states,
         municipalities=municipalities, localities=localities, **row)
 
@@ -101,6 +104,58 @@ def get_localities():
                     db.localities.name, orderby='name').as_list()
     locality = DIV(*[OPTION(k['name'], _value=k['id']) for k in localities])
     return locality
+
+def get_vendors():
+    v = db.vendors
+    vendors = []
+    rows = db(v.status==True).select(v.name, v.id).as_list()
+    vendors = DIV(*[OPTION(row['name'], _value=row['id']) for row in rows])
+    return vendors
+
+def get_vendor_info():
+    info = dict()
+    info['name'] = None
+    info['address'] = None
+    info['state'] = None
+    info['municipality'] = None
+    info['locality'] = None
+    info['zip_code'] = None
+    info['rfc'] = None
+    info['website'] = None
+    info['bank'] = None
+    info['branch_number'] = None
+    info['account_number'] = None
+    info['clabe'] = None
+    info['status'] = None
+
+    vendor_id = None
+    if request.vars.id:
+        try:
+            vendor_id = int(request.vars.id)
+        except:
+            return info
+    else:
+        return info
+    row = db(db.vendors.id==vendor_id).select().as_list()
+    if not row:
+        return info
+
+    row = row[0]
+    info['name'] = row['name']
+    info['address'] = row['address']
+    info['state'] = None
+    info['municipality'] = None
+    info['locality'] = None
+    info['zip_code'] = row['zip_code']
+    info['rfc'] = row['rfc']
+    info['website'] = row['website']
+    info['bank'] = row['bank']
+    info['branch_number'] = row['branch']
+    info['account_number'] = row['bank_account_number']
+    info['clabe'] = row['clabe']
+    info['status'] = row['status']
+    return info
+
 
 def create_vendor():
     vars = None
