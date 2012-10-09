@@ -55,8 +55,10 @@
     
     <div class="header">
     	<ul class="headermenu">
-            <li class="current"><a href="{{=URL(c='default', f='index')}}"><span class="icon icon-flatscreen"></span>Dashboard</a></li>
-            <li class="current"><a href="{{=URL(c='catalogs', f='index')}}"><span class="icon icon-pencil"></span>Catálogos</a></li>
+            {{block current_item}}
+            <li class="{{=dashboard_current}}"><a href="{{=URL(c='default', f='index')}}"><span class="icon icon-flatscreen"></span>Dashboard</a></li>
+            <li class="{{=catalogs_current}}"><a href="{{=URL(c='catalogs', f='index')}}"><span class="icon icon-pencil"></span>Catálogos</a></li>
+            {{end}}
         </ul>
         
         <div class="headerwidget">
