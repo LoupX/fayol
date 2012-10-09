@@ -209,7 +209,7 @@
 
         if(jQuery("#form").valid()) {
              jQuery.ajax({
-                url: '{{=URL('vendors', 'create_vendor')}}',
+                url: '{{=URL('vendors', 'update_vendor')}}',
                 data: { 
                     company:jQuery('#company').val(),
                     address:jQuery('#address').val(),

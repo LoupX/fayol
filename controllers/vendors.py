@@ -16,15 +16,21 @@ def new():
 
 def update():
     title = 'Proveedores'
+    current = ['menu_catalogs', 'sidebar_vendors', 'sub_vendors_read']
     vendor_id = None
     if request.vars.id:
-        vendor_id = request.vars.id
+        try:
+            vendor_id = int(request.vars.id)
+            session.vendor_id = vendor_id
+        except:
+            redirect(URL(c='vendors', f='new'))
     else:
         redirect(URL(c='vendors', f='new'))
     row = db(db.vendors.id==vendor_id).select().as_list()
-    row = row[0]
     if not row:
         redirect(URL(c='vendors', f='new'))
+    else:
+        row = row[0]
 
     options = [OPTION('Seleccionar', _value='')]
     states = read_states()
@@ -58,9 +64,8 @@ def update():
             else:
                 options += [OPTION(l['name'], _value=l['id'])]
     localities = SELECT(_name='locality', _id='locality', *options)
-    return dict(title=title, states=states, municipalities=municipalities,
-        localities=localities, **row)
-
+    return dict(title=title, current=current, states=states,
+        municipalities=municipalities, localities=localities, **row)
 
 def contact_information():
     title = 'Proveedores'
@@ -103,22 +108,57 @@ def create_vendor():
     vals = dict()
     if not request.ajax or request.env.request_method != 'POST':
         raise HTTP(400)
+
     if request.vars and request.vars.company:
         vars = request.vars
         name = vars.company
     else:
         return ''
+    try:
+        vals['address'] = vars.address
+        vals['state_id'] = vars.state
+        vals['municipality_id'] = vars.municipality
+        vals['locality_id'] = vars.locality
+        vals['zip_code'] = vars.zip_code
+        vals['rfc'] = vars.rfc
+        vals['website'] = vars.website
+    except Exception as e:
+        return ''
 
-    vals['address'] = vars.address
-    vals['state_id'] = vars.state
-    vals['municipality_id'] = vars.municipality
-    vals['locality_id'] = vars.locality
-    vals['zip_code'] = vars.zip_code
-    vals['rfc'] = vars.rfc
-    vals['website'] = vars.website
     id = _create_vendor(name, **vals)
     if id:
         return str(id)
+    else:
+        return ''
+
+def update_vendor():
+    vars = None
+    vendor_id = None
+    name = None
+    vals = dict()
+    if not request.ajax or request.env.request_method != 'POST':
+        raise HTTP(400)
+
+    if request.vars and request.vars.company and session.vendor_id:
+        vars = request.vars
+        vals['name'] = vars.company
+        vendor_id = session.vendor_id
+    else:
+        return ''
+    try:
+        vals['address'] = vars.address
+        vals['state_id'] = vars.state
+        vals['municipality_id'] = vars.municipality
+        vals['locality_id'] = vars.locality
+        vals['zip_code'] = vars.zip_code
+        vals['rfc'] = vars.rfc
+        vals['website'] = vars.website
+    except Exception as e:
+        return ''
+
+    r = _update_vendor(vendor_id, **vals)
+    if r:
+        return 'true'
     else:
         return ''
 
@@ -267,7 +307,7 @@ def read_localities(municipality_id):
     else:
         return rows
 
-def update_vendor(vendor_id, **kwargs):
+def _update_vendor(vendor_id, **kwargs):
     """
     Updates vendor's information with the given identifies. Returns True on
     success.
@@ -284,7 +324,9 @@ def update_vendor(vendor_id, **kwargs):
         True
     """
     try:
-        db.vendors[vendor_id] = kwargs
+        r = db(db.vendors.id==vendor_id).update(**kwargs)
+        if r==0:
+            raise Exception('Record does not exist')
     except Exception as e:
         db.rollback()
         return False
@@ -292,8 +334,7 @@ def update_vendor(vendor_id, **kwargs):
         db.commit()
         return True
 
-
-def update_vendor_contact_info(vendor_contact_info_id, **kwargs):
+def _update_vendor_contact_info(vendor_contact_info_id, **kwargs):
     """
     Updates vendor's information with the given identifies. Returns True on
     success.
@@ -311,7 +352,10 @@ def update_vendor_contact_info(vendor_contact_info_id, **kwargs):
         True
     """
     try:
-        db.vendor_contact_info[vendor_contact_info_id] = kwargs
+        r = db(db.vendor_contact_info.id==vendor_contact_info_id).update(
+            **kwargs)
+        if r == 0:
+            raise Exception('Record does not exist')
     except Exception as e:
         db.rollback()
         return False
@@ -320,7 +364,7 @@ def update_vendor_contact_info(vendor_contact_info_id, **kwargs):
         return True
 
 
-def update_vendor_agent(vendor_agent_id, **kwargs):
+def _update_vendor_agent(vendor_agent_id, **kwargs):
     """
     Updates agent's information with the given identifier. Returns True on
     success.
@@ -336,7 +380,9 @@ def update_vendor_agent(vendor_agent_id, **kwargs):
         >>>update_vendor_agent(1, name='John Doe')
     """
     try:
-        db.vendor_agents[vendor_agent_id] = kwargs
+        r = db(db.vendor_agents.id==vendor_agent_id).update(**kwargs)
+        if r == 0:
+            raise Exception('Record does not exist')
     except Exception as e:
         db.rollback()
         return False
@@ -345,7 +391,7 @@ def update_vendor_agent(vendor_agent_id, **kwargs):
         return True
 
 
-def update_vendor_agent_contact_info(vendor_agent_contact_info_id, **kwargs):
+def _update_vendor_agent_contact_info(vendor_agent_contact_info_id, **kwargs):
     """
     Updates the contact information of a vendor's agent with the given
     identifier. Returns True on success.
@@ -362,8 +408,11 @@ def update_vendor_agent_contact_info(vendor_agent_contact_info_id, **kwargs):
         >>>update_vendor_agent_contact_info(1)
         True
     """
+    vaci = db.vendor_agent_contact_info
     try:
-        db.vendor_agent_contact_info[vendor_agent_contact_info_id] = kwargs
+        r = db(vaci.id==vendor_agent_contact_info_id).update(**kwargs)
+        if r == 0:
+            raise Exception('Record does not exist')
     except Exception as e:
         db.rollback()
         return False
