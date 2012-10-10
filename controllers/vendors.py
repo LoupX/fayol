@@ -11,10 +11,7 @@ def index():
 def new():
     title = 'Proveedores'
     current = ['menu_catalogs', 'sidebar_vendors', 'sub_vendors_new']
-    states = db(db.states).select(db.states.name, db.states.id, 
-                 orderby='name').as_list()
-    state = DIV(*[OPTION(k['name'], _value=k['id']) for k in states])
-    return dict(title=title, current=current, state=state)
+    return dict(title=title, current=current)
 
 def update():
     title = 'Proveedores'
@@ -91,11 +88,14 @@ def quickedit():
     return dict()
 
 #Ajax functions
+
 def get_municipalities():
     id = request.vars.id
+    municipality = []
     municipalities = db(db.municipalities.state_id==id).select(db.municipalities.id,
                         db.municipalities.name, orderby='name').as_list()
-    municipality = DIV(*[OPTION(k['name'], _value=k['id']) for k in municipalities])
+    municipality = ([OPTION(k['name'], _value=k['id']) for k in
+                     municipalities])
     return municipality
 
 def get_localities():

@@ -50,7 +50,7 @@
                             <label>Estado</label>
                             <span class="field">
                                 <select name="states" id="states">
-                                {{=state}}
+                                    <option value="">Seleccionar</option>
                                 </select>
                             </span>
                         </p>
@@ -124,6 +124,15 @@
     var state = jQuery('#states'),
         municipality = jQuery('#municipality'),
         locality = jQuery('#locality');
+
+    jQuery.ajax({
+        type: "POST"
+        url: "{{=URL(c='common', f='get_states')}}",
+        data: {data:'data'}
+        success: function(results){
+            state.append(results)
+        }
+    });
 
     state.prepend('<option value="" selected>Selecccionar</option>');
 
