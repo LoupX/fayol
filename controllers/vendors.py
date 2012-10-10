@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import gluon.contrib.simplejson
 
 #Views
 def index():
@@ -575,3 +576,16 @@ def delete_vendor_agent_contact_info(vendor_agent_contact_info_id):
     else:
         db.commit()
         return True
+
+def testing():
+    myjson = dict(name='bearcode',state='Yucatan', status='True')
+    return gluon.contrib.simplejson.dumps(myjson)
+
+
+
+
+
+
+
+
+

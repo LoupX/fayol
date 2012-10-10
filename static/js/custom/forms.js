@@ -12,7 +12,8 @@
 jQuery(document).ready(function(){
 	
 	///// FORM TRANSFORMATION /////
-	jQuery('input:checkbox, input:radio, select.uniformselect, input:file').uniform();
+	//scumbag script
+	//jQuery('input:checkbox, select.uniformselect, input:file').uniform();
 
 
 	///// DUAL BOX /////

@@ -1,5 +1,5 @@
 {{extend 'base/layout.html'}}
-
+  
 {{block scripts_extra}}
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.dataTables.min.js')}}"></script>
 <script type="text/javascript" src="{{=URL('static', 'js/custom/tables.js')}}"></script>
@@ -35,35 +35,27 @@
 
                     <form class="stdform" action="" method="post">
                     	
-                    <ul class="buttonlist" style="float:right;">
+                    <!-- <ul class="buttonlist" style="float:right;">
                         <li style="display:none;"><button class="stdbtn btn_blue">Form Button</button></li>
                         <li><button id="edit" class="stdbtn btn_orange">Editar</button></li>
                         <li><button id="btnenable" class="stdbtn btn_red" onclick='cambiarClase(); return false;'>Deshabilitar</button></li>
-                   </ul>
-                   
-                     <script>                     	
-	                     function cambiarClase(){
-		                 	document.getElementById('btnenable').className = 
-		                 	(document.getElementById('btnenable').className == 'stdbtn btn_red') ? 'stdbtn btn_blue' : 'stdbtn btn_red';	                              
-		                 	document.getElementById('btnenable').innerHTML = 
-		                 	(document.getElementById('btnenable').innerHTML == 'Deshabilitar') ? 'habilitar' : 'Deshabilitar';
-		                 	}
-		                 </script>	 	
+                   </ul>	 	 -->
                     	
                         <p>
                         	
                             <span class="formwrapper" style="margin-left:0px;">
                             	  <select id="vendors" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="2">
-                                  {{=vendors}} 
+                                  <option value="">Seleccionar</option>
+                                  {{=vendors}}
                                 </select>
                             </span>
                         </p>
                          <p>
                         	
                             <span class="formwrapper" style="margin-left:0px; margin-top:-20px;">
-                            	<input type="radio" name="filtervendors" checked="checked" /> Habilitados &nbsp; &nbsp;
-                            	<input type="radio" name="filtervendors" /> Deshabilitados &nbsp; &nbsp;
-                                <input type="radio" name="filtervendors" /> Todos &nbsp; &nbsp;
+                            	<input type="radio" name="filtervendors" value="TRUE" onclick="ajaxFilter(this.value)" /> Habilitados &nbsp; &nbsp;
+                            	<input type="radio" name="filtervendors"  value="FALSE" onclick="ajaxFilter(this.value)"/> Deshabilitados &nbsp; &nbsp;
+                                <input type="radio" name="filtervendors" value="ANY" onclick="ajaxFilter(this.value)"/> Todos &nbsp; &nbsp;
                             </span>
                         </p>
                         
@@ -76,35 +68,35 @@
               <table cellpadding="0" cellspacing="0" class="table invoice">
                	  <tr>
                    	  <td width="30%">Nombre:</td>
-                      <td width="70%"><strong>{{=name}}</strong></td>
+                      <td width="70%"><strong id="name"></strong></td>
                   </tr>
                	  <tr>
                	    <td>Dirección:</td>
-               	    <td><strong>{{=address}}</strong></td>
+               	    <td><strong id="address"></strong></td>
            	      </tr>
                   <tr>
                 	  <td>Estado:</td>
-                	  <td><strong>{{=state}}</strong></td>
+                	  <td><strong id="state"></strong></td>
               	  </tr>
               	  <tr>
                 	  <td>Municipio:</td>
-                	  <td><strong>{{=municipality}}</strong></td>
+                	  <td><strong id="municipality"></strong></td>
               	  </tr>
               	  <tr>
                 	  <td>Ciudad:</td>
-                	  <td><strong>{{=locality}}</strong></td>
+                	  <td><strong id="locality"></strong></td>
               	  </tr>
               	  <tr>
                	    <td>Código postal:</td>
-               	    <td><strong>{{=zip_code}}</strong></td>
+               	    <td><strong id="zip_code"></strong></td>
            	      </tr>
                   <tr>
                 	  <td>RFC:</td>
-                	  <td><strong>{{=rfc}}</strong></td>
+                	  <td><strong id="rfc"></strong></td>
               	  </tr>
               	  <tr>
                    	  <td>Sitio Web:</td>
-                      <td><strong>{{=website}}</strong></td>
+                      <td><strong id="website"></strong></td>
                   </tr>
               </table>
             </div><!--one_half-->
@@ -114,19 +106,19 @@
               <table cellpadding="0" cellspacing="0" class="table invoice">
               	  <tr>
                 	  <td width="30%">Banco:</td>
-                	  <td width="70%"><strong>{{=bank}}</strong></td>
+                	  <td width="70%"><strong id="bank"></strong></td>
               	  </tr>
               	  <tr>
                 	  <td>Número de sucursal:</td>
-                	  <td><strong>{{=branch_number}}</strong></td>
+                	  <td><strong id="branch_number"></strong></td>
               	  </tr>
               	  <tr>
                 	  <td>Número de cuenta:</td>
-                	  <td><strong>{{=account_number}}</strong></td>
+                	  <td><strong id="account_number"></strong></td>
               	  </tr>
               	  <tr>
                 	  <td>CLABE:</td>
-                	  <td><strong>{{=clabe}}</strong></td>
+                	  <td><strong id="clabe"></strong></td>
               	  </tr>
               </table>
             </div><!--one_half-->
@@ -136,75 +128,160 @@
               <table cellpadding="0" cellspacing="0" class="table invoice" style="margin-top:-4px;">
               	  <tr>
                    	  <td  width="30%">Estatus:</td>
-                      <td  width="70%"><strong>{{=status}}</strong></td>
+                      <td  width="70%">
+                        <input type="checkbox" name="status" disabled>
+                        <span id="resp"></span>
+                      </td>
                   </tr>
               </table>
             </div><!--one_half-->
             
-            <br clear="all"/>
-            
-            <!--table cellpadding="0" cellspacing="0" border="0" class="stdtable" id="dyntable">
-                    <colgroup>
-                        <col class="con0" />
-                        <col class="con1" />
-                        <col class="con0" />
-                        <col class="con1" />
-                        <col class="con0" />
-                        <col class="con1" />
-                    </colgroup>
-                    <thead>
-                        <tr>
-                            <th class="head0">Etiqueta</th>
-                            <th class="head1">Descripción</th>
-                            <th class="head0">&nbsp;</th>
-                            <th class="head1">&nbsp;</th>
-                        </tr>
-                    </thead>
-                    <tfoot>
-                        <tr>
-                            <th class="head0">Etiqueta</th>
-                            <th class="head1">Descripción</th>
-                            <th class="head0">&nbsp;</th>
-                            <th class="head1">&nbsp;</th>
-                        </tr>
-                    </tfoot>
-                    <tbody>
-                        <tr class="gradeX">
-                            <td>Trident</td>
-                            <td>Internet Explorer 4.0</td>
-                            <td class="center" style="text-align: center;"><a href="{{=URL(c='vendors', f='quickedit.html')}}" class="toggle">Editar</a></td>
-                            <td class="center" style="text-align: center;"><a href="" class="delete">Eliminar</a></td>
-                        </tr>
-                        <tr class="gradeC">
-                            <td>Trident</td>
-                            <td>Internet Explorer 5.0</td>
-                            <td class="center" style="text-align: center;"><a href="{{=URL(c='vendors', f='quickedit.html')}}" class="toggle">Editar</a></td>
-                            <td class="center" style="text-align: center;"><a href="" class="delete">Eliminar</a></td>
-                        </tr>
-                        <tr class="gradeA">
-                            <td>Trident</td>
-                            <td>Internet Explorer 5.5</td>
-                            <td class="center" style="text-align: center;"><a href="{{=URL(c='vendors', f='quickedit.html')}}" class="toggle">Editar</a></td>
-                            <td class="center" style="text-align: center;"><a href="" class="delete">Eliminar</a></td>
-                        </tr>
-                        <tr class="gradeA">
-                            <td>Trident</td>
-                            <td>Internet Explorer 6</td>
-                            <td class="center" style="text-align: center;"><a href="{{=URL(c='vendors', f='quickedit.html')}}" class="toggle">Editar</a></td>
-                            <td class="center" style="text-align: center;"><a href="" class="delete">Eliminar</a></td>
-                        </tr>
-                    </tbody>
-                </table-->    
-        
+            <br clear="all"/> 
         </div><!--contentwrapper-->
         
         <br clear="all" />
         
-	</div><!-- centercontent -->
-    
-    
+	</div><!-- centercontent -->   
 </div><!--bodywrapper-->
+  
+    
+<script>
+var vendors = jQuery('.chzn-select'),
+    id = 0;
 
+function ajaxFilter(who) {
+    //console.log(which);
+    cleanFields();
+
+    jQuery.ajax({ 
+        url: '{{=URL('vendors', 'get_vendors')}}', 
+        type: 'POST',         
+        data: { who: who }, 
+        success: function (data) {
+          vendors
+            .html('')
+            .append(data)
+            .prepend('<option value="lol">Seleccionar</option>');
+            vendors.trigger("liszt:updated");
+          }
+    });
+  }
+
+vendors.change( function() {
+  ////clean fields
+  cleanFields();
+
+  id = jQuery(this).find(':selected').val();
+
+  if(id != '') {
+    var name = jQuery('#name'),
+        address = jQuery('#address'),
+        state = jQuery('#state'),
+        municipality = jQuery('#municipality'),
+        locality = jQuery('#locality'),
+        zip_code = jQuery('#zip_code'),
+        rfc = jQuery('#rfc'),
+        website = jQuery('#website'),
+        bank = jQuery('#bank'),
+        branch_number = jQuery('#branch_number'),
+        account_number = jQuery('#account_number'),
+        clabe = jQuery('#clabe'),
+        status = jQuery('input[name=status]'),
+        resp = jQuery('span#resp');
+        resp.html('');
+
+    //console.log(id);
+    //insert here an ajax function and shit
+    jQuery.ajax({ 
+      url: '{{=URL('vendors', 'testing')}}', 
+      type: 'POST',         
+      data: { id: id }, 
+      dataType:'json',
+      success: function (data) {
+        //receive something like data = {"name":"name","state":"state"}
+        name.html(data['name']);
+        address.html(data['address']);
+        state.html(data['state']);
+        municipality.html(data['municipality']);
+        locality.html(data['locality']);
+        zip_code.html(data['zip_code']);
+        rfc.html(data['rfc']);
+        website.html(data['website']);
+        bank.html(data['bank']);
+        branch_number.html(data['branch_number']);
+        account_number.html(data['account_number']);
+        clabe.html(data['clabe']);
+
+        status.val(id).removeAttr('disabled');
+        status.parent().parent().removeClass('disabled'); 
+
+        if (data['status'] == 'True') {
+          status.parent().addClass('checked');
+          resp.html('Activado.');
+        } else{
+          status.parent().removeClass('checked');
+          resp.html('Desactivado.');
+        };
+        
+      }
+    });     
+  }
+
+});
+
+jQuery('input[name=status]').live('click', function() {
+  var i = jQuery(this).val(),
+      resp = jQuery('span#resp');
+  //ajax
+  if (i != 0) {
+    jQuery.ajax({ 
+      url: '', 
+      type: 'POST',         
+      data: { i: i }, 
+      success: function (data) {
+        //data = Activado o Desactivado
+        resp.html('algo');
+      }
+    }); 
+  }
+});
+
+function cleanFields() {
+  var name = jQuery('#name'),
+      address = jQuery('#address'),
+      state = jQuery('#state'),
+      municipality = jQuery('#municipality'),
+      locality = jQuery('#locality'),
+      zip_code = jQuery('#zip_code'),
+      rfc = jQuery('#rfc'),
+      website = jQuery('#website'),
+      bank = jQuery('#bank'),
+      branch_number = jQuery('#branch_number'),
+      account_number = jQuery('#account_number'),
+      clabe = jQuery('#clabe'),
+      status = jQuery('input[name=status]'),
+      resp = jQuery('span#resp');
+
+      status.val('').attr('disabled',true);
+      status
+        .parent()
+          .removeClass('checked')
+          .parent()
+            .addClass('disabled');
+      resp.html('');
+
+  var elements = [name, address, state, municipality, locality, zip_code, 
+                  rfc, website, bank, branch_number, account_number, clabe];
+
+  for(var e in elements) {
+    elements[e].html('');
+  }
+}
+
+
+</script>
 </body>
+
 </html>
 {{end}}
+
