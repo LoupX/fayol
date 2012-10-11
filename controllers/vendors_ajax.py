@@ -40,13 +40,13 @@ def get_vendor_info():
 
     info['name'] = row.name
     info['address'] = row.address
-    info['state'] = None
-    info['municipality'] = None
-    info['locality'] = None
+    info['state'] = row.state_id
+    info['municipality'] = row.municipality_id
+    info['locality'] = row.locality_id
     info['zip_code'] = row.zip_code
     info['rfc'] = row.rfc
     info['website'] = row.website
-    info['bank'] = None
+    info['bank'] = row.bank_id
     info['branch_number'] = row.branch
     info['account_number'] = row.bank_account_number
     info['clabe'] = row.clabe
