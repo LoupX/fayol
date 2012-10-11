@@ -42,6 +42,6 @@ def get_localities():
         query = l.municipality_id==municipality_id
         rows = db(query).select(l.id, l.name)
         for row in rows:
-            options += str(OPTION(row.name, _value=row.name))
+            options += str(OPTION(row.name, _value=row.id))
             options += '\n'
     return options

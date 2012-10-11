@@ -132,7 +132,6 @@
         jQuery.ajax({
             type: "POST",
             url: "{{=URL(c='common', f='get_states')}}",
-            data: {id: id},
             success: function(results) {
                 state
                     .html(results)
@@ -146,10 +145,10 @@
         if(id != '') {
             jQuery.ajax({
                 type: "POST",
-                url: "{{=URL(c='vendors', f='get_municipalities')}}",
+                url: "{{=URL(c='common', f='get_municipalities')}}",
                 data: {id: id},
                 success: function(results) {
-                    locality
+                    municipality
                             .html(results)
                             .prepend('<option value="">Selecccionar</option>')
                             .trigger("liszt:updated");
@@ -246,7 +245,7 @@
             jQuery('.msgsuccess').hide();
 
              jQuery.ajax({
-                url: '{{=URL('vendors', 'create_vendor')}}',
+                url: '{{=URL(c='vendors_ajax', f='create_vendor')}}',
                 data: { 
                     company:jQuery('#company').val(),
                     address:jQuery('#address').val(),
@@ -279,7 +278,11 @@
     function deleteFields() {
         jQuery('#company').val('');
         jQuery('#address').val('');
-        jQuery('#states option').first().attr('selected','selected');
+        jQuery('#states')
+            .find('option')
+            .first()
+            .attr('selected',true)
+            .trigger("liszt:updated");
         jQuery('#municipality')
             .html('')
             .prepend('<option value="">Selecccionar</option>')
