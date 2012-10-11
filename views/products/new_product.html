@@ -2,7 +2,8 @@
 
 {{block scripts_extra}}
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.dataTables.min.js')}}"></script>
-<script type="text/javascript" src="{{=URL('static', 'js/custom/tables.js')}}"></script>	
+<script type="text/javascript" src="{{=URL('static', 'js/custom/dualselector.js')}}"></script>
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.validate.min.js')}}"></script>
 {{end}}
 
 {{block sidebar_menu}}
@@ -23,62 +24,112 @@
         	<div id="validation" class="subcontent">
             	
             		<div class="contenttitle2">
-                        <h3>Nombre del agente de ventas</h3>
+                        <h3>Nuevo producto</h3>
                     </div><!--contenttitle-->
+         
+					<div class="notibar msgerror" style="display:none;">
+                    	<a class="close"></a>
+                    	<p>Ocurrió un error con los datos del formulario.</p>
+                    </div>
+
+                    <div class="notibar msgsuccess" style="display:none;">
+                        <a class="close"></a>
+                        <p>Se han guardado los datos del formulario.</p>
+                    </div>
             	
-            	<script type="text/javascript">
-				jQuery(document).ready(function()
-				{
-						jQuery("#form_ventor").validate({
-							rules: 
-							{
-								sales_agent: "required",
-							},
-							messages: 
-							{
-								sales_agent: "Ingrese el nombre del agente de ventas",
-					
-							}
-						});
-					
-				});
-				</script>
-					
-            	
-                    <form id="form_agent" class="stdform stdform2" method="post" action="">
-                    	                        
+                    <form id="form_product" class="stdform stdform2" method="post" action="">           	                        
                         <p>
-	                        	<label>Nombre del agente de ventas</label>
-	                            <span class="field"><input type="text" name="sales_agent" id="sales_agent" class="longinput"/></span>
+	                        	<label>Nombre</label>
+	                            <span class="field"><input type="text" name="product_name" id="product_name" class="smallinput"/></span>
 	                    </p>
-                        
-                    </form><br />
-                       
-                    <div class="contenttitle2">
-                        <h3>Información de contacto</h3>
-                    </div><!--contenttitle-->   
-                       
-                    <form id="form_agent2" class="stdform stdform2" method="post" action="">
-                    	<div id="camposgenerados">
-	                    	<p>
-	                        	<label>Tipo</label>
-	                            <span class="field"><select name="type" id="type">
-	                            	<option value="">Choose One</option>
-	                                <option value="1">Selection One</option>
-	                                <option value="2">Selection Two</option>
-	                                <option value="3">Selection Three</option>
-	                                <option value="4">Selection Four</option>
-	                            </select></span>
-	                        </p> 
-	                        
-	                        <p style="margin-top: 1px;">
-	                        	<label>Descripción</label>
-	                            <span class="field"><input type="text" name="description" id="description1" class="longinput" keydown="aparecediv()"/></span>
-	                        </p>
-                    	</div>
-                        <p class="stdformbutton">
-                        	<button class="submit radius2">Guardar</button>
+	                    <p>
+	                        	<label>Nombre alternativo</label>
+	                            <span class="field"><input type="text" name="product_name_alt" id="product_name_alt" class="smallinput"/></span>
+	                    </p>
+	                    <p>
+	                        	<label>Código alternativo</label>
+	                            <span class="field"><input type="text" name="product_code_alt" id="product_code_alt" class="smallinput"/></span>
+	                    </p>
+	                    <p>
+                            	<label>Marca</label>
+                            	<span class="field">
+                                	<select name="trademark_name" id="trademark_name">
+	                            	    <option value="">Seleccionar</option>
+	                                </select>
+	                            </span>
                         </p>
+                        <p style="margin-top: 1px;">
+	                        	<label>Modelo</label>
+	                            <span class="field"><input type="text" name="model" id="model" class="smallinput "/></span>
+	                    </p>
+	                    <p>
+                            	<label>Unidad de medida</label>
+                            	<span class="field">
+                            	    <select name="measuring_unit" id="measuring_unit">
+	                        	        <option value="">Seleccionar</option>
+	                        	        </select>
+	                        	</span>
+                        </p>
+                        <p style="margin-top: 1px;">
+	                        	<label>Número de parte</label>
+	                            <span class="field"><input type="text" name="part_number" id="part_number" class="smallinput"/></span>
+	                    </p>
+	                    <p>
+	                        	<label>Número de serie</label>
+	                            <span class="field"><input type="text" name="serial_number" id="serial_number" class="smallinput"/></span>
+	                    </p>
+	                    <p>
+	                        	<label>Categorías</label>
+	                            <span class="dualselect field" id="dualselect_categories">
+	                           
+                            	<select class="uniformselect" name="categories_name" id="categories_name" multiple="multiple" size="10">
+                                    <option value="">Selection One</option>
+                                    <option value="">Selection Two</option>
+                                    <option value="">Selection Three</option>
+                                    <option value="">Selection Four</option>
+                                    <option value="">Selection Five</option>
+                                    <option value="">Selection Six</option>
+                                    <option value="">Selection Seven</option>
+                                    <option value="">Selection Eight</option>
+                                </select>
+                                <span class="ds_arrow">
+                                	<span class="arrow ds_next">»</span>
+                                	<span class="arrow ds_prev">«</span>                
+                                </span>
+                                <select multiple="multiple" name="chosen_categories" id="chosen_categories" size="10"></select>
+                                </span>
+	                    </p>
+	                    <p>
+	                        	<label>Proveedores</label>
+	                            <span class="dualselect field" id="dualselect_vendors">
+	                           
+                            	<select class="uniformselect" name="vendors_name" id="vendors_name" multiple="multiple" size="10">
+                                    <option value="">Selection One</option>
+                                    <option value="">Selection Two</option>
+                                    <option value="">Selection Three</option>
+                                    <option value="">Selection Four</option>
+                                    <option value="">Selection Five</option>
+                                    <option value="">Selection Six</option>
+                                    <option value="">Selection Seven</option>
+                                    <option value="">Selection Eight</option>
+                                </select>
+                                <span class="ds_arrow"> 
+                                	<span class="arrow ds_next">»</span>  
+                                	<span class="arrow ds_prev">«</span>                
+                                </span>
+                                <select multiple="multiple" name="chosen_vendors" id="chosen_vendors" size="10"></select>
+                                </span>
+	                    </p>
+	                    <p>
+                        	<label>Descripción</label>
+                            <span class="field"><textarea cols="80" rows="5" name="location" id="location2" class="smallinput"></textarea></span>
+                        </p>
+	                    
+                        <p class="stdformbutton">
+                        	<button id="submit" class="submit radius2">Guardar</button>
+                        </p>
+                        
+                        
                     </form>
                    
 
@@ -89,9 +140,47 @@
         <br clear="all" />
         
 	</div><!-- centercontent -->
-    
-    
+        
 </div><!--bodywrapper-->
+
+<script type="text/javascript">
+
+    //form and shit
+    //send form
+    jQuery('#submit').live('click', function(e) {
+        e.preventDefault();
+
+        jQuery("#form_product").validate({
+            rules: {
+                product_name: "required",
+                trademark_name: "required",
+                measuring_unit: "required",
+                chosen_categories: "required",
+                zip_code: {
+                    required: false,
+                    digits: true,
+                    minlength: 5
+                },
+                website: {
+                    url: true,
+                    required: false
+                },
+                rfc: {
+                    minlength: 10,
+                    maxlength:13,
+                    required: false
+                }
+            },
+            messages: {
+                product_name: "Ingrese el nombre del producto.",
+                trademark_name: "Seleccione una marca.",
+                measuring_unit: "Seleccione una unidad de medida.",
+                chosen_categories: "Seleccione una categoría."
+            }
+        });
+        
+    
+</script>
 
 </body>
 </html>

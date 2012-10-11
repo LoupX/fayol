@@ -23,14 +23,19 @@
 	<script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script>
 <![endif]-->
 <script type="text/javascript">
+jQuery(document).ready(function(){
 	{{try:}}
 	    {{for item in current:}}
-	    jQuery(document).ready(function(){
+	    
 	        jQuery("#{{=item}}").addClass("current");
-	    });
+	    
 	    {{pass}}
 	{{except Exception as e:}}
 	{{pass}}
+});
 </script>
+
+
+
 </head>
 

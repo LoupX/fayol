@@ -3,11 +3,18 @@
 #Views
 def index():
     title = 'Productos'
-    return dict(title=title)
+    current = ['menu_catalogs', 'sidebar_products', 'sub_products_read']
+    return dict(title=title, current=current)
     
 def new_product():
 	title = 'Productos'
-	return dict(title=title)
+	current = ['menu_catalogs', 'sidebar_products', 'sub_products_new']
+	return dict(title=title, current=current)
+	
+def prices_list():
+	title = 'Productos'
+	current = ['menu_catalogs', 'sidebar_products', 'sub_products_prices']
+	return dict(title=title, current=current)
 	     
 def trademarks():
     title = 'Marcas'
@@ -50,3 +57,7 @@ def new_unit():
     title = 'Unidades de medida'
     current = ['menu_catalogs', 'sidebar_units', 'sub_units_new']
     return dict(title=title,  current=current)
+    
+#Ajax functions
+
+#Functions

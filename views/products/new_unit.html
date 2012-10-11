@@ -2,7 +2,7 @@
 
 {{block scripts_extra}}
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.dataTables.min.js')}}"></script>
-<script type="text/javascript" src="{{=URL('static', 'js/custom/tables.js')}}"></script>	
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.validate.min.js')}}"></script>
 {{end}}
 
 {{block sidebar_menu}}
@@ -26,8 +26,17 @@
                         <h3>Nueva unidad de medida</h3>
                     </div><!--contenttitle-->
             						
-                    <form id="form_measuring_unit" class="stdform stdform2" method="post" action="">
-                    	                        
+            		<div class="notibar msgerror" style="display:none;">
+                    	<a class="close"></a>
+                    	<p>Ocurrió un error con los datos del formulario.</p>
+                    </div>
+
+                    <div class="notibar msgsuccess" style="display:none;">
+                        <a class="close"></a>
+                        <p>Se han guardado los datos del formulario.</p>
+                    </div>
+            						
+                    <form id="form_measuring_unit" class="stdform stdform2" method="post" action="">	                        
                         <p>
 	                        <label>Nombre</label>
 	                        <span class="field"><input type="text" name="measuring_unit" id="measuring_unit" class="longinput"/></span>
@@ -37,7 +46,7 @@
 	                        <span class="field"><input type="text" name="abbreviation" id="abbreviation" class="longinput"/></span>
 	                    </p>
 	                    <p class="stdformbutton">
-                        	<button class="submit radius2">Guardar</button>
+                        	<button id="submit" class="submit radius2">Guardar</button>
                         </p>
                     </form>
 
@@ -50,6 +59,58 @@
 	</div><!-- centercontent -->  
     
 </div><!--bodywrapper-->
+
+<script type="text/javascript">
+    
+    //form and shit
+    //send form
+    jQuery('#submit').live('click', function(e) {
+        e.preventDefault();
+        
+        jQuery("#form_measuring_unit").validate({
+            rules: {
+                measuring_unit: "required",
+                
+            },
+            messages: {
+                measuring_unit: "Ingrese el nombre de la unidad de medida",
+            }
+        });
+        
+
+        if(jQuery("#form_measuring_unit").valid()) {
+            jQuery('.msgerror').hide();
+            jQuery('.msgsuccess').hide();
+
+             jQuery.ajax({
+                url: '{{=URL('products', 'create_measuring_unit')}}',
+                data: { 
+                    measuring_unit:jQuery('#measuring_unit').val(),
+                    abbreviation:jQuery('#abbreviation').val(),
+                },
+                type: 'POST',
+                success:function(data){
+                    if(data){
+                        jQuery('.msgsuccess').fadeIn(1600);
+                        deleteFields();
+                    }
+                    else{
+                        jQuery('.msgerror').fadeIn(1600);
+                    }
+                    jQuery('body','html',window).animate(
+                                                        {scrollTop:0}, 
+                                                        1000);
+                }
+            }); 
+        }
+    });
+
+    function deleteFields() {
+        jQuery('#measuring_unit').val('');
+        jQuery('#abbreviation').val('');
+    }
+
+</script>
 
 </body>
 </html>
