@@ -2,7 +2,7 @@
 
 {{block scripts_extra}}
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.dataTables.min.js')}}"></script>
-<script type="text/javascript" src="{{=URL('static', 'js/custom/tables.js')}}"></script>	
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.validate.min.js')}}"></script>	
 {{end}}
 
 {{block sidebar_menu}}
@@ -25,6 +25,16 @@
             		<div class="contenttitle2">
                         <h3>Nueva categoría</h3>
                     </div><!--contenttitle-->
+            			
+            		<div class="notibar msgerror" style="display:none;">
+                    	<a class="close"></a>
+                    	<p>Ocurrió un error con los datos del formulario.</p>
+                    </div>
+
+                    <div class="notibar msgsuccess" style="display:none;">
+                        <a class="close"></a>
+                        <p>Se han guardado los datos del formulario.</p>
+                    </div>	
             						
                     <form id="form_category" class="stdform stdform2" method="post" action="">
                     	
@@ -37,7 +47,7 @@
 	                        <span class="field"><input type="text" name="category_description" id="category_description" class="longinput"/></span>
 	                    </p>
 	                    <p class="stdformbutton">
-                        	<button class="submit radius2">Guardar</button>
+                        	<button id="submit" class="submit radius2">Guardar</button>
                         </p>
                     </form>
 
@@ -50,6 +60,58 @@
 	</div><!-- centercontent -->  
     
 </div><!--bodywrapper-->
+
+<script type="text/javascript">
+    
+    //form and shit
+    //send form
+    jQuery('#submit').live('click', function(e) {
+        e.preventDefault();
+        
+        jQuery("#form_category").validate({
+            rules: {
+                category_name: "required",
+                
+            },
+            messages: {
+                category_name: "Ingrese el nombre de la categoría",
+            }
+        });
+        
+
+        if(jQuery("#form_category").valid()) {
+            jQuery('.msgerror').hide();
+            jQuery('.msgsuccess').hide();
+
+             jQuery.ajax({
+                url: '{{=URL('products', 'create_category')}}',
+                data: { 
+                    category_name:jQuery('#category_name').val(),
+                    category_description:jQuery('#category_description').val(),
+                },
+                type: 'POST',
+                success:function(data){
+                    if(data){
+                        jQuery('.msgsuccess').fadeIn(1600);
+                        deleteFields();
+                    }
+                    else{
+                        jQuery('.msgerror').fadeIn(1600);
+                    }
+                    jQuery('body','html',window).animate(
+                                                        {scrollTop:0}, 
+                                                        1000);
+                }
+            }); 
+        }
+    });
+
+    function deleteFields() {
+        jQuery('#category_name').val('');
+        jQuery('#category_description').val('');
+    }
+
+</script>
 
 </body>
 </html>
