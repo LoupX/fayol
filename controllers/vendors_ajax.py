@@ -58,8 +58,6 @@ def create_vendor():
     vars = None
     name = None
     vals = dict()
-    if not request.ajax or request.env.request_method != 'POST':
-        raise HTTP(400)
 
     if request.vars and request.vars.company:
         vars = request.vars
@@ -113,6 +111,9 @@ def update_vendor():
         return 'true'
     else:
         return ''
+
+def create_pay_information():
+
 
 #Functions
 def _create_vendor(name, **kwargs):

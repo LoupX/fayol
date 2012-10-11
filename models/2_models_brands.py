@@ -9,14 +9,16 @@ db.define_table('brands',
     Field('added_by', 'reference auth_user',
 	  default=auth.user.id if auth.user else None),
     Field('modified_by', 'reference auth_user',
-	  update=auth.user.id if auth.user else None), migrate=MIGRATE)
+	  update=auth.user.id if auth.user else None),
+    migrate=MIGRATE)
 
 db.define_table('brand_descriptions',
     Field('brand_id', 'reference brands', notnull=True),
-    Field('name', 'string', notnull=True, unique=True),
+    Field('name', 'string', notnull=True),
     Field('description', 'text'),
     Field('meta_description', 'string'),
-    Field('meta_keywords', 'string'), migrate=MIGRATE)
+    Field('meta_keywords', 'string'),
+    migrate=MIGRATE)
 
 db.brand_descriptions.format = '%(name)s'
 db.brands.date_added.represent = (lambda date_added, row:
