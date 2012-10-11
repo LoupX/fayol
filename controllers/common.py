@@ -45,3 +45,12 @@ def get_localities():
             options += str(OPTION(row.name, _value=row.id))
             options += '\n'
     return options
+
+def get_banks():
+    b = db.banks
+    rows = db(b).select(s.id, s.short_name)
+    options = str()
+    for row in rows:
+        options += str(OPTION(row.short_name, _value=row.id))
+        options += '\n'
+    return options

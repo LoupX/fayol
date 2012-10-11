@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 
 #Ajax functions
-
 def get_vendors():
     v = db.vendors
-    rows = db(v.status==True).select(v.name, v.id).as_list()
-    vendors = DIV(*[OPTION(row['name'], _value=row['id']) for row in rows])
-    return vendors
+    rows = db(v.status==True).select(v.name, v.id)
+    options = str()
+    for row in rows:
+        options += str(OPTION(row.name, _value=row.id))
+        options += '\n'
+    return options
 
 def get_vendor_info():
     info = dict()
