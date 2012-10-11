@@ -46,7 +46,6 @@
                             <span class="formwrapper" style="margin-left:0px;">
                             	  <select id="vendors" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="2">
                                   <option value="">Seleccionar</option>
-                                  {{=vendors}}
                                 </select>
                             </span>
                         </p>
@@ -154,7 +153,7 @@ function ajaxFilter(who) {
     cleanFields();
 
     jQuery.ajax({ 
-        url: '{{=URL('vendors', 'get_vendors')}}', 
+        url: "{{=URL(c='vendors_ajax', f='get_vendors')}}",
         type: 'POST',         
         data: { who: who }, 
         success: function (data) {
@@ -193,10 +192,10 @@ vendors.change( function() {
     //console.log(id);
     //insert here an ajax function and shit
     jQuery.ajax({ 
-      url: '{{=URL('vendors', 'testing')}}', 
-      type: 'POST',         
+      url: "{{=URL(c='vendors', f='testing')}}",
+      type: "POST",
       data: { id: id }, 
-      dataType:'json',
+      dataType:"json",
       success: function (data) {
         //receive something like data = {"name":"name","state":"state"}
         name.html(data['name']);

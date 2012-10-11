@@ -5,9 +5,7 @@ import gluon.contrib.simplejson
 def index():
     title = 'Proveedores'
     current = ['menu_catalogs', 'sidebar_vendors', 'sub_vendors_read']
-    vendors = get_vendors()
-    vendor_info = get_vendor_info()
-    return dict(title=title, current=current, vendors=vendors, **vendor_info)
+    return dict(title=title, current=current)
 
 def new():
     title = 'Proveedores'
