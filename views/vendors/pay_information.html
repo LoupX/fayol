@@ -152,7 +152,7 @@ vendors.change( function() {
 
         if(form.valid() && id != 0) {
             jQuery.ajax({
-                url: "{{=URL(c='common', f='')}}",
+                url: "{{=URL(c='vendors_ajax', f='create_pay_information')}}",
                 type: "POST",
                 success:function(data){
                   if(data){

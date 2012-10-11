@@ -157,7 +157,7 @@ function ajaxFilter(who) {
         type: 'POST',         
         data: { who: who }, 
         success: function (data) {
-          vendors
+          jQuery('#vendors')
             .html('')
             .append(data)
             .prepend('<option value="lol">Seleccionar</option>');

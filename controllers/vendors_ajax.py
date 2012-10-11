@@ -113,7 +113,29 @@ def update_vendor():
         return ''
 
 def create_pay_information():
+    data = dict()
+    id = None
+    if not request.vars.id:
+        return ''
+    else:
+        id = request.vars.id
+    try:
+        data['branch'] = request.vars.branch
+        data['bank_account_number'] = request.vars.bank_account_number
+        data['clabe'] = request.vars.clabe
+    except Exception as e:
+        pass
 
+    v = db.vendors
+    query = v.id==id
+    try:
+        db(query).update(**data)
+    except Exception as e:
+        db.rollback()
+        return ''
+    else:
+        db.commit()
+        return True
 
 #Functions
 def _create_vendor(name, **kwargs):
