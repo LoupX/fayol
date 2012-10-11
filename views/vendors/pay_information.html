@@ -53,7 +53,7 @@
                         <p>
                         	<label>Banco</label>
                             <span class="field">
-                                <select id="bank" name="bank" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="2">
+                                <select id="bank_id" name="bank_id" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="2">
                                 </select>
                             </span>
                         </p>
@@ -65,7 +65,7 @@
                         
                         <p>
                         	<label>Número de cuenta</label>
-                            <span class="field"><input type="text" name="acountnumber" id="acountnumber" class="smallinput" tabindex="4"/></span>
+                            <span class="field"><input type="text" name="account_number" id="account_number" class="smallinput" tabindex="4"/></span>
                         </p>
                         
                         <p>
@@ -95,7 +95,7 @@
 jQuery(".chzn-select").chosen();
 
 var vendors = jQuery('#selection') ,
-    banks = jQuery('#bank'),
+    banks = jQuery('#bank_id'),
     id = 0;
 
 ////// get vendors //////
@@ -132,9 +132,9 @@ vendors.change( function() {
         jQuery('.msgsuccess').hide();
 
         var form = jQuery("#form1"),
-            bank = jQuery('#bank').val(),
+            bank_id = jQuery('#bank_id').val(),
             branch = jQuery('#branch').val(),
-            acountnumber = jQuery('#acountnumber').val(),
+            account_number = jQuery('#account_number').val(),
             clabe = jQuery('#clabe').val();
 
         form.validate({
@@ -153,6 +153,13 @@ vendors.change( function() {
         if(form.valid() && id != 0) {
             jQuery.ajax({
                 url: "{{=URL(c='vendors_ajax', f='create_pay_information')}}",
+                data: { 
+                    
+                    bank_id:bank_id,
+                    branch:branch,
+                    account_number:account_number,
+                    clabe:clabe,
+                },
                 type: "POST",
                 success:function(data){
                   if(data){
@@ -177,7 +184,7 @@ vendors.change( function() {
 });
 
 function deleteFields() {
-        jQuery('#acountnumber').val('');
+        jQuery('#account_number').val('');
         jQuery('#branch').val('');
         jQuery('#clabe').val('');
     }

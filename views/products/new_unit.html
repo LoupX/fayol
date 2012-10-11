@@ -83,7 +83,7 @@
             jQuery('.msgsuccess').hide();
 
              jQuery.ajax({
-                url: '{{=URL('products', 'create_measuring_unit')}}',
+                url: "{{=URL('products', 'create_measuring_unit')}}",
                 data: { 
                     measuring_unit:jQuery('#measuring_unit').val(),
                     abbreviation:jQuery('#abbreviation').val(),
