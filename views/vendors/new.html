@@ -2,6 +2,11 @@
 
 {{block scripts_extra}}	
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.validate.min.js')}}"></script>
+<script type="text/javascript" src="{{=URL('static', 'js/custom/forms.js')}}"></script>
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.tagsinput.min.js')}}"></script>
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/charCount.js')}}"></script>
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/ui.spinner.min.js')}}"></script>
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/chosen.jquery.min.js')}}"></script>
 {{end}}
 
 {{block sidebar_menu}}
@@ -49,17 +54,17 @@
                         <p style="margin-top: 1px;">
                             <label>Estado</label>
                             <span class="field">
-                                <select name="states" id="states">
-                                {{=state}}
-                                </select>
+                                <!-- <select name="states" id="states">
+                                </select> -->
+                                <select id="states" name="states" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="2">
+                                  </select>
                             </span>
                         </p>
                         
                         <p style="margin-top: 1px;">
                             <label>Municipio</label>
                             <span id="municipality_container"class="field">
-                            <select name="municipality" id="municipality">
-                                <option value="">Seleccionar</option>
+                            <select name="municipality" id="municipality" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="2">
                             </select>
                             </span>
                         </p>
@@ -67,8 +72,7 @@
                         <p style="margin-top: 1px;">
                             <label>Ciudad</label>
                             <span class="field" id="locality_container">
-                            <select name="locality" id="locality">
-                                <option value="">Seleccionar</option>
+                            <select name="locality" id="locality" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="2">
                             </select>
                             </span>
                         </p>
@@ -125,29 +129,42 @@
         municipality = jQuery('#municipality'),
         locality = jQuery('#locality');
 
-    state.prepend('<option value="" selected>Selecccionar</option>');
+        jQuery.ajax({
+            type: "POST",
+            url: "{{=URL(c='common', f='get_states')}}",
+            data: {id: id},
+            success: function(results) {
+                state
+                    .html(results)
+                    .prepend('<option value="">Selecccionar</option>')
+                    .trigger("liszt:updated");
+                }
+        });
 
     state.change( function() {
         var id = jQuery(this).find(':selected').val();
         if(id != '') {
             jQuery.ajax({
                 type: "POST",
-                url: '{{=URL('vendors', 'get_municipalities')}}',
+                url: "{{=URL(c='vendors', f='get_municipalities')}}",
                 data: {id: id},
                 success: function(results) {
                     municipality
                             .html(results)
-                            .prepend('<option value="">Selecccionar</option>');
+                            .prepend('<option value="">Selecccionar</option>')
+                            .trigger("liszt:updated");
                 }
             });
         }
         else {
             municipality
                     .html('')
-                    .prepend('<option value="">Selecccionar</option>');
+                    .prepend('<option value="">Selecccionar</option>')
+                    .trigger("liszt:updated");
             locality
                     .html('')
-                    .prepend('<option value="">Selecccionar</option>');
+                    .prepend('<option value="">Selecccionar</option>')
+                    .trigger("liszt:updated");
         }
     });
 
@@ -161,14 +178,16 @@
                 success: function(results) {
                     locality
                             .html(results)
-                            .prepend('<option value="">Selecccionar</option>');
+                            .prepend('<option value="">Selecccionar</option>')
+                            .trigger("liszt:updated");
                 }
             });
         }
         else {
             locality
                     .html('')
-                    .prepend('<option value="">Selecccionar</option>');
+                    .prepend('<option value="">Selecccionar</option>')
+                    .trigger("liszt:updated");
         }
     });
 
@@ -261,8 +280,14 @@
         jQuery('#company').val('');
         jQuery('#address').val('');
         jQuery('#states option').first().attr('selected','selected');
-        jQuery('#municipality').html('').prepend('<option value="">Selecccionar</option>');
-        jQuery('#locality').html('').prepend('<option value="">Selecccionar</option>');
+        jQuery('#municipality')
+            .html('')
+            .prepend('<option value="">Selecccionar</option>')
+            .trigger("liszt:updated");
+        jQuery('#locality')
+            .html('')
+            .prepend('<option value="">Selecccionar</option>')
+            .trigger("liszt:updated");
         jQuery('#zip_code').val('');
         jQuery('#rfc').val('');
         jQuery('#website').val('');
