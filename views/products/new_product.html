@@ -79,27 +79,14 @@
 	                            <span class="field"><input type="text" name="serial_number" id="serial_number" class="smallinput"/></span>
 	                    </p>
 	                    <p>
-	                        	<label>Categorías</label>
-	                            <span class="dualselect field" id="dualselect_categories">
-	                           
-                            	<select class="uniformselect" name="categories_name" id="categories_name" multiple="multiple" size="10">
-                                    <option value="">Selection One</option>
-                                    <option value="">Selection Two</option>
-                                    <option value="">Selection Three</option>
-                                    <option value="">Selection Four</option>
-                                    <option value="">Selection Five</option>
-                                    <option value="">Selection Six</option>
-                                    <option value="">Selection Seven</option>
-                                    <option value="">Selection Eight</option>
-                                </select>
-                                <span class="ds_arrow">
-                                	<span class="arrow ds_next">»</span>
-                                	<span class="arrow ds_prev">«</span>                
-                                </span>
-                                <select multiple="multiple" name="chosen_categories" id="chosen_categories" size="10"></select>
-                                </span>
+	                        	<label>Categoría</label>
+	                            <span class="field">
+                            	    <select name="categories_name" id="categories_name">
+	                        	        <option value="">Seleccionar</option>
+	                        	        </select>
+	                        	</span>
 	                    </p>
-	                    <p>
+	                    <p style="margin-top:1px;">
 	                        	<label>Proveedores</label>
 	                            <span class="dualselect field" id="dualselect_vendors">
 	                           
@@ -155,7 +142,7 @@
                 product_name: "required",
                 trademark_name: "required",
                 measuring_unit: "required",
-                chosen_categories: "required",
+                categories_name: "required",
                 zip_code: {
                     required: false,
                     digits: true,
@@ -175,7 +162,7 @@
                 product_name: "Ingrese el nombre del producto.",
                 trademark_name: "Seleccione una marca.",
                 measuring_unit: "Seleccione una unidad de medida.",
-                chosen_categories: "Seleccione una categoría."
+                categories_name: "Seleccione una categoría."
             }
         });
         
