@@ -21,11 +21,12 @@ def get_municipalities():
             options += '/n'
     return options
 
-def get_localities(state_id=None, municipality_id=None):
+def get_localities():
     l = db.localities
     m = db.municipalities
     options = str()
-    if state_id:
+    if request.vars.state_id:
+        state_id = request.vars.state_id
         query = m.state_id==state_id
         rows = db(query).select(m.id)
         mids = []
@@ -36,7 +37,8 @@ def get_localities(state_id=None, municipality_id=None):
         for row in rows:
             options += str(OPTION(row.name, _value=row.id))
             options += '\n'
-    elif municipality_id:
+    elif request.vars.municipality_id:
+        municipality_id = request.vars.municipality_id
         query = l.municipality_id==municipality_id
         rows = db(query).select(l.id, l.name)
         for row in rows:

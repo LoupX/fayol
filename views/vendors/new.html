@@ -148,10 +148,10 @@
             });
             jQuery.ajax({
                 type: "POST",
-                data: {id: id},
-                url: "{{=URL(c='common', f='get_municipalities', args=['1'])}}",
+                data: {state_id: id},
+                url: "{{=URL(c='common', f='get_localities')}}",
                 success: function(results) {
-                    municipality
+                    locality
                             .html(results)
                             .prepend('<option value="">Seleccionar</option>');
                 }
@@ -172,8 +172,8 @@
         if(id != '') {
             jQuery.ajax({
                 type: "POST",
-                url: '{{=URL('vendors', 'get_localities')}}',
-                data: {id: id},
+                data: {municipality_id: id},
+                url: "{{=URL(c='common', f='get_localities')}}",
                 success: function(results) {
                     locality
                             .html(results)
