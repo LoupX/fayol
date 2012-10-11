@@ -3,24 +3,28 @@
 def get_states():
     s = db.states
     rows = db(s).select(s.id, s.name)
-    options = []
+    options = str()
     for row in rows:
-        options += OPTION(row.name, _value=row.id)
+        options += str(OPTION(row.name, _value=row.id))
+        options += '\n'
     return options
 
-def get_municipalities(state_id):
+def get_municipalities():
     m = db.municipalities
-    query = m.state_id==state_id
-    rows = db(query).select(m.id, m.name)
-    options = []
-    for row in rows:
-        options += OPTION(row.name, _value=row.id)
+    options = str()
+    if request.vars.id:
+        id = request.vars.id
+        query = m.state_id==id
+        rows = db(query).select(m.id, m.name)
+        for row in rows:
+            options += str(OPTION(row.name, _value=row.id))
+            options += '/n'
     return options
 
 def get_localities(state_id=None, municipality_id=None):
     l = db.localities
     m = db.municipalities
-    options = []
+    options = str()
     if state_id:
         query = m.state_id==state_id
         rows = db(query).select(m.id)
@@ -30,10 +34,12 @@ def get_localities(state_id=None, municipality_id=None):
         query = l.municipality_id.belongs(mids)
         rows = db(query).select(l.id, l.name)
         for row in rows:
-            options += OPTION(row.name, _value=row.id)
+            options += str(OPTION(row.name, _value=row.id))
+            options += '\n'
     elif municipality_id:
         query = l.municipality_id==municipality_id
         rows = db(query).select(l.id, l.name)
         for row in rows:
-            options += OPTION(row.name, _value=row.name)
+            options += str(OPTION(row.name, _value=row.name))
+            options += '\n'
     return options

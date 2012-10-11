@@ -126,37 +126,44 @@
         locality = jQuery('#locality');
 
     jQuery.ajax({
-        type: "POST"
+        type: "POST",
         url: "{{=URL(c='common', f='get_states')}}",
-        data: {data:'data'}
         success: function(results){
-            state.append(results)
+            state.append(results);
         }
     });
-
-    state.prepend('<option value="" selected>Selecccionar</option>');
 
     state.change( function() {
         var id = jQuery(this).find(':selected').val();
         if(id != '') {
             jQuery.ajax({
                 type: "POST",
-                url: '{{=URL('vendors', 'get_municipalities')}}',
                 data: {id: id},
+                url: "{{=URL(c='common', f='get_municipalities')}}",
                 success: function(results) {
                     municipality
                             .html(results)
-                            .prepend('<option value="">Selecccionar</option>');
+                            .prepend('<option value="">Seleccionar</option>');
+                }
+            });
+            jQuery.ajax({
+                type: "POST",
+                data: {id: id},
+                url: "{{=URL(c='common', f='get_municipalities', args=['1'])}}",
+                success: function(results) {
+                    municipality
+                            .html(results)
+                            .prepend('<option value="">Seleccionar</option>');
                 }
             });
         }
         else {
             municipality
                     .html('')
-                    .prepend('<option value="">Selecccionar</option>');
+                    .prepend('<option value="">Seleccionar</option>');
             locality
                     .html('')
-                    .prepend('<option value="">Selecccionar</option>');
+                    .prepend('<option value="">Seleccionar</option>');
         }
     });
 
@@ -170,14 +177,14 @@
                 success: function(results) {
                     locality
                             .html(results)
-                            .prepend('<option value="">Selecccionar</option>');
+                            .prepend('<option value="">Seleccionar</option>');
                 }
             });
         }
         else {
             locality
                     .html('')
-                    .prepend('<option value="">Selecccionar</option>');
+                    .prepend('<option value="">Seleccionar</option>');
         }
     });
 
@@ -270,7 +277,7 @@
         jQuery('#company').val('');
         jQuery('#address').val('');
         jQuery('#states option').first().attr('selected','selected');
-        jQuery('#municipality').html('').prepend('<option value="">Selecccionar</option>');
+        jQuery('#municipality').html('').prepend('<option value="">Seleccionar</option>');
         jQuery('#locality').html('').prepend('<option value="">Selecccionar</option>');
         jQuery('#zip_code').val('');
         jQuery('#rfc').val('');
