@@ -28,10 +28,10 @@ def get_vendor_information():
     query &= db.vendors.state_id==db.states.id
     query &= db.vendors.municipality_id==db.municipalities.id
     query &= db.vendors.locality_id==db.localities.id
-    row = db(query).select().first()
+    row = db(query).select().as_list()
 
-    #if row:
-    #    data = row[0]
+    if row:
+        data = row[0]
 
     from gluon.contrib import simplejson
     data = simplejson.dumps(data)
