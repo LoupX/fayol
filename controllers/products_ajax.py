@@ -36,7 +36,7 @@ def create_brand():
     data['description'] = request.vars.description
     try:
         b_id = db.brands.insert()
-        bd_id = db.brand_descriptions.insert(**data)
+        bd_id = db.brand_descriptions.insert(brand_id=b_id, **data)
     except Exception as e:
         db.rollback()
         return ''

@@ -13,7 +13,7 @@ db.define_table('brands',
     migrate=MIGRATE)
 
 db.define_table('brand_descriptions',
-    Field('brand_id', 'reference brands', unique=True, notnull=True),
+    Field('brand_id', 'reference brands', notnull=True),
     Field('name', 'string', unique=True, notnull=True),
     Field('description', 'text'),
     Field('meta_description', 'string'),

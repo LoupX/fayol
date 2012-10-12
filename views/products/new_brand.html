@@ -84,7 +84,7 @@
             jQuery('.msgsuccess').hide();
 
              jQuery.ajax({
-                url: "{{=URL('common', 'echo')}}",
+                url: "{{=URL(c='products_ajax', f='create_brand')}}",
                 data: { 
                     name:jQuery('#name').val(),
                     description:jQuery('#description').val(),

@@ -2,7 +2,13 @@
 
 def get_vendors():
     v = db.vendors
-    rows = db(v.status==True).select(v.name, v.id)
+    q = request.vars.query
+    query = v
+    if q == 'TRUE':
+        query = v.status==True
+    elif q == 'FALSE':
+        query = v.status==False
+    rows = db(query).select(v.name, v.id)
     options = str()
     for row in rows:
         options += str(OPTION(row.name, _value=row.id))
@@ -17,8 +23,10 @@ def get_vendor_information():
         id = int(id)
     except:
         return ''
+
     query = db.vendors.id==id
     row = db(query).select().as_list()
+
     if row:
         data = row[0]
     from gluon.contrib import simplejson
@@ -72,6 +80,14 @@ def update_pay_information():
     data['branch'] = vars.branch
     data['bank_account_number'] = vars.account_number
     data['clabe'] = vars.clabe
+    result = _update_vendor(id, data)
+    return result
+
+def toggle_vendor_status():
+    id = request.vars.id
+    status = request.vars.status
+    status = True if status == 'True' else False
+    data = dict(status=(not status))
     result = _update_vendor(id, data)
     return result
 
