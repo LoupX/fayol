@@ -243,16 +243,15 @@
         if(jQuery("#form").valid()) {
             jQuery('.msgerror').hide();
             jQuery('.msgsuccess').hide();
-            municipality_id = (jQuery('#municipality').val() != null) ? jQuery('#municipality').val() : ''
-            locality_id = (jQuery('#locality').val() != null) ? jQuery('#locality').val() : ''
+
              jQuery.ajax({
                 url: '{{=URL(c='vendors_ajax', f='create_vendor')}}',
                 data: { 
                     company:jQuery('#company').val(),
                     address:jQuery('#address').val(),
                     state:jQuery('#states').val(),
-                    municipality:municipality_id,
-                    locality:locality_id,
+                    municipality:jQuery('#municipality').val(),
+                    locality:jQuery('#locality').val(),
                     zip_code:jQuery('#zip_code').val(),
                     rfc:jQuery('#rfc').val(),
                     website:jQuery('#website').val()

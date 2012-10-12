@@ -53,7 +53,7 @@
                         <p>
                         	<label>Banco</label>
                             <span class="field">
-                                <select id="bank_id" name="bank_id" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="2">
+                                <select id="bank" name="bank" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="2">
                                 </select>
                             </span>
                         </p>
@@ -65,7 +65,7 @@
                         
                         <p>
                         	<label>Número de cuenta</label>
-                            <span class="field"><input type="text" name="account_number" id="account_number" class="smallinput" tabindex="4"/></span>
+                            <span class="field"><input type="text" name="acountnumber" id="acountnumber" class="smallinput" tabindex="4" maxlength="11"/></span>
                         </p>
                         
                         <p>
@@ -95,7 +95,7 @@
 jQuery(".chzn-select").chosen();
 
 var vendors = jQuery('#selection') ,
-    banks = jQuery('#bank_id'),
+    banks = jQuery('#bank'),
     id = 0;
 
 ////// get vendors //////
@@ -132,10 +132,9 @@ vendors.change( function() {
         jQuery('.msgsuccess').hide();
 
         var form = jQuery("#form1"),
-            id = jQuery("#selection").val(),
-            bank_id = jQuery('#bank_id').val(),
+            bank = jQuery('#bank').val(),
             branch = jQuery('#branch').val(),
-            account_number = jQuery('#account_number').val(),
+            acountnumber = jQuery('#acountnumber').val(),
             clabe = jQuery('#clabe').val();
 
         form.validate({
@@ -185,7 +184,7 @@ vendors.change( function() {
 });
 
 function deleteFields() {
-        jQuery('#account_number').val('');
+        jQuery('#acountnumber').val('');
         jQuery('#branch').val('');
         jQuery('#clabe').val('');
     }
