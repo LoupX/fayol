@@ -32,6 +32,10 @@ def get_vendor_information():
 
     if row:
         data = row[0]
+        if 'date_added' in data['vendors']:
+            data['vendors']['date_added'] = str(data['vendors']['date_added'])
+        if 'date_modified' in data['vendors']:
+            data['vendors']['date_modified'] = str(data['vendors']['date_modified'])
 
     from gluon.contrib import simplejson
     data = simplejson.dumps(data)
@@ -56,7 +60,7 @@ def create_vendor():
         id = db.vendors.insert(**insert)
     except Exception as e:
         db.rollback()
-        return ''
+        return e
     else:
         db.commit()
         return str(id)

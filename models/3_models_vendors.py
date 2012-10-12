@@ -40,3 +40,8 @@ db.define_table('vendor_agent_contact_info',
     Field('contact_type_id', 'reference contact_types', notnull=True),
     Field('description', 'string', notnull=True),
     migrate=MIGRATE)
+
+db.vendors.date_added.represent = (lambda date_added, row:
+                                date_added.strftime('%d - %m - %Y'))
+db.vendors.date_modified.represent = (lambda date_modified, row:
+                                     date_added.strftime('%d - %m - %Y'))
