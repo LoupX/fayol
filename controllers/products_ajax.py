@@ -1,21 +1,34 @@
 # -*- coding: utf-8 -*-
 
-# Ajax functions.
-def new_brand():
-    pass
-
-# Functions.
-def create_brand(name):
-    b = db.brands
-    bd = db.brand_descriptions
+def create_category():
+    data = dict()
+    if request.vars.category_name:
+        data['name'] = request.vars.category_name
+    data['description'] = request.vars.category_description
     try:
-        brand_id = db(b).insert()
-        data = dict(brand_id=brand_id, name=name)
-        brand_description_id = db.db.insert(**data)
+        c_id = db.categories.insert()
+        cd_id = db.category_descriptions.insert(category_id=c_id, **data)
     except Exception as e:
         db.rollback()
-        return False
+        return ''
     else:
         db.commit()
-        return True
+        return str(dict(category_id=c_id, category_description_id=cd_id))
+
+def create_unit():
+    data = dict()
+    if request.vars.measuring_unit and request.vars.abbreviation:
+        data['name'] = request.vars.measuring_unit
+        data['abbreviation'] = request.vars.abbreviation
+    try:
+        id = db.units.insert(**data)
+    except Exception as e:
+        db.rollback()
+        return ''
+    else:
+        db.commit()
+        return str(id)
+
+def create_brand():
+    pass
 

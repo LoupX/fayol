@@ -54,3 +54,6 @@ def get_banks():
         options += str(OPTION(row.short_name, _value=row.id))
         options += '\n'
     return options
+
+def echo():
+    return str(request.vars)

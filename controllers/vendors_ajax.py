@@ -28,7 +28,6 @@ def get_vendor_information():
 def create_vendor():
     data = dict()
     insert = dict()
-    id = ''
     vars = request.vars
     data['name'] = vars.company
     data['address'] = vars.address
