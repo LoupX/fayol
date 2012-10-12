@@ -153,7 +153,7 @@ vendors.change( function() {
 
         if(form.valid() && id != 0) {
             jQuery.ajax({
-                url: "{{=URL(c='vendors_ajax', f='create_pay_information')}}",
+                url: "{{=URL(c='vendors_ajax', f='update_pay_information')}}",
                 data: {
                     bank_id:bank_id,
                     branch:branch,

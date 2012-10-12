@@ -155,7 +155,6 @@ function ajaxFilter(who) {
     jQuery.ajax({ 
         url: "{{=URL(c='vendors_ajax', f='get_vendors')}}",
         type: 'POST',         
-        data: { who: who }, 
         success: function (data) {
           jQuery('#vendors_select')
             .html('')
