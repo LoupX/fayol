@@ -208,21 +208,21 @@ vendors_select.change( function() {
       success: function (data) {
         console.log(data);
         //receive something like data = {"name":"name","state":"state"}
-        name.html(data['name']);
-        address.html(data['address']);
-        state.html(data['state_id']);
-        municipality.html(data['municipality_id']);
-        locality.html(data['locality_id']);
-        zip_code.html(data['zip_code']);
-        rfc.html(data['rfc']);
-        website.html(data['website']);
-        bank.html(data['bank_id']);
-        branch_number.html(data['branch']);
-        account_number.html(data['bank_account_number']);
-        clabe.html(data['clabe']);
+        name.html(data.vendors['name']);
+        address.html(data.vendors['address']);
+        state.html(data.vendors['state_id']);
+        municipality.html(data.vendors['municipality_id']);
+        locality.html(data.vendors['locality_id']);
+        zip_code.html(data.vendors['zip_code']);
+        rfc.html(data.vendors['rfc']);
+        website.html(data.vendors['website']);
+        bank.html(data.vendors['bank_id']);
+        branch_number.html(data.vendors['branch']);
+        account_number.html(data.vendors['bank_account_number']);
+        clabe.html(data.vendors['clabe']);
 
         jQuery('#ev')
-        .attr('href',"{{=URL(c='vendors', f='update', vars=dict(id='2'))}}");
+          .attr('href',"{{=URL(c='vendors', f='update', vars=dict(id='"+id+"'))}}");
         
 
         status.val(id).removeAttr('disabled');

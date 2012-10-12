@@ -197,8 +197,8 @@
     jQuery('#submit').live('click', function(e) {
         e.preventDefault();
         var sid = jQuery('#states').val(),
-            mid = jQuery('#municipality').val(),
-            lid = jQuery('#locality').val();
+            mid = (jQuery('#municipality').val() == null) ? '': jQuery('#municipality').val(),
+            lid = (jQuery('#locality').val() == null) ? '': jQuery('#locality').val();
         // var company = jQuery('#company'),
         //     zip_code = jQuery('#zip_code'),
         //     val_zip = /^([1-9]{2}|[0-9][1-9]|[1-9][0-9])[0-9]{3}$/;
@@ -261,6 +261,7 @@
                 },
                 type: 'POST',
                 success:function(data){
+                    console.log(data);
                     if(data){
                         jQuery('.msgsuccess').fadeIn(1600);
                         deleteFields();
