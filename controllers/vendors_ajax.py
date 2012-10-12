@@ -3,9 +3,9 @@
 def get_vendors():
     v = db.vendors
     q = request.vars.query
-    query = v
-    if q == 'TRUE':
-        query = v.status==True
+    query = v.status==True
+    if q == 'ANY':
+        query = v
     elif q == 'FALSE':
         query = v.status==False
     rows = db(query).select(v.name, v.id)
@@ -25,10 +25,14 @@ def get_vendor_information():
         return ''
 
     query = db.vendors.id==id
-    row = db(query).select().as_list()
+    query &= db.vendors.state_id==db.states.id
+    query &= db.vendors.municipality_id==db.municipalities.id
+    query &= db.vendors.locality_id==db.localities.id
+    row = db(query).select().first()
 
-    if row:
-        data = row[0]
+    #if row:
+    #    data = row[0]
+
     from gluon.contrib import simplejson
     data = simplejson.dumps(data)
     return data
