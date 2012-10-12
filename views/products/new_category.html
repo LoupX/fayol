@@ -40,11 +40,11 @@
                     	
                         <p>
 	                        <label>Nombre</label>
-	                        <span class="field"><input type="text" name="category_name" id="category_name" class="smallinput"/></span>
+	                        <span class="field"><input type="text" name="category_name" id="name" class="smallinput"/></span>
 	                    </p>
 	                    <p>
 	                       	<label>Descripción</label>
-	                        <span class="field"><input type="text" name="category_description" id="category_description" class="smallinput"/></span>
+	                        <span class="field"><input type="text" name="category_description" id="description" class="smallinput"/></span>
 	                    </p>
 	                    <p class="stdformbutton">
                         	<button id="submit" class="submit radius2">Guardar</button>
@@ -70,11 +70,11 @@
         
         jQuery("#form_category").validate({
             rules: {
-                category_name: "required",
+                name: "required",
                 
             },
             messages: {
-                category_name: "Ingrese el nombre de la categoría",
+                name: "Ingrese el nombre de la categoría",
             }
         });
         
@@ -86,8 +86,8 @@
              jQuery.ajax({
                 url: "{{=URL('products', 'create_category')}}",
                 data: { 
-                    category_name:jQuery('#category_name').val(),
-                    category_description:jQuery('#category_description').val(),
+                    name:jQuery('#name').val(),
+                    description:jQuery('#description').val(),
                 },
                 type: 'POST',
                 success:function(data){
@@ -107,8 +107,8 @@
     });
 
     function deleteFields() {
-        jQuery('#category_name').val('');
-        jQuery('#category_description').val('');
+        jQuery('#name').val('');
+        jQuery('#description').val('');
     }
 
 </script>

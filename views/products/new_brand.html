@@ -36,15 +36,15 @@
                         <p>Se han guardado los datos del formulario.</p>
                     </div>		
             						
-                    <form id="form_trademark" class="stdform stdform2" method="post" action="">
+                    <form id="form_brand" class="stdform stdform2" method="post" action="">
                     	
                         <p>
 	                        <label>Nombre</label>
-	                        <span class="field"><input type="text" name="trademark_name" id="trademark_name" class="smallinput"/></span>
+	                        <span class="field"><input type="text" name="name" id="name" class="smallinput"/></span>
 	                    </p>
 	                    <p>
 	                       	<label>Descripción</label>
-	                        <span class="field"><input type="text" name="trademark_description" id="trademark_description" class="smallinput"/></span>
+	                        <span class="field"><input type="text" name="description" id="description" class="smallinput"/></span>
 	                    </p>
 	                    <p class="stdformbutton">
                         	<button id="submit" class="submit radius2">Guardar</button>
@@ -68,26 +68,26 @@
     jQuery('#submit').live('click', function(e) {
         e.preventDefault();
         
-        jQuery("#form_trademark").validate({
+        jQuery("#form_brand").validate({
             rules: {
-                trademark_name: "required",
+                name: "required",
                 
             },
             messages: {
-                trademark_name: "Ingrese el nombre de la marca",
+                name: "Ingrese el nombre de la marca",
             }
         });
         
 
-        if(jQuery("#form_trademark").valid()) {
+        if(jQuery("#form_brand").valid()) {
             jQuery('.msgerror').hide();
             jQuery('.msgsuccess').hide();
 
              jQuery.ajax({
-                url: "{{=URL('products', 'create_trademark')}}",
+                url: "{{=URL('products', 'create_brand')}}",
                 data: { 
-                    trademark_name:jQuery('#trademark_name').val(),
-                    trademark_description:jQuery('#trademark_description').val(),
+                    name:jQuery('#name').val(),
+                    description:jQuery('#description').val(),
                 },
                 type: 'POST',
                 success:function(data){
@@ -107,8 +107,8 @@
     });
 
     function deleteFields() {
-        jQuery('#trademark_name').val('');
-        jQuery('#trademark_description').val('');
+        jQuery('#name').val('');
+        jQuery('#description').val('');
     }
 
 </script>

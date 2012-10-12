@@ -16,18 +16,18 @@ def prices_list():
 	current = ['menu_catalogs', 'sidebar_products', 'sub_products_prices']
 	return dict(title=title, current=current)
 	     
-def trademarks():
+def brands():
     title = 'Marcas'
-    current = ['menu_catalogs', 'sidebar_trademark', 'sub_trademark_read']
+    current = ['menu_catalogs', 'sidebar_brand', 'sub_brand_read']
     return dict(title=title, current=current)
     
-def trademark_quickedit():
+def brand_quickedit():
 	title = 'Marcas'
 	return dict(title=title)
 
-def new_trademark():
+def new_brand():
 	title = 'Marcas'
-	current = ['menu_catalogs', 'sidebar_trademark', 'sub_trademark_new']
+	current = ['menu_catalogs', 'sidebar_brand', 'sub_brand_new']
 	return dict(title=title, current=current)    
     
 def categories():
