@@ -145,8 +145,20 @@
   
     
 <script>
-var vendors_select = jQuery('.chzn-select'),
+var vendors_select = jQuery('#vendors_select'),
     id = 0;
+
+////// get active vendors //////
+jQuery.ajax({
+    url: "{{=URL(c='vendors_ajax', f='get_vendors')}}",
+    type: "POST",
+    success:function(data){
+      vendors_select
+        .append('<option value="">Selecccionar</option>')
+        .append(data)
+        .trigger("liszt:updated");
+    }
+});  
 
 function ajaxFilter(who) {
     //console.log(which);
@@ -154,7 +166,8 @@ function ajaxFilter(who) {
 
     jQuery.ajax({ 
         url: "{{=URL(c='vendors_ajax', f='get_vendors')}}",
-        type: 'POST',         
+        type: 'POST',
+        data: { query: who },          
         success: function (data) {
           jQuery('#vendors_select')
             .html('')

@@ -128,7 +128,7 @@ jQuery.ajax({
 
 vendors.change( function() {
     id = jQuery(this).find(':selected').val();
-
+    console.log(id);
     var ibank = jQuery('#bank'),
         ibranch = jQuery('#branch'),
         iaccount = jQuery('#acountnumber'),
@@ -154,6 +154,7 @@ vendors.change( function() {
             ibank
                 .find("option[value="+data['bank_id']+"]")
                 .attr('selected',true)
+                .change()
                 .trigger("liszt:updated");
         }
     });
@@ -216,7 +217,7 @@ vendors.change( function() {
                   if(data){
                         jQuery('.msgsuccess').fadeIn(1600);
                         deleteFields();
-                        id = 0;
+                        id = id;
                     }
                     else{
                         jQuery('.msgerror').fadeIn(1600);
