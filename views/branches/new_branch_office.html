@@ -36,7 +36,7 @@
                         <p>Se han guardado los datos del formulario.</p>
                     </div>		
             						
-                    <form id="form_trademark" class="stdform stdform2" method="post" action="">
+                    <form id="form_branch_office" class="stdform stdform2" method="post" action="">
                     	
 	                    <p>
 	                       	<label>Nombre</label>
@@ -114,6 +114,173 @@
 	</div><!-- centercontent -->   
     
 </div><!--bodywrapper-->
+
+<script type="text/javascript">
+    //Ajax for selects
+    var states = jQuery('#states'),
+        municipality = jQuery('#municipality'),
+        locality = jQuery('#locality');
+
+        jQuery.ajax({
+            type: "POST",
+            url: "{{=URL(c='common', f='get_states')}}",
+            success: function(results) {
+                states
+                    .html(results)
+                    .prepend('<option value="">Selecccionar</option>')
+                    .trigger("liszt:updated");
+                }
+        });
+
+    states.change( function() {
+        var id = jQuery(this).find(':selected').val();
+        if(id != '') {
+            jQuery.ajax({
+                type: "POST",
+                url: "{{=URL(c='common', f='get_municipalities')}}",
+                data: {id: id},
+                success: function(results) {
+                    municipality
+                            .html(results)
+                            .prepend('<option value="">Selecccionar</option>')
+                            .trigger("liszt:updated");
+                }
+            });
+        }
+        else {
+            municipality
+                    .html('')
+                    .prepend('<option value="">Selecccionar</option>')
+                    .trigger("liszt:updated");
+            locality
+                    .html('')
+                    .prepend('<option value="">Selecccionar</option>')
+                    .trigger("liszt:updated");
+        }
+    });
+
+    municipality.change( function() {
+        var id = jQuery(this).find(':selected').val();
+        if(id != '') {
+            jQuery.ajax({
+                type: "POST",
+                data: {municipality_id: id},
+                url: "{{=URL(c='common', f='get_localities')}}",
+                success: function(results) {
+                    locality
+                            .html(results)
+                            .prepend('<option value="">Selecccionar</option>')
+                            .trigger("liszt:updated");
+                }
+            });
+        }
+        else {
+            locality
+                    .html('')
+                    .prepend('<option value="">Selecccionar</option>')
+                    .trigger("liszt:updated");
+        }
+    });
+
+    //send form
+    jQuery('#submit').live('click', function(e) {
+        e.preventDefault();
+        
+        jQuery("#form_branch_office").validate({
+            rules: {
+                name: "required",
+                address : "required",
+                colony : "required",
+                states : "required",
+                municipality : "required",
+                locality : "required",
+                zip_code: {
+                    required: false,
+                    digits: true,
+                    minlength: 5
+                },
+                rfc: {
+                    minlength: 10,
+                    maxlength:13,
+                    required: false
+                }
+            },
+            messages: {
+                name: "Ingrese el nombre de la surcursal",
+                address: "Ingrese la dirección de la surcursal",
+                colony: "Ingrese la colonia de la surcursal",
+                states: "Ingrese el estado de la surcursal",
+                municipality: "Ingrese el municipio de la surcursal",
+                locality: "Ingrese la ciudad de la surcursal",
+                zip_code: "Este campo debe tener 5 números.",
+                rfc: "R.F.C. inválido."
+            }
+        });
+        
+
+        if(jQuery("#form_branch_office").valid()) {
+            jQuery('.msgerror').hide();
+            jQuery('.msgsuccess').hide();
+
+             jQuery.ajax({
+                url: "{{=URL(c='branches_ajax', f='create_branch')}}",
+                data: { 
+                    name:jQuery('#name').val(),
+                    address:jQuery('#address').val(),
+                    colony:jQuery('#colony').val(),
+                    states:jQuery('#states').val(),
+                    municipality:jQuery('#municipality').val(),
+                    locality:jQuery('#locality').val(),
+                    zip_code:jQuery('#zip_code').val(),
+                    corporate:jQuery('#corporate').val(),
+                    rfc:jQuery('#rfc').val(),
+                    tax_regime:jQuery('#tax_regime').val()
+                },
+                type: 'POST',
+                success:function(data){
+                    if(data){
+                        jQuery('.msgsuccess').fadeIn(1600);
+                        deleteFields();
+                    }
+                    else{
+                        jQuery('.msgerror').fadeIn(1600);
+                        //jQuery('html').scrollTop();
+                        //jQuery(window).scrollTop(0);
+                    }
+                    jQuery('body','html',window).animate(
+                                                        {scrollTop:0}, 
+                                                        1000);
+                }
+            }); 
+        }
+    });
+
+    function deleteFields() {
+        jQuery('#name').val('');
+        jQuery('#address').val('');
+        jQuery('#colony').val('');
+        jQuery('#states')
+            .find('option')
+            .first()
+            .attr('selected',true)
+            .trigger("liszt:updated");
+        jQuery('#municipality')
+            .html('')
+            .prepend('<option value="">Selecccionar</option>')
+            .trigger("liszt:updated");
+        jQuery('#locality')
+            .html('')
+            .prepend('<option value="">Selecccionar</option>')
+            .trigger("liszt:updated");
+        jQuery('#zip_code').val('');
+        jQuery('#corporate').val('');
+        jQuery('#rfc').val('');
+        jQuery('#tax_regime').val('');
+    }
+
+    
+</script>
+
 
 </body>
 </html>
