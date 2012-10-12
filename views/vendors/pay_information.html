@@ -3,6 +3,11 @@
 {{block scripts_extra}}	
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.validate.min.js')}}"></script>
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/chosen.jquery.min.js')}}"></script>
+<style type="text/css">
+    .ellol {
+        border: 1px solid red;
+    }    
+</style>
 {{end}}
 
 {{block sidebar_menu}}
@@ -60,7 +65,7 @@
                         
                         <p style="margin-top: 1px;">
                         	<label>Número de Sucursal</label>
-                            <span class="field"><input type="text" name="branch" id="branch" class="smallinput" tabindex="3"/></span>
+                            <span class="field"><input type="text" name="branch" id="branch" class="smallinput" tabindex="3" maxlength="4"/></span>
                         </p>
                         
                         <p>
@@ -123,6 +128,36 @@ jQuery.ajax({
 
 vendors.change( function() {
     id = jQuery(this).find(':selected').val();
+
+    var ibank = jQuery('#bank'),
+        ibranch = jQuery('#branch'),
+        iaccount = jQuery('#acountnumber'),
+        iclabe = jQuery('#clabe');
+
+    ibranch.empty();
+    iaccount.empty();
+    iclabe.empty();
+    ibank
+        .find('option[value=""]')
+        .attr('selected',true)
+        .trigger("liszt:updated");
+
+    jQuery.ajax({
+        url: "{{=URL(c='vendors_ajax', f='get_vendor_information')}}",
+        data: { id:id },
+        type: "POST",
+        dataType:"json",
+        success:function(data){
+            ibranch.val(data['branch']);
+            iaccount.val(data['bank_account_number']);
+            iclabe.val(data['clabe']);
+            ibank
+                .find("option[value="+data['bank_id']+"]")
+                .attr('selected',true)
+                .trigger("liszt:updated");
+        }
+    });
+
 });
 
 
@@ -132,7 +167,7 @@ vendors.change( function() {
         jQuery('.msgsuccess').hide();
 
         var form = jQuery("#form1"),
-            bank = jQuery('#bank').val(),
+            bank_id = jQuery('#bank').val(),
             branch = jQuery('#branch').val(),
             acountnumber = jQuery('#acountnumber').val(),
             clabe = jQuery('#clabe').val();
@@ -141,22 +176,38 @@ vendors.change( function() {
             rules: {
                 clabe: {
                     required: false,
-                    digits: true
+                    digits: true,
+                    maxlength: 18,
+                    minlength: 18
                 },
+                acountnumber: {
+                    required: false,
+                    digits: true,
+                    maxlength: 11,
+                    minlength: 11
+                },
+                branch: {
+                    required: false,
+                    digits: true,
+                    maxlength: 4
+                }
             },
             messages: {
-                clabe: "Este campo debe tener sólo números."
+                clabe: "Se requiere 18 digitos.",
+                acountnumber: "Se requiere 11 digitos",
+                branch: "Se requiere maximo 4 digitos."
+
             }
         });
 
 
-        if(form.valid() && id != 0) {
+        if(form.valid() && valSelec(id)) {
             jQuery.ajax({
                 url: "{{=URL(c='vendors_ajax', f='update_pay_information')}}",
                 data: {
                     bank_id:bank_id,
                     branch:branch,
-                    account_number:account_number,
+                    account_number:acountnumber,
                     clabe:clabe,
                     id:id,
                 },
@@ -165,6 +216,7 @@ vendors.change( function() {
                   if(data){
                         jQuery('.msgsuccess').fadeIn(1600);
                         deleteFields();
+                        id = 0;
                     }
                     else{
                         jQuery('.msgerror').fadeIn(1600);
@@ -187,7 +239,26 @@ function deleteFields() {
         jQuery('#acountnumber').val('');
         jQuery('#branch').val('');
         jQuery('#clabe').val('');
+        jQuery('#selection')
+            .find('option[value=""]')
+            .attr('selected',true)
+            .trigger("liszt:updated");
+        jQuery('#bank')
+            .find('option[value=""]')
+            .attr('selected',true)
+            .trigger("liszt:updated");
     }
+function valSelec(s) {
+    var bol;
+    if (s != 0) {
+        bol = true;
+        jQuery('#selection').siblings('div').removeClass('ellol');
+    } else{
+        bol = false;
+        jQuery('#selection').siblings('div').addClass('ellol');
+    };
+    return bol
+}
             
             
 </script>
