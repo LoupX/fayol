@@ -210,13 +210,13 @@ vendors_select.change( function() {
         //receive something like data = {"name":"name","state":"state"}
         name.html(data.vendors['name']);
         address.html(data.vendors['address']);
-        state.html(data.vendors['state_id']);
-        municipality.html(data.vendors['municipality_id']);
-        locality.html(data.vendors['locality_id']);
+        state.html(data.states['name']);
+        municipality.html(data.municipalities['name']);
+        locality.html(data.localities['name']);
         zip_code.html(data.vendors['zip_code']);
         rfc.html(data.vendors['rfc']);
         website.html(data.vendors['website']);
-        bank.html(data.vendors['bank_id']);
+        bank.html(data.banks['name']);
         branch_number.html(data.vendors['branch']);
         account_number.html(data.vendors['bank_account_number']);
         clabe.html(data.vendors['clabe']);
@@ -228,7 +228,7 @@ vendors_select.change( function() {
         status.val(id).removeAttr('disabled');
         status.parent().parent().removeClass('disabled'); 
 
-        if (data['status'] == true) {
+        if (data.vendors['status'] == true) {
           status.parent().addClass('checked');
           resp.html('Activado.');
         } else{
