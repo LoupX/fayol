@@ -28,6 +28,7 @@ def get_vendor_information():
     query &= db.vendors.state_id==db.states.id
     query &= db.vendors.municipality_id==db.municipalities.id
     query &= db.vendors.locality_id==db.localities.id
+    query &= db.vendors.bank_id==db.banks.id
     row = db(query).select().as_list()
 
     if row:
