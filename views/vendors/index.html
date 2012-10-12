@@ -44,7 +44,7 @@
                         <p>
                         	
                             <span class="formwrapper" style="margin-left:0px;">
-                            	  <select id="vendors" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="2">
+                            	  <select id="vendors_select" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="2">
                                   <option value="">Seleccionar</option>
                                 </select>
                             </span>
@@ -145,7 +145,7 @@
   
     
 <script>
-var vendors = jQuery('.chzn-select'),
+var vendors_select = jQuery('.chzn-select'),
     id = 0;
 
 function ajaxFilter(who) {
@@ -157,7 +157,7 @@ function ajaxFilter(who) {
         type: 'POST',         
         data: { who: who }, 
         success: function (data) {
-          jQuery('#vendors')
+          jQuery('#vendors_select')
             .html('')
             .append(data)
             .prepend('<option value="lol">Seleccionar</option>');
@@ -166,7 +166,7 @@ function ajaxFilter(who) {
     });
   }
 
-vendors.change( function() {
+vendors_select.change( function() {
   ////clean fields
   cleanFields();
 
