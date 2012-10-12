@@ -132,7 +132,7 @@ def create_pay_information():
         db(query).update(**data)
     except Exception as e:
         db.rollback()
-        return ''
+        return e
     else:
         db.commit()
         return True

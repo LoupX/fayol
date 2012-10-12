@@ -132,6 +132,7 @@ vendors.change( function() {
         jQuery('.msgsuccess').hide();
 
         var form = jQuery("#form1"),
+            id = jQuery("#selection").val(),
             bank_id = jQuery('#bank_id').val(),
             branch = jQuery('#branch').val(),
             account_number = jQuery('#account_number').val(),
@@ -153,12 +154,12 @@ vendors.change( function() {
         if(form.valid() && id != 0) {
             jQuery.ajax({
                 url: "{{=URL(c='vendors_ajax', f='create_pay_information')}}",
-                data: { 
-                    
+                data: {
                     bank_id:bank_id,
                     branch:branch,
                     account_number:account_number,
                     clabe:clabe,
+                    id:id,
                 },
                 type: "POST",
                 success:function(data){
