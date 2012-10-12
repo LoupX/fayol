@@ -30,5 +30,17 @@ def create_unit():
         return str(id)
 
 def create_brand():
-    pass
+    data = dict()
+    if request.vars.name:
+        data['name'] = request.vars.name
+    data['description'] = request.vars.description
+    try:
+        b_id = db.brands.insert()
+        bd_id = db.brand_descriptions.insert(**data)
+    except Exception as e:
+        db.rollback()
+        return ''
+    else:
+        db.commit()
+        return str(dict(brand_id=b_id, brand_description_id=bd_id))
 
