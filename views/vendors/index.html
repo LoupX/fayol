@@ -45,14 +45,13 @@
                         	
                             <span class="formwrapper" style="margin-left:0px;">
                             	  <select id="vendors_select" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="2">
-                                  <option value="">Seleccionar</option>
                                 </select>
                             </span>
                         </p>
                          <p>
                         	
                             <span class="formwrapper" style="margin-left:0px; margin-top:-20px;">
-                            	<input type="radio" name="filtervendors" value="TRUE" onclick="ajaxFilter(this.value)" /> Habilitados &nbsp; &nbsp;
+                            	<input type="radio" name="filtervendors" value="TRUE" onclick="ajaxFilter(this.value)" checked="checked"/> Habilitados &nbsp; &nbsp;
                             	<input type="radio" name="filtervendors"  value="FALSE" onclick="ajaxFilter(this.value)"/> Deshabilitados &nbsp; &nbsp;
                                 <input type="radio" name="filtervendors" value="ANY" onclick="ajaxFilter(this.value)"/> Todos &nbsp; &nbsp;
                             </span>
@@ -64,7 +63,7 @@
             
             <div class="one_half" style="margin-bottom:40px;">
               
-              <table cellpadding="0" cellspacing="0" class="table invoice">
+              <table cellpadding="0" cellspacing="0" class="table invoice" style="margin-bottom:4px;">
                	  <tr>
                    	  <td width="30%">Nombre:</td>
                       <td width="70%"><strong id="name"></strong></td>
@@ -98,11 +97,15 @@
                       <td><strong id="website"></strong></td>
                   </tr>
               </table>
+              <a href="">
+                <span id="ev" style="" class="stdbtn">Editar</span>
+              </a>
             </div><!--one_half-->
+
             
 			<div class="one_half last" style="margin-bottom:40px;">
            
-              <table cellpadding="0" cellspacing="0" class="table invoice">
+              <table cellpadding="0" cellspacing="0" class="table invoice" style="margin-bottom:4px;">
               	  <tr>
                 	  <td width="30%">Banco:</td>
                 	  <td width="70%"><strong id="bank"></strong></td>
@@ -120,6 +123,9 @@
                 	  <td><strong id="clabe"></strong></td>
               	  </tr>
               </table>
+              <a href="{{=URL(c='vendors', f='pay_information')}}" data-id="">
+                <span id="ep" style="" class="stdbtn">Editar</span>
+              </a>
             </div><!--one_half-->
             
             			<div class="one_half last" style="margin-bottom:40px;">
@@ -149,16 +155,7 @@ var vendors_select = jQuery('#vendors_select'),
     id = 0;
 
 ////// get active vendors //////
-jQuery.ajax({
-    url: "{{=URL(c='vendors_ajax', f='get_vendors')}}",
-    type: "POST",
-    success:function(data){
-      vendors_select
-        .append('<option value="">Selecccionar</option>')
-        .append(data)
-        .trigger("liszt:updated");
-    }
-});  
+ajaxFilter('TRUE'); 
 
 function ajaxFilter(who) {
     //console.log(which);
@@ -172,8 +169,8 @@ function ajaxFilter(who) {
           jQuery('#vendors_select')
             .html('')
             .append(data)
-            .prepend('<option value="lol">Seleccionar</option>');
-            vendors.trigger("liszt:updated");
+            .prepend('<option value="lol">Seleccionar</option>')
+            .trigger("liszt:updated");
           }
     });
   }
@@ -204,29 +201,34 @@ vendors_select.change( function() {
     //console.log(id);
     //insert here an ajax function and shit
     jQuery.ajax({ 
-      url: "{{=URL(c='vendors', f='testing')}}",
+      url: "{{=URL(c='vendors_ajax', f='get_vendor_information')}}",
       type: "POST",
       data: { id: id }, 
       dataType:"json",
       success: function (data) {
+        //console.log(data.status);
         //receive something like data = {"name":"name","state":"state"}
         name.html(data['name']);
         address.html(data['address']);
-        state.html(data['state']);
-        municipality.html(data['municipality']);
-        locality.html(data['locality']);
+        state.html(data['state_id']);
+        municipality.html(data['municipality_id']);
+        locality.html(data['locality_id']);
         zip_code.html(data['zip_code']);
         rfc.html(data['rfc']);
         website.html(data['website']);
-        bank.html(data['bank']);
-        branch_number.html(data['branch_number']);
-        account_number.html(data['account_number']);
+        bank.html(data['bank_id']);
+        branch_number.html(data['branch']);
+        account_number.html(data['bank_account_number']);
         clabe.html(data['clabe']);
+
+        jQuery('#ev')
+        .attr('href',"{{=URL(c='vendors', f='update', vars=dict(id='2'))}}");
+        
 
         status.val(id).removeAttr('disabled');
         status.parent().parent().removeClass('disabled'); 
 
-        if (data['status'] == 'True') {
+        if (data['status'] == true) {
           status.parent().addClass('checked');
           resp.html('Activado.');
         } else{
@@ -288,6 +290,11 @@ function cleanFields() {
     elements[e].html('');
   }
 }
+
+////// edit buttons //////
+jQuery('#ev').live('click', function() {
+  jQuery(),
+});
 
 
 </script>
