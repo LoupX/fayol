@@ -206,7 +206,7 @@ vendors_select.change( function() {
       data: { id: id }, 
       dataType:"json",
       success: function (data) {
-        //console.log(data.status);
+        console.log(data);
         //receive something like data = {"name":"name","state":"state"}
         name.html(data['name']);
         address.html(data['address']);
@@ -292,9 +292,7 @@ function cleanFields() {
 }
 
 ////// edit buttons //////
-jQuery('#ev').live('click', function() {
-  jQuery(),
-});
+
 
 
 </script>
