@@ -84,7 +84,7 @@
             jQuery('.msgsuccess').hide();
 
              jQuery.ajax({
-                url: '{{=URL('products', 'create_trademark')}}',
+                url: "{{=URL('products', 'create_trademark')}}",
                 data: { 
                     trademark_name:jQuery('#trademark_name').val(),
                     trademark_description:jQuery('#trademark_description').val(),

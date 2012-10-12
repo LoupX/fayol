@@ -84,7 +84,7 @@
             jQuery('.msgsuccess').hide();
 
              jQuery.ajax({
-                url: '{{=URL('products', 'create_category')}}',
+                url: "{{=URL('products', 'create_category')}}",
                 data: { 
                     category_name:jQuery('#category_name').val(),
                     category_description:jQuery('#category_description').val(),
