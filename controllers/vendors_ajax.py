@@ -40,7 +40,7 @@ def get_vendor_information():
 
     from gluon.contrib import simplejson
     data = simplejson.dumps(data)
-    return data
+    return str(data)
 
 def create_vendor():
     data = dict()
