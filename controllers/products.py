@@ -10,6 +10,11 @@ def new_product():
 	title = 'Productos'
 	current = ['menu_catalogs', 'sidebar_products', 'sub_products_new']
 	return dict(title=title, current=current)
+
+def view_product():
+	title = 'Productos'
+	current = ['menu_catalogs', 'sidebar_products', 'sub_products_read']
+	return dict(title=title, current=current)
 	
 def prices_list():
 	title = 'Productos'
