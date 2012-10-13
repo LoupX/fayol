@@ -148,11 +148,11 @@ vendors.change( function() {
         type: "POST",
         dataType:"json",
         success:function(data){
-            ibranch.val(data['branch']);
-            iaccount.val(data['bank_account_number']);
-            iclabe.val(data['clabe']);
+            ibranch.val(data.vendors['branch']);
+            iaccount.val(data.vendors['bank_account_number']);
+            iclabe.val(data.vendors['clabe']);
             ibank
-                .find("option[value="+data['bank_id']+"]")
+                .find("option[value="+data.vendors['id']+"]")
                 .attr('selected',true)
                 .change()
                 .trigger("liszt:updated");

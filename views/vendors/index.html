@@ -97,8 +97,8 @@
                       <td><strong id="website"></strong></td>
                   </tr>
               </table>
-              <a href="">
-                <span id="ev" style="" class="stdbtn">Editar</span>
+              <a href="#" id="ev" data-id="">
+                <span class="stdbtn">Editar</span>
               </a>
             </div><!--one_half-->
 
@@ -206,7 +206,7 @@ vendors_select.change( function() {
       data: { id: id }, 
       dataType:"json",
       success: function (data) {
-        console.log(data);
+        //console.log(data);
         //receive something like data = {"name":"name","state":"state"}
         name.html(data.vendors['name']);
         address.html(data.vendors['address']);
@@ -216,13 +216,14 @@ vendors_select.change( function() {
         zip_code.html(data.vendors['zip_code']);
         rfc.html(data.vendors['rfc']);
         website.html(data.vendors['website']);
-        bank.html(data.banks['name']);
+        bank.html(data.banks['short_name']);
         branch_number.html(data.vendors['branch']);
         account_number.html(data.vendors['bank_account_number']);
         clabe.html(data.vendors['clabe']);
 
+        //{{=URL(c='vendors', f='update', vars=dict(id='"+data.vendors.id+"'))}}
         jQuery('#ev')
-          .attr('href',"{{=URL(c='vendors', f='update', vars=dict(id='"+id+"'))}}");
+    .attr('href', "/vendors/update?id="+data.vendors.id+"&s="+data.states['id']+"&m="+data.municipalities['id']+"&l="+data.localities['id']);
         
 
         status.val(id).removeAttr('disabled');
