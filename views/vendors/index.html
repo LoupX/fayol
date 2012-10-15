@@ -123,8 +123,8 @@
                 	  <td><strong id="clabe"></strong></td>
               	  </tr>
               </table>
-              <a href="{{=URL(c='vendors', f='pay_information')}}" data-id="">
-                <span id="ep" style="" class="stdbtn">Editar</span>
+              <a href="" id="ep">
+                <span  style="" class="stdbtn">Editar</span>
               </a>
             </div><!--one_half-->
             
@@ -224,6 +224,8 @@ vendors_select.change( function() {
         //{{=URL(c='vendors', f='update', vars=dict(id='"+data.vendors.id+"'))}}
         jQuery('#ev')
     .attr('href', "/vendors/update?id="+data.vendors.id+"&s="+data.vendors['state_id']+"&m="+data.vendors['municipality_id']+"&l="+data.vendors['locality_id']);
+    jQuery('#ep')
+    .attr('href', "/vendors/updatep?id="+data.vendors.id);
         
 
         status.val(id).removeAttr('disabled');
@@ -231,33 +233,18 @@ vendors_select.change( function() {
 
         if (data.vendors['status'] == true) {
           status.parent().addClass('checked');
-          resp.html('Activado.');
+          status.attr('onclick','chk('+id+',"True")');
+          resp.html('Activado.');
         } else{
           status.parent().removeClass('checked');
-          resp.html('Desactivado.');
+          status.attr('onclick','chk('+id+',"False")');
+          resp.html('Desactivado.');
         };
         
       }
     });     
   }
 
-});
-
-jQuery('input[name=status]').live('click', function() {
-  var i = jQuery(this).val(),
-      resp = jQuery('span#resp');
-  //ajax
-  if (i != 0) {
-    jQuery.ajax({ 
-      url: '', 
-      type: 'POST',         
-      data: { i: i }, 
-      success: function (data) {
-        //data = Activado o Desactivado
-        resp.html('algo');
-      }
-    }); 
-  }
 });
 
 function cleanFields() {
@@ -293,6 +280,38 @@ function cleanFields() {
 }
 
 ////// edit buttons //////
+function chk(id, s) {
+    var status = jQuery('input[name=status]'),
+        resp = jQuery('span#resp');
+
+    if(s == 'True') {
+      var ans = confirm('¿Está seguro?.');
+
+      if(ans) {
+        jQuery.ajax({
+          url: "{{=URL(c='vendors_ajax', f='toggle_vendor_status')}}",
+          type: 'POST',
+          data: { id: id, status: s }
+        });
+        status.parent().removeClass('checked');
+        status.attr('onclick','chk('+id+',"False")');
+        resp.html('Desactivado.');
+      } else {
+        resp.html('Activado.');
+        status.parent().addClass('checked');
+      }        
+    }
+    else {
+        jQuery.ajax({
+          url: "{{=URL(c='vendors_ajax', f='toggle_vendor_status')}}",
+          type: 'POST',
+          data: { id: id, status: s }
+        });
+        status.parent().addClass('checked');
+        status.attr('onclick','chk('+id+',"True")');
+        resp.html('Activado.');
+    }
+}
 
 
 
