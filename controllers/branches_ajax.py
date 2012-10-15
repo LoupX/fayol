@@ -43,10 +43,11 @@ def get_branch_information():
 
     try:
         query = db.branches.id==id
-        query &= db.branches.company_address_id==db.company_addresses.id
         left = []
+        left.append(db.company_addresses.on(
+            db.branches.company_address_id==db.company_addresses.id))
         left.append(db.company_tax_info.on(
-            db.branches.company_tax_info_id == db.company_tax_info.id))
+            db.branches.company_tax_info_id==db.company_tax_info.id))
         left.append(db.states.on(db.company_addresses.state_id==db.states.id))
         left.append(db.municipalities.on(
             db.company_addresses.municipality_id==db.municipalities.id))
@@ -80,8 +81,9 @@ def get_warehouse_information():
 
     try:
         query = db.warehouses.id==id
-        query &= db.warehouses.company_address_id==db.company_addresses.id
         left = []
+        left.append(db.company_addresses.on(
+            db.warehouses.company_address_id==db.company_addresses.id))
         left.append(db.states.on(db.company_addresses.state_id==db.states.id))
         left.append(db.municipalities.on(
             db.company_addresses.municipality_id==db.municipalities.id))
@@ -89,8 +91,8 @@ def get_warehouse_information():
             db.localities.on(
                 db.company_addresses.locality_id==db.localities.id))
         row = db(query).select(
-            db.warehouses.ALL, db.states.name, db.municipalities.name,
-            db.localities.name, db.banks.short_name,
+            db.warehouses.ALL, db.states.name,
+            db.municipalities.name, db.localities.name,
             db.company_addresses.ALL, left=left).as_list()
     except:
         db.rollback()

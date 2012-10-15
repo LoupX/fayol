@@ -114,7 +114,7 @@ def _update_vendor(id, data):
         result = db(query).update(**data)
     except Exception as e:
         db.rollback()
-        return str(e)
+        return ''
     else:
         db.commit()
         if result == 1:
