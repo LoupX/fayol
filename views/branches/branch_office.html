@@ -44,10 +44,10 @@
                         <p>	
                             <span class="formwrapper" style="margin-left:0px;">
                             	  <select id="branches_select" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="2">
-                                  <option value="">Seleccionar</option>
                                 </select>
                             </span>
                         </p>
+                        
                          <p>
                             <span class="formwrapper" style="margin-left:0px; margin-top:-20px;">
                             	<input type="radio" name="filtervendors" value="TRUE" onclick="ajaxFilter(this.value)" /> Habilitadas &nbsp; &nbsp;
@@ -69,7 +69,7 @@
                   </tr>
                   <tr>
                    	  <td>Colonia:</td>
-                      <td><strong id="colony"></strong></td>
+                      <td><strong id="suburb"></strong></td>
                   </tr>
                	  <tr>
                	    <td>Dirección:</td>
@@ -135,8 +135,11 @@
 </div><!--bodywrapper-->  
     
 <script>
-var branches_select = jQuery('.chzn-select'),
+var branches_select = jQuery('#branches_select'),
     id = 0;
+
+////// get active vendors //////
+ajaxFilter('TRUE'); 
 
 function ajaxFilter(who) {
     //console.log(which);
@@ -144,13 +147,14 @@ function ajaxFilter(who) {
 
     jQuery.ajax({ 
         url: "{{=URL(c='branches_ajax', f='get_branches')}}",
-        type: 'POST',         
+        type: 'POST',
+        data: { query: who },          
         success: function (data) {
           jQuery('#branches_select')
             .html('')
             .append(data)
-            .prepend('<option value="lol">Seleccionar</option>');
-            vendors.trigger("liszt:updated");
+            .prepend('<option value="lol">Seleccionar</option>')
+            .trigger("liszt:updated");
           }
     });
   }
@@ -163,15 +167,17 @@ branches_select.change( function() {
 
   if(id != '') {
     var name = jQuery('#name'),
+    	suburb = jQuery('#suburb'),
         address = jQuery('#address'),
-        colony = jQuery('#colony'),
         state = jQuery('#state'),
         municipality = jQuery('#municipality'),
         locality = jQuery('#locality'),
         zip_code = jQuery('#zip_code'),
+        
         corporate = jQuery('#corporate'),
         rfc = jQuery('#rfc'),
         tax_regime = jQuery('#tax_regime'),
+        
         status = jQuery('input[name=status]'),
         resp = jQuery('span#resp');
         resp.html('');
@@ -179,27 +185,36 @@ branches_select.change( function() {
     //console.log(id);
     //insert here an ajax function and shit
     jQuery.ajax({ 
-      url: "{{=URL(c='branches', f='testing')}}",
+      url: "{{=URL(c='branches_ajax', f='get_branch_information')}}",
       type: "POST",
       data: { id: id }, 
       dataType:"json",
       success: function (data) {
+        //console.log(data);
         //receive something like data = {"name":"name","state":"state"}
-        name.html(data['name']);
-        address.html(data['address']);
-        colony.html(data['colony']);
-        state.html(data['state']);
-        municipality.html(data['municipality']);
-        locality.html(data['locality']);
-        zip_code.html(data['zip_code']);
-        corporate.html(data['corporate']);
-        rfc.html(data['rfc']);
-        tax_regime.html(data['tax_regime']);
+        name.html(data.vendors['name']);
+        suburb.html(data.branches['suburb'])
+        address.html(data.vendors['address']);
+        state.html(data.states['name']);
+        municipality.html(data.municipalities['name']);
+        locality.html(data.localities['na	me']);
+        zip_code.html(data.vendors['zip_code']);
+        rfc.html(data.vendors['rfc']);
+        website.html(data.vendors['website']);
+        bank.html(data.banks['short_name']);
+        branch_number.html(data.vendors['branch']);
+        account_number.html(data.vendors['bank_account_number']);
+        clabe.html(data.vendors['clabe']);
+
+        //{{=URL(c='vendors', f='update', vars=dict(id='"+data.vendors.id+"'))}}
+        jQuery('#ev')
+    .attr('href', "/vendors/update?id="+data.vendors.id+"&s="+data.vendors['state_id']+"&m="+data.vendors['municipality_id']+"&l="+data.vendors['locality_id']);
         
+
         status.val(id).removeAttr('disabled');
         status.parent().parent().removeClass('disabled'); 
 
-        if (data['status'] == 'True') {
+        if (data.vendors['status'] == true) {
           status.parent().addClass('checked');
           resp.html('Activado.');
         } else{
@@ -233,11 +248,12 @@ jQuery('input[name=status]').live('click', function() {
 function cleanFields() {
   var name = jQuery('#name'),
       address = jQuery('#address'),
-      colony = jQuery('#colony'),
+      suburb = jQuery('suburb'),
       state = jQuery('#state'),
       municipality = jQuery('#municipality'),
       locality = jQuery('#locality'),
       zip_code = jQuery('#zip_code'),
+      
       corporate = jQuery('#corporate'),
       rfc = jQuery('#rfc'),
       tax_regime = jQuery('#tax_regime'),
@@ -253,13 +269,16 @@ function cleanFields() {
             .addClass('disabled');
       resp.html('');
 
-  var elements = [name, address, colony, state, municipality, locality, zip_code, 
-                  corporate, rfc, tax_regime];
+  var elements = [name, address, suburb, state, municipality, locality, zip_code, 
+                  corporate ,rfc, tax_regime];
 
   for(var e in elements) {
     elements[e].html('');
   }
 }
+
+////// edit buttons //////
+
 
 
 </script>
