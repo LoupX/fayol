@@ -61,14 +61,13 @@ def get_branch_information():
     except:
         db.rollback()
 
+    import datetime
     if row:
         data = row[0]
-        if 'date_added' in data['branches']:
-            data['branches']['date_added'] = str(
-                data['branches']['date_added'])
-        if 'date_modified' in data['branches']:
-            data['branches']['date_modified'] = str(
-                data['branches']['date_modified'])
+        for r in data:
+            for k in data[r]:
+                if type(data[r][k]) is datetime.datetime:
+                    data[r][k] = str(data[r][k])
 
     from gluon.contrib import simplejson
     data = simplejson.dumps(data)
@@ -97,14 +96,13 @@ def get_warehouse_information():
     except:
         db.rollback()
 
+    import datetime
     if row:
         data = row[0]
-        if 'date_added' in data['branches']:
-            data['warehouses']['date_added'] = str(
-                data['warehouses']['date_added'])
-        if 'date_modified' in data['branches']:
-            data['warehouses']['date_modified'] = str(
-                data['warehouses']['date_modified'])
+        for r in data:
+            for k in data[r]:
+                if type(data[r][k]) is datetime.datetime:
+                    data[r][k] = str(data[r][k])
 
     from gluon.contrib import simplejson
     data = simplejson.dumps(data)
