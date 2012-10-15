@@ -126,6 +126,10 @@
               </table>
             </div><!--one_half-->
             
+            <a href="#" id="ev" data-id="" style="float:right;">
+                <span class="stdbtn">Editar</span>
+              </a>
+            
             <br clear="all"/> 
         </div><!--contentwrapper-->
         
@@ -192,19 +196,17 @@ branches_select.change( function() {
       success: function (data) {
         //console.log(data);
         //receive something like data = {"name":"name","state":"state"}
-        name.html(data.vendors['name']);
+        name.html(data.branches['name']);
         suburb.html(data.branches['suburb'])
-        address.html(data.vendors['address']);
+        address.html(data.branches['address']);
         state.html(data.states['name']);
         municipality.html(data.municipalities['name']);
-        locality.html(data.localities['na	me']);
-        zip_code.html(data.vendors['zip_code']);
-        rfc.html(data.vendors['rfc']);
-        website.html(data.vendors['website']);
-        bank.html(data.banks['short_name']);
-        branch_number.html(data.vendors['branch']);
-        account_number.html(data.vendors['bank_account_number']);
-        clabe.html(data.vendors['clabe']);
+        locality.html(data.localities['name']);
+        zip_code.html(data.branches['zip_code']);
+        
+        corporate.html(data.branches['corporate']);
+        rfc.html(data.branches['rfc']);
+        tax_regime.html(data.branches['tax_regime']);
 
         //{{=URL(c='vendors', f='update', vars=dict(id='"+data.vendors.id+"'))}}
         jQuery('#ev')
