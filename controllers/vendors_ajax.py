@@ -68,7 +68,7 @@ def create_vendor():
         id = db.vendors.insert(**insert)
     except Exception as e:
         db.rollback()
-        return e
+        return ''
     else:
         db.commit()
         return str(id)
