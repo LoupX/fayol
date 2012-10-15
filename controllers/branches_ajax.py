@@ -39,23 +39,24 @@ def get_warehouses():
 def get_branch_information():
     id = request.vars.id
     data = dict()
+    row = None
+
     try:
         query = db.branches.id==id
         query &= db.branches.company_address_id==db.company_addresses.id
         left = []
-        left.append(db.states.on(db.branches.state_id == db.states.id))
-        left.append(db.municipalities.on(
-            db.branches.municipality_id == db.municipalities.id))
-        left.append(
-            db.localities.on(db.branches.locality_id == db.localities.id))
-        left.append(db.banks.on(db.branches.bank_id == db.banks.id))
         left.append(db.company_tax_info.on(
-            db.branches.company_tax_info_id==db.company_tax_info.id))
+            db.branches.company_tax_info_id == db.company_tax_info.id))
+        left.append(db.states.on(db.company_addresses.state_id==db.states.id))
+        left.append(db.municipalities.on(
+            db.company_addresses.municipality_id==db.municipalities.id))
+        left.append(
+            db.localities.on(
+                db.company_addresses.locality_id==db.localities.id))
         row = db(query).select(
             db.branches.ALL, db.states.name, db.municipalities.name,
-            db.localities.name, db.banks.short_name,
-            db.company_addresses.ALL, db.company_tax_info.ALL,
-            left=left).as_list()
+            db.localities.name, db.company_addresses.ALL,
+            db.company_tax_info.ALL, left=left).as_list()
     except:
         db.rollback()
 
@@ -75,18 +76,18 @@ def get_branch_information():
 def get_warehouse_information():
     id = request.vars.id
     data = dict()
+    row = None
+
     try:
         query = db.warehouses.id==id
         query &= db.warehouses.company_address_id==db.company_addresses.id
         left = []
-        left.append(db.states.on(db.warehouses.state_id == db.states.id))
+        left.append(db.states.on(db.company_addresses.state_id==db.states.id))
         left.append(db.municipalities.on(
-            db.warehouses.municipality_id == db.municipalities.id))
+            db.company_addresses.municipality_id==db.municipalities.id))
         left.append(
-            db.localities.on(db.warehouses.locality_id == db.localities.id))
-        left.append(db.banks.on(db.warehouses.bank_id == db.banks.id))
-        left.append(db.company_tax_info.on(
-            db.warehouses.company_tax_info_id==db.company_tax_info.id))
+            db.localities.on(
+                db.company_addresses.locality_id==db.localities.id))
         row = db(query).select(
             db.warehouses.ALL, db.states.name, db.municipalities.name,
             db.localities.name, db.banks.short_name,

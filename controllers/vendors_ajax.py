@@ -22,6 +22,7 @@ def get_vendors():
 def get_vendor_information():
     id = request.vars.id
     data = dict()
+    row = None
 
     try:
         query = db.vendors.id==id
