@@ -72,8 +72,8 @@
                       <td><strong id="suburb"></strong></td>
                   </tr>
                	  <tr>
-               	    <td>Dirección:</td>
-               	    <td><strong id="address"></strong></td>
+               	      <td>Dirección:</td>
+               	      <td><strong id="address"></strong></td>
            	      </tr>
                   <tr>
                 	  <td>Estado:</td>
@@ -124,6 +124,7 @@
                       </td>
                   </tr>
               </table>
+              
             </div><!--one_half-->
             
             <a href="#" id="ev" data-id="" style="float:right;">
@@ -170,18 +171,16 @@ branches_select.change( function() {
   id = jQuery(this).find(':selected').val();
 
   if(id != '') {
-    var name = jQuery('#name'),
+    var name = jQuery('#name'),	
     	suburb = jQuery('#suburb'),
         address = jQuery('#address'),
         state = jQuery('#state'),
         municipality = jQuery('#municipality'),
         locality = jQuery('#locality'),
-        zip_code = jQuery('#zip_code'),
-        
+        zip_code = jQuery('#zip_code'),       
         corporate = jQuery('#corporate'),
         rfc = jQuery('#rfc'),
-        tax_regime = jQuery('#tax_regime'),
-        
+        tax_regime = jQuery('#tax_regime'),       
         status = jQuery('input[name=status]'),
         resp = jQuery('span#resp');
         resp.html('');
@@ -196,34 +195,33 @@ branches_select.change( function() {
       success: function (data) {
         //console.log(data);
         //receive something like data = {"name":"name","state":"state"}
-        name.html(data.branches['name']);
-        suburb.html(data.branches['suburb'])
-        address.html(data.branches['address']);
+        name.html(data.branches['name']);       
+        suburb.html(data.company_addresses['suburb'])
+        address.html(data.company_addresses['address']);       
         state.html(data.states['name']);
         municipality.html(data.municipalities['name']);
         locality.html(data.localities['name']);
-        zip_code.html(data.branches['zip_code']);
-        
-        corporate.html(data.branches['corporate']);
-        rfc.html(data.branches['rfc']);
-        tax_regime.html(data.branches['tax_regime']);
+        zip_code.html(data.company_addresses['zip_code']); 
+        corporate.html(data.company_tax_info['business_name']);
+        rfc.html(data.company_tax_info['rfc']);
+        tax_regime.html(data.company_tax_info['tax']);
 
         //{{=URL(c='vendors', f='update', vars=dict(id='"+data.vendors.id+"'))}}
         jQuery('#ev')
-    .attr('href', "/vendors/update?id="+data.vendors.id+"&s="+data.vendors['state_id']+"&m="+data.vendors['municipality_id']+"&l="+data.vendors['locality_id']);
-        
+    .attr('href', "/vendors/update?id="+data.branches.id+"&s="+data.branches['state_id']+"&m="+data.branches['municipality_id']+"&l="+data.branches['locality_id']);
 
         status.val(id).removeAttr('disabled');
         status.parent().parent().removeClass('disabled'); 
 
-        if (data.vendors['status'] == true) {
+        if (data.branches['status'] == true) {
           status.parent().addClass('checked');
-          resp.html('Activado.');
+          status.attr('onclick','chk('+id+',"True")');
+          resp.html('Activado.');
         } else{
           status.parent().removeClass('checked');
-          resp.html('Desactivado.');
-        };
-        
+          status.attr('onclick','chk('+id+',"False")');
+          resp.html('Desactivado.');
+        };   
       }
     });     
   }
@@ -250,7 +248,7 @@ jQuery('input[name=status]').live('click', function() {
 function cleanFields() {
   var name = jQuery('#name'),
       address = jQuery('#address'),
-      suburb = jQuery('suburb'),
+      suburb = jQuery('#suburb'),
       state = jQuery('#state'),
       municipality = jQuery('#municipality'),
       locality = jQuery('#locality'),
@@ -280,8 +278,38 @@ function cleanFields() {
 }
 
 ////// edit buttons //////
+function chk(id, s) {
+    var status = jQuery('input[name=status]'),
+        resp = jQuery('span#resp');
 
+    if(s == 'True') {
+      var ans = confirm('¿Está seguro?.');
 
+      if(ans) {
+        jQuery.ajax({
+          url: "{{=URL(c='branches_ajax', f='toggle_branch_status')}}",
+          type: 'POST',
+          data: { id: id, status: s }
+        });
+        status.parent().removeClass('checked');
+        status.attr('onclick','chk('+id+',"False")');
+        resp.html('Desactivado.');
+      } else {
+        resp.html('Activado.');
+        status.parent().addClass('checked');
+      }        
+    }
+    else {
+        jQuery.ajax({
+          url: "{{=URL(c='branches_ajax', f='toggle_branch_status')}}",
+          type: 'POST',
+          data: { id: id, status: s }
+        });
+        status.parent().addClass('checked');
+        status.attr('onclick','chk('+id+',"True")');
+        resp.html('Activado.');
+    }
+}
 
 </script>
 
