@@ -27,4 +27,3 @@ MAIL_PASSWORD = 'qazWSX11'
 CAPTCHA_URL = 'http://www.google.com/recaptcha/api/verify'
 CAPTCHA_PUBLIC_KEY = '6LfgfNUSAAAAAInvYO8nTIAZgv9DvHZv-89QB-88'
 CAPTCHA_PRIVATE_KEY = '6LfgfNUSAAAAACpq8SmJPxN-T7_1Ggnr6Zufw_sN'
-
