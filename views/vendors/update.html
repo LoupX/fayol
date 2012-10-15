@@ -132,8 +132,8 @@ $(document).ready(function() {
 <script type="text/javascript">
     //Ajax for selects
     selectS();
-    //selectM({{=sid}});
-    //selectL({{=mid}});
+    selectM({{=sid}});
+    selectL({{=mid}});
 
     var state = jQuery('#states'),
         municipality = jQuery('#municipality'),
@@ -250,7 +250,8 @@ $(document).ready(function() {
                     locality: lid,
                     zip_code:jQuery('#zip_code').val(),
                     rfc:jQuery('#rfc').val(),
-                    website:jQuery('#website').val()
+                    website:jQuery('#website').val(),
+                    id: '{{=request.vars.id}}'
                 },
                 type: 'POST',
                 success:function(data){

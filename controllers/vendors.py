@@ -15,12 +15,11 @@ def new():
 def update():
     title = 'Proveedores'
     current = ['menu_catalogs', 'sidebar_vendors', 'sub_vendors_read']
-    #vendor_id = request.vars.id
-    #sid = request.vars.s
-    #mid = request.vars.m 
-    #lid = request.vars.l
-    #return dict(title=title, current=current, id=vendor_id, sid=sid, mid=mid, lid=lid)
-    return dict(title=title, current=current)
+    vendor_id = request.vars.id
+    sid = request.vars.s
+    mid = request.vars.m 
+    lid = request.vars.l
+    return dict(title=title, current=current, id=vendor_id, sid=sid, mid=mid, lid=lid)
 
 def updatep():
     title = 'Proveedores'
