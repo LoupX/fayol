@@ -25,11 +25,15 @@ def get_vendor_information():
         return ''
 
     query = db.vendors.id==id
-    query &= db.vendors.state_id==db.states.id
-    query &= db.vendors.municipality_id==db.municipalities.id
-    query &= db.vendors.locality_id==db.localities.id
-    query &= db.vendors.bank_id==db.banks.id
-    row = db(query).select().as_list()
+    left = []
+    left.append(db.states.on(db.vendors.state_id==db.states.id))
+    left.append(db.municipalities.on(
+        db.vendors.municipality_id==db.municipalities.id))
+    left.append(db.localities.on(db.vendors.locality_id==db.localities.id))
+    left.append(db.banks.on(db.vendors.bank_id==db.banks.id))
+    row = db(query).select(
+        db.vendors.ALL, db.states.name, db.municipalities.name,
+        db.localities.name, db.banks.short_name, left=left).as_list()
 
     if row:
         data = row[0]
