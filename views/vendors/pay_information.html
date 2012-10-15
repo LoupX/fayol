@@ -65,7 +65,7 @@
                         
                         <p style="margin-top: 1px;">
                         	<label>Número de Sucursal</label>
-                            <span class="field"><input type="text" name="branch" id="branch" class="smallinput" tabindex="3" maxlength="4"/></span>
+                            <span class="field"><input type="text" name="branch" id="branch" class="smallinput" tabindex="3" maxlength="3"/></span>
                         </p>
                         
                         <p>
@@ -128,7 +128,7 @@ jQuery.ajax({
 
 vendors.change( function() {
     id = jQuery(this).find(':selected').val();
-    console.log(id);
+    //console.log(id);
     var ibank = jQuery('#bank'),
         ibranch = jQuery('#branch'),
         iaccount = jQuery('#acountnumber'),
@@ -152,7 +152,7 @@ vendors.change( function() {
             iaccount.val(data.vendors['bank_account_number']);
             iclabe.val(data.vendors['clabe']);
             ibank
-                .find("option[value="+data.vendors['id']+"]")
+                .find("option[value="+data.vendors['bank_id']+"]")
                 .attr('selected',true)
                 .change()
                 .trigger("liszt:updated");
@@ -190,13 +190,13 @@ vendors.change( function() {
                 branch: {
                     required: false,
                     digits: true,
-                    maxlength: 4
+                    maxlength: 3
                 }
             },
             messages: {
                 clabe: "Se requiere 18 digitos.",
                 acountnumber: "Se requiere 11 digitos",
-                branch: "Se requiere maximo 4 digitos."
+                branch: "Se requiere maximo 3 digitos."
 
             }
         });
