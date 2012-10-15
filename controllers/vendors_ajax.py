@@ -8,7 +8,10 @@ def get_vendors():
         query = v
     elif q == 'FALSE':
         query = v.status==False
-    rows = db(query).select(v.name, v.id)
+    try:
+        rows = db(query).select(v.name, v.id)
+    except:
+        db.rollback()
     options = str()
     for row in rows:
         options += str(OPTION(row.name, _value=row.id))
@@ -19,21 +22,20 @@ def get_vendors():
 def get_vendor_information():
     id = request.vars.id
     data = dict()
-    try:
-        id = int(id)
-    except:
-        return ''
 
-    query = db.vendors.id==id
-    left = []
-    left.append(db.states.on(db.vendors.state_id==db.states.id))
-    left.append(db.municipalities.on(
-        db.vendors.municipality_id==db.municipalities.id))
-    left.append(db.localities.on(db.vendors.locality_id==db.localities.id))
-    left.append(db.banks.on(db.vendors.bank_id==db.banks.id))
-    row = db(query).select(
-        db.vendors.ALL, db.states.name, db.municipalities.name,
-        db.localities.name, db.banks.short_name, left=left).as_list()
+    try:
+        query = db.vendors.id==id
+        left = []
+        left.append(db.states.on(db.vendors.state_id==db.states.id))
+        left.append(db.municipalities.on(
+            db.vendors.municipality_id==db.municipalities.id))
+        left.append(db.localities.on(db.vendors.locality_id==db.localities.id))
+        left.append(db.banks.on(db.vendors.bank_id==db.banks.id))
+        row = db(query).select(
+            db.vendors.ALL, db.states.name, db.municipalities.name,
+            db.localities.name, db.banks.short_name, left=left).as_list()
+    except:
+        db.rollback()
 
     if row:
         data = row[0]
