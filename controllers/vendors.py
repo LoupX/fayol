@@ -22,6 +22,11 @@ def update():
     #return dict(title=title, current=current, id=vendor_id, sid=sid, mid=mid, lid=lid)
     return dict(title=title, current=current)
 
+def updatep():
+    title = 'Proveedores'
+    current = ['menu_catalogs', 'sidebar_vendors', 'sub_vendors_read']
+    return dict(title=title, current=current)
+
 def contact_information():
     title = 'Proveedores'
     return dict(title=title)
@@ -29,6 +34,9 @@ def contact_information():
 def pay_information():
     title = 'Proveedores'
     current = ['menu_catalogs', 'sidebar_vendors', 'sub_vendors_pay']
+    #if request.vars.id:
+    #    return dict(title=title, current=current, id=request.vars.id)
+    #else:
     return dict(title=title, current=current)
 
 def sales_agents():

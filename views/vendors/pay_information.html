@@ -113,7 +113,7 @@ jQuery.ajax({
         .append(data)
          .trigger("liszt:updated");
     }
-});     
+});
 ////// get banks //////
 jQuery.ajax({
     url: "{{=URL(c='common', f='get_banks')}}",
@@ -124,7 +124,7 @@ jQuery.ajax({
         .append(data)
         .trigger("liszt:updated");
     }
-}); 
+});
 
 vendors.change( function() {
     id = jQuery(this).find(':selected').val();

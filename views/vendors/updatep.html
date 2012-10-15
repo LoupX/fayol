@@ -1,0 +1,242 @@
+{{extend 'base/layout.html'}}
+
+{{block scripts_extra}}
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.validate.min.js')}}"></script>
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/chosen.jquery.min.js')}}"></script>
+<style type="text/css">
+    .ellol {
+        border: 1px solid red;
+    }
+</style>
+{{end}}
+
+{{block sidebar_menu}}
+{{include 'vendors/sidebar.html'}}
+{{end}}
+
+{{block content}}
+<div class="centercontent">
+
+    <div class="pageheader">
+
+        <h1 class="pagetitle">{{=title}}</h1>
+
+    </div><!--pageheader-->
+
+    <div id="contentwrapper" class="contentwrapper">
+
+        <div class="contenttitle2">
+            <h3>Selecciona un proveedor</h3>
+        </div><!--contenttitle-->
+        <div class="notibar msgerror" style="display:none;">
+            <a class="close"></a>
+            <p>Ocurrió un error con los datos del formulario.</p>
+        </div>
+
+        <div class="notibar msgsuccess" style="display:none;">
+            <a class="close"></a>
+            <p>Se han guardado los datos del formulario.</p>
+        </div>
+        <div id="validation" class="subcontent">
+
+            <form id="form1" class="stdform stdform2" method="post">
+
+                <p>
+                    <label>Proveedor</label>
+                            <span class="field">
+                                <input type="text" name="vendor" id="vendor" class="smallinput" disabled/>
+                            </span>
+                </p>
+
+                <br />
+
+                <div class="contenttitle2">
+                    <h3>Información de pago</h3>
+                </div><!--contenttitle-->
+
+                <p>
+                    <label>Banco</label>
+                            <span class="field">
+                                <select id="bank" name="bank" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="2">
+                                </select>
+                            </span>
+                </p>
+
+                <p style="margin-top: 1px;">
+                    <label>Número de Sucursal</label>
+                    <span class="field"><input type="text" name="branch" id="branch" class="smallinput" tabindex="3" maxlength="3"/></span>
+                </p>
+
+                <p>
+                    <label>Número de cuenta</label>
+                    <span class="field"><input type="text" name="acountnumber" id="acountnumber" class="smallinput" tabindex="4" maxlength="11"/></span>
+                </p>
+
+                <p>
+                    <label>CLABE</label>
+                    <span class="field"><input type="text" name="clabe" id="clabe" class="smallinput" maxlength="18" tabindex="5"/></span>
+                </p>
+
+                <p class="stdformbutton">
+                    <button class="submit radius2" id="submit">Guardar</button>
+                </p>
+                <input type="hidden" id="vid" value="{{=request.vars.id}}">
+            </form>
+
+        </div><!--subcontent-->
+
+    </div><!--contentwrapper-->
+
+    <br clear="all" />
+
+</div><!-- centercontent -->
+
+
+</div><!--bodywrapper-->
+
+<script type="text/javascript">
+    //executes these ajax when document is loaded
+    //
+    jQuery(".chzn-select").chosen();
+
+    var vendors = jQuery('#selection'),
+        banks = jQuery('#bank'),
+        id = 0;
+
+    ////// get banks //////
+    jQuery.ajax({
+        url: "{{=URL(c='common', f='get_banks')}}",
+        type: "POST",
+        success:function(data){
+            banks
+                    .append('<option value="">Selecccionar</option>')
+                    .append(data)
+                    .trigger("liszt:updated");
+        }
+    });
+
+
+    ////// get info //////
+    jQuery.ajax({
+        url: "{{=URL(c='vendors_ajax', f='get_vendor_information')}}",
+        data: { id: "{{=request.vars.id}}" },
+        type: "POST",
+        dataType:"json",
+        success:function(data){
+            //console.log(data);
+            jQuery('#branch').val(data.vendors['branch']);
+            jQuery('#acountnumber').val(data.vendors['bank_account_number']);
+            jQuery('#clabe').val(data.vendors['clabe']);
+            jQuery('#vendor').val(data.vendors['name']);
+            banks
+                .find("option[value="+data.vendors['bank_id']+"]")
+                .attr('selected',true)
+                .change()
+                .trigger("liszt:updated");
+        }
+    });
+
+
+
+
+    jQuery('#submit').live('click', function(e){
+        e.preventDefault();
+        jQuery('.msgerror').hide();
+        jQuery('.msgsuccess').hide();
+
+        var form = jQuery("#form1"),
+                bank_id = jQuery('#bank').val(),
+                branch = jQuery('#branch').val(),
+                acountnumber = jQuery('#acountnumber').val(),
+                clabe = jQuery('#clabe').val();
+
+        form.validate({
+            rules: {
+                clabe: {
+                    required: false,
+                    digits: true,
+                    maxlength: 18,
+                    minlength: 18
+                },
+                acountnumber: {
+                    required: false,
+                    digits: true,
+                    maxlength: 11,
+                    minlength: 11
+                },
+                branch: {
+                    required: false,
+                    digits: true,
+                    maxlength: 3
+                },
+                vendor: "required"
+            },
+            messages: {
+                clabe: "Se requiere 18 digitos.",
+                acountnumber: "Se requiere 11 digitos",
+                branch: "Se requiere maximo 3 digitos.",
+                vendor: "No puede estar vacio."
+
+            }
+        });
+
+
+        if(form.valid()) {
+            jQuery.ajax({
+                url: "{{=URL(c='vendors_ajax', f='update_pay_information')}}",
+                data: {
+                    bank_id:bank_id,
+                    branch:branch,
+                    account_number:acountnumber,
+                    clabe:clabe,
+                    id: jQuery('#vid').val()
+                },
+                type: "POST",
+                success:function(data){
+                    if(data){
+                        jQuery('.msgsuccess').fadeIn(1600);
+                        //deleteFields();
+                        setTimeout('redirect()', 1600);
+                    }
+                    else{
+                        jQuery('.msgerror').fadeIn(1600);
+                    }
+                    jQuery('body','html',window).animate(
+                            {scrollTop:0},
+                            1000);
+                }
+            });
+        } else {
+            jQuery('.msgerror').fadeIn(1600);
+            jQuery('body','html',window).animate(
+                    {scrollTop:0},
+                    1000);
+        }
+
+    });
+
+    function deleteFields() {
+        jQuery('#acountnumber').val('');
+        jQuery('#branch').val('');
+        jQuery('#clabe').val('');
+        jQuery('#selection')
+                .find('option[value=""]')
+                .attr('selected',true)
+                .trigger("liszt:updated");
+        jQuery('#bank')
+                .find('option[value=""]')
+                .attr('selected',true)
+                .trigger("liszt:updated");
+    }
+
+    function redirect() {
+        window.location.replace('/vendors/');
+    }
+
+
+
+</script>
+
+</body>
+</html>
+{{end}}

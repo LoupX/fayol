@@ -115,5 +115,7 @@ jQuery(document).ready(function(){
 	
 	///// SELECT WITH SEARCH /////
 	jQuery(".chzn-select").chosen();
-	
+    jQuery(".chzn-select-deselect").chosen({allow_single_deselect:true});
+
+
 });
