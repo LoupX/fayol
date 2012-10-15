@@ -2,7 +2,10 @@
 
 def get_states():
     s = db.states
-    rows = db(s).select(s.id, s.name)
+    try:
+        rows = db(s).select(s.id, s.name)
+    except:
+        db.rollback()
     options = str()
     for row in rows:
         options += str(OPTION(row.name, _value=row.id))
@@ -15,7 +18,10 @@ def get_municipalities():
     if request.vars.id:
         id = request.vars.id
         query = m.state_id==id
-        rows = db(query).select(m.id, m.name)
+        try:
+            rows = db(query).select(m.id, m.name)
+        except:
+            db.rollback()
         for row in rows:
             options += str(OPTION(row.name, _value=row.id))
             options += '/n'
@@ -28,19 +34,28 @@ def get_localities():
     if request.vars.state_id:
         state_id = request.vars.state_id
         query = m.state_id==state_id
-        rows = db(query).select(m.id)
+        try:
+            rows = db(query).select(m.id)
+        except:
+            db.rollback()
         mids = []
         for row in rows:
             mids.append(row.id)
         query = l.municipality_id.belongs(mids)
-        rows = db(query).select(l.id, l.name)
+        try:
+            rows = db(query).select(l.id, l.name)
+        except:
+            db.rollback()
         for row in rows:
             options += str(OPTION(row.name, _value=row.id))
             options += '\n'
     elif request.vars.municipality_id:
         municipality_id = request.vars.municipality_id
         query = l.municipality_id==municipality_id
-        rows = db(query).select(l.id, l.name)
+        try:
+            rows = db(query).select(l.id, l.name)
+        except:
+            db.rollback()
         for row in rows:
             options += str(OPTION(row.name, _value=row.id))
             options += '\n'
@@ -48,7 +63,10 @@ def get_localities():
 
 def get_banks():
     b = db.banks
-    rows = db(b).select(b.id, b.short_name)
+    try:
+        rows = db(b).select(b.id, b.short_name)
+    except:
+        db.rollback()
     options = str()
     for row in rows:
         options += str(OPTION(row.short_name, _value=row.id))

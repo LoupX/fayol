@@ -137,7 +137,7 @@ def create_branch():
             tax_info_id = db.company_tax_info.insert(**data_tax)
     except Exception as e:
         db.rollback()
-        return e
+        return ''
     else:
         try:
             data['company_address_id'] = address_id
@@ -146,7 +146,7 @@ def create_branch():
             id = db.branches.insert(**data)
         except Exception as e:
             db.rollback()
-            return e
+            return ''
         else:
             db.commit()
             return str(id)
@@ -171,14 +171,14 @@ def create_warehouse():
         address_id = db.company_addresses.insert(**data_address)
     except Exception as e:
         db.rollback()
-        return e
+        return ''
     else:
         try:
             data['company_address_id'] = address_id
             id = db.warehouses.insert(**data)
         except Exception as e:
             db.rollback()
-            return e
+            return ''
         else:
             db.commit()
             return str(id)
