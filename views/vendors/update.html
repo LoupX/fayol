@@ -7,6 +7,12 @@
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/charCount.js')}}"></script>
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/ui.spinner.min.js')}}"></script>
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/chosen.jquery.min.js')}}"></script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+  console.log('done');
+});
+</script>
 {{end}}
 
 {{block sidebar_menu}}
@@ -126,8 +132,8 @@
 <script type="text/javascript">
     //Ajax for selects
     selectS();
-    selectM({{=sid}});
-    selectL({{=mid}});
+    //selectM({{=sid}});
+    //selectL({{=mid}});
 
     var state = jQuery('#states'),
         municipality = jQuery('#municipality'),
