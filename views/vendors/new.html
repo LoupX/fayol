@@ -2,10 +2,6 @@
 
 {{block scripts_extra}}	
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.validate.min.js')}}"></script>
-<script type="text/javascript" src="{{=URL('static', 'js/custom/forms.js')}}"></script>
-<script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.tagsinput.min.js')}}"></script>
-<script type="text/javascript" src="{{=URL('static', 'js/plugins/charCount.js')}}"></script>
-<script type="text/javascript" src="{{=URL('static', 'js/plugins/ui.spinner.min.js')}}"></script>
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/chosen.jquery.min.js')}}"></script>
 {{end}}
 
@@ -94,26 +90,13 @@
                         
                         <p>
                             <label>Sitio Web</label>
-                            <span class="field"><input type="text" name="website" id="website" class="smallinput" tabindex="8"/></span>
+                            <span class="field">
+                                <input type="text" name="website" id="website" class="smallinput" tabindex="8" 
+                                placeholder="http://ejemplo.com"/></span>
                         </p>
                         
                         <p class="stdformbutton">
                             <button id="submit" class="submit radius2" tabindex="9">Guardar </button>
-                            <!-- <span class="msg" style="
-                            display:none;
-                            background: #FFFCCC;
-                            color: #333;
-                            margin-bottom: 10px;
-                            padding: 5px;
-                            text-align: center;
-                            font-size: 13px;
-                            -moz-border-radius: 2px;
-                            -webkit-border-radius: 2px;
-                            border-radius: 2px;
-                            margin-left:30px;">
-                            something happened
-                            </span> -->
-                            
                         </p>
                     </form>
 
@@ -130,6 +113,8 @@
 
 <script type="text/javascript">
 //////////// Ajax for selects ////////////
+    jQuery(".chzn-select").chosen();
+
     var state = jQuery('#states'),
         municipality = jQuery('#municipality'),
         locality = jQuery('#locality');

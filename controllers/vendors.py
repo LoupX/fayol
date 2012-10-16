@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-@auth.requires_login()
 import gluon.contrib.simplejson
 
 #Views
