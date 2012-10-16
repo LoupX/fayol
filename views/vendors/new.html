@@ -31,7 +31,7 @@
                     <p>Ocurrió un error con los datos del formulario.</p>
                 </div>
 
-                <div class="notibar msgerror exists" style="display:none;">
+                <div class="notibar exists" style="display:none;">
                     <a class="close"></a>
                     <p>Ese proveedor existe, para editarlo vaya a la sección de ver proveedor. </p>
                 </div>
@@ -204,7 +204,7 @@
             messages: {
                 company: "Ingrese el nombre de la empresa",
                 zip_code: "Este campo debe tener 5 números.",
-                website: "Entre una url válida.",
+                website: "El sitio web debe tener el siguiente formato: http://ejemplo.com ",
                 rfc: "R.F.C. inválido."
             }
         });
@@ -214,17 +214,18 @@
         e.preventDefault();
         var sid = jQuery('#states').val(),
             mid = (jQuery('#municipality').val() == null) ? '': jQuery('#municipality').val(),
-            lid = (jQuery('#locality').val() == null) ? '': jQuery('#locality').val();
+            lid = (jQuery('#locality').val() == null) ? '': jQuery('#locality').val(),
+            com = jQuery('#company').val();
+        
+        jQuery('.msgerror').hide();
+        jQuery('.exists').hide();
+        jQuery('.msgsuccess').hide();
 
-        if(jQuery("#form").valid()) {
-            jQuery('.msgerror').hide();
-            jQuery('.exists').hide();
-            jQuery('.msgsuccess').hide();
-
+        if(jQuery("#form").valid() && com != null) {
              jQuery.ajax({
                 url: "{{=URL(c='vendors_ajax', f='create_vendor')}}",
                 data: { 
-                    company:jQuery('#company').val(),
+                    company:com,
                     address:jQuery('#address').val(),
                     state: sid,
                     municipality: mid,
@@ -253,6 +254,9 @@
                                                         1000);
                 }
             }); 
+        } else {
+            jQuery('.msgerror').fadeIn(1600);
+            jQuery('body','html',window, document).animate({scrollTop:0},1000);
         }
     });
 
