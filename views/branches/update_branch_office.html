@@ -32,7 +32,7 @@ jQuery(document).ready(function() {
         	<div id="validation" class="subcontent">
             	
             		<div class="contenttitle2">
-                        <h3>Nueva sucursal</h3>
+                        <h3>Editar sucursal</h3>
                     </div><!--contenttitle-->
             				
             		<div class="notibar msgerror" style="display:none;">
@@ -58,11 +58,11 @@ jQuery(document).ready(function() {
 	                     
 	                    <p style="border-top: 1px #ddd solid;">
 	                       	<label>Dirección</label>
-	                        <span class="field"><input type="text" name="suburb" id="suburb" class="smallinput"/></span>
+	                        <span class="field"><input type="text" name="address" id="address" class="smallinput"/></span>
 	                    </p>
 	                    <p>
 	                       	<label>Colonia</label>
-	                        <span class="field"><input type="text" name="colony" id="colony" class="smallinput"/></span>
+	                        <span class="field"><input type="text" name="suburb" id="suburb" class="smallinput"/></span>
 	                    </p>
 	                    <p style="margin-top: 1px;">
                             <label>Estado</label>
@@ -100,7 +100,7 @@ jQuery(document).ready(function() {
                         
                         <p  style="border-top: 1px #ddd solid;">
 	                       	<label>Razón social</label>
-	                        <span class="field"><input type="text" name="corporate" id="corporate" class="smallinput"/></span>
+	                        <span class="field"><input type="text" name="business_name" id="business_name" class="smallinput"/></span>
 	                    </p>
 	                    <p>
 	                       	<label>R.F.C.</label>
@@ -108,7 +108,7 @@ jQuery(document).ready(function() {
 	                    </p>
 	                    <p>
 	                       	<label>Regimen fiscal</label>
-	                        <span class="field"><input type="text" name="tax_regime" id="tax_regime" class="smallinput"/></span>
+	                        <span class="field"><input type="text" name="tax" id="tax" class="smallinput"/></span>
 	                    </p>
                         
 	                    <p class="stdformbutton">
@@ -188,18 +188,20 @@ jQuery(document).ready(function() {
 
     jQuery.ajax({
         url: "{{=URL(c='branches_ajax', f='get_branch_information')}}",
-        data: { id: "{{=id}}" },
+        data: { id: "{{=request.vars.id}}" },
         type: "POST",
         dataType:"json",
         success:function(data){
             //console.log(data);           
-            jQuery('#name').val(data.branches['name']);
-            jQuery('#suburb').val(data.branches['suburb']);
-            jQuery('#address').val(data.branches['name']);
-            jQuery('#zip_code').val(data.branches['zip_code']);
-            jQuery('#corporate').val(data.branches['corporate']);
-            jQuery('#rfc').val(data.branches['rfc']);
-            jQuery('#tax_regime').val(data.branches['tax_regime']);
+            
+            jQuery('#name').val(data.branches['name']); 
+            jQuery('#suburb').val(data.company_addresses['suburb']);
+            jQuery('#address').val(data.company_addresses['address']);
+            jQuery('#zip_code').val(data.company_addresses['zip_code']);
+            
+            jQuery('#business_name').val(data.company_tax_info['business_name']);
+            jQuery('#rfc').val(data.company_tax_info['rfc']);
+            jQuery('#tax').val(data.company_tax_info['tax']);
 
             selectS();
             selectM(data.branches['state_id']);
@@ -304,9 +306,9 @@ jQuery(document).ready(function() {
                     municipality:jQuery('#municipality').val(),
                     locality:jQuery('#locality').val(),
                     zip_code:jQuery('#zip_code').val(),
-                    corporate:jQuery('#corporate').val(),
+                    business_name:jQuery('#business_name').val(),
                     rfc:jQuery('#rfc').val(),
-                    tax_regime:jQuery('#tax_regime').val()
+                    tax:jQuery('#tax').val()
                 },
                 type: 'POST',
                 success:function(data){
@@ -345,9 +347,9 @@ jQuery(document).ready(function() {
             .prepend('<option value="">Selecccionar</option>')
             .trigger("liszt:updated");
         jQuery('#zip_code').val('');
-        jQuery('#corporate').val('');
+        jQuery('#business_name').val('');
         jQuery('#rfc').val('');
-        jQuery('#tax_regime').val('');
+        jQuery('#tax').val('');
     }
     
     function selectS() {

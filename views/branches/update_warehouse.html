@@ -1,8 +1,11 @@
 {{extend 'base/layout.html'}}
 
 {{block scripts_extra}}
-<script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.dataTables.min.js')}}"></script>
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.validate.min.js')}}"></script>	
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.tagsinput.min.js')}}"></script>
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/charCount.js')}}"></script>
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/ui.spinner.min.js')}}"></script>
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/chosen.jquery.min.js')}}"></script>
 
 <script type="text/javascript">
 jQuery(document).ready(function() {
@@ -29,7 +32,7 @@ jQuery(document).ready(function() {
         	<div id="validation" class="subcontent">
             	
             		<div class="contenttitle2">
-                        <h3>Nuevo almacén</h3>
+                        <h3>Editar almacén</h3>
                     </div><!--contenttitle-->
             				
             		<div class="notibar msgerror" style="display:none;">
@@ -59,7 +62,7 @@ jQuery(document).ready(function() {
 	                    </p>
 	                    <p>
 	                       	<label>Colonia</label>
-	                        <span class="field"><input type="text" name="colony" id="colony" class="smallinput"/></span>
+	                        <span class="field"><input type="text" name="suburb" id="suburb" class="smallinput"/></span>
 	                    </p>
 	                    <p style="margin-top: 1px;">
                             <label>Estado</label>
@@ -106,11 +109,13 @@ jQuery(document).ready(function() {
 
 <script type="text/javascript">
     //Ajax for selects
-    jQuery(".chzn-select").chosen({allow_single_deselect:true});
+    jQuery(".chzn-select").chosen();
 
     var state = jQuery('#states'),
         municipality = jQuery('#municipality'),
         locality = jQuery('#locality');
+        
+    
 
     state.change( function() {
         var id = jQuery(this).find(':selected').val();
@@ -165,24 +170,31 @@ jQuery(document).ready(function() {
     
 
     jQuery.ajax({
-        url: "{{=URL(c='vendors_ajax', f='get_vendor_information')}}",
-        data: { id: "{{=id}}" },
+        url: "{{=URL(c='branches_ajax', f='get_warehouse_information')}}",
+        data: { id: "{{=request.vars.id}}" },
         type: "POST",
         dataType:"json",
         success:function(data){
             //console.log(data);
-            jQuery('#company').val(data.vendors['name']);
-            jQuery('#address').val(data.vendors['address']);
-            jQuery('#zip_code').val(data.vendors['zip_code']);
-            jQuery('#rfc').val(data.vendors['rfc']);
-            jQuery('#website').val(data.vendors['website']);
+            
+            jQuery('#name').val(data.warehouses['name']); 
+            jQuery('#suburb').val(data.company_addresses['suburb']);
+            jQuery('#address').val(data.company_addresses['address']);
+            jQuery('#zip_code').val(data.company_addresses['zip_code']);
             
             selectS();
-            selectM(data.vendors['state_id']);
-            selectL(data.vendors['municipality_id']);
+	        state_options = jQuery("#states").find('option') 
+            for(var i in state_options) { 
+            	if(jQuery(state_options[i]).val() == data.company_addresses.state_id) { 
+            		jQuery(state_options[i]).attr('selected', true); 
+            		jQuery(state_options[i]).trigger("liszt:updated"); 
+            	} 
+            }
+            selectM(data.warehouses['state_id']);
+            selectL(data.warehouses['municipality_id']);
             
             jQuery('#states')
-                .find('option[value='+data.vendors['state_id']+']')
+                .find('option[value='+data.warehouses['state_id']+']')
                 .attr('selected',true)
                 .trigger("liszt:updated");
 
@@ -190,19 +202,19 @@ jQuery(document).ready(function() {
 
             // console.log(data.municipalities['id']);
             jQuery('#municipality')
-                .find("option[value="+data.vendors['municipality_id']+"]")
+                .find("option[value="+data.warehouses['municipality_id']+"]")
                 .attr('selected',true)
                 .trigger("liszt:updated");
 
             // //selectL(data.municipalities['id']);
             jQuery('#locality')
-                .find("option[value="+data.vendors['locality_id']+"]")
+                .find("option[value="+data.warehouses['locality_id']+"]")
                 .attr('selected',true)
                 .trigger("liszt:updated"); 
 
             // municipality.html(data.municipalities['name']);
             // locality.html(data.localities['name']);
-            console.log(data.vendors['state_id']+' : '+data.vendors['municipality_id']+' : '+data.vendors['locality_id']);
+            console.log(data.warehouses['state_id']+' : '+data.warehouses['municipality_id']+' : '+data.warehouses['locality_id']);
         }
     });
 
@@ -234,65 +246,58 @@ jQuery(document).ready(function() {
         //     }
         // }
         
-        jQuery("#form").validate({
+        jQuery("#form_warehouse").validate({
             rules: {
-                company: "required",
+                name: "required",
+                address : "required",
+                colony : "required",
+                states : "required",
+                municipality : "required",
+                locality : "required",
                 zip_code: {
                     required: false,
                     digits: true,
                     minlength: 5
-                },
-                website: {
-                    url: true,
-                    required: false
-                },
-                rfc: {
-                    minlength: 10,
-                    maxlength:13,
-                    required: false
                 }
             },
             messages: {
-                company: "Ingrese el nombre de la empresa",
+                name: "Ingrese el nombre de la surcursal",
+                address: "Ingrese la dirección de la surcursal",
+                colony: "Ingrese la colonia de la surcursal",
+                states: "Ingrese el estado de la surcursal",
+                municipality: "Ingrese el municipio de la surcursal",
+                locality: "Ingrese la ciudad de la surcursal",
                 zip_code: "Este campo debe tener 5 números.",
-                website: "Entre una url válida.",
-                rfc: "R.F.C. inválido."
             }
-        });
-        
+        });        
 
-        if(jQuery("#form").valid()) {
+        if(jQuery("#form_warehouse").valid()) {
             jQuery('.msgerror').hide();
             jQuery('.msgsuccess').hide();
-            var sendid = '{{=request.vars.id}}';
 
              jQuery.ajax({
-                url: "{{=URL(c='vendors_ajax', f='update_vendor')}}",
+                url: "{{=URL(c='branches_ajax', f='create_warehouse')}}",
                 data: { 
-                    company:jQuery('#company').val(),
+                    name:jQuery('#name').val(),
                     address:jQuery('#address').val(),
-                    state: sid,
-                    municipality: mid,
-                    locality: lid,
+                    suburb:jQuery('#colony').val(),
+                    states:jQuery('#states').val(),
+                    municipality:jQuery('#municipality').val(),
+                    locality:jQuery('#locality').val(),
                     zip_code:jQuery('#zip_code').val(),
-                    rfc:jQuery('#rfc').val(),
-                    website:jQuery('#website').val(),
-                    id: sendid
                 },
                 type: 'POST',
                 success:function(data){
-                    console.log(data);
                     if(data){
                         jQuery('.msgsuccess').fadeIn(1600);
                         deleteFields();
-                        sid, mid, lid, sendid = 0;
                     }
                     else{
                         jQuery('.msgerror').fadeIn(1600);
                         //jQuery('html').scrollTop();
                         //jQuery(window).scrollTop(0);
                     }
-                    jQuery('body','html',window, document).animate(
+                    jQuery('body','html',window).animate(
                                                         {scrollTop:0}, 
                                                         1000);
                 }
@@ -300,24 +305,27 @@ jQuery(document).ready(function() {
         }
     });
 
-    function deleteFields() {
-        jQuery('#company').val('');
+        function deleteFields() {
+        jQuery('#name').val('');
         jQuery('#address').val('');
-        jQuery('#states option')
+        jQuery('#colony').val('');
+        jQuery('#states')
+            .find('option')
             .first()
             .attr('selected',true)
             .trigger("liszt:updated");
         jQuery('#municipality')
             .html('')
-            .prepend('<option value="">Seleccionar</option>')
+            .prepend('<option value="">Selecccionar</option>')
             .trigger("liszt:updated");
         jQuery('#locality')
             .html('')
-            .prepend('<option value="">Seleccionar</option>')
+            .prepend('<option value="">Selecccionar</option>')
             .trigger("liszt:updated");
         jQuery('#zip_code').val('');
+        jQuery('#business_name').val('');
         jQuery('#rfc').val('');
-        jQuery('#website').val('');
+        jQuery('#tax').val('');
     }
 
     function selectS() {
