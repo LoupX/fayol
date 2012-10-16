@@ -202,17 +202,61 @@ def create_warehouse():
             db.commit()
             return str(id)
 
-def _update_branch(id, **data):
+
+def toggle_branch_status():
+    id = request.vars.id
+    status = str(request.vars.status).upper()
+    status = True if status == 'TRUE' else False
+    data = dict(status=(not status))
+    try:
+        result = db(db.branches.id==id).update(**data)
+    except Exception as e:
+        db.rollback()
+        return ''
+    else:
+        db.commit()
+        if result == 1:
+            return True
+        else:
+            return ''
+
+def toggle_warehouse_status():
+    id = request.vars.id
+    status = str(request.vars.status).upper()
+    status = True if status == 'TRUE' else False
+    data = dict(status=(not status))
+    try:
+        result = db(db.warehouses.id==id).update(**data)
+    except Exception as e:
+        db.rollback()
+        return ''
+    else:
+        db.commit()
+        if result == 1:
+            return True
+        else:
+            return ''
+
+def update_branch(id, **data):
     b = db.branches
     query = b.id==id
     try:
         result = db(query).insert(**data)
     except SyntaxError as e:
-        pass
+        db.rollback()
+        if 'duplicate field' in e:
+            return 0
+        else:
+            return ''
     except Exception as e:
-        pass
+        db.rollback()
+        return ''
     else:
-        pass
+        db.commit()
+        if result == 1:
+            return True
+        else:
+            return ''
 
-def _update_warehouse(id, **data):
+def update_warehouse(id, **data):
     pass

@@ -108,8 +108,8 @@ def update_pay_information():
 
 def toggle_vendor_status():
     id = request.vars.id
-    status = request.vars.status
-    status = True if status == 'True' else False
+    status = str(request.vars.status).upper()
+    status = True if status == 'TRUE' else False
     data = dict(status=(not status))
     result = _update_vendor(id, **data)
     return result
