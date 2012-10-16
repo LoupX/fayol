@@ -288,6 +288,7 @@ jQuery(document).ready(function() {
         if(jQuery("#form").valid()) {
             jQuery('.msgerror').hide();
             jQuery('.msgsuccess').hide();
+            var sendid = '{{=request.vars.id}}';
 
              jQuery.ajax({
                 url: "{{=URL(c='vendors_ajax', f='update_vendor')}}",
@@ -300,7 +301,7 @@ jQuery(document).ready(function() {
                     zip_code:jQuery('#zip_code').val(),
                     rfc:jQuery('#rfc').val(),
                     website:jQuery('#website').val(),
-                    id: '{{=request.vars.id}}'
+                    id: sendid
                 },
                 type: 'POST',
                 success:function(data){
@@ -308,14 +309,14 @@ jQuery(document).ready(function() {
                     if(data){
                         jQuery('.msgsuccess').fadeIn(1600);
                         deleteFields();
-                        sid, mid, lid = 0;
+                        sid, mid, lid, sendid = 0;
                     }
                     else{
                         jQuery('.msgerror').fadeIn(1600);
                         //jQuery('html').scrollTop();
                         //jQuery(window).scrollTop(0);
                     }
-                    jQuery('body','html',window).animate(
+                    jQuery('body','html',window, document).animate(
                                                         {scrollTop:0}, 
                                                         1000);
                 }
