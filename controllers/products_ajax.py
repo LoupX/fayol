@@ -3,9 +3,9 @@
 
 def create_category():
     data = dict()
-    if request.vars.category_name:
-        data['name'] = request.vars.category_name
-    data['description'] = request.vars.category_description
+    if request.vars.name:
+        data['name'] = request.vars.name
+    data['description'] = request.vars.description
     try:
         c_id = db.categories.insert()
         cd_id = db.category_descriptions.insert(category_id=c_id, **data)

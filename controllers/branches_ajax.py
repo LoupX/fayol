@@ -132,12 +132,9 @@ def create_branch():
     data_address['locality_id'] = vars.locality
     data_address['zip_code'] = vars.zip_code
 
-    if vars.corporate:
-        data_tax['business_name'] = vars.corporate
-    if vars.rfc:
-        data_tax['rfc'] = vars.rfc
-    if vars.tax_regime:
-        data_tax['tax'] = vars.tax_regime
+    data_tax['business_name'] = vars.corporate
+    data_tax['rfc'] = vars.rfc
+    data_tax['tax'] = vars.tax_regime
 
     data['name'] = vars.name
 
@@ -238,26 +235,39 @@ def toggle_warehouse_status():
         else:
             return ''
 
-def update_branch(id, **data):
+def update_branch():
     b = db.branches
-    query = b.id==id
+    vars = request.vars
+    id = vars.id
+    company_address_id = None
+    company_tax_info_id = None
+    data = dict()
+    data_address = dict()
+    data_tax = dict()
     try:
-        result = db(query).insert(**data)
-    except SyntaxError as e:
-        db.rollback()
-        if 'duplicate field' in e:
-            return 0
-        else:
-            return ''
+        row = db(db.branches.id==id).select(db.branches.company_address_id,
+            db.branches.company_tax_info_id)
     except Exception as e:
         db.rollback()
         return ''
+    if row:
+        company_address_id = row.company_address_id
+        company_tax_info_id = company_tax_info_id
     else:
-        db.commit()
-        if result == 1:
-            return True
-        else:
-            return ''
+        return ''
+    data_address['address'] = vars.address
+    data_address['suburb'] = vars.suburb
+    data_address['state_id'] = vars.states
+    data_address['municipality_id'] = vars.municipality
+    data_address['locality_id'] = vars.locality
+    data_address['zip_code'] = vars.zip_code
+
+    data_tax['business_name'] = vars.corporate
+    data_tax['rfc'] = vars.rfc
+    data_tax['tax'] = vars.tax_regime
+
+    data['name'] = vars.name
+
 
 def update_warehouse(id, **data):
     pass
