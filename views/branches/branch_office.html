@@ -208,7 +208,7 @@ branches_select.change( function() {
 
         //{{=URL(c='vendors', f='update', vars=dict(id='"+data.vendors.id+"'))}}
         jQuery('#edit_branch')
-    .attr('href', "/branches/update_branch_office?id="+data.branches.id+"&s="+data.branches['state_id']+"&m="+data.branches['municipality_id']+"&l="+data.branches['locality_id']);
+    .attr('href', "/fayol/branches/update_branch_office?id="+data.branches.id+"&s="+data.branches['state_id']+"&m="+data.branches['municipality_id']+"&l="+data.branches['locality_id']);
 
         status.val(id).removeAttr('disabled');
         status.parent().parent().removeClass('disabled'); 

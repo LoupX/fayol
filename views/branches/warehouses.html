@@ -183,7 +183,7 @@ warehouses_select.change( function() {
 
         //{{=URL(c='vendors', f='update', vars=dict(id='"+data.vendors.id+"'))}}
          jQuery('#edit_warehouse')
-    .attr('href', "/branches/update_warehouse?id="+data.warehouses.id+"&s="+data.warehouses['state_id']+"&m="+data.warehouses['municipality_id']+"&l="+data.warehouses['locality_id']);
+    .attr('href', "/fayol/branches/update_warehouse?id="+data.warehouses.id+"&s="+data.warehouses['state_id']+"&m="+data.warehouses['municipality_id']+"&l="+data.warehouses['locality_id']);
 
         status.val(id).removeAttr('disabled');
         status.parent().parent().removeClass('disabled'); 
