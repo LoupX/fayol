@@ -58,24 +58,24 @@
                         <p>
                         	<label>Banco</label>
                             <span class="field">
-                                <select id="bank" name="bank" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="2">
+                                <select id="bank" name="bank" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="2" disabled>
                                 </select>
                             </span>
                         </p>
                         
                         <p style="margin-top: 1px;">
                         	<label>Número de Sucursal</label>
-                            <span class="field"><input type="text" name="branch" id="branch" class="smallinput" tabindex="3" maxlength="3"/></span>
+                            <span class="field"><input type="text" name="branch" id="branch" class="smallinput" tabindex="3" maxlength="3" disabled/></span>
                         </p>
                         
                         <p>
                         	<label>Número de cuenta</label>
-                            <span class="field"><input type="text" name="acountnumber" id="acountnumber" class="smallinput" tabindex="4" maxlength="11"/></span>
+                            <span class="field"><input type="text" name="acountnumber" id="acountnumber" class="smallinput" tabindex="4" maxlength="11" disabled/></span>
                         </p>
                         
                         <p>
                         	<label>CLABE</label>
-                            <span class="field"><input type="text" name="clabe" id="clabe" class="smallinput" maxlength="18" tabindex="5"/></span>
+                            <span class="field"><input type="text" name="clabe" id="clabe" class="smallinput" maxlength="18" tabindex="5" disabled/></span>
                         </p>
                         
                         <p class="stdformbutton">
@@ -102,18 +102,21 @@ jQuery(".chzn-select").chosen();
 var vendors = jQuery('#selection') ,
     banks = jQuery('#bank'),
     id = 0;
+get_vendors();
 
 ////// get vendors //////
-jQuery.ajax({
-    url: "{{=URL(c='vendors_ajax', f='get_vendors')}}",
-    type: "POST",
-    success:function(data){
-      vendors
-        .append('<option value="">Selecccionar</option>')
-        .append(data)
-         .trigger("liszt:updated");
-    }
-});
+function get_vendors() {
+    jQuery.ajax({
+        url: "{{=URL(c='vendors_ajax', f='get_vendors')}}",
+        type: "POST",
+        success:function(data){
+          vendors
+            .append('<option value="">Selecccionar</option>')
+            .append(data)
+             .trigger("liszt:updated");
+        }
+    });
+}
 ////// get banks //////
 jQuery.ajax({
     url: "{{=URL(c='common', f='get_banks')}}",
@@ -126,54 +129,59 @@ jQuery.ajax({
     }
 });
 
-vendors.change( function() {
+vendors.live('change', function() {
+    
+    jQuery('#selection').siblings('div').removeClass('ellol');
     id = jQuery(this).find(':selected').val();
-    //console.log(id);
     var ibank = jQuery('#bank'),
         ibranch = jQuery('#branch'),
         iaccount = jQuery('#acountnumber'),
         iclabe = jQuery('#clabe');
 
-    ibranch.empty();
-    iaccount.empty();
-    iclabe.empty();
-    ibank
-        .find('option[value=""]')
-        .attr('selected',true)
-        .trigger("liszt:updated");
+    if( id != '') {
+        ibranch
+            .attr('disabled',false)
+            .empty();
+        iaccount
+            .attr('disabled',false)
+            .empty();
+        iclabe
+            .attr('disabled',false)
+            .empty();
+        ibank
+            .attr('disabled',false)
+            .find('option[value=""]')
+            .attr('selected',true)
+            .trigger("liszt:updated");
 
-    jQuery.ajax({
-        url: "{{=URL(c='vendors_ajax', f='get_vendor_information')}}",
-        data: { id:id },
-        type: "POST",
-        dataType:"json",
-        success:function(data){
-            ibranch.val(data.vendors['branch']);
-            iaccount.val(data.vendors['bank_account_number']);
-            iclabe.val(data.vendors['clabe']);
-            ibank
-                .find("option[value="+data.vendors['bank_id']+"]")
-                .attr('selected',true)
-                .change()
-                .trigger("liszt:updated");
-        }
-    });
+        //jQuery('#submit').attr('disabled',false);
+
+        jQuery.ajax({
+            url: "{{=URL(c='vendors_ajax', f='get_vendor_information')}}",
+            data: { id:id },
+            type: "POST",
+            dataType:"json",
+            success:function(data){
+                ibranch.val(data.vendors['branch']);
+                iaccount.val(data.vendors['bank_account_number']);
+                iclabe.val(data.vendors['clabe']);
+                ibank
+                    .find("option[value="+data.vendors['bank_id']+"]")
+                    .attr('selected',true)
+                    .change()
+                    .trigger("liszt:updated");
+            }
+        });
+
+    } else {
+        deleteFields();
+        id = '';
+    }
 
 });
 
-
- jQuery('#submit').live('click', function(e){
-        e.preventDefault();
-        jQuery('.msgerror').hide();
-        jQuery('.msgsuccess').hide();
-
-        var form = jQuery("#form1"),
-            bank_id = jQuery('#bank').val(),
-            branch = jQuery('#branch').val(),
-            acountnumber = jQuery('#acountnumber').val(),
-            clabe = jQuery('#clabe').val();
-
-        form.validate({
+//////////// validate form ////////////
+        jQuery("#form1").validate({
             rules: {
                 clabe: {
                     required: false,
@@ -190,19 +198,31 @@ vendors.change( function() {
                 branch: {
                     required: false,
                     digits: true,
+                    minlength: 3,
                     maxlength: 3
                 }
             },
             messages: {
                 clabe: "Se requiere 18 digitos.",
                 acountnumber: "Se requiere 11 digitos",
-                branch: "Se requiere maximo 3 digitos."
+                branch: "Se requiere 3 digitos."
 
             }
         });
 
 
-        if(form.valid() && valSelec(id)) {
+ jQuery('#submit').live('click', function(e){
+        e.preventDefault();
+        jQuery('.msgerror').hide();
+        jQuery('.msgsuccess').hide();
+
+        var bank_id = jQuery('#bank').val(),
+            branch = jQuery('#branch').val(),
+            acountnumber = jQuery('#acountnumber').val(),
+            clabe = jQuery('#clabe').val();
+
+        
+        if(jQuery("#form1").valid() && valSelec(id)) {
             jQuery.ajax({
                 url: "{{=URL(c='vendors_ajax', f='update_pay_information')}}",
                 data: {
@@ -215,9 +235,11 @@ vendors.change( function() {
                 type: "POST",
                 success:function(data){
                   if(data){
-                        jQuery('.msgsuccess').fadeIn(1600);
+                        jQuery('.msgsuccess').fadeIn(1600, function() {
+                            jQuery('.msgsuccess').fadeOut('slow');
+                        });
                         deleteFields();
-                        id = id;
+                        id = '';
                     }
                     else{
                         jQuery('.msgerror').fadeIn(1600);
@@ -237,23 +259,33 @@ vendors.change( function() {
 });
 
 function deleteFields() {
-        jQuery('#acountnumber').val('');
-        jQuery('#branch').val('');
-        jQuery('#clabe').val('');
-        jQuery('#selection')
-            .find('option[value=""]')
-            .attr('selected',true)
-            .trigger("liszt:updated");
+        jQuery('#acountnumber')
+            .attr('disabled',true)
+            .val('');
+        jQuery('#branch')
+            .attr('disabled',true)
+            .val('');
+        jQuery('#clabe')
+            .attr('disabled',true)
+            .val('');
+        jQuery('#selection_chzn').remove();
+        jQuery('#selection').val('').removeClass('chzn-done').chosen();
         jQuery('#bank')
+            .attr('disabled',true)
             .find('option[value=""]')
             .attr('selected',true)
             .trigger("liszt:updated");
+        //jQuery('#submit').attr('disabled',true);
     }
+
 function valSelec(s) {
     var bol;
     if (s != 0) {
         bol = true;
         jQuery('#selection').siblings('div').removeClass('ellol');
+    } else if(s != null){
+        bol = false;
+        jQuery('#selection').siblings('div').addClass('ellol');
     } else{
         bol = false;
         jQuery('#selection').siblings('div').addClass('ellol');
