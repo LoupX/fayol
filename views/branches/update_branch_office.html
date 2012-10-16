@@ -1,0 +1,120 @@
+{{extend 'base/layout.html'}}
+
+{{block scripts_extra}}
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.dataTables.min.js')}}"></script>
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.validate.min.js')}}"></script>	
+{{end}}
+
+{{block sidebar_menu}}
+{{include 'branches/sidebar.html'}}
+{{end}}
+
+{{block content}}
+    <div class="centercontent">
+    
+        <div class="pageheader">
+        
+            <h1 class="pagetitle">{{=title}}</h1>
+            
+        </div><!--pageheader-->
+        
+        <div id="contentwrapper" class="contentwrapper">
+        
+        	<div id="validation" class="subcontent">
+            	
+            		<div class="contenttitle2">
+                        <h3>Nueva sucursal</h3>
+                    </div><!--contenttitle-->
+            				
+            		<div class="notibar msgerror" style="display:none;">
+                    	<a class="close"></a>
+                    	<p>Ocurrió un error con los datos del formulario.</p>
+                    </div>
+
+                    <div class="notibar msgsuccess" style="display:none;">
+                        <a class="close"></a>
+                        <p>Se han guardado los datos del formulario.</p>
+                    </div>		
+            						
+                    <form id="form_branch_office" class="stdform stdform2" method="post" action="">
+                    	
+	                    <p>
+	                       	<label>Nombre</label>
+	                        <span class="field"><input type="text" name="name" id="name" class="smallinput"/></span>
+	                    </p>
+	                    
+	                    <div class="contenttitle2">
+                        <h3>Domicilio</h3>
+                        </div>  
+	                     
+	                    <p style="border-top: 1px #ddd solid;">
+	                       	<label>Dirección</label>
+	                        <span class="field"><input type="text" name="address" id="address" class="smallinput"/></span>
+	                    </p>
+	                    <p>
+	                       	<label>Colonia</label>
+	                        <span class="field"><input type="text" name="colony" id="colony" class="smallinput"/></span>
+	                    </p>
+	                    <p style="margin-top: 1px;">
+                            <label>Estado</label>
+                            <span class="field">
+                                <!-- <select name="states" id="states">
+                                </select> -->
+                                <select id="states" name="states" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="3">
+                                  </select>
+                            </span>
+                        </p>
+	                    <p style="margin-top: 1px;">
+                            <label>Municipio</label>
+                            <span id="municipality_container"class="field">
+                            <select name="municipality" id="municipality" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="4">
+                            </select>
+                            </span>
+                        </p>
+	                    <p style="margin-top: 1px;">
+                            <label>Ciudad</label>
+                            <span class="field" id="locality_container">
+                            <select name="locality" id="locality" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="5">
+                            </select>
+                            </span>
+                        </p>
+ 	                    <p style="margin-top: 1px;">
+                            <label>Código postal</label>
+                            <span class="field"><input type="text" name="zip_code" id="zip_code" class="smallinput" maxlength="5" tabindex="6"/></span>
+                        </p>
+	                    
+	                    <div class="contenttitle2">
+                        <h3>Información fiscal</h3>
+                        </div> 
+                        
+                        <p  style="border-top: 1px #ddd solid;">
+	                       	<label>Razón social</label>
+	                        <span class="field"><input type="text" name="corporate" id="corporate" class="smallinput"/></span>
+	                    </p>
+	                    <p>
+	                       	<label>R.F.C.</label>
+	                        <span class="field"><input type="text" name="rfc" id="rfc" class="smallinput"/></span>
+	                    </p>
+	                    <p>
+	                       	<label>Regimen fiscal</label>
+	                        <span class="field"><input type="text" name="tax_regime" id="tax_regime" class="smallinput"/></span>
+	                    </p>
+                        
+	                    <p class="stdformbutton">
+                        	<button id="submit" class="submit radius2">Guardar</button>
+                        </p>
+                    </form>
+
+            </div><!--subcontent-->     
+        
+        </div><!--contentwrapper-->
+        
+        <br clear="all" />
+        
+	</div><!-- centercontent -->   
+    
+</div><!--bodywrapper-->
+
+</body>
+</html>
+{{end}}

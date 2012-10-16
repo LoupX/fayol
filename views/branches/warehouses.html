@@ -107,7 +107,7 @@
               </table>
             </div><!--one_half-->
             
-            <a href="#" id="ev" data-id="" style="float:right;">
+            <a href="#" id="edit_warehouse" data-id="" style="float:right;">
                 <span class="stdbtn">Editar</span>
             </a>
             
@@ -182,8 +182,8 @@ warehouses_select.change( function() {
         zip_code.html(data.company_addresses['zip_code']); 
 
         //{{=URL(c='vendors', f='update', vars=dict(id='"+data.vendors.id+"'))}}
-         jQuery('#ev')
-    .attr('href', "/vendors/update?id="+data.warehouses.id+"&s="+data.warehouses['state_id']+"&m="+data.warehouses['municipality_id']+"&l="+data.warehouses['locality_id']);
+         jQuery('#edit_warehouse')
+    .attr('href', "/branches/update_warehouse?id="+data.warehouses.id+"&s="+data.warehouses['state_id']+"&m="+data.warehouses['municipality_id']+"&l="+data.warehouses['locality_id']);
 
         status.val(id).removeAttr('disabled');
         status.parent().parent().removeClass('disabled'); 

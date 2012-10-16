@@ -27,3 +27,12 @@ def new_warehouse():
     current = ['menu_catalogs', 'sidebar_warehouses', 'sub_warehouse_new']
     return dict(title=title,  current=current)
     
+def update_branch_office():
+    title = 'Sucursales'
+    current = ['menu_catalogs', 'sidebar_branches', 'sub_branch_office_new']
+    return dict(title=title,  current=current)
+
+def update_warehouse():
+    title = 'Almacenes'
+    current = ['menu_catalogs', 'sidebar_warehouses', 'sub_warehouse_new']
+    return dict(title=title,  current=current)
