@@ -2,14 +2,13 @@
 
 {{block scripts_extra}} 
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.validate.min.js')}}"></script>
-<script type="text/javascript" src="{{=URL('static', 'js/custom/forms.js')}}"></script>
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.tagsinput.min.js')}}"></script>
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/charCount.js')}}"></script>
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/ui.spinner.min.js')}}"></script>
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/chosen.jquery.min.js')}}"></script>
 
 <script type="text/javascript">
-$(document).ready(function() {
+jQuery(document).ready(function() {
   console.log('done');
 });
 </script>
@@ -131,13 +130,61 @@ $(document).ready(function() {
 
 <script type="text/javascript">
     //Ajax for selects
-    selectS();
-    selectM({{=sid}});
-    selectL({{=mid}});
+    jQuery(".chzn-select").chosen({allow_single_deselect:true});
 
     var state = jQuery('#states'),
         municipality = jQuery('#municipality'),
         locality = jQuery('#locality');
+
+    state.change( function() {
+        var id = jQuery(this).find(':selected').val();
+        if(id != '') {
+            jQuery.ajax({
+                type: "POST",
+                url: "{{=URL(c='common', f='get_municipalities')}}",
+                data: {id: id},
+                success: function(results) {
+                    municipality
+                            .html(results)
+                            .prepend('<option value="">Selecccionar</option>')
+                            .trigger("liszt:updated");
+                }
+            });
+        }
+        else {
+            municipality
+                    .html('')
+                    .prepend('<option value="">Selecccionar</option>')
+                    .trigger("liszt:updated");
+            locality
+                    .html('')
+                    .prepend('<option value="">Selecccionar</option>')
+                    .trigger("liszt:updated");
+        }
+    });
+
+    municipality.change( function() {
+        var id = jQuery(this).find(':selected').val();
+        if(id != '') {
+            jQuery.ajax({
+                type: "POST",
+                data: {municipality_id: id},
+                url: "{{=URL(c='common', f='get_localities')}}",
+                success: function(results) {
+                    locality
+                            .html(results)
+                            .prepend('<option value="">Selecccionar</option>')
+                            .trigger("liszt:updated");
+                }
+            });
+        }
+        else {
+            locality
+                    .html('')
+                    .prepend('<option value="">Selecccionar</option>')
+                    .trigger("liszt:updated");
+        }
+    });
 
     
 
@@ -154,10 +201,12 @@ $(document).ready(function() {
             jQuery('#rfc').val(data.vendors['rfc']);
             jQuery('#website').val(data.vendors['website']);
             
-
+            selectS();
+            selectM(data.vendors['state_id']);
+            selectL(data.vendors['municipality_id']);
             
             jQuery('#states')
-                .find("option[value="+data.states['id']+"]")
+                .find('option[value='+data.vendors['state_id']+']')
                 .attr('selected',true)
                 .trigger("liszt:updated");
 
@@ -165,19 +214,19 @@ $(document).ready(function() {
 
             // console.log(data.municipalities['id']);
             jQuery('#municipality')
-                .find("option[value="+data.municipalities['id']+"]")
+                .find("option[value="+data.vendors['municipality_id']+"]")
                 .attr('selected',true)
                 .trigger("liszt:updated");
 
             // //selectL(data.municipalities['id']);
             jQuery('#locality')
-                .find("option[value="+data.localities['id']+"]")
+                .find("option[value="+data.vendors['locality_id']+"]")
                 .attr('selected',true)
                 .trigger("liszt:updated"); 
 
             // municipality.html(data.municipalities['name']);
             // locality.html(data.localities['name']);
-            
+            console.log(data.vendors['state_id']+' : '+data.vendors['municipality_id']+' : '+data.vendors['locality_id']);
         }
     });
 

@@ -222,10 +222,8 @@ vendors_select.change( function() {
         clabe.html(data.vendors['clabe']);
 
         //{{=URL(c='vendors', f='update', vars=dict(id='"+data.vendors.id+"'))}}
-        jQuery('#ev')
-    .attr('href', "/vendors/update?id="+data.vendors.id+"&s="+data.vendors['state_id']+"&m="+data.vendors['municipality_id']+"&l="+data.vendors['locality_id']);
-    jQuery('#ep')
-    .attr('href', "/vendors/updatep?id="+data.vendors.id);
+        jQuery('#ev').attr('href', "/vendors/update?id="+data.vendors.id);
+        jQuery('#ep').attr('href', "/vendors/updatep?id="+data.vendors.id);
         
 
         status.val(id).removeAttr('disabled');
