@@ -4,6 +4,7 @@ def get_branches():
     b = db.branches
     q = request.vars.query
     query = b.status == True
+    rows = []
     if q == 'ANY':
         query = b
     elif q == 'FALSE':
@@ -23,6 +24,7 @@ def get_warehouses():
     w = db.warehouses
     q = request.vars.query
     query = w.status == True
+    rows = []
     if q == 'ANY':
         query = w
     elif q == 'FALSE':
@@ -82,7 +84,6 @@ def get_warehouse_information():
     id = request.vars.id
     data = dict()
     row = None
-
     try:
         query = db.warehouses.id == id
         left = []
@@ -152,6 +153,12 @@ def create_branch():
             if tax_info_id:
                 data['company_tax_info_id'] = tax_info_id
             id = db.branches.insert(**data)
+        except SyntaxError as e:
+            db.rollback()
+            if 'duplicate field' in e:
+                return 0
+            else:
+                return ''
         except Exception as e:
             db.rollback()
             return ''
@@ -164,7 +171,6 @@ def create_warehouse():
     data = dict()
     data_address = dict()
     vars = request.vars
-    tax_info_id = None
 
     data_address['address'] = vars.address
     data_address['suburb'] = vars.suburb
@@ -172,7 +178,6 @@ def create_warehouse():
     data_address['municipality_id'] = vars.municipality
     data_address['locality_id'] = vars.locality
     data_address['zip_code'] = vars.zip_code
-
     data['name'] = vars.name
 
     try:
@@ -184,9 +189,30 @@ def create_warehouse():
         try:
             data['company_address_id'] = address_id
             id = db.warehouses.insert(**data)
+        except SyntaxError as e:
+            db.rollback()
+            if 'duplicate field' in e:
+                return 0
+            else:
+                return ''
         except Exception as e:
             db.rollback()
             return ''
         else:
             db.commit()
             return str(id)
+
+def _update_branch(id, **data):
+    b = db.branches
+    query = b.id==id
+    try:
+        result = db(query).insert(**data)
+    except SyntaxError as e:
+        pass
+    except Exception as e:
+        pass
+    else:
+        pass
+
+def _update_warehouse(id, **data):
+    pass

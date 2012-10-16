@@ -4,6 +4,7 @@ def get_vendors():
     v = db.vendors
     q = request.vars.query
     query = v.status==True
+    rows = []
     if q == 'ANY':
         query = v
     elif q == 'FALSE':
@@ -66,6 +67,12 @@ def create_vendor():
             insert[k] = v
     try:
         id = db.vendors.insert(**insert)
+    except SyntaxError as e:
+        db.rollback()
+        if 'duplicate field' in e:
+            return 0
+        else:
+            return ''
     except Exception as e:
         db.rollback()
         return ''
@@ -85,7 +92,7 @@ def update_vendor():
     data['zip_code'] = vars.zip_code
     data['rfc'] = vars.rfc
     data['website'] = vars.website
-    result = _update_vendor(id, data)
+    result = _update_vendor(id, **data)
     return result
 
 def update_pay_information():
@@ -96,7 +103,7 @@ def update_pay_information():
     data['branch'] = vars.branch
     data['bank_account_number'] = vars.account_number
     data['clabe'] = vars.clabe
-    result = _update_vendor(id, data)
+    result = _update_vendor(id, **data)
     return result
 
 def toggle_vendor_status():
@@ -104,14 +111,20 @@ def toggle_vendor_status():
     status = request.vars.status
     status = True if status == 'True' else False
     data = dict(status=(not status))
-    result = _update_vendor(id, data)
+    result = _update_vendor(id, **data)
     return result
 
-def _update_vendor(id, data):
+def _update_vendor(id, **data):
     v = db.vendors
     query = v.id==id
     try:
         result = db(query).update(**data)
+    except SyntaxError as e:
+        db.rollback()
+        if 'duplicate field' in e:
+            return 0
+        else:
+            return ''
     except Exception as e:
         db.rollback()
         return ''

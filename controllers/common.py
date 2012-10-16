@@ -2,6 +2,7 @@
 
 def get_states():
     s = db.states
+    rows = []
     try:
         rows = db(s).select(s.id, s.name)
     except:
@@ -15,6 +16,7 @@ def get_states():
 def get_municipalities():
     m = db.municipalities
     options = str()
+    rows = []
     if request.vars.id:
         id = request.vars.id
         query = m.state_id==id
@@ -31,6 +33,7 @@ def get_localities():
     l = db.localities
     m = db.municipalities
     options = str()
+    rows = []
     if request.vars.state_id:
         state_id = request.vars.state_id
         query = m.state_id==state_id
@@ -63,6 +66,7 @@ def get_localities():
 
 def get_banks():
     b = db.banks
+    rows = []
     try:
         rows = db(b).select(b.id, b.short_name)
     except:
