@@ -29,10 +29,10 @@ def new_warehouse():
     
 def update_branch_office():
     title = 'Sucursales'
-    current = ['menu_catalogs', 'sidebar_branches', 'sub_branch_office_new']
+    current = ['menu_catalogs', 'sidebar_branches', 'sub_branch_office_read']
     return dict(title=title,  current=current)
 
 def update_warehouse():
     title = 'Almacenes'
-    current = ['menu_catalogs', 'sidebar_warehouses', 'sub_warehouse_new']
+    current = ['menu_catalogs', 'sidebar_warehouses', 'sub_warehouse_read']
     return dict(title=title,  current=current)

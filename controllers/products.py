@@ -2,9 +2,9 @@
 
 #Views
 def index():
-    title = 'Productos'
-    current = ['menu_catalogs', 'sidebar_products', 'sub_products_read']
-    return dict(title=title, current=current)
+	title = 'Productos'
+	current = ['menu_catalogs', 'sidebar_products', 'sub_products_read']
+	return dict(title=title, current=current)
     
 def new_product():
 	title = 'Productos'
@@ -40,14 +40,14 @@ def categories():
     current = ['menu_catalogs', 'sidebar_categories', 'sub_categories_read']
     return dict(title=title, current=current)
     
-def categories_quickedit():
-	title = 'Unidades de medida'
-	return dict(title=title)
-    
 def new_category():
 	title = 'Categorías'
 	current = ['menu_catalogs', 'sidebar_categories', 'sub_categories_new']
 	return dict(title=title, current=current)
+    
+def categories_quickedit():
+	title = 'Categorías'
+	return dict(title=title)
     
 def units():
     title = 'Unidades de medida'
