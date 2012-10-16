@@ -1256,6 +1256,7 @@ form label.error { float: none; color: #f00; font-size: 11px; display: block; te
 .msginfo { border: 1px solid #99c4ea; background: #d1e4f3 url(../images/notifications.png) no-repeat 0 -156px; }
 .msgsuccess { border: 1px solid #c1d779; background: #effeb9 url(../images/notifications.png) no-repeat 0 -104px; }
 .msgerror { border: 1px solid #e18b7c; background: #fad5cf url(../images/notifications.png) no-repeat 0 0; }
+.exists { border: 1px solid #e18b7c; background: #fad5cf url(../images/notifications.png) no-repeat 0 0; }
 .announcement { 
 	border: 1px solid #fbe187; background: #ffffdf url(../images/icons/blogperfume/Advertisment/advertisment-32.png) no-repeat 10px 10px; 
 	color: #95673f; height: auto;

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+@auth.requires_login()
 
 def get_vendors():
     v = db.vendors
@@ -54,14 +55,14 @@ def create_vendor():
     data = dict()
     insert = dict()
     vars = request.vars
-    data['name'] = vars.company
-    data['address'] = vars.address
+    data['name'] = vars.company.upper()
+    data['address'] = vars.address.upper()
     data['state_id'] = vars.state
     data['municipality_id'] = vars.municipality
     data['locality_id'] = vars.locality
     data['zip_code'] = vars.zip_code
-    data['rfc'] = vars.rfc
-    data['website'] = vars.website
+    data['rfc'] = vars.rfc.upper()
+    data['website'] = vars.website.upper()
     for k, v in data.items():
         if v:
             insert[k] = v
@@ -84,14 +85,14 @@ def update_vendor():
     vars = request.vars
     data = dict()
     id = vars.id
-    data['name'] = vars.company
-    data['address'] = vars.address
+    data['name'] = vars.company.upper()
+    data['address'] = vars.address.upper()
     data['state_id'] = vars.state
     data['municipality_id'] = vars.municipality
     data['locality_id'] = vars.locality
     data['zip_code'] = vars.zip_code
-    data['rfc'] = vars.rfc
-    data['website'] = vars.website
+    data['rfc'] = vars.rfc.upper()
+    data['website'] = vars.website.upper()
     result = _update_vendor(id, **data)
     return result
 
@@ -108,8 +109,8 @@ def update_pay_information():
 
 def toggle_vendor_status():
     id = request.vars.id
-    status = request.vars.status
-    status = True if status == 'True' else False
+    status = str(request.vars.status).upper()
+    status = True if status == 'TRUE' else False
     data = dict(status=(not status))
     result = _update_vendor(id, **data)
     return result

@@ -15,7 +15,7 @@ db.define_table('categories',
 
 db.define_table('category_descriptions',
     Field('category_id', 'reference categories', required=True, notnull=True),
-    Field('name', 'string', required=True, notnull=True),
+    Field('name', 'string', required=True, notnull=True, unique=True),
     Field('description', 'text'),
     Field('meta_description', 'string'),
     Field('meta_keywords', 'string'),

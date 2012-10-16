@@ -2,9 +2,6 @@
 
 {{block scripts_extra}} 
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.validate.min.js')}}"></script>
-<script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.tagsinput.min.js')}}"></script>
-<script type="text/javascript" src="{{=URL('static', 'js/plugins/charCount.js')}}"></script>
-<script type="text/javascript" src="{{=URL('static', 'js/plugins/ui.spinner.min.js')}}"></script>
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/chosen.jquery.min.js')}}"></script>
 
 <script type="text/javascript">
@@ -40,6 +37,11 @@ jQuery(document).ready(function() {
                     <p>Ocurrió un error con los datos del formulario.</p>
                 </div>
 
+                <div class="notibar msgerror exists" style="display:none;">
+                    <a class="close"></a>
+                    <p>Ese proveedor existe, para editarlo vaya a la sección de ver proveedor. </p>
+                </div>
+
                 <div class="notibar msgsuccess" style="display:none;">
                         <a class="close"></a>
                         <p>Se han guardado los datos del formulario.</p>
@@ -59,8 +61,6 @@ jQuery(document).ready(function() {
                         <p style="margin-top: 1px;">
                             <label>Estado</label>
                             <span class="field">
-                                <!-- <select name="states" id="states">
-                                </select> -->
                                 <select id="states" name="states" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="3">
                                   </select>
                             </span>
@@ -99,21 +99,6 @@ jQuery(document).ready(function() {
                         
                         <p class="stdformbutton">
                             <button id="submit" class="submit radius2" tabindex="9">Guardar </button>
-                            <!-- <span class="msg" style="
-                            display:none;
-                            background: #FFFCCC;
-                            color: #333;
-                            margin-bottom: 10px;
-                            padding: 5px;
-                            text-align: center;
-                            font-size: 13px;
-                            -moz-border-radius: 2px;
-                            -webkit-border-radius: 2px;
-                            border-radius: 2px;
-                            margin-left:30px;">
-                            something happened
-                            </span> -->
-                            
                         </p>
                     </form>
 
@@ -129,13 +114,14 @@ jQuery(document).ready(function() {
 </div><!--bodywrapper-->
 
 <script type="text/javascript">
-    //Ajax for selects
+//////////// Ajax for selects ////////////
     jQuery(".chzn-select").chosen({allow_single_deselect:true});
 
     var state = jQuery('#states'),
         municipality = jQuery('#municipality'),
         locality = jQuery('#locality');
 
+//////////// get municipalities ////////////
     state.change( function() {
         var id = jQuery(this).find(':selected').val();
         if(id != '') {
@@ -162,7 +148,7 @@ jQuery(document).ready(function() {
                     .trigger("liszt:updated");
         }
     });
-
+//////////// get localities ////////////
     municipality.change( function() {
         var id = jQuery(this).find(':selected').val();
         if(id != '') {
@@ -305,7 +291,6 @@ jQuery(document).ready(function() {
                 },
                 type: 'POST',
                 success:function(data){
-                    console.log(data);
                     if(data){
                         jQuery('.msgsuccess').fadeIn(1600);
                         deleteFields();
@@ -313,8 +298,6 @@ jQuery(document).ready(function() {
                     }
                     else{
                         jQuery('.msgerror').fadeIn(1600);
-                        //jQuery('html').scrollTop();
-                        //jQuery(window).scrollTop(0);
                     }
                     jQuery('body','html',window, document).animate(
                                                         {scrollTop:0}, 

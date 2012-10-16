@@ -2,10 +2,6 @@
 
 {{block scripts_extra}}	
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.validate.min.js')}}"></script>
-<script type="text/javascript" src="{{=URL('static', 'js/custom/forms.js')}}"></script>
-<script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.tagsinput.min.js')}}"></script>
-<script type="text/javascript" src="{{=URL('static', 'js/plugins/charCount.js')}}"></script>
-<script type="text/javascript" src="{{=URL('static', 'js/plugins/ui.spinner.min.js')}}"></script>
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/chosen.jquery.min.js')}}"></script>
 {{end}}
 
@@ -35,7 +31,7 @@
                     <p>Ocurrió un error con los datos del formulario.</p>
                 </div>
 
-                <div class="notibar msgerrorp" style="display:none;">
+                <div class="notibar exists" style="display:none;">
                     <a class="close"></a>
                     <p>Ese proveedor existe, para editarlo vaya a la sección de ver proveedor. </p>
                 </div>
@@ -94,26 +90,13 @@
                         
                         <p>
                             <label>Sitio Web</label>
-                            <span class="field"><input type="text" name="website" id="website" class="smallinput" tabindex="8"/></span>
+                            <span class="field">
+                                <input type="text" name="website" id="website" class="smallinput" tabindex="8" 
+                                placeholder="http://ejemplo.com"/></span>
                         </p>
                         
                         <p class="stdformbutton">
                             <button id="submit" class="submit radius2" tabindex="9">Guardar </button>
-                            <!-- <span class="msg" style="
-                            display:none;
-                            background: #FFFCCC;
-                            color: #333;
-                            margin-bottom: 10px;
-                            padding: 5px;
-                            text-align: center;
-                            font-size: 13px;
-                            -moz-border-radius: 2px;
-                            -webkit-border-radius: 2px;
-                            border-radius: 2px;
-                            margin-left:30px;">
-                            something happened
-                            </span> -->
-                            
                         </p>
                     </form>
 
@@ -129,22 +112,25 @@
 </div><!--bodywrapper-->
 
 <script type="text/javascript">
-    //Ajax for selects
+//////////// Ajax for selects ////////////
+    jQuery(".chzn-select").chosen();
+
     var state = jQuery('#states'),
         municipality = jQuery('#municipality'),
         locality = jQuery('#locality');
 
-        jQuery.ajax({
-            type: "POST",
-            url: "{{=URL(c='common', f='get_states')}}",
-            success: function(results) {
-                state
-                    .html(results)
-                    .prepend('<option value="">Selecccionar</option>')
-                    .trigger("liszt:updated");
-                }
-        });
+    jQuery.ajax({
+        type: "POST",
+        url: "{{=URL(c='common', f='get_states')}}",
+        success: function(results) {
+            state
+                .html(results)
+                .prepend('<option value="">Selecccionar</option>')
+                .trigger("liszt:updated");
+            }
+    });
 
+//////////// get municipalities ////////////
     state.change( function() {
         var id = jQuery(this).find(':selected').val();
         if(id != '') {
@@ -154,24 +140,25 @@
                 data: {id: id},
                 success: function(results) {
                     municipality
-                            .html(results)
-                            .prepend('<option value="">Selecccionar</option>')
-                            .trigger("liszt:updated");
+                        .html(results)
+                        .prepend('<option value="">Selecccionar</option>')
+                        .trigger("liszt:updated");
                 }
             });
         }
         else {
             municipality
-                    .html('')
-                    .prepend('<option value="">Selecccionar</option>')
-                    .trigger("liszt:updated");
+                .html('')
+                .prepend('<option value="">Selecccionar</option>')
+                .trigger("liszt:updated");
             locality
-                    .html('')
-                    .prepend('<option value="">Selecccionar</option>')
-                    .trigger("liszt:updated");
+                .html('')
+                .prepend('<option value="">Selecccionar</option>')
+                .trigger("liszt:updated");
         }
     });
 
+//////////// get localities ////////////
     municipality.change( function() {
         var id = jQuery(this).find(':selected').val();
         if(id != '') {
@@ -181,47 +168,22 @@
                 url: "{{=URL(c='common', f='get_localities')}}",
                 success: function(results) {
                     locality
-                            .html(results)
-                            .prepend('<option value="">Selecccionar</option>')
-                            .trigger("liszt:updated");
+                        .html(results)
+                        .prepend('<option value="">Selecccionar</option>')
+                        .trigger("liszt:updated");
                 }
             });
         }
         else {
             locality
-                    .html('')
-                    .prepend('<option value="">Selecccionar</option>')
-                    .trigger("liszt:updated");
+                .html('')
+                .prepend('<option value="">Selecccionar</option>')
+                .trigger("liszt:updated");
         }
     });
 
-    //form and shit
-    
-
-    //send form
-    jQuery('#submit').live('click', function(e) {
-        e.preventDefault();
-        var sid = jQuery('#states').val(),
-            mid = (jQuery('#municipality').val() == null) ? '': jQuery('#municipality').val(),
-            lid = (jQuery('#locality').val() == null) ? '': jQuery('#locality').val();
-        // var company = jQuery('#company'),
-        //     zip_code = jQuery('#zip_code'),
-        //     val_zip = /^([1-9]{2}|[0-9][1-9]|[1-9][0-9])[0-9]{3}$/;
-
-        // if(company.val() != null && company.val().length != 0 
-        //    && company.val().indexOf(" ") != 0) {
-        //     if(zip_code.val().length > 0  ) {
-        //         if( val_zip.test( zip_code.val() ) ) {
-        //             zip_code = zip_code.val();
-        //             console.log('pressed'+zip_code.val());
-        //         }
-        //     } else{
-        //     console.log('pressed');
-
-        //     }
-        // }
-        
-        jQuery("#form").validate({
+//////////// validate form ////////////
+    jQuery("#form").validate({
             rules: {
                 company: "required",
                 zip_code: {
@@ -242,21 +204,28 @@
             messages: {
                 company: "Ingrese el nombre de la empresa",
                 zip_code: "Este campo debe tener 5 números.",
-                website: "Entre una url válida.",
+                website: "El sitio web debe tener el siguiente formato: http://ejemplo.com ",
                 rfc: "R.F.C. inválido."
             }
         });
+
+//////////// send form ////////////
+    jQuery('#submit').live('click', function(e) {
+        e.preventDefault();
+        var sid = jQuery('#states').val(),
+            mid = (jQuery('#municipality').val() == null) ? '': jQuery('#municipality').val(),
+            lid = (jQuery('#locality').val() == null) ? '': jQuery('#locality').val(),
+            com = jQuery('#company').val();
         
+        jQuery('.msgerror').hide();
+        jQuery('.exists').hide();
+        jQuery('.msgsuccess').hide();
 
-        if(jQuery("#form").valid()) {
-            jQuery('.msgerror').hide();
-            jQuery('.msgerrorp').hide();
-            jQuery('.msgsuccess').hide();
-
+        if(jQuery("#form").valid() && com != null) {
              jQuery.ajax({
                 url: "{{=URL(c='vendors_ajax', f='create_vendor')}}",
                 data: { 
-                    company:jQuery('#company').val(),
+                    company:com,
                     address:jQuery('#address').val(),
                     state: sid,
                     municipality: mid,
@@ -267,7 +236,6 @@
                 },
                 type: 'POST',
                 success:function(data){
-                    console.log(data);
                     if(data != 0 && data){
                         jQuery('.msgsuccess').fadeIn(1600, function() {
                             jQuery('.msgsuccess').fadeOut('slow');
@@ -276,18 +244,19 @@
                         sid, mid, lid = 0;
                     }
                     else if(data == 0) {
-                        jQuery('.msgerrorp').fadeIn(1600);
+                        jQuery('.exists').fadeIn(1600);
                     }
                     else{
                         jQuery('.msgerror').fadeIn(1600);
-                        //jQuery('html').scrollTop();
-                        //jQuery(window).scrollTop(0);
                     }
                     jQuery('body','html',window).animate(
                                                         {scrollTop:0}, 
                                                         1000);
                 }
             }); 
+        } else {
+            jQuery('.msgerror').fadeIn(1600);
+            jQuery('body','html',window, document).animate({scrollTop:0},1000);
         }
     });
 

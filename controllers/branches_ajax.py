@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+@auth.requires_login()
 def get_branches():
     b = db.branches
     q = request.vars.query
@@ -19,7 +20,7 @@ def get_branches():
         options += '\n'
     return options
 
-
+@auth.requires_login()
 def get_warehouses():
     w = db.warehouses
     q = request.vars.query
@@ -39,7 +40,7 @@ def get_warehouses():
         options += '\n'
     return options
 
-
+@auth.requires_login()
 def get_branch_information():
     id = request.vars.id
     data = dict()
@@ -79,7 +80,7 @@ def get_branch_information():
     data = simplejson.dumps(data)
     return str(data)
 
-
+@auth.requires_login()
 def get_warehouse_information():
     id = request.vars.id
     data = dict()
@@ -116,42 +117,36 @@ def get_warehouse_information():
     data = simplejson.dumps(data)
     return str(data)
 
-
+@auth.requires_login()
 def create_branch():
     data = dict()
     data_address = dict()
     data_tax = dict()
     vars = request.vars
-    tax_info_id = None
 
-    data_address['address'] = vars.address
-    data_address['suburb'] = vars.suburb
+    data_address['address'] = vars.address.upper()
+    data_address['suburb'] = vars.suburb.upper()
     data_address['state_id'] = vars.states
     data_address['municipality_id'] = vars.municipality
     data_address['locality_id'] = vars.locality
     data_address['zip_code'] = vars.zip_code
 
-    if vars.corporate:
-        data_tax['business_name'] = vars.corporate
-    if vars.rfc:
-        data_tax['rfc'] = vars.rfc
-    if vars.tax_regime:
-        data_tax['tax'] = vars.tax_regime
+    data_tax['business_name'] = vars.corporate.upper()
+    data_tax['rfc'] = vars.rfc.upper()
+    data_tax['tax'] = vars.tax_regime.upper()
 
-    data['name'] = vars.name
+    data['name'] = vars.name.upper()
 
     try:
         address_id = db.company_addresses.insert(**data_address)
-        if data_tax:
-            tax_info_id = db.company_tax_info.insert(**data_tax)
+        tax_info_id = db.company_tax_info.insert(**data_tax)
     except Exception as e:
         db.rollback()
         return ''
     else:
         try:
             data['company_address_id'] = address_id
-            if tax_info_id:
-                data['company_tax_info_id'] = tax_info_id
+            data['company_tax_info_id'] = tax_info_id
             id = db.branches.insert(**data)
         except SyntaxError as e:
             db.rollback()
@@ -166,19 +161,19 @@ def create_branch():
             db.commit()
             return str(id)
 
-
+@auth.requires_login()
 def create_warehouse():
     data = dict()
     data_address = dict()
     vars = request.vars
 
-    data_address['address'] = vars.address
-    data_address['suburb'] = vars.suburb
+    data_address['address'] = vars.address.upper()
+    data_address['suburb'] = vars.suburb.upper()
     data_address['state_id'] = vars.states
     data_address['municipality_id'] = vars.municipality
     data_address['locality_id'] = vars.locality
     data_address['zip_code'] = vars.zip_code
-    data['name'] = vars.name
+    data['name'] = vars.name.upper()
 
     try:
         address_id = db.company_addresses.insert(**data_address)
@@ -202,17 +197,132 @@ def create_warehouse():
             db.commit()
             return str(id)
 
-def _update_branch(id, **data):
-    b = db.branches
-    query = b.id==id
+@auth.requires_login()
+def toggle_branch_status():
+    id = request.vars.id
+    status = str(request.vars.status).upper()
+    status = True if status == 'TRUE' else False
+    data = dict(status=(not status))
     try:
-        result = db(query).insert(**data)
-    except SyntaxError as e:
-        pass
+        result = db(db.branches.id==id).update(**data)
     except Exception as e:
-        pass
+        db.rollback()
+        return ''
     else:
-        pass
+        db.commit()
+        if result == 1:
+            return True
+        else:
+            return ''
 
-def _update_warehouse(id, **data):
-    pass
+@auth.requires_login()
+def toggle_warehouse_status():
+    id = request.vars.id
+    status = str(request.vars.status).upper()
+    status = True if status == 'TRUE' else False
+    data = dict(status=(not status))
+    try:
+        result = db(db.warehouses.id==id).update(**data)
+    except Exception as e:
+        db.rollback()
+        return ''
+    else:
+        db.commit()
+        if result == 1:
+            return True
+        else:
+            return ''
+
+@auth.requires_login()
+def update_branch():
+    b = db.branches
+    vars = request.vars
+    id = vars.id
+    data = dict()
+    data_address = dict()
+    data_tax = dict()
+    try:
+        row = db(db.branches.id==id).select(db.branches.company_address_id,
+            db.branches.company_tax_info_id)
+    except Exception as e:
+        db.rollback()
+        return ''
+    if row:
+        company_address_id = row.company_address_id
+        company_tax_info_id = row.company_tax_info_id
+    else:
+        return ''
+
+    data_address['address'] = vars.address.upper()
+    data_address['suburb'] = vars.suburb.upper()
+    data_address['state_id'] = vars.states
+    data_address['municipality_id'] = vars.municipality
+    data_address['locality_id'] = vars.locality
+    data_address['zip_code'] = vars.zip_code
+
+    data_tax['business_name'] = vars.corporate.upper()
+    data_tax['rfc'] = vars.rfc.upper()
+    data_tax['tax'] = vars.tax_regime.upper()
+
+    data['name'] = vars.name
+
+    try:
+        db(db.branches.id==id).update(**data)
+        db(db.company_addresses.id==company_address_id).update(**data_address)
+        db(db.company_tax_info.id==company_tax_info_id).update(**data_tax)
+    except SyntaxError as e:
+        db.rollback()
+        if 'duplicate field' in e:
+            return 0
+        else:
+            return ''
+    except Exception as e:
+        db.rollback()
+        return ''
+    else:
+        db.commit()
+        return True
+
+@auth.requires_login()
+def update_warehouse(id, **data):
+    b = db.branches
+    vars = request.vars
+    id = vars.id
+    data = dict()
+    data_address = dict()
+    data_tax = dict()
+    try:
+        row = db(db.branches.id == id).select(db.branches.company_address_id,
+            db.branches.company_tax_info_id)
+    except Exception as e:
+        db.rollback()
+        return ''
+    if row:
+        company_address_id = row.company_address_id
+    else:
+        return ''
+
+    data_address['address'] = vars.address.upper()
+    data_address['suburb'] = vars.suburb.upper()
+    data_address['state_id'] = vars.states
+    data_address['municipality_id'] = vars.municipality
+    data_address['locality_id'] = vars.locality
+    data_address['zip_code'] = vars.zip_code
+
+    data['name'] = vars.name
+
+    try:
+        db(db.branches.id == id).update(**data)
+        db(db.company_addresses.id == company_address_id).update(**data_address)
+    except SyntaxError as e:
+        db.rollback()
+        if 'duplicate field' in e:
+            return 0
+        else:
+            return ''
+    except Exception as e:
+        db.rollback()
+        return ''
+    else:
+        db.commit()
+        return True
