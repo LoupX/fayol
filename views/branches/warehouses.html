@@ -140,7 +140,7 @@ function ajaxFilter(who) {
     });
   }
 
-branches_select.change( function() {
+warehouses_select.change( function() {
   ////clean fields
   cleanFields();
 
@@ -169,7 +169,7 @@ branches_select.change( function() {
       success: function (data) {
         //console.log(data);
         //receive something like data = {"name":"name","state":"state"}
-        name.html(data.branches['name']);       
+        name.html(data.warehouses['name']);       
         suburb.html(data.company_addresses['suburb'])
         address.html(data.company_addresses['address']);       
         state.html(data.states['name']);
@@ -253,7 +253,7 @@ function chk(id, s) {
 
       if(ans) {
         jQuery.ajax({
-          url: "{{=URL(c='branches_ajax', f='toggle_branch_status')}}",
+          url: "{{=URL(c='branches_ajax', f='toggle_warehouse_status')}}",
           type: 'POST',
           data: { id: id, status: s }
         });
@@ -267,7 +267,7 @@ function chk(id, s) {
     }
     else {
         jQuery.ajax({
-          url: "{{=URL(c='branches_ajax', f='toggle_branch_status')}}",
+          url: "{{=URL(c='branches_ajax', f='toggle_warehouse_status')}}",
           type: 'POST',
           data: { id: id, status: s }
         });
