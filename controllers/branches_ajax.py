@@ -3,11 +3,11 @@
 def get_branches():
     b = db.branches
     q = request.vars.query
-    query = b.status==True
+    query = b.status == True
     if q == 'ANY':
         query = b
     elif q == 'FALSE':
-        query = b.status==False
+        query = b.status == False
     try:
         rows = db(query).select(b.name, b.id)
     except:
@@ -18,14 +18,15 @@ def get_branches():
         options += '\n'
     return options
 
+
 def get_warehouses():
     w = db.warehouses
     q = request.vars.query
-    query = w.status==True
+    query = w.status == True
     if q == 'ANY':
         query = w
     elif q == 'FALSE':
-        query = w.status==False
+        query = w.status == False
     try:
         rows = db(query).select(w.name, w.id)
     except:
@@ -36,76 +37,84 @@ def get_warehouses():
         options += '\n'
     return options
 
+
 def get_branch_information():
     id = request.vars.id
     data = dict()
+    row = None
+
     try:
-        query = db.branches.id==id
-        query &= db.branches.company_address_id==db.company_addresses.id
+        query = db.branches.id == id
         left = []
-        left.append(db.states.on(db.branches.state_id == db.states.id))
-        left.append(db.municipalities.on(
-            db.branches.municipality_id == db.municipalities.id))
-        left.append(
-            db.localities.on(db.branches.locality_id == db.localities.id))
-        left.append(db.banks.on(db.branches.bank_id == db.banks.id))
+        left.append(db.company_addresses.on(
+            db.branches.company_address_id == db.company_addresses.id))
         left.append(db.company_tax_info.on(
-            db.branches.company_tax_info_id==db.company_tax_info.id))
+            db.branches.company_tax_info_id == db.company_tax_info.id))
+        left.append(db.states.on(db.company_addresses.state_id == db.states.id))
+        left.append(db.municipalities.on(
+            db.company_addresses.municipality_id == db.municipalities.id))
+        left.append(
+            db.localities.on(
+                db.company_addresses.locality_id == db.localities.id))
         row = db(query).select(
             db.branches.ALL, db.states.name, db.municipalities.name,
-            db.localities.name, db.banks.short_name,
-            db.company_addresses.ALL, db.company_tax_info.ALL,
-            left=left).as_list()
+            db.localities.name, db.company_addresses.ALL,
+            db.company_tax_info.ALL, left=left).as_list()
     except:
         db.rollback()
 
+    import datetime
+
     if row:
         data = row[0]
-        if 'date_added' in data['branches']:
-            data['branches']['date_added'] = str(
-                data['branches']['date_added'])
-        if 'date_modified' in data['branches']:
-            data['branches']['date_modified'] = str(
-                data['branches']['date_modified'])
+        for r in data:
+            for k in data[r]:
+                if type(data[r][k]) is datetime.datetime:
+                    data[r][k] = str(data[r][k])
 
     from gluon.contrib import simplejson
+
     data = simplejson.dumps(data)
     return str(data)
+
 
 def get_warehouse_information():
     id = request.vars.id
     data = dict()
+    row = None
+
     try:
-        query = db.warehouses.id==id
-        query &= db.warehouses.company_address_id==db.company_addresses.id
+        query = db.warehouses.id == id
         left = []
-        left.append(db.states.on(db.warehouses.state_id == db.states.id))
+        left.append(db.company_addresses.on(
+            db.warehouses.company_address_id == db.company_addresses.id))
+        left.append(db.states.on(db.company_addresses.state_id == db.states.id))
         left.append(db.municipalities.on(
-            db.warehouses.municipality_id == db.municipalities.id))
+            db.company_addresses.municipality_id == db.municipalities.id))
         left.append(
-            db.localities.on(db.warehouses.locality_id == db.localities.id))
-        left.append(db.banks.on(db.warehouses.bank_id == db.banks.id))
-        left.append(db.company_tax_info.on(
-            db.warehouses.company_tax_info_id==db.company_tax_info.id))
+            db.localities.on(
+                db.company_addresses.locality_id == db.localities.id))
         row = db(query).select(
-            db.warehouses.ALL, db.states.name, db.municipalities.name,
-            db.localities.name, db.banks.short_name,
+            db.warehouses.ALL, db.states.name,
+            db.municipalities.name, db.localities.name,
             db.company_addresses.ALL, left=left).as_list()
     except:
         db.rollback()
 
+    import datetime
+
     if row:
         data = row[0]
-        if 'date_added' in data['branches']:
-            data['warehouses']['date_added'] = str(
-                data['warehouses']['date_added'])
-        if 'date_modified' in data['branches']:
-            data['warehouses']['date_modified'] = str(
-                data['warehouses']['date_modified'])
+        for r in data:
+            for k in data[r]:
+                if type(data[r][k]) is datetime.datetime:
+                    data[r][k] = str(data[r][k])
 
     from gluon.contrib import simplejson
+
     data = simplejson.dumps(data)
     return str(data)
+
 
 def create_branch():
     data = dict()
