@@ -305,7 +305,6 @@ jQuery(document).ready(function() {
                 },
                 type: 'POST',
                 success:function(data){
-                    console.log(data);
                     if(data){
                         jQuery('.msgsuccess').fadeIn(1600);
                         deleteFields();
@@ -313,8 +312,6 @@ jQuery(document).ready(function() {
                     }
                     else{
                         jQuery('.msgerror').fadeIn(1600);
-                        //jQuery('html').scrollTop();
-                        //jQuery(window).scrollTop(0);
                     }
                     jQuery('body','html',window, document).animate(
                                                         {scrollTop:0}, 
