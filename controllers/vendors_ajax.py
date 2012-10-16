@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 @auth.requires_login()
+
 def get_vendors():
     v = db.vendors
     q = request.vars.query
