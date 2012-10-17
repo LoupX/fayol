@@ -1,8 +1,11 @@
 {{extend 'base/layout.html'}}
 
 {{block scripts_extra}}
-<script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.dataTables.min.js')}}"></script>
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.validate.min.js')}}"></script>	
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.tagsinput.min.js')}}"></script>
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/charCount.js')}}"></script>
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/ui.spinner.min.js')}}"></script>
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/chosen.jquery.min.js')}}"></script>	
 {{end}}
 
 {{block sidebar_menu}}
@@ -64,14 +67,16 @@
                                   </select>
                             </span>
                         </p>
-	                    <p style="margin-top: 1px;">
+                        
+                        <p style="margin-top: 1px;">
                             <label>Municipio</label>
                             <span id="municipality_container"class="field">
                             <select name="municipality" id="municipality" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="4">
                             </select>
                             </span>
                         </p>
-	                    <p style="margin-top: 1px;">
+
+                        <p style="margin-top: 1px;">
                             <label>Ciudad</label>
                             <span class="field" id="locality_container">
                             <select name="locality" id="locality" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="5">
@@ -100,6 +105,8 @@
 
 <script type="text/javascript">
     //Ajax for selects
+    jQuery(".chzn-select").chosen({allow_single_deselect:true});
+    
     var states = jQuery('#states'),
         municipality = jQuery('#municipality'),
         locality = jQuery('#locality');
