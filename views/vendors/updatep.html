@@ -101,37 +101,25 @@ jQuery(".chzn-select").chosen();
 
 var vendors = jQuery('#selection') ,
     banks = jQuery('#bank'),
-    id = 0;
-
-////// get banks //////
-jQuery.ajax({
-    url: "{{=URL(c='common', f='get_banks')}}",
-    type: "POST",
-    success:function(data){
-      banks
-        .append('<option value="">Selecccionar</option>')
-        .append(data)
-        .trigger("liszt:updated");
-    }
-});
+    id = 0,
+    shit = '';
 
 ////// get info //////
+
 jQuery.ajax({
         url: "{{=URL(c='vendors_ajax', f='get_vendor_information')}}",
         data: { id: "{{=request.vars.id}}" },
         type: "POST",
         dataType:"json",
         success:function(data){
-            //console.log(data);
             jQuery('#branch').val(data.vendors['branch']);
             jQuery('#acountnumber').val(data.vendors['bank_account_number']);
             jQuery('#clabe').val(data.vendors['clabe']);
             jQuery('#vendor').html(data.vendors['name']);
-            banks
-                .find("option[value="+data.vendors['bank_id']+"]")
-                .attr('selected',true)
-                .change()
-                .trigger("liszt:updated");
+            shit = data.vendors['bank_id'];
+        },
+        complete: function() {
+            nl();
         }
     });
 
@@ -164,6 +152,26 @@ jQuery.ajax({
 
             }
         });
+
+////// get banks //////
+function nl() {
+jQuery.ajax({
+    url: "{{=URL(c='common', f='get_banks')}}",
+    type: "POST",
+    success:function(data){
+      banks
+        .append('<option value="">Selecccionar</option>')
+        .append(data)
+        .trigger("liszt:updated");
+    },
+    complete:function() {
+            banks
+                .find("option[value="+shit+"]")
+                .attr('selected',true)
+                .trigger("liszt:updated");
+    }
+});
+}
 
 //////////// validate form ////////////
         jQuery("#form1").validate({
