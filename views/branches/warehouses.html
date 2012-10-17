@@ -180,11 +180,9 @@ warehouses_select.change( function() {
         municipality.html(data.municipalities['name']);
         locality.html(data.localities['name']);
         zip_code.html(data.company_addresses['zip_code']); 
-
-        //{{=URL(c='vendors', f='update', vars=dict(id='"+data.vendors.id+"'))}}
+        
          jQuery('#edit_warehouse')
     .attr('href', "{{=URL(c='branches', f='update_warehouse')}}"+'?id='+data.warehouses.id);
-
         status.val(id).removeAttr('disabled');
         status.parent().parent().removeClass('disabled'); 
 

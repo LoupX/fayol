@@ -114,7 +114,9 @@ jQuery(document).ready(function() {
     var state = jQuery('#states'),
         municipality = jQuery('#municipality'),
         locality = jQuery('#locality');
-        
+        state_id = null
+        municipality_id = null
+        locality_id = null
     
 
     state.change( function() {
@@ -182,16 +184,12 @@ jQuery(document).ready(function() {
             jQuery('#address').val(data.company_addresses['address']);
             jQuery('#zip_code').val(data.company_addresses['zip_code']);
             
+            state_id = data.company_addresses.state_id
+            municipality_id = data.company_addresses.municipality_id
+            locality_id = data.company_addresses.locality_id
             selectS();
-	        /*state_options = jQuery("#states").find('option')
-            for(var i in state_options) { 
-            	if(jQuery(state_options[i]).val() == data.company_addresses.state_id) { 
-            		jQuery(state_options[i]).attr('selected', true); 
-            		jQuery(state_options[i]).trigger("liszt:updated"); 
-            	} 
-            }*/
-            selectM(data.warehouses['state_id']);
-            selectL(data.warehouses['municipality_id']);
+            selectM(state_id);
+            selectL(municipality_id);
             
             jQuery('#states')
                 .find('option[value='+data.warehouses['state_id']+']')
@@ -332,12 +330,23 @@ jQuery(document).ready(function() {
         jQuery.ajax({
             type: "POST",
             url: "{{=URL(c='common', f='get_states')}}",
+            complete: function(){
+                options = state.find('option');
+                if(options.length > 0 && state_id){
+                    for(var i in options) { 
+                        if(jQuery(options[i]).val() == state_id) { 
+                            jQuery(options[i]).attr('selected', true); 
+                            state.trigger("liszt:updated"); 
+                        } 
+                    }
+                }
+            },
             success: function(results) {
                 state
                     .html(results)
                     .prepend('<option value="">Seleccionar</option>')
                     .trigger("liszt:updated");
-                }
+            }
         });
 
     }
@@ -347,6 +356,17 @@ jQuery(document).ready(function() {
             type: "POST",
             url: "{{=URL(c='common', f='get_municipalities')}}",
             data: {id: v},
+            complete: function(){
+                options = municipality.find('option');
+                if(options.length > 0 && municipality_id){
+                    for(var i in options) { 
+                        if(jQuery(options[i]).val() == municipality_id) { 
+                            jQuery(options[i]).attr('selected', true); 
+                            municipality.trigger("liszt:updated"); 
+                        } 
+                    }
+                }
+            },
             success: function(results) {
                 municipality
                     .html(results)
@@ -361,6 +381,17 @@ jQuery(document).ready(function() {
                 type: "POST",
                 data: {municipality_id: v},
                 url: "{{=URL(c='common', f='get_localities')}}",
+                complete: function(){
+                    options = locality.find('option');
+                    if(options.length > 0 && locality_id){
+                        for(var i in options) { 
+                            if(jQuery(options[i]).val() == locality_id) { 
+                                jQuery(options[i]).attr('selected', true); 
+                                locality.trigger("liszt:updated"); 
+                            } 
+                        }
+                    }
+                },
                 success: function(results) {
                     locality
                             .html(results)
@@ -369,8 +400,36 @@ jQuery(document).ready(function() {
                 }
         });
     }
-
     
+    /*
+    state.ajaxComplete(function(){
+        
+    });
+
+    municipality.ajaxComplete(function(){
+        options = jQuery("#municipality").find('option');
+        if(options.length > 0){
+            for(var i in options) { 
+                if(jQuery(options[i]).val() == municipality_id) { 
+                    jQuery(options[i]).attr('selected', true); 
+                    municipality.trigger("liszt:updated"); 
+                } 
+            }
+        }
+    });
+
+    locality.ajaxComplete(function(){
+        options = jQuery("#locality").find('option');
+        if(options.length > 0){
+            for(var i in options) { 
+                if(jQuery(options[i]).val() == locality_id) { 
+                    jQuery(options[i]).attr('selected', true); 
+                    locality.trigger("liszt:updated"); 
+                } 
+            }
+        }
+    });
+    */
 </script>
 
 </body>
