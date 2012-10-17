@@ -19,9 +19,3 @@ db.define_table('brand_descriptions',
     Field('meta_description', 'string'),
     Field('meta_keywords', 'string'),
     migrate=MIGRATE)
-
-db.brand_descriptions.format = '%(name)s'
-db.brands.date_added.represent = (lambda date_added, row:
-	                             date_added.strftime('%d - %m - %Y'))
-db.brands.date_modified.represent = (lambda date_modified, row: 
-	                                date_added.strftime('%d - %m - %Y'))

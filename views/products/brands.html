@@ -90,6 +90,17 @@
     
 </div><!--bodywrapper-->
 
+<script type="text/javascript">
+    jQuery.ajax({
+        url: "{{=URL(c='products_ajax', f='get_brands')}}",
+        type: "POST",
+        dataType: "json",
+        success:function(data){
+            
+        }
+    });
+</script>
+
 </body>
 </html>
 {{end}}

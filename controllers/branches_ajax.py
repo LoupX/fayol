@@ -4,7 +4,7 @@
 def get_branches():
     b = db.branches
     q = request.vars.query
-    query = b.status == True
+    query = b.status==True
     rows = []
     if q == 'ANY':
         query = b
@@ -67,7 +67,6 @@ def get_branch_information():
         db.rollback()
 
     import datetime
-
     if row:
         data = row[0]
         for r in data:
