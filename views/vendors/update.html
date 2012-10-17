@@ -117,7 +117,10 @@
 
     var state = jQuery('#states'),
         municipality = jQuery('#municipality'),
-        locality = jQuery('#locality');
+        locality = jQuery('#locality'),
+        s = '',
+        m = '',
+        l = '';
 
 //////////// get info ////////////
     jQuery.ajax({
@@ -132,31 +135,12 @@
             jQuery('#zip_code').val(data.vendors['zip_code']);
             jQuery('#rfc').val(data.vendors['rfc']);
             jQuery('#website').val(data.vendors['website']);
-            
-            selectS(data.vendors['state_id']);
-            selectM(data.vendors['state_id'], data.vendors['municipality_id']);
-            selectL(data.vendors['municipality_id'], data.vendors['locality_id']);
-            
-            //jQuery('#states')
-            
-            // jQuery('#states')
-            //     .find('option[value='+data.vendors['state_id']+']')
-            //     .attr('selected',true)
-            //     .trigger("liszt:updated");
-
-            
-
-            // // console.log(data.municipalities['id']);
-            // jQuery('#municipality')
-            //     .find("option[value="+data.vendors['municipality_id']+"]")
-            //     .attr('selected',true)
-            //     .trigger("liszt:updated");
-
-            // // //selectL(data.municipalities['id']);
-            // jQuery('#locality')
-            //     .find("option[value="+data.vendors['locality_id']+"]")
-            //     .attr('selected',true)
-            //     .trigger("liszt:updated"); 
+            s = data.vendors['state_id'];
+            m = data.vendors['municipality_id'];
+            l = data.vendors['locality_id'];
+            selectS(s);
+            selectM(s, m);
+            selectL(m, l); 
         }
     });
 
@@ -301,9 +285,13 @@
                 state
                     .html(results)
                     .prepend('<option value="">Selecccionar</option>')
+                    .trigger("liszt:updated");
+                },
+            complete: function() {
+                state
                     .find('option[value='+id+']').attr('selected',true)
                     .trigger("liszt:updated");
-                }
+            }
         });
 
     }
@@ -317,6 +305,10 @@
                 municipality
                     .html(results)
                     .prepend('<option value="">Selecccionar</option>')
+                    .trigger("liszt:updated");
+            },
+            complete: function() {
+                municipality
                     .find('option[value='+id+']').attr('selected',true)
                     .trigger("liszt:updated");
             }
@@ -332,9 +324,13 @@
                     locality
                         .html(results)
                         .prepend('<option value="">Selecccionar</option>')
+                        .trigger("liszt:updated");
+                },
+                complete: function() {
+                    locality
                         .find('option[value='+id+']').attr('selected',true)
                         .trigger("liszt:updated");
-                }
+            }
         });
     }
 
