@@ -114,6 +114,9 @@ jQuery(document).ready(function() {
     var state = jQuery('#states'),
         municipality = jQuery('#municipality'),
         locality = jQuery('#locality');
+        state_id = null
+        municipality_id = null
+        locality_id = null
         
     
 
@@ -182,14 +185,10 @@ jQuery(document).ready(function() {
             jQuery('#address').val(data.company_addresses['address']);
             jQuery('#zip_code').val(data.company_addresses['zip_code']);
             
+            state_id = data.company_addresses.state_id
+            municipality_id = data.company_addresses.municipality_id
+            locality_id = data.company_addresses.locality_id
             selectS();
-	        state_options = jQuery("#states").find('option') 
-            for(var i in state_options) { 
-            	if(jQuery(state_options[i]).val() == data.company_addresses.state_id) { 
-            		jQuery(state_options[i]).attr('selected', true); 
-            		jQuery(state_options[i]).trigger("liszt:updated"); 
-            	} 
-            }
             selectM(data.warehouses['state_id']);
             selectL(data.warehouses['municipality_id']);
             
@@ -369,8 +368,17 @@ jQuery(document).ready(function() {
                 }
         });
     }
-
     
+    jQuery('#states').ready(function(e){
+        state_options = jQuery("#states").find('option'); 
+        for(var i in state_options) { 
+            if(jQuery(state_options[i]).val()==state_id) { 
+                jQuery(state_options[i]).attr('selected', true); 
+                jQuery(state_options[i]).trigger("liszt:updated"); 
+            } 
+        }
+    });
+
 </script>
 
 </body>
