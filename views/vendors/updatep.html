@@ -43,8 +43,8 @@
                                                 
                         <p>
                             <label>Proveedor</label>
-                            <span class="field">
-                                <input type="text" name="vendor" id="vendor" class="smallinput" disabled/>
+                            <span class="field" id="vendor">
+                                <!-- <input type="text" name="vendor" id="vendor" class="smallinput" disabled/> -->
                             </span>
                         </p>
                         
@@ -126,7 +126,7 @@ jQuery.ajax({
             jQuery('#branch').val(data.vendors['branch']);
             jQuery('#acountnumber').val(data.vendors['bank_account_number']);
             jQuery('#clabe').val(data.vendors['clabe']);
-            jQuery('#vendor').val(data.vendors['name']);
+            jQuery('#vendor').html(data.vendors['name']);
             banks
                 .find("option[value="+data.vendors['bank_id']+"]")
                 .attr('selected',true)
