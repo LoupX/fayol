@@ -205,10 +205,9 @@ branches_select.change( function() {
         corporate.html(data.company_tax_info['business_name']);
         rfc.html(data.company_tax_info['rfc']);
         tax_regime.html(data.company_tax_info['tax']);
-
-        //{{=URL(c='vendors', f='update', vars=dict(id='"+data.vendors.id+"'))}}
+        
         jQuery('#edit_branch')
-    .attr('href', "/fayol/branches/update_branch_office?id="+data.branches.id);
+    .attr('href', "{{=URL(c='branches', f='update_branch_office')}}"+'?id='+data.branches.id);
 
         status.val(id).removeAttr('disabled');
         status.parent().parent().removeClass('disabled'); 
