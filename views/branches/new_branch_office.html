@@ -77,7 +77,7 @@
                         </p>
 
                         <p style="margin-top: 1px;">
-                            <label>Ciudad</label>
+                            <label>Población</label>
                             <span class="field" id="locality_container">
                             <select name="locality" id="locality" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="6">
                             </select>
@@ -189,11 +189,7 @@
         }
     });
 
-    //send form
-    jQuery('#submit').live('click', function(e) {
-        e.preventDefault();
-        
-        jQuery("#form_branch_office").validate({
+    jQuery("#form_branch_office").validate({
             rules: {
                 name: "required",
                 address : "required",
@@ -208,7 +204,7 @@
                 },
                 rfc: {
                     minlength: 10,
-                    maxlength:13,
+                    maxlength: 13,
                     required: false
                 }
             },
@@ -218,11 +214,15 @@
                 colony: "Ingrese la colonia de la surcursal",
                 states: "Ingrese el estado de la surcursal",
                 municipality: "Ingrese el municipio de la surcursal",
-                locality: "Ingrese la ciudad de la surcursal",
+                locality: "Ingrese la Población de la surcursal",
                 zip_code: "Este campo debe tener 5 números.",
                 rfc: "R.F.C. inválido."
-            }
-        });
+         }
+    });
+
+    //send form
+    jQuery('#submit').live('click', function(e) {
+        e.preventDefault();
         
 
         if(jQuery("#form_branch_office").valid()) {

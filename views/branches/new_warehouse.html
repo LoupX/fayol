@@ -77,7 +77,7 @@
                         </p>
 
                         <p style="margin-top: 1px;">
-                            <label>Ciudad</label>
+                            <label>Población</label>
                             <span class="field" id="locality_container">
                             <select name="locality" id="locality" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="6">
                             </select>
@@ -174,12 +174,7 @@
 
     //form and shit
     
-
-    //send form
-    jQuery('#submit').live('click', function(e) {
-        e.preventDefault();
-        
-        jQuery("#form_warehouse").validate({
+    jQuery("#form_warehouse").validate({
             rules: {
                 name: "required",
                 address : "required",
@@ -199,12 +194,15 @@
                 colony: "Ingrese la colonia de la surcursal",
                 states: "Ingrese el estado de la surcursal",
                 municipality: "Ingrese el municipio de la surcursal",
-                locality: "Ingrese la ciudad de la surcursal",
+                locality: "Ingrese la Población de la surcursal",
                 zip_code: "Este campo debe tener 5 números.",
             }
-        });
-        
+    });
 
+    //send form
+    jQuery('#submit').live('click', function(e) {
+        e.preventDefault();
+   
         if(jQuery("#form_warehouse").valid()) {
             jQuery('.msgerror').hide();
             jQuery('.msgsuccess').hide();
