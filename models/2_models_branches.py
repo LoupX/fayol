@@ -18,7 +18,7 @@ db.define_table('company_addresses',
 
 db.define_table('company_tax_info',
     Field('business_name', 'string', comment='razón social'),
-    Field('rfc', 'string', length='13', unique=True),
+    Field('rfc', 'string', length='13'),
     Field('tax', 'string', comment='régimen fiscal'),
     Field('status', 'boolean', default=True),
     Field('date_added', 'datetime', default=request.now),

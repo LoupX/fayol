@@ -123,18 +123,18 @@ def create_branch():
     data_tax = dict()
     vars = request.vars
 
-    data_address['address'] = u(vars.address).upper()
-    data_address['suburb'] = u(vars.suburb).upper()
+    data_address['address'] = vars.address.decode('utf-8').upper()
+    data_address['suburb'] = vars.suburb.decode('utf-8').upper()
     data_address['state_id'] = vars.states
     data_address['municipality_id'] = vars.municipality
     data_address['locality_id'] = vars.locality
     data_address['zip_code'] = vars.zip_code
 
-    data_tax['business_name'] = u(vars.corporate).upper()
-    data_tax['rfc'] = u(vars.rfc).upper()
-    data_tax['tax'] = u(vars.tax_regime).upper()
+    data_tax['business_name'] = vars.corporate.decode('utf-8').upper()
+    data_tax['rfc'] = vars.rfc.decode('utf-8').upper()
+    data_tax['tax'] = vars.tax_regime.decode('utf-8').upper()
 
-    data['name'] = u(vars.name).upper()
+    data['name'] = vars.name.decode('utf-8').upper()
 
     try:
         address_id = db.company_addresses.insert(**data_address)
@@ -166,13 +166,13 @@ def create_warehouse():
     data_address = dict()
     vars = request.vars
 
-    data_address['address'] = vars.address.upper()
-    data_address['suburb'] = vars.suburb.upper()
+    data_address['address'] = vars.address.decode('utf-8').upper()
+    data_address['suburb'] = vars.suburb.decode('utf-8').upper()
     data_address['state_id'] = vars.states
     data_address['municipality_id'] = vars.municipality
     data_address['locality_id'] = vars.locality
     data_address['zip_code'] = vars.zip_code
-    data['name'] = vars.name.upper()
+    data['name'] = vars.name.decode('utf-8').upper()
 
     try:
         address_id = db.company_addresses.insert(**data_address)
@@ -252,16 +252,16 @@ def update_branch():
     else:
         return ''
 
-    data_address['address'] = vars.address.upper()
-    data_address['suburb'] = vars.suburb.upper()
+    data_address['address'] = vars.address.decode('utf-8').upper()
+    data_address['suburb'] = vars.suburb.decode('utf-8').upper()
     data_address['state_id'] = vars.states
     data_address['municipality_id'] = vars.municipality
     data_address['locality_id'] = vars.locality
     data_address['zip_code'] = vars.zip_code
 
-    data_tax['business_name'] = vars.corporate.upper()
-    data_tax['rfc'] = vars.rfc.upper()
-    data_tax['tax'] = vars.tax_regime.upper()
+    data_tax['business_name'] = vars.corporate.decode('utf-8').upper()
+    data_tax['rfc'] = vars.rfc.decode('utf-8').upper()
+    data_tax['tax'] = vars.tax_regime.decode('utf-8').upper()
 
     data['name'] = vars.name
 
@@ -289,7 +289,7 @@ def update_warehouse(id, **data):
     id = vars.id
     data = dict()
     data_address = dict()
-    data_tax = dict()
+
     try:
         row = db(db.branches.id == id).select(db.branches.company_address_id,
             db.branches.company_tax_info_id)
@@ -301,14 +301,14 @@ def update_warehouse(id, **data):
     else:
         return ''
 
-    data_address['address'] = vars.address.upper()
-    data_address['suburb'] = vars.suburb.upper()
+    data_address['address'] = vars.address.decode('utf-8').upper()
+    data_address['suburb'] = vars.suburb.decode('utf-8').upper()
     data_address['state_id'] = vars.states
     data_address['municipality_id'] = vars.municipality
     data_address['locality_id'] = vars.locality
     data_address['zip_code'] = vars.zip_code
 
-    data['name'] = vars.name
+    data['name'] = vars.namedecode('utf-8').upper()
 
     try:
         db(db.branches.id == id).update(**data)

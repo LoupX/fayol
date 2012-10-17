@@ -4,8 +4,8 @@
 def create_brand():
     data = dict()
     if request.vars.name:
-        data['name'] = request.vars.name.upper()
-    data['description'] = request.vars.description.upper()
+        data['name'] = request.vars.name.decode('utf-8').upper()
+    data['description'] = request.vars.description.decode('utf-8').upper()
     try:
         b_id = db.brands.insert()
         bd_id = db.brand_descriptions.insert(brand_id=b_id, **data)
@@ -25,8 +25,8 @@ def create_brand():
 def create_category():
     data = dict()
     if request.vars.name:
-        data['name'] = request.vars.name.upper()
-    data['description'] = request.vars.description.upper()
+        data['name'] = request.vars.name.decode('utf-8').upper()
+    data['description'] = request.vars.description.decode('utf-8').upper()
     try:
         c_id = db.categories.insert()
         cd_id = db.category_descriptions.insert(category_id=c_id, **data)
@@ -46,8 +46,8 @@ def create_category():
 def create_unit():
     data = dict()
     if request.vars.measuring_unit and request.vars.abbreviation:
-        data['name'] = request.vars.measuring_unit.upper()
-        data['abbreviation'] = request.vars.abbreviation.upper()
+        data['name'] = request.vars.measuring_unit.decode('utf-8').upper()
+        data['abbreviation'] = request.vars.abbreviation.decode('utf-8').upper()
     try:
         id = db.units.insert(**data)
     except SyntaxError as e:
