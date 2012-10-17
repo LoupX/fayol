@@ -130,7 +130,7 @@ jQuery(document).ready(function() {
                 success: function(results) {
                     municipality
                             .html(results)
-                            .prepend('<option value="">Selecccionar</option>')
+                            .prepend('<option value="">Seleccionar</option>')
                             .trigger("liszt:updated");
                 }
             });
@@ -138,11 +138,11 @@ jQuery(document).ready(function() {
         else {
             municipality
                     .html('')
-                    .prepend('<option value="">Selecccionar</option>')
+                    .prepend('<option value="">Seleccionar</option>')
                     .trigger("liszt:updated");
             locality
                     .html('')
-                    .prepend('<option value="">Selecccionar</option>')
+                    .prepend('<option value="">Seleccionar</option>')
                     .trigger("liszt:updated");
         }
     });
@@ -157,7 +157,7 @@ jQuery(document).ready(function() {
                 success: function(results) {
                     locality
                             .html(results)
-                            .prepend('<option value="">Selecccionar</option>')
+                            .prepend('<option value="">Seleccionar</option>')
                             .trigger("liszt:updated");
                 }
             });
@@ -165,7 +165,7 @@ jQuery(document).ready(function() {
         else {
             locality
                     .html('')
-                    .prepend('<option value="">Selecccionar</option>')
+                    .prepend('<option value="">Seleccionar</option>')
                     .trigger("liszt:updated");
         }
     });
@@ -189,6 +189,13 @@ jQuery(document).ready(function() {
             municipality_id = data.company_addresses.municipality_id
             locality_id = data.company_addresses.locality_id
             selectS();
+            /*state_options = jQuery("#states").find('option')
+            for(var i in state_options) { 
+                if(jQuery(state_options[i]).val() == data.company_addresses.state_id) { 
+                    jQuery(state_options[i]).attr('selected', true); 
+                    jQuery(state_options[i]).trigger("liszt:updated"); 
+                } 
+            }*/
             selectM(data.warehouses['state_id']);
             selectL(data.warehouses['municipality_id']);
             
@@ -315,11 +322,11 @@ jQuery(document).ready(function() {
             .trigger("liszt:updated");
         jQuery('#municipality')
             .html('')
-            .prepend('<option value="">Selecccionar</option>')
+            .prepend('<option value="">Seleccionar</option>')
             .trigger("liszt:updated");
         jQuery('#locality')
             .html('')
-            .prepend('<option value="">Selecccionar</option>')
+            .prepend('<option value="">Seleccionar</option>')
             .trigger("liszt:updated");
         jQuery('#zip_code').val('');
         jQuery('#business_name').val('');
@@ -334,7 +341,7 @@ jQuery(document).ready(function() {
             success: function(results) {
                 state
                     .html(results)
-                    .prepend('<option value="">Selecccionar</option>')
+                    .prepend('<option value="">Seleccionar</option>')
                     .trigger("liszt:updated");
                 }
         });
