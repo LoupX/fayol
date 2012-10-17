@@ -5,7 +5,12 @@
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.tagsinput.min.js')}}"></script>
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/charCount.js')}}"></script>
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/ui.spinner.min.js')}}"></script>
-<script type="text/javascript" src="{{=URL('static', 'js/plugins/chosen.jquery.min.js')}}"></script>	
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/chosen.jquery.min.js')}}"></script>
+<style type="text/css">
+    .ellol {
+        border: 1px solid red;
+    }    
+</style>	
 {{end}}
 
 {{block sidebar_menu}}
@@ -42,7 +47,7 @@
                     <form id="form_branch_office" class="stdform stdform2" method="post" action="">
                     	
 	                    <p>
-	                       	<label>Nombre</label>
+	                       	<label>Nombre *</label>
 	                        <span class="field"><input type="text" name="name" id="name" class="smallinput" tabindex="1"/></span>
 	                    </p>
 	                    
@@ -51,15 +56,15 @@
                         </div>  
 	                     
 	                    <p style="border-top: 1px #ddd solid;">
-	                       	<label>Dirección</label>
+	                       	<label>Dirección *</label>
 	                        <span class="field"><input type="text" name="address" id="address" class="smallinput" tabindex="2"/></span>
 	                    </p>
 	                    <p>
-	                       	<label>Colonia</label>
+	                       	<label>Colonia *</label>
 	                        <span class="field"><input type="text" name="colony" id="colony" class="smallinput" tabindex="3"/></span>
 	                    </p>
 	                    <p style="margin-top: 1px;">
-                            <label>Estado</label>
+                            <label>Estado *</label>
                             <span class="field">
                                 <!-- <select name="states" id="states">
                                 </select> -->
@@ -69,7 +74,7 @@
                         </p>
                         
                         <p style="margin-top: 1px;">
-                            <label>Municipio</label>
+                            <label>Municipio *</label>
                             <span id="municipality_container"class="field">
                             <select name="municipality" id="municipality" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="5">
                             </select>
@@ -77,7 +82,7 @@
                         </p>
 
                         <p style="margin-top: 1px;">
-                            <label>Población</label>
+                            <label>Población *</label>
                             <span class="field" id="locality_container">
                             <select name="locality" id="locality" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="6">
                             </select>
@@ -124,6 +129,10 @@
     //Ajax for selects
     jQuery(".chzn-select").chosen({allow_single_deselect:true});
     
+    var sid = '',
+    	mid = '',
+    	lid = '';
+    
     var states = jQuery('#states'),
         municipality = jQuery('#municipality'),
         locality = jQuery('#locality');
@@ -140,12 +149,13 @@
         });
 
     states.change( function() {
-        var id = jQuery(this).find(':selected').val();
-        if(id != '') {
+        sid = jQuery(this).find(':selected').val();
+        if(sid != '') {
+        states.siblings('div').removeClass('ellol');
             jQuery.ajax({
                 type: "POST",
                 url: "{{=URL(c='common', f='get_municipalities')}}",
-                data: {id: id},
+                data: {id: sid},
                 success: function(results) {
                     municipality
                             .html(results)
@@ -167,11 +177,12 @@
     });
 
     municipality.change( function() {
-        var id = jQuery(this).find(':selected').val();
-        if(id != '') {
+        mid = jQuery(this).find(':selected').val();
+        if(mid != '') {
+        	municipality.siblings('div').removeClass('ellol');
             jQuery.ajax({
                 type: "POST",
-                data: {municipality_id: id},
+                data: {municipality_id: mid},
                 url: "{{=URL(c='common', f='get_localities')}}",
                 success: function(results) {
                     locality
@@ -188,15 +199,19 @@
                     .trigger("liszt:updated");
         }
     });
+    
+    locality.change( function() {
+        lid = jQuery(this).find(':selected').val();
+        if(lid != '') {
+	        locality.siblings('div').removeClass('ellol');
+        }
+    });
 
     jQuery("#form_branch_office").validate({
             rules: {
                 name: "required",
                 address : "required",
                 colony : "required",
-                states : "required",
-                municipality : "required",
-                locality : "required",
                 zip_code: {
                     required: false,
                     digits: true,
@@ -212,20 +227,19 @@
                 name: "Ingrese el nombre de la surcursal",
                 address: "Ingrese la dirección de la surcursal",
                 colony: "Ingrese la colonia de la surcursal",
-                states: "Ingrese el estado de la surcursal",
-                municipality: "Ingrese el municipio de la surcursal",
-                locality: "Ingrese la Población de la surcursal",
                 zip_code: "Este campo debe tener 5 números.",
                 rfc: "R.F.C. inválido."
          }
     });
-
+    
     //send form
     jQuery('#submit').live('click', function(e) {
         e.preventDefault();
-        
+        valState(sid);
+        valLoc(lid);
+        valMun(mid);
 
-        if(jQuery("#form_branch_office").valid()) {
+        if(jQuery("#form_branch_office").valid() && valState(sid) && valLoc(lid) && valMun(mid)) {
             jQuery('.msgerror').hide();
             jQuery('.msgsuccess').hide();
 
@@ -283,6 +297,51 @@
         jQuery('#corporate').val('');
         jQuery('#rfc').val('');
         jQuery('#tax_regime').val('');
+    }
+    
+    function valState(s) {
+    var bol;
+    if (s != 0) {
+        bol = true;
+        jQuery('#states').siblings('div').removeClass('ellol');
+    } else if(s != null){
+        bol = false;
+        jQuery('#states').siblings('div').addClass('ellol');
+    } else{
+        bol = false;
+        jQuery('#states').siblings('div').addClass('ellol');
+    };
+    return bol
+    }
+    
+    function valLoc(s) {
+    var bol;
+    if (s != 0) {
+        bol = true;
+        jQuery('#locality').siblings('div').removeClass('ellol');
+    } else if(s != null){
+        bol = false;
+        jQuery('#locality').siblings('div').addClass('ellol');
+    } else{
+        bol = false;
+        jQuery('#locality').siblings('div').addClass('ellol');
+    };
+    return bol
+    }
+    
+    function valMun(s) {
+    var bol;
+    if (s != 0) {
+        bol = true;
+        jQuery('#municipality').siblings('div').removeClass('ellol');
+    } else if(s != null){
+        bol = false;
+        jQuery('#municipality').siblings('div').addClass('ellol');
+    } else{
+        bol = false;
+        jQuery('#municipality').siblings('div').addClass('ellol');
+    };
+    return bol
     }
 
     
