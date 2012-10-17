@@ -55,14 +55,14 @@ def create_vendor():
     data = dict()
     insert = dict()
     vars = request.vars
-    data['name'] = vars.company.upper()
-    data['address'] = vars.address.upper()
+    data['name'] = u(vars.company).upper()
+    data['address'] = u(vars.address).upper()
     data['state_id'] = vars.state
     data['municipality_id'] = vars.municipality
     data['locality_id'] = vars.locality
     data['zip_code'] = vars.zip_code
-    data['rfc'] = vars.rfc.upper()
-    data['website'] = vars.website.upper()
+    data['rfc'] = u(vars.rfc).upper()
+    data['website'] = u(vars.website).upper()
     for k, v in data.items():
         if v:
             insert[k] = v
@@ -85,14 +85,14 @@ def update_vendor():
     vars = request.vars
     data = dict()
     id = vars.id
-    data['name'] = vars.company.upper()
-    data['address'] = vars.address.upper()
+    data['name'] = u(vars.company).upper()
+    data['address'] = u(vars.address).upper()
     data['state_id'] = vars.state
     data['municipality_id'] = vars.municipality
     data['locality_id'] = vars.locality
     data['zip_code'] = vars.zip_code
-    data['rfc'] = vars.rfc.upper()
-    data['website'] = vars.website.upper()
+    data['rfc'] = u(vars.rfc).upper()
+    data['website'] = u(vars.website).upper()
     result = _update_vendor(id, **data)
     return result
 

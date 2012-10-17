@@ -123,18 +123,18 @@ def create_branch():
     data_tax = dict()
     vars = request.vars
 
-    data_address['address'] = vars.address.upper()
-    data_address['suburb'] = vars.suburb.upper()
+    data_address['address'] = u(vars.address).upper()
+    data_address['suburb'] = u(vars.suburb).upper()
     data_address['state_id'] = vars.states
     data_address['municipality_id'] = vars.municipality
     data_address['locality_id'] = vars.locality
     data_address['zip_code'] = vars.zip_code
 
-    data_tax['business_name'] = vars.corporate.upper()
-    data_tax['rfc'] = vars.rfc.upper()
-    data_tax['tax'] = vars.tax_regime.upper()
+    data_tax['business_name'] = u(vars.corporate).upper()
+    data_tax['rfc'] = u(vars.rfc).upper()
+    data_tax['tax'] = u(vars.tax_regime).upper()
 
-    data['name'] = vars.name.upper()
+    data['name'] = u(vars.name).upper()
 
     try:
         address_id = db.company_addresses.insert(**data_address)

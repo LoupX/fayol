@@ -25,8 +25,8 @@ def create_brand():
 def create_category():
     data = dict()
     if request.vars.name:
-        data['name'] = request.vars.name
-    data['description'] = request.vars.description
+        data['name'] = request.vars.name.upper()
+    data['description'] = request.vars.description.upper()
     try:
         c_id = db.categories.insert()
         cd_id = db.category_descriptions.insert(category_id=c_id, **data)
@@ -46,8 +46,8 @@ def create_category():
 def create_unit():
     data = dict()
     if request.vars.measuring_unit and request.vars.abbreviation:
-        data['name'] = request.vars.measuring_unit
-        data['abbreviation'] = request.vars.abbreviation
+        data['name'] = request.vars.measuring_unit.upper()
+        data['abbreviation'] = request.vars.abbreviation.upper()
     try:
         id = db.units.insert(**data)
     except SyntaxError as e:
@@ -71,8 +71,8 @@ def get_brands():
     except:
         db.rollback()
 
-    import datetime
     if data:
+        import datetime
         for row in data:
             for k in row:
                 for key in row[k]:
@@ -82,3 +82,38 @@ def get_brands():
     data = simplejson.dumps(data)
     return str(data)
 
+def get_categories():
+    data = []
+    try:
+        data = db(db.category_descriptions.category_id==
+                 db.categories.id).select().as_list()
+    except:
+        db.rollback()
+
+    if data:
+        import datetime
+        for row in data:
+            for k in row:
+                for key in row[k]:
+                    if type(row[k][key]) is datetime.datetime:
+                        row[k][key] = str(row[k][key])
+    from gluon.contrib import simplejson
+    data = simplejson.dumps(data)
+    return str(data)
+
+def get_units():
+    data = []
+    try:
+        data = db(db.units).select().as_list()
+    except:
+        db.rollback()
+
+    if data:
+        import datetime
+        for row in data:
+            for k in row:
+                if type(row[k]) is datetime.datetime:
+                    row[k] = str(row[k])
+    from gluon.contrib import simplejson
+    data = simplejson.dumps(data)
+    return str(data)
