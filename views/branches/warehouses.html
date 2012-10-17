@@ -49,9 +49,9 @@
                         </p>
                          <p>
                             <span class="formwrapper" style="margin-left:0px; margin-top:-20px;">
-                            	<input type="radio" name="filtervendors" value="TRUE" onclick="ajaxFilter(this.value)" /> Habilitadas &nbsp; &nbsp;
-                            	<input type="radio" name="filtervendors"  value="FALSE" onclick="ajaxFilter(this.value)"/> Deshabilitadas &nbsp; &nbsp;
-                                <input type="radio" name="filtervendors" value="ANY" onclick="ajaxFilter(this.value)"/> Todas &nbsp; &nbsp;
+                            	<input type="radio" id="a" name="filtervendors" value="TRUE" onclick="ajaxFilter(this.value)" checked="checked"/> Habilitadas &nbsp; &nbsp;
+                            	<input type="radio" id="b" name="filtervendors"  value="FALSE" onclick="ajaxFilter(this.value)"/> Deshabilitadas &nbsp; &nbsp;
+                                <input type="radio" id="c" name="filtervendors" value="ANY" onclick="ajaxFilter(this.value)"/> Todas &nbsp; &nbsp;
                             </span>
                         </p>
                         
@@ -128,6 +128,8 @@ ajaxFilter('TRUE');
 
 function ajaxFilter(who) {
     //console.log(which);
+    jQuery('#warehouses_select_chzn').remove();
+    jQuery('#warehouses_select').val('').removeClass('chzn-done').chosen();
     cleanFields();
 
     jQuery.ajax({ 
@@ -157,8 +159,7 @@ warehouses_select.change( function() {
         state = jQuery('#state'),
         municipality = jQuery('#municipality'),
         locality = jQuery('#locality'),
-        zip_code = jQuery('#zip_code'),       
-             
+        zip_code = jQuery('#zip_code'),              
         status = jQuery('input[name=status]'),
         resp = jQuery('span#resp');
         resp.html('');
@@ -181,8 +182,9 @@ warehouses_select.change( function() {
         locality.html(data.localities['name']);
         zip_code.html(data.company_addresses['zip_code']); 
         
-         jQuery('#edit_warehouse')
-    .attr('href', "{{=URL(c='branches', f='update_warehouse')}}"+'?id='+data.warehouses.id);
+        jQuery('#edit_warehouse')
+        .attr('href', "{{=URL(c='branches', f='update_warehouse')}}"+'?id='+data.warehouses.id);
+        
         status.val(id).removeAttr('disabled');
         status.parent().parent().removeClass('disabled'); 
 
@@ -195,13 +197,14 @@ warehouses_select.change( function() {
           status.attr('onclick','chk('+id+',"False")');
           resp.html('Desactivado.');
         };   
+        
       }
     });     
   }
 
 });
 
-jQuery('input[name=status]').live('click', function() {
+/*jQuery('input[name=status]').live('click', function() {
   var i = jQuery(this).val(),
       resp = jQuery('span#resp');
   //ajax
@@ -216,20 +219,21 @@ jQuery('input[name=status]').live('click', function() {
       }
     }); 
   }
-});
+});*/
 
 function cleanFields() {
+  jQuery('#edit_warehouse').removeAttr('href');
+
   var name = jQuery('#name'),
       address = jQuery('#address'),
       suburb = jQuery('#suburb'),
       state = jQuery('#state'),
       municipality = jQuery('#municipality'),
       locality = jQuery('#locality'),
-      zip_code = jQuery('#zip_code'),
-      
+      zip_code = jQuery('#zip_code'),     
       status = jQuery('input[name=status]'),
       resp = jQuery('span#resp');
-
+      
       status.val('').attr('disabled',true);
       status
         .parent()
@@ -251,20 +255,43 @@ function chk(id, s) {
         resp = jQuery('span#resp');
 
     if(s == 'True') {
-      var ans = confirm('¿Está seguro?.');
+        var ans = confirm('¿Está seguro?.');
 
-      if(ans) {
-        jQuery.ajax({
-          url: "{{=URL(c='branches_ajax', f='toggle_warehouse_status')}}",
-          type: 'POST',
-          data: { id: id, status: s }
-        });
-        status.parent().removeClass('checked');
-        status.attr('onclick','chk('+id+',"False")');
-        resp.html('Desactivado.');
+        if(ans) {
+        	jQuery.ajax({
+          		url: "{{=URL(c='branches_ajax', f='toggle_warehouse_status')}}",
+          		type: 'POST',
+          		data: { id: id, status: s }
+        	});
+        	status.parent().removeClass('checked');
+        	status.attr('onclick','chk('+id+',"False")');
+        	resp.html('Desactivado.');
+			//jQuery('#vendors_select_chzn').remove();
+			//jQuery('#vendors_select').val('').removeClass('chzn-done').chosen();
+			////ajaxFilter('TRUE');
+			//jQuery('#a','#c').parent('span').removeClass('checked');
+			//jQuery('#b').parent('span').addClass('checked');
+			//jQuery('#vendors_select').find('option[value='+id+']').remove();
+			cleanFields();
+			jQuery('#warehouses_select_chzn').remove();
+			jQuery('#warehouses_select').val('').removeClass('chzn-done').chosen();
+        
+			if(jQuery('#a').parent('span').hasClass('checked')) {
+                ajaxFilter('TRUE');
+            } else if(jQuery('#b').parent('span').hasClass('checked')) {
+                ajaxFilter('FALSE');
+            } else {
+                ajaxFilter('ANY');
+            }
+            
+            //ajaxFilter('TRUE'); 
+            //jQuery('#vendors_select_chzn').remove();
+            //jQuery('#vendors_select').val('').removeClass('chzn-done').chosen();
       } else {
         resp.html('Activado.');
         status.parent().addClass('checked');
+        //jQuery('#b','#c').parent('span').removeClass('checked');
+        //jQuery('#a').parent('span').addClass('checked');
       }        
     }
     else {
@@ -276,7 +303,23 @@ function chk(id, s) {
         status.parent().addClass('checked');
         status.attr('onclick','chk('+id+',"True")');
         resp.html('Activado.');
+		//ajaxFilter('FALSE');
+        //jQuery('#vendors_select').find('option[value='+id+']').remove();
+        cleanFields();
+        jQuery('#warehouses_select_chzn').remove();
+        jQuery('#warehouses_select').val('').removeClass('chzn-done').chosen();
+
+        if(jQuery('#a').parent('span').hasClass('checked')) {
+            ajaxFilter('TRUE');
+        } else if(jQuery('#b').parent('span').hasClass('checked')) {
+            ajaxFilter('FALSE');
+        } else {
+            ajaxFilter('ANY');
+        }
+        //jQuery('#vendors_select_chzn').remove();
+        //jQuery('#vendors_select').val('').removeClass('chzn-done').chosen();
     }
+
 }
 
 </script>
@@ -285,4 +328,3 @@ function chk(id, s) {
 
 </html>
 {{end}}
-

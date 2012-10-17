@@ -222,10 +222,10 @@ vendors_select.change( function() {
         account_number.html(data.vendors['bank_account_number']);
         clabe.html(data.vendors['clabe']);
 
-        //{{=URL(c='vendors', f='update', vars=dict(id='"+data.vendors.id+"'))}}
-        jQuery('#ev').attr('href', "/fayol/vendors/update?id="+data.vendors.id);
-        jQuery('#ep').attr('href', "/fayol/vendors/updatep?id="+data.vendors.id);
-        
+        jQuery('#ev')
+        .attr('href', "{{=URL(c='vendors', f='update')}}"+'?id='+data.vendors.id);
+        jQuery('#ep')
+        .attr('href', "{{=URL(c='vendors', f='updatep')}}"+'?id='+data.vendors.id);
 
         status.val(id).removeAttr('disabled');
         status.parent().parent().removeClass('disabled'); 
