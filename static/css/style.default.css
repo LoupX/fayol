@@ -1441,10 +1441,10 @@ a.btn_list2 { background-position: -47px -480px; }
 a.btn_table { background-position: -82px -480px; }
 
 .stdbtn { 
-	font-weight: bold; padding: 7px 10px; border: 1px solid #ccc; background: #eee url(../images/buttons.png) repeat-x top left; color: #333; 
+	font-weight: bold; padding: 7px 10px; border: 1px solid #ccc; background: #eee url(../images/buttons.png) repeat-x top left; /*color: #333; JALA*/
 	-moz-border-radius: 2px; -webkit-border-radius: 2px; border-radius: 2px; cursor: pointer; opacity: 0.8;
 }
-.stdbtn:hover { text-decoration: none; opacity: 1; }
+.stdbtn:hover { text-decoration: none; border: 1px solid #CCC; opacity: 1; }
 
 .btn_yellow { background-position: 0 -38px; border-color: #ebb205; color: #ae510d; }
 .btn_blue { background-position: 0 -76px; border-color: #0282ce; color: #fff; }
