@@ -152,7 +152,7 @@ def create_branch():
             if 'duplicate field' in e:
                 return 0
             else:
-                return ''
+                return e
         except Exception as e:
             db.rollback()
             return ''
