@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 
 db.define_table('products',
-    Field('brand_id', 'reference brands', required=True, notnull=True),
-    Field('unit_id', 'reference units', required=True, notnull=True),
-    Field('code', 'string', required=True, notnull=True, unique=True),
+    Field('brand_id', 'reference brands', notnull=True),
+    Field('unit_id', 'reference units', notnull=True),
+    Field('category_id', 'reference_categories', notnull=True),
+    Field('code', 'string', unique=True),
     Field('alternative_code', 'string'),
     Field('location', 'string'),
     Field('part_number', 'string'),
@@ -35,11 +36,6 @@ db.define_table('product_descriptions',
 db.define_table('product_to_vendor',
     Field('product_id', 'reference products'),
     Field('vendor_id', 'reference vendors'),
-    migrate=MIGRATE)
-
-db.define_table('product_to_category',
-    Field('product_id', 'reference products'),
-    Field('category_id', 'reference categories'),
     migrate=MIGRATE)
 
 db.define_table('product_price_lists',

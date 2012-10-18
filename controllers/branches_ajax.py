@@ -280,7 +280,7 @@ def update_branch():
         return True
 
 @auth.requires_login()
-def update_warehouse(id, **data):
+def update_warehouse():
     b = db.branches
     vars = request.vars
     id = vars.id
@@ -288,8 +288,8 @@ def update_warehouse(id, **data):
     data_address = dict()
 
     try:
-        row = db(db.branches.id == id).select(db.branches.company_address_id,
-            db.branches.company_tax_info_id).first()
+        row = db(db.warehouses.id==id).select(
+            db.warehouses.company_address_id).first()
         company_address_id = row.company_address_id
     except Exception as e:
         db.rollback()
@@ -305,8 +305,8 @@ def update_warehouse(id, **data):
     data['name'] = vars.namedecode('utf-8').upper()
 
     try:
-        db(db.branches.id == id).update(**data)
-        db(db.company_addresses.id == company_address_id).update(**data_address)
+        db(db.warehouses.id==id).update(**data)
+        db(db.company_addresses.id==company_address_id).update(**data_address)
     except SyntaxError as e:
         db.rollback()
         if 'duplicate field' in e:

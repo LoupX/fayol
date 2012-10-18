@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-@auth.requires_login()
 
+@auth.requires_login()
 def create_brand():
     data = dict()
     if request.vars.name:
@@ -22,6 +22,7 @@ def create_brand():
         db.commit()
         return str(dict(brand_id=b_id, brand_description_id=bd_id))
 
+@auth.requires_login()
 def create_category():
     data = dict()
     if request.vars.name:
@@ -43,6 +44,7 @@ def create_category():
         db.commit()
         return str(dict(category_id=c_id, category_description_id=cd_id))
 
+@auth.requires_login()
 def create_unit():
     data = dict()
     if request.vars.measuring_unit and request.vars.abbreviation:
@@ -63,6 +65,29 @@ def create_unit():
         db.commit()
         return str(id)
 
+@auth.requires_login()
+def create_product():
+    data = dict()
+    data_description = dict()
+
+    data['brand_id'] = None
+    data['unit_id'] = None
+    data['code'] = None
+    data['alternative_code'] = None
+    data['location'] = None
+    data['part_number'] = None
+    data['serial_number'] = None
+    data['model'] = None
+    data['standard_cost'] = None
+    data['markup'] = None
+
+    data_description['name'] = None
+    data_description['alternative_name'] = None
+    data_description['description'] = None
+
+
+
+@auth.requires_login()
 def get_brands():
     data = []
     try:
@@ -82,6 +107,7 @@ def get_brands():
     data = simplejson.dumps(data)
     return str(data)
 
+@auth.requires_login()
 def get_categories():
     data = []
     try:
@@ -101,6 +127,7 @@ def get_categories():
     data = simplejson.dumps(data)
     return str(data)
 
+@auth.requires_login()
 def get_units():
     data = []
     try:
@@ -118,6 +145,7 @@ def get_units():
     data = simplejson.dumps(data)
     return str(data)
 
+@auth.requires_login()
 def update_brand():
     id = request.vars.id
     data['name'] = request.vars.name.decode('utf-8').upper()
@@ -140,6 +168,7 @@ def update_brand():
         else:
             return ''
 
+@auth.requires_login()
 def update_category():
     id = request.vars.id
     data['name'] = request.vars.name.decode('utf-8').upper()
@@ -163,6 +192,7 @@ def update_category():
             return ''
 
 
+@auth.requires_login()
 def update_unit():
     id = request.vars.id
     data['name'] = request.vars.name.decode('utf-8').upper()
@@ -185,6 +215,7 @@ def update_unit():
         else:
             return ''
 
+@auth.requires_login()
 def toggle_brand():
     id = request.vars.id
     try:
@@ -206,6 +237,7 @@ def toggle_brand():
         else:
             return ''
 
+@auth.requires_login()
 def toggle_category():
     id = request.vars.id
     try:
@@ -227,6 +259,7 @@ def toggle_category():
         else:
             return ''
 
+@auth.requires_login()
 def toggle_unit():
     id = request.vars.id
     try:
