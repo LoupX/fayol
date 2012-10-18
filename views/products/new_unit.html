@@ -101,7 +101,6 @@
                         jQuery('.msgsuccess').fadeIn(1600, function() {
                             jQuery('.msgsuccess').fadeOut('slow');
                         });
-                        setTimeout('redirect()', 1600)
                    }
                     else if(data == 0) {
                         jQuery('.exists').fadeIn(1600);
@@ -123,10 +122,6 @@
     function deleteFields() {
         jQuery('#measuring_unit').val('');
         jQuery('#abbreviation').val('');
-    }
-    
-    function redirect() {
-        window.location.replace("{{=URL(c='products', f='units')}}");
     }
 
 </script>
