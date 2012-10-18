@@ -112,6 +112,7 @@
 </div><!--bodywrapper-->
 
 <script type="text/javascript">
+
 //////////// Ajax for selects ////////////
     jQuery(".chzn-select").chosen();
 
@@ -155,11 +156,11 @@
                 success: function(results) {
                     municipality
                         .html(results)
-                        .prepend('<option value="">Selecccionar</option>')
+                        .prepend('<option value="">Seleccionar</option>')
                         .trigger("liszt:updated");
                     locality
                         .html('')
-                        .prepend('<option value="">Selecccionar</option>')
+                        .prepend('<option value="">Seleccionar</option>')
                         .trigger("liszt:updated");
                 }
             });
@@ -167,11 +168,11 @@
         else {
             municipality
                 .html('')
-                .prepend('<option value="">Selecccionar</option>')
+                .prepend('<option value="">Seleccionar</option>')
                 .trigger("liszt:updated");
             locality
                 .html('')
-                .prepend('<option value="">Selecccionar</option>')
+                .prepend('<option value="">Seleccionar</option>')
                 .trigger("liszt:updated");
         }
     });
@@ -187,7 +188,7 @@
                 success: function(results) {
                     locality
                         .html(results)
-                        .prepend('<option value="">Selecccionar</option>')
+                        .prepend('<option value="">Seleccionar</option>')
                         .trigger("liszt:updated");
                 }
             });
@@ -195,7 +196,7 @@
         else {
             locality
                 .html('')
-                .prepend('<option value="">Selecccionar</option>')
+                .prepend('<option value="">Seleccionar</option>')
                 .trigger("liszt:updated");
         }
     });

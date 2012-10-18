@@ -35,10 +35,16 @@ def new_warehouse():
 def update_branch_office():
     title = 'Sucursales'
     current = ['menu_catalogs', 'sidebar_branches', 'sub_branch_office_read']
-    return dict(title=title,  current=current)
+    sid = request.vars.s
+    mid = request.vars.m 
+    lid = request.vars.l
+    return dict(title=title,  current=current, sid=sid, mid=mid, lid=lid)
 
 @auth.requires_login()
 def update_warehouse():
     title = 'Almacenes'
     current = ['menu_catalogs', 'sidebar_warehouses', 'sub_warehouse_read']
-    return dict(title=title,  current=current)
+    sid = request.vars.s
+    mid = request.vars.m 
+    lid = request.vars.l
+    return dict(title=title,  current=current, sid=sid, mid=mid, lid=lid)

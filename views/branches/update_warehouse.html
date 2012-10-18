@@ -2,9 +2,6 @@
 
 {{block scripts_extra}}
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.validate.min.js')}}"></script>	
-<script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.tagsinput.min.js')}}"></script>
-<script type="text/javascript" src="{{=URL('static', 'js/plugins/charCount.js')}}"></script>
-<script type="text/javascript" src="{{=URL('static', 'js/plugins/ui.spinner.min.js')}}"></script>
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/chosen.jquery.min.js')}}"></script>
 
 <script type="text/javascript">
@@ -38,6 +35,11 @@ jQuery(document).ready(function() {
             		<div class="notibar msgerror" style="display:none;">
                     	<a class="close"></a>
                     	<p>Ocurrió un error con los datos del formulario.</p>
+                    </div>
+
+                    <div class="notibar exists" style="display:none;">
+                    	<a class="close"></a>
+                    	<p>Ese proveedor existe, para editarlo vaya a la sección de ver proveedor. </p>
                     </div>
 
                     <div class="notibar msgsuccess" style="display:none;">
@@ -108,17 +110,39 @@ jQuery(document).ready(function() {
 </div><!--bodywrapper-->
 
 <script type="text/javascript">
-    //Ajax for selects
+//////////// Ajax for selects ////////////
     jQuery(".chzn-select").chosen();
 
     var state = jQuery('#states'),
         municipality = jQuery('#municipality'),
         locality = jQuery('#locality');
-        state_id = null
-        municipality_id = null
-        locality_id = null
-    
+    var s = '',
+        m = '',
+        l = '';
 
+//////////// get info ////////////
+    jQuery.ajax({
+        url: "{{=URL(c='vendors_ajax', f='get_vendor_information')}}",
+        data: { id: "{{=id}}" },
+        type: "POST",
+        dataType:"json",
+        success:function(data){
+            //console.log(data);
+            jQuery('#company').val(data.vendors['name']);
+            jQuery('#address').val(data.vendors['address']);
+            jQuery('#zip_code').val(data.vendors['zip_code']);
+            jQuery('#rfc').val(data.vendors['rfc']);
+            jQuery('#website').val(data.vendors['website']);
+            s = data.vendors['state_id'];
+            m = data.vendors['municipality_id'];
+            l = data.vendors['locality_id'];
+            selectS(s);
+            selectM(s, m);
+            selectL(m, l); 
+        }
+    });
+
+//////////// get municipalities ////////////
     state.change( function() {
         var id = jQuery(this).find(':selected').val();
         if(id != '') {
@@ -128,24 +152,29 @@ jQuery(document).ready(function() {
                 data: {id: id},
                 success: function(results) {
                     municipality
-                            .html(results)
-                            .prepend('<option value="">Seleccionar</option>')
-                            .trigger("liszt:updated");
+                        .html(results)
+                        .prepend('<option value="">Seleccionar</option>')
+                        .trigger("liszt:updated");
+                    locality
+                        .html('')
+                        .prepend('<option value="">Seleccionar</option>')
+                        .trigger("liszt:updated");
                 }
             });
         }
         else {
             municipality
-                    .html('')
-                    .prepend('<option value="">Seleccionar</option>')
-                    .trigger("liszt:updated");
+                .html('')
+                .prepend('<option value="">Seleccionar</option>')
+                .trigger("liszt:updated");
             locality
-                    .html('')
-                    .prepend('<option value="">Seleccionar</option>')
-                    .trigger("liszt:updated");
+                .html('')
+                .prepend('<option value="">Seleccionar</option>')
+                .trigger("liszt:updated");
         }
     });
 
+//////////// get localities ////////////
     municipality.change( function() {
         var id = jQuery(this).find(':selected').val();
         if(id != '') {
@@ -155,9 +184,9 @@ jQuery(document).ready(function() {
                 url: "{{=URL(c='common', f='get_localities')}}",
                 success: function(results) {
                     locality
-                            .html(results)
-                            .prepend('<option value="">Seleccionar</option>')
-                            .trigger("liszt:updated");
+                        .html(results)
+                        .prepend('<option value="">Seleccionar</option>')
+                        .trigger("liszt:updated");
                 }
             });
         }
@@ -169,82 +198,8 @@ jQuery(document).ready(function() {
         }
     });
 
-    
-
-    jQuery.ajax({
-        url: "{{=URL(c='branches_ajax', f='get_warehouse_information')}}",
-        data: { id: "{{=request.vars.id}}" },
-        type: "POST",
-        dataType:"json",
-        success:function(data){
-            //console.log(data);
-            
-            jQuery('#name').val(data.warehouses['name']); 
-            jQuery('#suburb').val(data.company_addresses['suburb']);
-            jQuery('#address').val(data.company_addresses['address']);
-            jQuery('#zip_code').val(data.company_addresses['zip_code']);
-            
-            state_id = data.company_addresses.state_id
-            municipality_id = data.company_addresses.municipality_id
-            locality_id = data.company_addresses.locality_id
-            selectS();
-            selectM(state_id);
-            selectL(municipality_id);
-            
-            jQuery('#states')
-                .find('option[value='+data.warehouses['state_id']+']')
-                .attr('selected',true)
-                .trigger("liszt:updated");
-
-            
-
-            // console.log(data.municipalities['id']);
-            jQuery('#municipality')
-                .find("option[value="+data.warehouses['municipality_id']+"]")
-                .attr('selected',true)
-                .trigger("liszt:updated");
-
-            // //selectL(data.municipalities['id']);
-            jQuery('#locality')
-                .find("option[value="+data.warehouses['locality_id']+"]")
-                .attr('selected',true)
-                .trigger("liszt:updated"); 
-
-            // municipality.html(data.municipalities['name']);
-            // locality.html(data.localities['name']);
-            console.log(data.warehouses['state_id']+' : '+data.warehouses['municipality_id']+' : '+data.warehouses['locality_id']);
-        }
-    });
-
-    
-
-    //form and shit
-    
-
-    //send form
-    jQuery('#submit').live('click', function(e) {
-        e.preventDefault();
-        var sid = jQuery('#states').val(),
-            mid = (jQuery('#municipality').val() == null) ? '': jQuery('#municipality').val(),
-            lid = (jQuery('#locality').val() == null) ? '': jQuery('#locality').val();
-        // var company = jQuery('#company'),
-        //     zip_code = jQuery('#zip_code'),
-        //     val_zip = /^([1-9]{2}|[0-9][1-9]|[1-9][0-9])[0-9]{3}$/;
-
-        // if(company.val() != null && company.val().length != 0 
-        //    && company.val().indexOf(" ") != 0) {
-        //     if(zip_code.val().length > 0  ) {
-        //         if( val_zip.test( zip_code.val() ) ) {
-        //             zip_code = zip_code.val();
-        //             console.log('pressed'+zip_code.val());
-        //         }
-        //     } else{
-        //     console.log('pressed');
-
-        //     }
-        // }
-        
-        jQuery("#form_warehouse").validate({
+//////////// validate form ////////////
+    jQuery("#form_warehouse").validate({
             rules: {
                 name: "required",
                 address : "required",
@@ -267,169 +222,8 @@ jQuery(document).ready(function() {
                 locality: "Ingrese la Población de la surcursal",
                 zip_code: "Este campo debe tener 5 números.",
             }
-        });        
+    });    
 
-        if(jQuery("#form_warehouse").valid()) {
-            jQuery('.msgerror').hide();
-            jQuery('.msgsuccess').hide();
-
-             jQuery.ajax({
-                url: "{{=URL(c='branches_ajax', f='create_warehouse')}}",
-                data: { 
-                    name:jQuery('#name').val(),
-                    address:jQuery('#address').val(),
-                    suburb:jQuery('#colony').val(),
-                    states:jQuery('#states').val(),
-                    municipality:jQuery('#municipality').val(),
-                    locality:jQuery('#locality').val(),
-                    zip_code:jQuery('#zip_code').val(),
-                },
-                type: 'POST',
-                success:function(data){
-                    if(data){
-                        jQuery('.msgsuccess').fadeIn(1600);
-                        deleteFields();
-                    }
-                    else{
-                        jQuery('.msgerror').fadeIn(1600);
-                        //jQuery('html').scrollTop();
-                        //jQuery(window).scrollTop(0);
-                    }
-                    jQuery('body','html',window).animate(
-                                                        {scrollTop:0}, 
-                                                        1000);
-                }
-            }); 
-        }
-    });
-
-        function deleteFields() {
-        jQuery('#name').val('');
-        jQuery('#address').val('');
-        jQuery('#colony').val('');
-        jQuery('#states')
-            .find('option')
-            .first()
-            .attr('selected',true)
-            .trigger("liszt:updated");
-        jQuery('#municipality')
-            .html('')
-            .prepend('<option value="">Seleccionar</option>')
-            .trigger("liszt:updated");
-        jQuery('#locality')
-            .html('')
-            .prepend('<option value="">Seleccionar</option>')
-            .trigger("liszt:updated");
-        jQuery('#zip_code').val('');
-        jQuery('#business_name').val('');
-        jQuery('#rfc').val('');
-        jQuery('#tax').val('');
-    }
-
-    function selectS() {
-        jQuery.ajax({
-            type: "POST",
-            url: "{{=URL(c='common', f='get_states')}}",
-            complete: function(){
-                options = state.find('option');
-                if(options.length > 0 && state_id){
-                    for(var i in options) { 
-                        if(jQuery(options[i]).val() == state_id) { 
-                            jQuery(options[i]).attr('selected', true); 
-                            state.trigger("liszt:updated"); 
-                        } 
-                    }
-                }
-            },
-            success: function(results) {
-                state
-                    .html(results)
-                    .prepend('<option value="">Seleccionar</option>')
-                    .trigger("liszt:updated");
-            }
-        });
-
-    }
-
-    function selectM(v) {
-        jQuery.ajax({
-            type: "POST",
-            url: "{{=URL(c='common', f='get_municipalities')}}",
-            data: {id: v},
-            complete: function(){
-                options = municipality.find('option');
-                if(options.length > 0 && municipality_id){
-                    for(var i in options) { 
-                        if(jQuery(options[i]).val() == municipality_id) { 
-                            jQuery(options[i]).attr('selected', true); 
-                            municipality.trigger("liszt:updated"); 
-                        } 
-                    }
-                }
-            },
-            success: function(results) {
-                municipality
-                    .html(results)
-                    .prepend('<option value="">Seleccionar</option>')
-                    .trigger("liszt:updated");
-            }
-        });
-    }
-
-    function selectL(v) {
-        jQuery.ajax({
-                type: "POST",
-                data: {municipality_id: v},
-                url: "{{=URL(c='common', f='get_localities')}}",
-                complete: function(){
-                    options = locality.find('option');
-                    if(options.length > 0 && locality_id){
-                        for(var i in options) { 
-                            if(jQuery(options[i]).val() == locality_id) { 
-                                jQuery(options[i]).attr('selected', true); 
-                                locality.trigger("liszt:updated"); 
-                            } 
-                        }
-                    }
-                },
-                success: function(results) {
-                    locality
-                            .html(results)
-                            .prepend('<option value="">Seleccionar</option>')
-                            .trigger("liszt:updated");
-                }
-        });
-    }
-    
-    /*
-    state.ajaxComplete(function(){
-        
-    });
-
-    municipality.ajaxComplete(function(){
-        options = jQuery("#municipality").find('option');
-        if(options.length > 0){
-            for(var i in options) { 
-                if(jQuery(options[i]).val() == municipality_id) { 
-                    jQuery(options[i]).attr('selected', true); 
-                    municipality.trigger("liszt:updated"); 
-                } 
-            }
-        }
-    });
-
-    locality.ajaxComplete(function(){
-        options = jQuery("#locality").find('option');
-        if(options.length > 0){
-            for(var i in options) { 
-                if(jQuery(options[i]).val() == locality_id) { 
-                    jQuery(options[i]).attr('selected', true); 
-                    locality.trigger("liszt:updated"); 
-                } 
-            }
-        }
-    });
-    */
 </script>
 
 </body>
