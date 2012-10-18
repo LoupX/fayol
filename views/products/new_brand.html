@@ -31,6 +31,11 @@
                     	<p>Ocurrió un error con los datos del formulario.</p>
                     </div>
 
+                    <div class="notibar exists" style="display:none;">
+                    	<a class="close"></a>
+                    	<p>Esta marca existe, para editarla vaya a la sección de ver marcas. </p>
+                    </div>
+
                     <div class="notibar msgsuccess" style="display:none;">
                         <a class="close"></a>
                         <p>Se han guardado los datos del formulario.</p>
@@ -78,10 +83,11 @@
             }
         });
         
+        jQuery('.msgerror').hide();
+        jQuery('.exists').hide();
+        jQuery('.msgsuccess').hide();
 
         if(jQuery("#form_brand").valid()) {
-            jQuery('.msgerror').hide();
-            jQuery('.msgsuccess').hide();
 
              jQuery.ajax({
                 url: "{{=URL(c='products_ajax', f='create_brand')}}",
@@ -91,9 +97,14 @@
                 },
                 type: 'POST',
                 success:function(data){
-                    if(data){
-                        jQuery('.msgsuccess').fadeIn(1600);
-                        deleteFields();
+                    if(data != 0 && data){
+                        jQuery('.msgsuccess').fadeIn(1600, function() {
+                            jQuery('.msgsuccess').fadeOut('slow');
+                        });
+                        setTimeout('redirect()', 1600)
+                   }
+                    else if(data == 0) {
+                        jQuery('.exists').fadeIn(1600);
                     }
                     else{
                         jQuery('.msgerror').fadeIn(1600);
@@ -103,12 +114,19 @@
                                                         1000);
                 }
             }); 
+        } else {
+            jQuery('.msgerror').fadeIn(1600);
+            jQuery('body','html',window, document).animate({scrollTop:0},1000);
         }
     });
 
     function deleteFields() {
         jQuery('#name').val('');
         jQuery('#description').val('');
+    }
+    
+    function redirect() {
+        window.location.replace("{{=URL(c='products', f='brands')}}");
     }
 
 </script>

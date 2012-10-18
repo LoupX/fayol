@@ -31,12 +31,18 @@
                     	<p>Ocurrió un error con los datos del formulario.</p>
                     </div>
 
+                    <div class="notibar exists" style="display:none;">
+                    	<a class="close"></a>
+                    	<p>Esta unidad de medida existe, para editarla vaya a la sección de ver unidades de medida. </p>
+                    </div>
+
                     <div class="notibar msgsuccess" style="display:none;">
                         <a class="close"></a>
                         <p>Se han guardado los datos del formulario.</p>
                     </div>
             						
-                    <form id="form_measuring_unit" class="stdform stdform2" method="post" action="">	                        
+                    <form id="form_measuring_unit" class="stdform stdform2" method="post" action="">
+                    	                        
                         <p>
 	                        <label>Nombre *</label>
 	                        <span class="field"><input type="text" name="measuring_unit" id="measuring_unit" class="smallinput"/></span>
@@ -77,10 +83,11 @@
             }
         });
         
+        jQuery('.msgerror').hide();
+        jQuery('.exists').hide();
+        jQuery('.msgsuccess').hide();
 
         if(jQuery("#form_measuring_unit").valid()) {
-            jQuery('.msgerror').hide();
-            jQuery('.msgsuccess').hide();
 
              jQuery.ajax({
                 url: "{{=URL(c='products_ajax', f='create_unit')}}",
@@ -90,9 +97,14 @@
                 },
                 type: 'POST',
                 success:function(data){
-                    if(data){
-                        jQuery('.msgsuccess').fadeIn(1600);
-                        deleteFields();
+                    if(data != 0 && data){
+                        jQuery('.msgsuccess').fadeIn(1600, function() {
+                            jQuery('.msgsuccess').fadeOut('slow');
+                        });
+                        setTimeout('redirect()', 1600)
+                   }
+                    else if(data == 0) {
+                        jQuery('.exists').fadeIn(1600);
                     }
                     else{
                         jQuery('.msgerror').fadeIn(1600);
@@ -102,12 +114,19 @@
                                                         1000);
                 }
             }); 
+        } else {
+            jQuery('.msgerror').fadeIn(1600);
+            jQuery('body','html',window, document).animate({scrollTop:0},1000);
         }
     });
 
     function deleteFields() {
         jQuery('#measuring_unit').val('');
         jQuery('#abbreviation').val('');
+    }
+    
+    function redirect() {
+        window.location.replace("{{=URL(c='products', f='units')}}");
     }
 
 </script>
