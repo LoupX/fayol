@@ -302,7 +302,7 @@ def update_warehouse():
     data_address['locality_id'] = vars.locality
     data_address['zip_code'] = vars.zip_code
 
-    data['name'] = vars.namedecode('utf-8').upper()
+    data['name'] = vars.name.decode('utf-8').upper()
 
     try:
         db(db.warehouses.id==id).update(**data)
