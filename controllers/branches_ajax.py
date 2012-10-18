@@ -256,9 +256,9 @@ def update_branch():
     data_address['locality_id'] = vars.locality
     data_address['zip_code'] = vars.zip_code
 
-    data_tax['business_name'] = vars.corporate.decode('utf-8').upper()
+    data_tax['business_name'] = vars.business_name.decode('utf-8').upper()
     data_tax['rfc'] = vars.rfc.decode('utf-8').upper()
-    data_tax['tax'] = vars.tax_regime.decode('utf-8').upper()
+    data_tax['tax'] = vars.tax.decode('utf-8').upper()
 
     data['name'] = vars.name
 
