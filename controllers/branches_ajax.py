@@ -242,14 +242,11 @@ def update_branch():
     data_tax = dict()
     try:
         row = db(db.branches.id==id).select(db.branches.company_address_id,
-            db.branches.company_tax_info_id)
-    except Exception as e:
-        db.rollback()
-        return ''
-    if row:
+            db.branches.company_tax_info_id).first()
         company_address_id = row.company_address_id
         company_tax_info_id = row.company_tax_info_id
-    else:
+    except Exception as e:
+        db.rollback()
         return ''
 
     data_address['address'] = vars.address.decode('utf-8').upper()
@@ -292,13 +289,10 @@ def update_warehouse(id, **data):
 
     try:
         row = db(db.branches.id == id).select(db.branches.company_address_id,
-            db.branches.company_tax_info_id)
+            db.branches.company_tax_info_id).first()
+        company_address_id = row.company_address_id
     except Exception as e:
         db.rollback()
-        return ''
-    if row:
-        company_address_id = row.company_address_id
-    else:
         return ''
 
     data_address['address'] = vars.address.decode('utf-8').upper()

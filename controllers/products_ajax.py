@@ -119,10 +119,131 @@ def get_units():
     return str(data)
 
 def update_brand():
-    pass
+    id = request.vars.id
+    data['name'] = request.vars.name.decode('utf-8').upper()
+    data['description'] = request.vars.description('utf-8').upper()
+    try:
+        db(db.brand_descriptions.brand_id==id).update(**data)
+    except SyntaxError as e:
+        db.rollback()
+        if 'duplicate field' in e:
+            return 0
+        else:
+            return ''
+    except Exception as e:
+        db.rollback()
+        return ''
+    else:
+        db.commit()
+        if result==1:
+            return True
+        else:
+            return ''
 
 def update_category():
-    pass
+    id = request.vars.id
+    data['name'] = request.vars.name.decode('utf-8').upper()
+    data['description'] = request.vars.description('utf-8').upper()
+    try:
+        db(db.category_descriptions.category_id==id).update(**data)
+    except SyntaxError as e:
+        db.rollback()
+        if 'duplicate field' in e:
+            return 0
+        else:
+            return ''
+    except Exception as e:
+        db.rollback()
+        return ''
+    else:
+        db.commit()
+        if result == 1:
+            return True
+        else:
+            return ''
+
 
 def update_unit():
-    pass
+    id = request.vars.id
+    data['name'] = request.vars.name.decode('utf-8').upper()
+    data['abbreviation'] = request.vars.abbreviation('utf-8').upper()
+    try:
+        db(db.units.id==id).update(**data)
+    except SyntaxError as e:
+        db.rollback()
+        if 'duplicate field' in e:
+            return 0
+        else:
+            return ''
+    except Exception as e:
+        db.rollback()
+        return ''
+    else:
+        db.commit()
+        if result == 1:
+            return True
+        else:
+            return ''
+
+def toggle_brand():
+    id = request.vars.id
+    try:
+        row = db(db.brands.id==id).select().first()
+        db(db.brands.id==id).update(status==(not row.status))
+    except SyntaxError as e:
+        db.rollback()
+        if 'duplicate field' in e:
+            return 0
+        else:
+            return ''
+    except Exception as e:
+        db.rollback()
+        return ''
+    else:
+        db.commit()
+        if result == 1:
+            return True
+        else:
+            return ''
+
+def toggle_category():
+    id = request.vars.id
+    try:
+        row = db(db.categories.id==id).select().first()
+        db(db.categories.id==id).update(status==(not row.status))
+    except SyntaxError as e:
+        db.rollback()
+        if 'duplicate field' in e:
+            return 0
+        else:
+            return ''
+    except Exception as e:
+        db.rollback()
+        return ''
+    else:
+        db.commit()
+        if result == 1:
+            return True
+        else:
+            return ''
+
+def toggle_unit():
+    id = request.vars.id
+    try:
+        row = db(db.units.id==id).select().first()
+        db(db.units.id==id).update(status==(not row.status))
+    except SyntaxError as e:
+        db.rollback()
+        if 'duplicate field' in e:
+            return 0
+        else:
+            return ''
+    except Exception as e:
+        db.rollback()
+        return ''
+    else:
+        db.commit()
+        if result == 1:
+            return True
+        else:
+            return ''
