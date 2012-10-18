@@ -14,8 +14,8 @@ db.define_table('categories',
     migrate=MIGRATE)
 
 db.define_table('category_descriptions',
-    Field('category_id', 'reference categories', required=True, notnull=True),
-    Field('name', 'string', required=True, notnull=True, unique=True),
+    Field('category_id', 'reference categories', notnull=True),
+    Field('name', 'string', notnull=True, unique=True),
     Field('description', 'text'),
     Field('meta_description', 'string'),
     Field('meta_keywords', 'string'),

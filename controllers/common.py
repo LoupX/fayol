@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-@auth.requires_login()
 
+@auth.requires_login()
 def get_states():
     s = db.states
     rows = []
@@ -14,6 +14,7 @@ def get_states():
         options += '\n'
     return options
 
+@auth.requires_login()
 def get_municipalities():
     m = db.municipalities
     options = str()
@@ -30,6 +31,7 @@ def get_municipalities():
             options += '/n'
     return options
 
+@auth.requires_login()
 def get_localities():
     l = db.localities
     m = db.municipalities
@@ -65,6 +67,7 @@ def get_localities():
             options += '\n'
     return options
 
+@auth.requires_login()
 def get_banks():
     b = db.banks
     rows = []
