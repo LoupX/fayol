@@ -251,7 +251,7 @@ def update_branch():
 
     data_address['address'] = vars.address.decode('utf-8').upper()
     data_address['suburb'] = vars.suburb.decode('utf-8').upper()
-    data_address['state_id'] = vars.states
+    data_address['state_id'] = vars.state
     data_address['municipality_id'] = vars.municipality
     data_address['locality_id'] = vars.locality
     data_address['zip_code'] = vars.zip_code
@@ -297,7 +297,7 @@ def update_warehouse(id, **data):
 
     data_address['address'] = vars.address.decode('utf-8').upper()
     data_address['suburb'] = vars.suburb.decode('utf-8').upper()
-    data_address['state_id'] = vars.states
+    data_address['state_id'] = vars.state
     data_address['municipality_id'] = vars.municipality
     data_address['locality_id'] = vars.locality
     data_address['zip_code'] = vars.zip_code
