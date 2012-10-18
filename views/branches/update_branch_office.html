@@ -3,6 +3,11 @@
 {{block scripts_extra}}
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.validate.min.js')}}"></script>	
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/chosen.jquery.min.js')}}"></script>
+<style type="text/css">
+    .ellol {
+        border: 1px solid red;
+    }    
+</style>
 {{end}}
 
 {{block sidebar_menu}}
@@ -130,9 +135,13 @@
     var state = jQuery('#states'),
         municipality = jQuery('#municipality'),
         locality = jQuery('#locality');
-    var s = '',
+    var st = '',
         m = '',
         l = '';
+    
+    var sid,
+        mid = (jQuery('#municipality').val() == null) ? '': jQuery('#municipality').val(),
+        lid = (jQuery('#locality').val() == null) ? '': jQuery('#locality').val();
 
 //////////// get info ////////////
     jQuery.ajax({
@@ -160,12 +169,13 @@
 
 //////////// get municipalities ////////////
     state.change( function() {
-        var id = jQuery(this).find(':selected').val();
-        if(id != '') {
+        sid = jQuery(this).find(':selected').val();
+        if(sid != '') {
+        state.siblings('div').removeClass('ellol');
             jQuery.ajax({
                 type: "POST",
                 url: "{{=URL(c='common', f='get_municipalities')}}",
-                data: {id: id},
+                data: {id: sid},
                 success: function(results) {
                     municipality
                         .html(results)
@@ -189,14 +199,22 @@
                 .trigger("liszt:updated");
         }
     });
+    
+    locality.change( function() {
+        lid = jQuery(this).find(':selected').val();
+        if(lid != '') {
+	        locality.siblings('div').removeClass('ellol');
+        }
+    });
 
 //////////// get localities ////////////
     municipality.change( function() {
-        var id = jQuery(this).find(':selected').val();
-        if(id != '') {
+        mid = jQuery(this).find(':selected').val();
+        if(mid != '') {
+        	municipality.siblings('div').removeClass('ellol');
             jQuery.ajax({
                 type: "POST",
-                data: {municipality_id: id},
+                data: {municipality_id: mid},
                 url: "{{=URL(c='common', f='get_localities')}}",
                 success: function(results) {
                     locality
@@ -243,16 +261,18 @@
 //////////// send form ////////////
     jQuery('#submit').live('click', function(e) {
         e.preventDefault();
-        var sid = jQuery('#states').val(),
-            mid = (jQuery('#municipality').val() == null) ? '': jQuery('#municipality').val(),
-            lid = (jQuery('#locality').val() == null) ? '': jQuery('#locality').val(),
-            sendid = '{{=request.vars.id}}';
+        valState(sid);
+        valLoc(lid);
+        valMun(mid);
+        
+        var sendid = '{{=request.vars.id}}';
         
         jQuery('.msgerror').hide();
         jQuery('.exists').hide();
         jQuery('.msgsuccess').hide();
 
-        if(jQuery("#form_branch_office").valid() && sid != null && mid != null && lid != null) {
+        if(jQuery("#form_branch_office").valid() && sid != null && mid != null && lid != null && valState(sid) && valLoc(lid) && valMun(mid)) {
+        console.log('in');
              jQuery.ajax({
                 url: "{{=URL(c='branches_ajax', f='update_branch')}}",
                 data: { 
@@ -354,6 +374,51 @@
 
     function redirect() {
         window.location.replace("{{=URL(c='branches', f='branch_office')}}");
+    }
+    
+    function valState(ss) {
+    var bol;
+    if (ss != 0) {
+        bol = true;
+        jQuery('#states').siblings('div').removeClass('ellol');
+    } else if(ss != null){
+        bol = false;
+        jQuery('#states').siblings('div').addClass('ellol');
+    } else{
+        bol = false;
+        jQuery('#states').siblings('div').addClass('ellol');
+    };
+    return bol
+    }
+    
+    function valLoc(ss) {
+    var bol;
+    if (ss != 0) {
+        bol = true;
+        jQuery('#locality').siblings('div').removeClass('ellol');
+    } else if(ss != null){
+        bol = false;
+        jQuery('#locality').siblings('div').addClass('ellol');
+    } else{
+        bol = false;
+        jQuery('#locality').siblings('div').addClass('ellol');
+    };
+    return bol
+    }
+    
+    function valMun(ss) {
+    var bol;
+    if (ss != 0) {
+        bol = true;
+        jQuery('#municipality').siblings('div').removeClass('ellol');
+    } else if(ss != null){
+        bol = false;
+        jQuery('#municipality').siblings('div').addClass('ellol');
+    } else{
+        bol = false;
+        jQuery('#municipality').siblings('div').addClass('ellol');
+    };
+    return bol
     }
 
     
