@@ -117,3 +117,12 @@ def get_units():
     from gluon.contrib import simplejson
     data = simplejson.dumps(data)
     return str(data)
+
+def update_brand():
+    pass
+
+def update_category():
+    pass
+
+def update_unit():
+    pass
