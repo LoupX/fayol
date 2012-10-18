@@ -135,13 +135,13 @@
     var state = jQuery('#states'),
         municipality = jQuery('#municipality'),
         locality = jQuery('#locality');
-    var st = '',
+    var s = '',
         m = '',
         l = '';
     
     var sid,
-        mid = (jQuery('#municipality').val() == null) ? '': jQuery('#municipality').val(),
-        lid = (jQuery('#locality').val() == null) ? '': jQuery('#locality').val();
+        mid,
+        lid;
 
 //////////// get info ////////////
     jQuery.ajax({
@@ -158,12 +158,12 @@
             jQuery('#business_name').val(data.company_tax_info['business_name']);
             jQuery('#rfc').val(data.company_tax_info['rfc']);
             jQuery('#tax').val(data.company_tax_info['tax']);
-            s = data.company_addresses['state_id'];
-            m = data.company_addresses['municipality_id'];
-            l = data.company_addresses['locality_id'];
-            selectS(s);
-            selectM(s, m);
-            selectL(m, l); 
+            sid = (data.company_addresses['state_id'] == null) ? '': data.company_addresses['state_id'];
+            mid = (data.company_addresses['municipality_id'] == null) ? '': data.company_addresses['municipality_id'];
+            lid = (data.company_addresses['locality_id'] == null) ? '': data.company_addresses['locality_id'];
+            selectS(sid);
+            selectM(sid, mid);
+            selectL(mid, lid); 
         }
     });
 
@@ -197,6 +197,8 @@
                 .html('')
                 .prepend('<option value="">Seleccionar</option>')
                 .trigger("liszt:updated");
+            mid = '';
+            lid = '';
         }
     });
     
@@ -229,6 +231,7 @@
                     .html('')
                     .prepend('<option value="">Seleccionar</option>')
                     .trigger("liszt:updated");
+            lid = '';
         }
     });
 
