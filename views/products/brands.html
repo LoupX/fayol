@@ -27,58 +27,25 @@
         
         <div id="contentwrapper" class="contentwrapper">
             <table cellpadding="0" cellspacing="0" border="0" class="stdtable" id="table">
-                    <colgroup>
-                        <col class="con0" />
-                        <col class="con1" />
-                        <col class="con0" />
-                        <col class="con1" />
-                        <col class="con0" />
-                    </colgroup>
-                    <thead>
-                        <tr>
-                            <th class="head0">Nombre</th>
-                            <th class="head1">Descripción </th>
-                            <th class="head0">Estatus </th>
-                            <th class="head1">&nbsp;</th>
-                            
-                        </tr>
-                    </thead>
-                    <tfoot>
-                        <tr>
-                            <th class="head0">Nombre</th>
-                            <th class="head1">Descripción </th>
-                            <th class="head0">Estatus </th>
-                            <th class="head1">&nbsp;</th>
-                            
-                        </tr>
-                    </tfoot>
-                    <tbody>
-                        <tr class="gradeX">
-                            <td width="20%">Nombre</td>
-                            <td width="50%">descripción de la marca</td>
-                            <td width="15%" style="text-align: center;"> <input type="checkbox" name="check2" checked="checked" /> </td>
-                            <td width="15%" class="center" style="text-align: center;"><a href="{{=URL(c='products', f='brand_quickedit.html')}}" class="toggle">Editar</a></td>
-                        </tr>
-                        <tr class="gradeC">
-                            <td>Nombre</td>
-                            <td>descripción de la marca</td>
-                            <td style="text-align: center;"> <input type="checkbox" name="check2" checked="checked" /> </td>
-                            <td class="center" style="text-align: center;"><a href="{{=URL(c='products', f='brand_quickedit.html')}}" class="toggle">Editar</a></td>
-                        </tr>
-                        <tr class="gradeA">
-                            <td>Nombre</td>
-                            <td>descripción de la marca</td>
-                            <td style="text-align: center;"> <input type="checkbox" name="check2" checked="checked" /> </td>
-                            <td class="center" style="text-align: center;"><a href="{{=URL(c='products', f='brand_quickedit.html')}}" class="toggle">Editar</a></td>
-                        </tr>
-                        <tr class="gradeA">
-                            <td>Nombre</td>
-                            <td>descripción de la marca</td>
-                            <td style="text-align: center;"> <input type="checkbox" name="check2" checked="checked" /> </td>
-                            <td class="center" style="text-align: center;"><a href="{{=URL(c='products', f='brand_quickedit.html')}}" class="toggle">Editar</a></td>
-                        </tr>
-                    </tbody>
-                </table>
+                <thead>
+                    <tr>
+                        <th class="head0">Nombre</th>
+                        <th class="head1">Descripción </th>
+                        <th class="head0">Estatus </th>
+                        <th class="head1">&nbsp;</th>
+                        
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th class="head0">Nombre</th>
+                        <th class="head1">Descripción </th>
+                        <th class="head0">Estatus </th>
+                        <th class="head1">&nbsp;</th>
+                        
+                    </tr>
+                </tfoot>
+            </table>
         </div><!--contentwrapper-->
         
         <br clear="all" />
@@ -89,7 +56,53 @@
 </div><!--bodywrapper-->
 
 <script type="text/javascript">
-    jQuery("#parentezco").html("Hola");
+
+    function quickEdit(){
+        jQuery('.stdtable a.toggle').on("click", function(){                                
+            //this is to hide current open quick view in a table 
+            jQuery(this).parents('table').find('tr').each(function(){
+                jQuery(this).removeClass('hiderow');
+                if(jQuery(this).hasClass('togglerow'))
+                    jQuery(this).remove();
+            });
+            
+            var parentRow = jQuery(this).parents('tr');
+            var numcols = parentRow.find('td').length + 1;              //get the number of columns in a table. Added 1 for new row to be inserted              
+            var url = jQuery(this).attr('href');
+            
+            //this will insert a new row next to this element's row parent
+            parentRow.after('<tr class="togglerow"><td colspan="'+numcols+'"><div class="toggledata"></div></td></tr>');
+            
+            var toggleData = parentRow.next().find('.toggledata');
+            
+            parentRow.next().hide();
+            
+            //get data from server
+            jQuery.post(url,function(data){
+                toggleData.append(data);                        //inject data read from server
+                parentRow.next().fadeIn();                      //show inserted new row
+                parentRow.addClass('hiderow');                  //hide this row to look like replacing the newly inserted row
+                jQuery('input,select').uniform();
+            });
+                    
+            return false;
+        });
+
+        jQuery('.stdtable input:checkbox').on("change", function(e){
+            console.log(e.currentTarget.value);
+            jQuery.ajax({
+                url: "{{=URL(c='products_ajax', f='toggle_brand')}}",
+                type: "POST",
+                data: {
+                    id:e.currentTarget.value
+                },
+                success: function(data){
+                    console.log(data);
+                }
+            });
+        })
+    }
+
     jQuery.ajax({
         url: "{{=URL(c='products_ajax', f='get_brands')}}",
         type: "POST",
@@ -104,8 +117,8 @@
                 aaData[cont] = [
                     description.name, 
                     description.description, 
-                    "<input type=\"checkbox\" " + checked + " />", 
-                    "<a href=\"{{=URL(c='products', f='brand_quickedit.html')}}\" class=\"toggle\">Editar</a>"
+                    "<input type=\"checkbox\" " + checked + " value=\"" + brand.id + "\" />", 
+                    "<a href=\"{{=URL(c='products', f='brand_quickedit.html')}}?id=" + brand.id + "\" class=\"toggle\">Editar</a>"
                 ];
                 cont++;
             }
@@ -114,10 +127,11 @@
                 "aoColumns": [
                     {"sTitle":"Nombre"},
                     {"sTitle":"Descripción"},
-                    {"sTitle":"Estatus", "center":true},
-                    {"sTitle":"", "sStyle":"text-align: center;"}
+                    {"sTitle":"Estatus", "sClass":"center"},
+                    {"sTitle":"", "sClass":"center"}
                 ]
             });
+            quickEdit();
         }
     });
 </script>

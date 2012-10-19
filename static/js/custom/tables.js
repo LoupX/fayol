@@ -109,8 +109,7 @@ jQuery(document).ready(function(){
 		});
 				
 		return false;
-	});
-		
+	});	
 		
 	///// REMOVE TOGGLED QUICK VIEW WHEN CLICKING SUBMIT/CANCEL BUTTON /////	
 	jQuery('.toggledata button.cancel, .toggledata button.submit').live('click',function(){
