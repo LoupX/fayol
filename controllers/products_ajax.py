@@ -92,10 +92,18 @@ def create_product():
             for k in vars['vendors[]']:
                 db.product_to_vendor.insert(product_id=id,
                     vendor_id=vars['vendors[]'][k])
+    except SyntaxError as e:
+        db.rollback()
+        if 'duplicate field' in e:
+            return 0
+        else:
+            return ''
     except Exception as e:
-        pass
+        db.rollback()
+        return ''
     else:
-        pass
+        db.commit()
+        return id
 
 @auth.requires_login()
 def get_brands():
