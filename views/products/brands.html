@@ -124,6 +124,24 @@
                 cont++;
             }
             jQuery("#table").dataTable( {
+            	"oLanguage": {
+            		"sProcessing": "Procesando...",
+            		"sLengthMenu": "Ver _MENU_ registros",
+            		"sZeroRecords": "No se encontraron registros",
+            		"sEmptyTable": "No hay registros en esta tabla",
+            		"sLoadingRecords": "Cargando...",
+            		"sInfo": "Viendo _START_ - _END_ de _TOTAL_ registros",
+            		"sInfoEmpty": "Viendo 0 - 0 de 0 registros",
+            		"sInfoFiltered": "(Flitrado de _MAX_ registros totales)",
+            		"sSearch": "Buscar",
+            		"oPaginate": {
+            			"sFirst":"Primero",
+            			"sPrevious":"Anterior",
+            			"sNext":"Siguiente",
+            			"sLast":"Ultimo"
+            		},
+            	},
+                "sPaginationType": "full_numbers",
                 "aaData": aaData,
                 "aoColumns": [
                     {"sTitle":"Nombre"},
