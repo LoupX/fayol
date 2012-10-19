@@ -1,6 +1,8 @@
 {{extend 'base/layout.html'}}
 
 {{block scripts_extra}}
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.maskedinput.js')}}"></script>
+
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.validate.min.js')}}"></script>
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/chosen.jquery.min.js')}}"></script>
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.dataTables.min.js')}}"></script>
@@ -102,8 +104,16 @@
                                 </span>
 	                    </p>
 	                    <p>
-                        	<label>Descripción</label>
-                            <span class="field"><textarea cols="80" rows="5" name="description" id="description" class="smallinput"></textarea></span>
+	                        	<label>Costo estandar</label>
+	                            <span class="field"><input type="text" name="standard_cost" id="standard_cost" class="smallinput" placeholder="0.00"/></span>
+	                    </p>
+	                    <p>
+	                        	<label>Margen de utilidad</label>
+	                            <span class="field"><input type="text" name="markup" id="markup" class="smallinput"/></span>
+	                    </p>
+	                    <p>
+                        		<label>Descripción</label>
+                        		<span class="field"><textarea cols="80" rows="5" name="description" id="description" class="smallinput"></textarea></span>
                         </p>
 	                    
                         <p class="stdformbutton">
@@ -227,7 +237,7 @@
             }
         });
 
-//////////// send form //////////// 					Errores: si se pone de nuevo el mismo no lo reconoce
+//////////// send form //////////// 				
     jQuery('#submit').live('click', function(e) {
         e.preventDefault();
         valbra(bid);
@@ -240,7 +250,7 @@
 
         if(jQuery("#form_product").valid() && valbra(bid) && valuni(uid) && valcat(cid)) {
              jQuery.ajax({
-                url: "{{=URL(c='common', f='echo')}}",
+                url: "{{=URL(c='products_ajax', f='create_product')}}",
                 data: { 
                     name:jQuery('#name').val(),
                     alternative_name:jQuery('#alternative_name').val(),
@@ -252,6 +262,8 @@
                     serial_number:jQuery('#serial_number').val(),
                     category_id:jQuery('#category').val(),
                     vendors:jQuery('#vendors').val(),
+                    standard_cost:jQuery('#standard_cost').val(),
+                    markup:jQuery('#markup').val(),
                     description:jQuery('#description').val(),
                 },
                 type: 'POST',
@@ -313,6 +325,8 @@
             .trigger("liszt:updated");
         jQuery('#part_number').val('');
         jQuery('#serial_number').val('');
+        jQuery('#standard_cost').val('');
+        jQuery('#markup').val('');
         jQuery('#description').val('');
     }
     
