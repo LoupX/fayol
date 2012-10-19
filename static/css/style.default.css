@@ -2491,7 +2491,12 @@ blockquote.bq2 {
 
 /* Estilo para el hover de las tablas */
 
-.odd: hover
+.odd:hover
 {
-	background-color: #000;
+	background-color: #eeeeee;
+}
+
+.even:hover
+{
+	background-color: #eeeeee;
 }
