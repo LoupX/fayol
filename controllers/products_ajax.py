@@ -69,23 +69,33 @@ def create_unit():
 def create_product():
     data = dict()
     data_description = dict()
+    vars = request.vars
 
-    data['brand_id'] = None
-    data['unit_id'] = None
-    data['code'] = None
-    data['alternative_code'] = None
-    data['location'] = None
-    data['part_number'] = None
-    data['serial_number'] = None
-    data['model'] = None
-    data['standard_cost'] = None
-    data['markup'] = None
+    data['brand_id'] = vars.brand_id
+    data['unit_id'] = vars.unit_id
+    data['alternative_code'] = vars.alternative_code
+    data['part_number'] = vars.part_number
+    data['serial_number'] = vars.serial_number
+    data['model'] = vars.model
+    data['standard_cost'] = vars.standard_cost
+    data['markup'] = vars.markup
 
-    data_description['name'] = None
-    data_description['alternative_name'] = None
-    data_description['description'] = None
+    data_description['name'] = vars.name
+    data_description['alternative_name'] = vars.alternative_name
+    data_description['description'] = vars.description
 
-
+    try:
+        id = db.products.insert(**data)
+        if id:
+            data_description['product_id'] = id
+            db.product_descriptions.insert(**data_description)
+            for k in vars['vendors[]']:
+                db.product_to_vendor.insert(product_id=id,
+                    vendor_id=vars['vendors[]'][k])
+    except Exception as e:
+        pass
+    else:
+        pass
 
 @auth.requires_login()
 def get_brands():
