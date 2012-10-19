@@ -100,12 +100,23 @@
             for(row in data){
                 brand = data[row].brands;
                 description = data[row].brand_descriptions;
-                aaData[cont] = [description.name, description.description, "", ""];
+                checked = (brand.status) ? "checked=\"checked\"" : "";
+                aaData[cont] = [
+                    description.name, 
+                    description.description, 
+                    "<input type=\"checkbox\" " + checked + " />", 
+                    "<a href=\"{{=URL(c='products', f='brand_quickedit.html')}}\" class=\"toggle\">Editar</a>"
+                ];
                 cont++;
             }
-
             jQuery("#table").dataTable( {
                 "aaData": aaData,
+                "aoColumns": [
+                    {"sTitle":"Nombre"},
+                    {"sTitle":"Descripción"},
+                    {"sTitle":"Estatus", "center":true},
+                    {"sTitle":"", "sStyle":"text-align: center;"}
+                ]
             });
         }
     });
