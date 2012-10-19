@@ -1,9 +1,10 @@
 {{extend 'base/layout.html'}}
 
 {{block scripts_extra}}
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.validate.min.js')}}"></script>
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/chosen.jquery.min.js')}}"></script>
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.dataTables.min.js')}}"></script>
 <script type="text/javascript" src="{{=URL('static', 'js/custom/dualselector.js')}}"></script>
-<script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.validate.min.js')}}"></script>
 {{end}}
 
 {{block sidebar_menu}}
@@ -32,7 +33,12 @@
                     	<p>Ocurrió un error con los datos del formulario.</p>
                     </div>
 
-                    <div class="notibar msgsuccess" style="display:none;">
+                	<div class="notibar exists" style="display:none;">
+                   		<a class="close"></a>
+                    	<p>Este producto ya existe, para editarlo vaya a la sección de ver producto. </p>
+                    </div>
+
+                	<div class="notibar msgsuccess" style="display:none;">
                         <a class="close"></a>
                         <p>Se han guardado los datos del formulario.</p>
                     </div>
@@ -40,35 +46,37 @@
                     <form id="form_product" class="stdform stdform2" method="post" action="">           	                        
                         <p>
 	                        	<label>Nombre</label>
-	                            <span class="field"><input type="text" name="product_name" id="product_name" class="smallinput"/></span>
+	                            <span class="field"><input type="text" name="name" id="name" class="smallinput"/></span>
 	                    </p>
 	                    <p>
 	                        	<label>Nombre alternativo</label>
-	                            <span class="field"><input type="text" name="product_name_alt" id="product_name_alt" class="smallinput"/></span>
+	                            <span class="field"><input type="text" name="alternative_name" id="alternative_name" class="smallinput"/></span>
 	                    </p>
 	                    <p>
 	                        	<label>Código alternativo</label>
-	                            <span class="field"><input type="text" name="product_code_alt" id="product_code_alt" class="smallinput"/></span>
+	                            <span class="field"><input type="text" name="alternative_code" id="alternative_code" class="smallinput"/></span>
 	                    </p>
-	                    <p>
-                            	<label>Marca</label>
-                            	<span class="field">
-                                	<select name="trademark_name" id="trademark_name">
-	                            	    <option value="">Seleccionar</option>
-	                                </select>
-	                            </span>
+	                    <p style="margin-top: 1px;">
+                            <label>Marca</label>
+                            <span class="field">
+                                <!-- <select name="states" id="states">
+                                </select> -->
+                                <select id="brands" name="brands" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="3">
+                                  </select>
+                            </span>
                         </p>
                         <p style="margin-top: 1px;">
 	                        	<label>Modelo</label>
 	                            <span class="field"><input type="text" name="model" id="model" class="smallinput "/></span>
 	                    </p>
-	                    <p>
-                            	<label>Unidad de medida</label>
-                            	<span class="field">
-                            	    <select name="measuring_unit" id="measuring_unit">
-	                        	        <option value="">Seleccionar</option>
-	                        	        </select>
-	                        	</span>
+	                    <p style="margin-top: 1px;">
+                            <label>Unidad de medida</label>
+                            <span class="field">
+                                <!-- <select name="states" id="states">
+                                </select> -->
+                                <select id="unit" name="unit" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="3">
+                                  </select>
+                            </span>
                         </p>
                         <p style="margin-top: 1px;">
 	                        	<label>Número de parte</label>
@@ -78,38 +86,31 @@
 	                        	<label>Número de serie</label>
 	                            <span class="field"><input type="text" name="serial_number" id="serial_number" class="smallinput"/></span>
 	                    </p>
-	                    <p>
-	                        	<label>Categoría</label>
-	                            <span class="field">
-                            	    <select name="categories_name" id="categories_name">
-	                        	        <option value="">Seleccionar</option>
-	                        	        </select>
-	                        	</span>
-	                    </p>
+	                    <p style="margin-top: 1px;">
+                            <label>Categoría</label>
+                            <span class="field">
+                                <!-- <select name="states" id="states">
+                                </select> -->
+                                <select id="category" name="category" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="3">
+                                  </select>
+                            </span>
+                        </p>
 	                    <p style="margin-top:1px;">
 	                        	<label>Proveedores</label>
 	                            <span class="dualselect field" id="dualselect_vendors">
 	                           
-                            	<select class="uniformselect" name="vendors_name" id="vendors_name" multiple="multiple" size="10">
-                                    <option value="">Selection One</option>
-                                    <option value="">Selection Two</option>
-                                    <option value="">Selection Three</option>
-                                    <option value="">Selection Four</option>
-                                    <option value="">Selection Five</option>
-                                    <option value="">Selection Six</option>
-                                    <option value="">Selection Seven</option>
-                                    <option value="">Selection Eight</option>
+                            	<select class="uniformselect" name="chosen_vendors" id="chosen_vendors" multiple="multiple" size="10">
                                 </select>
                                 <span class="ds_arrow"> 
                                 	<span class="arrow ds_next">»</span>  
                                 	<span class="arrow ds_prev">«</span>                
                                 </span>
-                                <select multiple="multiple" name="chosen_vendors" id="chosen_vendors" size="10"></select>
+                                <select multiple="multiple" name="vendors" id="vendors" size="10"></select>
                                 </span>
 	                    </p>
 	                    <p>
                         	<label>Descripción</label>
-                            <span class="field"><textarea cols="80" rows="5" name="location" id="location2" class="smallinput"></textarea></span>
+                            <span class="field"><textarea cols="80" rows="5" name="description" id="description" class="smallinput"></textarea></span>
                         </p>
 	                    
                         <p class="stdformbutton">
@@ -132,40 +133,153 @@
 
 <script type="text/javascript">
 
-    //form and shit
-    //send form
-    jQuery('#submit').live('click', function(e) {
-        e.preventDefault();
+//////////// Ajax for selects ////////////
+    jQuery(".chzn-select").chosen();
 
-        jQuery("#form_product").validate({
+    var brand = jQuery('#brands'),
+        unit = jQuery('#unit'),
+        category = jQuery('#category');
+        chosen_vendors = jQuery('#chosen_vendors');
+        
+    
+    jQuery.ajax({
+        type: "POST",
+        url: "{{=URL(c='products_ajax', f='get_brands')}}",
+        dataType: "json",
+        success: function(results) {
+        	options = "";
+        	for(k in results){
+	        	options += "<option value=\"" + results[k].brands.id + "\">" + results[k].brand_descriptions.name + "</option>";
+	        }
+            brand	
+                .html(options)
+                .prepend('<option value="">Selecccionar</option>')
+                .trigger("liszt:updated");
+            }
+    });
+    jQuery.ajax({
+        type: "POST",
+        url: "{{=URL(c='products_ajax', f='get_units')}}",
+        dataType: "json",
+        success: function(results) {
+        	options = "";
+            for(k in results){
+	        	options += "<option value=\"" + results[k].id + "\">" + results[k].name + "</option>";
+	        }
+            unit	
+                .html(options)
+                .prepend('<option value="">Selecccionar</option>')
+                .trigger("liszt:updated");
+            }
+    });
+    jQuery.ajax({
+        type: "POST",
+        url: "{{=URL(c='products_ajax', f='get_categories')}}",
+        dataType: "json",
+        success: function(results) {
+        	options = "";
+            for(k in results){
+	        	options += "<option value=\"" + results[k].category_descriptions.id + "\">" + results[k].category_descriptions.name + "</option>";
+	        }
+            category	
+                .html(options)
+                .prepend('<option value="">Selecccionar</option>')
+                .trigger("liszt:updated");
+            }
+    });
+    jQuery.ajax({
+        type: "POST",
+        url: "{{=URL(c='vendors_ajax', f='get_vendors')}}",
+        success: function(results) {
+            chosen_vendors	
+                .html(results)
+                .trigger("liszt:updated");
+            }
+    });
+
+//////////// validate form ////////////
+    jQuery("#form_product").validate({
             rules: {
-                product_name: "required",
-                trademark_name: "required",
-                measuring_unit: "required",
-                categories_name: "required",
-                zip_code: {
-                    required: false,
-                    digits: true,
-                    minlength: 5
-                },
-                website: {
-                    url: true,
-                    required: false
-                },
-                rfc: {
-                    minlength: 10,
-                    maxlength:13,
-                    required: false
-                }
+                name: "required",
             },
             messages: {
-                product_name: "Ingrese el nombre del producto.",
-                trademark_name: "Seleccione una marca.",
-                measuring_unit: "Seleccione una unidad de medida.",
-                categories_name: "Seleccione una categoría."
+                name: "Ingrese el nombre del producto",
             }
         });
+
+//////////// send form //////////// 												Problem
+    jQuery('#submit').live('click', function(e) {
+        e.preventDefault();
         
+        jQuery('.msgerror').hide();
+        jQuery('.exists').hide();
+        jQuery('.msgsuccess').hide();
+
+        if(jQuery("#form_product").valid()) {
+             jQuery.ajax({
+                url: "{{=URL(c='products_ajax', f='create_product')}}",
+                data: { 
+                    name:jQuery('#name').val(),
+                    alternative_name:jQuery('#alternative_name').val(),
+                    alternative_code:jQuery('#alternative_code').val(),
+                    brands:jQuery('#brands').val(),
+                    model:jQuery('#model').val(),
+                    unit:jQuery('#unit').val(),
+                    part_number:jQuery('#part_number').val(),
+                    serial_number:jQuery('#serial_number').val(),
+                    category:jQuery('#category').val(),
+                    vendors:jQuery('#vendors').val(),
+                    description:jQuery('#description').val(),
+                },
+                type: 'POST',
+                success:function(data){
+                    if(data != 0 && data){
+                        jQuery('.msgsuccess').fadeIn(1600, function() {
+                            jQuery('.msgsuccess').fadeOut('slow');
+                        });
+                        deleteFields();
+                    }
+                    else if(data == 0) {
+                        jQuery('.exists').fadeIn(1600);
+                    }
+                    else{
+                        jQuery('.msgerror').fadeIn(1600);
+                    }
+                    jQuery('body','html',window).animate(
+                                                        {scrollTop:0}, 
+                                                        1000);
+                }
+            }); 
+        } else {
+            jQuery('.msgerror').fadeIn(1600);
+            jQuery('body','html',window, document).animate({scrollTop:0},1000);
+        }
+    });
+
+///////////// Borrar campos /////////////
+
+    function deleteFields() {
+        jQuery('#name').val('');
+        jQuery('#alternative_name').val('');
+        jQuery('#alternative_code').val('');
+        jQuery('#model').val('');
+        jQuery('#brands')
+            .first()
+            .attr('selected',true)
+            .trigger("liszt:updated");
+        jQuery('#unit')
+            .first()
+            .attr('selected',true)
+            .trigger("liszt:updated");
+        jQuery('#category')
+            .first()
+            .attr('selected',true)
+            .trigger("liszt:updated");
+        jQuery('#part_number').val('');
+        jQuery('#serial_number').val('');
+        jQuery('#vendors').val('');
+        jQuery('#description').val('');
+    }
     
 </script>
 
