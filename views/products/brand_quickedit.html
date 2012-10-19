@@ -19,7 +19,7 @@
     <br clear="all" />
     
     <div class="quickformbutton">
-    	<button id="submit" class="update">Actualizar</button>
+    	<button class="update" id="submit">Actualizar</button>
         <button class="cancel">Cancelar</button>
         <span class="loading"><img src="{{=URL('static', '/images/loaders/loader3.gif')}}" alt="" />Actualizando cambios...</span>
     </div><!-- button -->
@@ -41,7 +41,7 @@
                         jQuery('.msgsuccess').fadeIn(1600, function() {
                             jQuery('.msgsuccess').fadeOut('slow');
                         });
-                        deleteFields();
+                        toggleData.append(data);                        //inject data read from server
                    }
                     else if(data == 0) {
                         jQuery('.exists').fadeIn(1600);

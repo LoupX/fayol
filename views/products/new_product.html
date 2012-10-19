@@ -240,7 +240,7 @@
 
         if(jQuery("#form_product").valid() && valbra(bid) && valuni(uid) && valcat(cid)) {
              jQuery.ajax({
-                url: "{{=URL(c='products_ajax', f='create_product')}}",
+                url: "{{=URL(c='common', f='echo')}}",
                 data: { 
                     name:jQuery('#name').val(),
                     alternative_name:jQuery('#alternative_name').val(),

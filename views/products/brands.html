@@ -2,7 +2,6 @@
 
 {{block scripts_extra}}
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.dataTables.min.js')}}"></script>
-<script type="text/javascript" src="{{=URL('static', 'js/custom/tables.js')}}"></script>
 
 <script type="text/javascript" src="{{=URL('static', 'js/custom/forms.js')}}"></script>
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.tagsinput.min.js')}}"></script>
@@ -56,6 +55,8 @@
 </div><!--bodywrapper-->
 
 <script type="text/javascript">
+
+	
 
     function quickEdit(){
         jQuery('.stdtable a.toggle').on("click", function(){                                
@@ -117,7 +118,7 @@
                 aaData[cont] = [
                     description.name, 
                     description.description, 
-                    "<input type=\"checkbox\" " + checked + " value=\"" + brand.id + "\" />", 
+                    "<div class=\"checker\" id=\"uniform-undefined\"><span class=\"checked\"><input type=\"checkbox\" " + checked + " value=\"" + brand.id + "\" /></span></div>", 
                     "<a href=\"{{=URL(c='products', f='brand_quickedit.html')}}?id=" + brand.id + "\" class=\"toggle\">Editar</a>"
                 ];
                 cont++;
