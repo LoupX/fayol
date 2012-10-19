@@ -5,6 +5,11 @@
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/chosen.jquery.min.js')}}"></script>
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.dataTables.min.js')}}"></script>
 <script type="text/javascript" src="{{=URL('static', 'js/custom/dualselector.js')}}"></script>
+<style type="text/css">
+    .ellol {
+        border: 1px solid red;
+    }    
+</style>
 {{end}}
 
 {{block sidebar_menu}}
@@ -105,7 +110,8 @@
                                 	<span class="arrow ds_next">»</span>  
                                 	<span class="arrow ds_prev">«</span>                
                                 </span>
-                                <select multiple="multiple" name="vendors" id="vendors" size="10"></select>
+                                <select multiple="multiple" name="vendors" id="vendors" size="10">   
+                                </select>
                                 </span>
 	                    </p>
 	                    <p>
@@ -136,6 +142,10 @@
 //////////// Ajax for selects ////////////
     jQuery(".chzn-select").chosen();
 
+    var bid = '',
+    	uid = '',
+    	cid = '';
+    
     var brand = jQuery('#brands'),
         unit = jQuery('#unit'),
         category = jQuery('#category');
@@ -157,6 +167,14 @@
                 .trigger("liszt:updated");
             }
     });
+    
+    brand.change( function() {
+        bid = jQuery(this).find(':selected').val();
+        if(bid != '') {
+	        brand.siblings('div').removeClass('ellol');
+        }
+    });
+    
     jQuery.ajax({
         type: "POST",
         url: "{{=URL(c='products_ajax', f='get_units')}}",
@@ -172,6 +190,14 @@
                 .trigger("liszt:updated");
             }
     });
+    
+    unit.change( function() {
+        uid = jQuery(this).find(':selected').val();
+        if(uid != '') {
+	        unit.siblings('div').removeClass('ellol');
+        }
+    });
+    
     jQuery.ajax({
         type: "POST",
         url: "{{=URL(c='products_ajax', f='get_categories')}}",
@@ -187,6 +213,14 @@
                 .trigger("liszt:updated");
             }
     });
+    
+    category.change( function() {
+        cid = jQuery(this).find(':selected').val();
+        if(cid != '') {
+	        category.siblings('div').removeClass('ellol');
+        }
+    });
+    
     jQuery.ajax({
         type: "POST",
         url: "{{=URL(c='vendors_ajax', f='get_vendors')}}",
@@ -207,15 +241,18 @@
             }
         });
 
-//////////// send form //////////// 												Problem
+//////////// send form //////////// 					Errores: si se pone de nuevo el mismo no lo reconoce, checar que se resetee vendors
     jQuery('#submit').live('click', function(e) {
         e.preventDefault();
+        valbra(bid);
+        valuni(uid);
+        valcat(cid);
         
         jQuery('.msgerror').hide();
         jQuery('.exists').hide();
         jQuery('.msgsuccess').hide();
 
-        if(jQuery("#form_product").valid()) {
+        if(jQuery("#form_product").valid() && valbra(bid) && valuni(uid) && valcat(cid)) {
              jQuery.ajax({
                 url: "{{=URL(c='products_ajax', f='create_product')}}",
                 data: { 
@@ -238,6 +275,9 @@
                             jQuery('.msgsuccess').fadeOut('slow');
                         });
                         deleteFields();
+                        bid = 0;
+                        uid = 0;
+                        cid = 0;
                     }
                     else if(data == 0) {
                         jQuery('.exists').fadeIn(1600);
@@ -264,22 +304,72 @@
         jQuery('#alternative_code').val('');
         jQuery('#model').val('');
         jQuery('#brands')
+            .find('option')
             .first()
             .attr('selected',true)
             .trigger("liszt:updated");
         jQuery('#unit')
+            .find('option')
             .first()
             .attr('selected',true)
             .trigger("liszt:updated");
         jQuery('#category')
+            .find('option')
             .first()
             .attr('selected',true)
             .trigger("liszt:updated");
         jQuery('#part_number').val('');
         jQuery('#serial_number').val('');
-        jQuery('#vendors').val('');
+        jQuery('#vendors')
+            .empty()
         jQuery('#description').val('');
     }
+    
+    function valbra(s) {
+    var bol;
+    if (s != 0) {
+        bol = true;
+        jQuery('#brands').siblings('div').removeClass('ellol');
+    } else if(s != null){
+        bol = false;
+        jQuery('#brands').siblings('div').addClass('ellol');
+    } else{
+        bol = false;
+        jQuery('#brands').siblings('div').addClass('ellol');
+    };
+    return bol
+    }
+    
+    function valuni(s) {
+    var bol;
+    if (s != 0) {
+        bol = true;
+        jQuery('#unit').siblings('div').removeClass('ellol');
+    } else if(s != null){
+        bol = false;
+        jQuery('#unit').siblings('div').addClass('ellol');
+    } else{
+        bol = false;
+        jQuery('#unit').siblings('div').addClass('ellol');
+    };
+    return bol
+    }
+    
+    function valcat(s) {
+    var bol;
+    if (s != 0) {
+        bol = true;
+        jQuery('#category').siblings('div').removeClass('ellol');
+    } else if(s != null){
+        bol = false;
+        jQuery('#category').siblings('div').addClass('ellol');
+    } else{
+        bol = false;
+        jQuery('#category').siblings('div').addClass('ellol');
+    };
+    return bol
+    }
+
     
 </script>
 
