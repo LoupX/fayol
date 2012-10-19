@@ -254,6 +254,12 @@
                         sid = 0;
                         mid = 0;
                         lid = 0;
+                        jQuery('#states_chzn').remove();
+                        jQuery('#states').val('').removeClass('chzn-done').chosen();
+                        jQuery('#municipality_chzn').remove();
+                        jQuery('#municipality').val('').removeClass('chzn-done').chosen();
+                        jQuery('#locality_chzn').remove();
+                        jQuery('#locality').val('').removeClass('chzn-done').chosen();
                     }
                     else if(data == 0) {
                         jQuery('.exists').fadeIn(1600);
