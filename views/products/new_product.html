@@ -64,8 +64,6 @@
 	                    <p style="margin-top: 1px;">
                             <label>Marca</label>
                             <span class="field">
-                                <!-- <select name="states" id="states">
-                                </select> -->
                                 <select id="brands" name="brands" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="3">
                                   </select>
                             </span>
@@ -77,8 +75,6 @@
 	                    <p style="margin-top: 1px;">
                             <label>Unidad de medida</label>
                             <span class="field">
-                                <!-- <select name="states" id="states">
-                                </select> -->
                                 <select id="unit" name="unit" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="3">
                                   </select>
                             </span>
@@ -94,24 +90,15 @@
 	                    <p style="margin-top: 1px;">
                             <label>Categoría</label>
                             <span class="field">
-                                <!-- <select name="states" id="states">
-                                </select> -->
                                 <select id="category" name="category" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="3">
                                   </select>
                             </span>
                         </p>
 	                    <p style="margin-top:1px;">
 	                        	<label>Proveedores</label>
-	                            <span class="dualselect field" id="dualselect_vendors">
-	                           
-                            	<select class="uniformselect" name="chosen_vendors" id="chosen_vendors" multiple="multiple" size="10">
-                                </select>
-                                <span class="ds_arrow"> 
-                                	<span class="arrow ds_next">»</span>  
-                                	<span class="arrow ds_prev">«</span>                
-                                </span>
-                                <select multiple="multiple" name="vendors" id="vendors" size="10">   
-                                </select>
+	                            <span class="field">
+                            	<select name="vendors" id="vendors" multiple="multiple" size="10" data-placeholder="Seleccionar" class="chzn-select"></select>
+                               
                                 </span>
 	                    </p>
 	                    <p>
@@ -149,9 +136,8 @@
     var brand = jQuery('#brands'),
         unit = jQuery('#unit'),
         category = jQuery('#category');
-        chosen_vendors = jQuery('#chosen_vendors');
+        vendors = jQuery('#vendors');
         
-    
     jQuery.ajax({
         type: "POST",
         url: "{{=URL(c='products_ajax', f='get_brands')}}",
@@ -225,12 +211,12 @@
         type: "POST",
         url: "{{=URL(c='vendors_ajax', f='get_vendors')}}",
         success: function(results) {
-            chosen_vendors	
+            vendors	
                 .html(results)
                 .trigger("liszt:updated");
             }
     });
-
+    
 //////////// validate form ////////////
     jQuery("#form_product").validate({
             rules: {
@@ -241,7 +227,7 @@
             }
         });
 
-//////////// send form //////////// 					Errores: si se pone de nuevo el mismo no lo reconoce, checar que se resetee vendors
+//////////// send form //////////// 					Errores: si se pone de nuevo el mismo no lo reconoce
     jQuery('#submit').live('click', function(e) {
         e.preventDefault();
         valbra(bid);
@@ -278,6 +264,13 @@
                         bid = 0;
                         uid = 0;
                         cid = 0;
+                        recargarvendors();
+                        jQuery('#brands_chzn').remove();
+                        jQuery('#brands').val('').removeClass('chzn-done').chosen();
+                        jQuery('#unit_chzn').remove();
+                        jQuery('#unit').val('').removeClass('chzn-done').chosen();
+                        jQuery('#category_chzn').remove();
+                        jQuery('#category').val('').removeClass('chzn-done').chosen();
                     }
                     else if(data == 0) {
                         jQuery('.exists').fadeIn(1600);
@@ -320,8 +313,6 @@
             .trigger("liszt:updated");
         jQuery('#part_number').val('');
         jQuery('#serial_number').val('');
-        jQuery('#vendors')
-            .empty()
         jQuery('#description').val('');
     }
     
@@ -370,6 +361,18 @@
     return bol
     }
 
+    function recargarvendors()
+    {
+    	jQuery.ajax({
+    	    type: "POST",
+    	    url: "{{=URL(c='vendors_ajax', f='get_vendors')}}",
+    	    success: function(results) {
+            	vendors	
+            	    .html(results)
+            	    .trigger("liszt:updated");
+            }
+        });    
+    }
     
 </script>
 
