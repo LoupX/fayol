@@ -244,14 +244,14 @@ vendors.live('change', function() {
                     else{
                         jQuery('.msgerror').fadeIn(1600);
                     }
-                    jQuery('body','html',window).animate(
+                    jQuery('body','html',window, document).animate(
                                                         {scrollTop:0}, 
                                                         1000);
                 }
             });  
         } else {
             jQuery('.msgerror').fadeIn(1600);
-            jQuery('body','html',window).animate(
+            jQuery('body','html',window, document).animate(
                                                 {scrollTop:0}, 
                                                 1000);
         }

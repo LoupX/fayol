@@ -2,7 +2,13 @@
 
 {{block scripts_extra}}
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.dataTables.min.js')}}"></script>
-<script type="text/javascript" src="{{=URL('static', 'js/custom/tables.js')}}"></script>	
+<script type="text/javascript" src="{{=URL('static', 'js/custom/tables.js')}}"></script>
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/chosen.jquery.min.js')}}"></script>	
+<style type="text/css">
+    .ellol {
+        border: 1px solid red;
+    }    
+</style>
 {{end}}
 
 {{block sidebar_menu}}
@@ -19,36 +25,66 @@
         </div><!--pageheader-->
         
         <div id="contentwrapper" class="contentwrapper">
+            <div class="notibar msgerror" style="display:none;">
+                        <a class="close"></a>
+                        <!-- Ocurrió un error con los datos del formulario. -->
+                        <p>Seleccione al menos un precio como predeterminado y/o llena los campos resaltados.</p>
+                </div>
+
+                <div class="notibar msgsuccess" style="display:none;">
+                        <a class="close"></a>
+                        <p>Se han guardado los datos del formulario.</p>
+                    </div>
+                <div class="notibar exists" style="display:none;">
+                        <a class="close"></a>
+                        <p>Seleecione un producto.</p>
+                    </div>
         
         	<div id="validation" class="subcontent">
             	
             		<div class="contenttitle2">
-                        <h3>Lista de precios</h3>
+                        <h3>Seleccione un producto</h3>
                     </div><!--contenttitle-->
             	    <br />   
-                    
-                    
-                    <div class="contenttitle2">
-                        <h3>Precio 1</h3>
-                    </div><!--contenttitle-->   
+                    <!--contenttitle-->   
                        
                     <form id="form_agent2" class="stdform stdform2" method="post" action="">
-                    	<div id="camposgenerados">
-	                    	<p>
-	                        	<label>Nombre</label>
-	                            <span class="field"><input type="text" name="description" id="description1" class="smallinput"/></span>
-	                        </p> 
-	                        
-	                        <p style="margin-top: 1px;">
-	                        	<label>Precio</label>
-	                            <span class="field"><input type="text" name="description" id="description1" class="smallinput" keydown="aparecediv()"/></span>
-	                        </p>
-	                        <p style="margin-top: 1px;">
-	                        	<label>Predeterminado</label>
-	                            <span class="field"><input type="radio" name="radiofield" style="opacity: 0; "></span>
-	                        </p>
-                    	</div>
-                       
+                         <p>
+                            <label>Productos</label>
+                            <span class="field">
+                                <select id="product" name="product" data-placeholder="Seleccionar" style="width:350px;" tabindex="1">
+                                    <option value="">Seleccionar</option>
+                                    <option value="9">Producto9</option>
+                                    <option value="8">Producto8</option>
+                                    <option value="7">Producto7</option>
+                                    <option value="6">Producto6</option>
+                                </select>
+                            </span>
+                        </p>
+                        
+                    <br />
+                        <div id="campos">
+                            <!-- <div id="ori">
+    	                    	<p style="margin-top: 1px;">
+    	                        	<label>Nombre</label>
+    	                            <span class="field">
+                                        <input type="text" name="namelist" id="namelist" class="smallinput active"/>
+                                    </span>
+    	                        </p> 
+    	                        <p style="margin-top: 1px;">
+    	                        	<label>Precio</label>
+    	                            <span class="field">
+                                        <input type="text" name="price" id="price" class="smallinput"/>
+                                    </span>
+    	                        </p>
+    	                        <p style="margin-top: 1px;">
+    	                        	<label>Predeterminado</label>
+    	                            <span class="field">
+                                        <input type="radio" name="radiofield" style="opacity: 0; ">
+                                    </span>
+    	                        </p>
+                            </div> -->
+                       </div>
                         <p class="stdformbutton">
                         	<button id="submit" class="submit radius2">Guardar</button>
                         </p>
@@ -67,8 +103,255 @@
 </div><!--bodywrapper-->
 
 <script type="text/javascript">
+    var original = jQuery('#namelist'),
+        divori = jQuery('#ori'),
+        divres = jQuery('#campos'),
+        divs = '#',
+        cont = 0,
+        product = jQuery("#product"),
+        productid = '';
 
-cont = 1;
+    product.chosen();
+
+    // original.keyup( function(tecla) {
+    //     if(tecla.keyCode != 8 && tecla.keyCode != 32 && original.val().length > 0) {
+    //         if(jQuery(this).hasClass('active')) {
+
+    //             jQuery(this).removeClass('active');
+    //             divres.append(newInput(cont));
+    //             jQuery('#div'+cont).slideToggle(90);
+    //             jQuery(":radio").uniform();
+    //             cont+=1;
+    //         }
+    //     }
+    // });
+
+    // original.blur(function() {
+    //     if( jQuery(this).val().length <= 0 && !jQuery(this).hasClass('active') ) {
+    //         divori.slideToggle(90, function() {
+    //                 divori.remove();
+    //         });
+    //     };
+    // });
+
+    divres.append(newInput(cont));
+    jQuery('#div0').show();
+    cont+=1;
+    blockFields('input[name^=ano]', true);
+    blockFields('input[name^=price]', true);
+    //blockFields('input[name=radiofield]', true);
+
+    function nuevo(n){
+        jQuery('input[name=ano'+n+']').keyup( function(tecla) {
+            if(tecla.keyCode != 8 && tecla.keyCode != 32 && jQuery(this).val().length >= 0) {
+                if(jQuery(this).hasClass('active')) {
+                    jQuery(this)
+                        .removeClass('active')
+                        .addClass('last');
+                    jQuery('input[name=price'+n+']')
+                        .removeClass('active')
+                        .addClass('last');
+                    jQuery('#radiofield'+n)
+                        .removeClass('active')
+                        .addClass('last');
+                    divres.append(newInput(cont));
+                    jQuery('#div'+cont).slideToggle(90);
+                    jQuery(":radio").uniform();
+                    cont+=1;
+                }
+                jQuery(this).removeClass('error');
+            } 
+        });
+        jQuery('input[name=price'+n+']').keyup( function(tecla) {
+            if(tecla.keyCode != 8 && tecla.keyCode != 32 && jQuery(this).val().length >= 0) {
+                if(jQuery(this).hasClass('active')) {
+                    jQuery(this)
+                        .removeClass('active')
+                        .addClass('last');
+                    jQuery('input[name=ano'+n+']')
+                        .removeClass('active')
+                        .addClass('last');
+                    jQuery('#radiofield'+n)
+                        .removeClass('active')
+                        .addClass('last');
+                    divres.append(newInput(cont));
+                    jQuery('#div'+cont).slideToggle(90);
+                    jQuery(":radio").uniform();
+                    cont+=1;
+                }
+                jQuery(this).removeClass('error');
+            } 
+        });
+    }
+
+    function detele(v) {
+        if( jQuery('input[name=ano'+v+']').val().length <= 0 && 
+            jQuery('input[name=price'+v+']').val().length <= 0 && 
+            !jQuery('input[name=ano'+v+']').hasClass('active') ) {
+            jQuery('#div'+v).slideToggle(90, function() {
+                jQuery('#div'+v).remove();
+            });
+       };
+    }
+
+    function newInput(val) {
+        var ni = '<div id="div'+val+'" style="display:none;"> <p style="margin-top: 1px;"> <label>Nombre</label> <span class="field"> <input type="text" name="ano'+val+'" id="'+val+'" class="smallinput active" onkeyup="nuevo('+val+');" onblur="detele('+val+');" /> </span> </p> <p style="margin-top: 1px;"> <label>Precio</label> <span class="field"> <input type="text" name="price'+val+'" id="price'+val+'" class="smallinput active" onkeyup="nuevo('+val+');" onblur="detele('+val+');" /> </span> </p> <p style="margin-top: 1px;"> <label>Predeterminado</label> <span class="field"> <input type="radio" name="radiofield" id="radiofield'+val+'" style="opacity: 0; " class="active"> </span> </p> </div>';
+        return ni
+    }
+
+    ///////// change method for select /////////
+    product.change(function() {
+        jQuery(this).siblings('div').removeClass('ellol');
+        productid = jQuery(this).find(':selected').val();
+        removeFields('input[name^=ano]');
+
+        if (productid != '') {
+            blockFields('input[name^=ano]', false);
+            blockFields('input[name^=price]', false);
+            //blockFields('input[name=radiofield]', false);
+
+        } else{
+            blockFields('input[name^=ano]', true);
+            blockFields('input[name^=price]', true);
+            //blockFields('input[name=radiofield]', true);
+            productid = '';
+        };
+
+
+    });
+
+    function blockFields(who, bol) {
+        var inputsqwe = jQuery(who);
+        jQuery.each(inputsqwe, function(i) {
+            jQuery(inputsqwe[i]).attr('disabled', bol);
+        });
+    }
+
+    function removeFields(who) {
+        var inputsasd = jQuery(who);
+        jQuery.each(inputsasd, function(i) {
+            if (!jQuery(inputsasd[i]).hasClass('active')) {
+                jQuery(inputsasd[i])
+                    .closest('div')
+                    .remove(); 
+            }
+        });    
+    }
+
+    jQuery('#submit').live('click', function(e) {
+        e.preventDefault();
+        jQuery('.msgsuccess').hide();
+        jQuery('.msgerror').hide();
+        jQuery('.exists').hide();
+
+        var aerrors = [],
+            perrors = [],
+            chk = [];
+
+        // Validate form and shit as usual....
+        if (productid != '') {
+            //removeFields('input[name^=ano]');
+            var inputs_ano = jQuery('input[name^=ano]'),
+                inputs_pri = jQuery('input[name^=price]'),
+                inputs_rad = jQuery('input[name=radiofield]');
+
+                // Check ano, pri and rad inputs
+            jQuery.each(inputs_ano, function(i) {
+                if (!jQuery(inputs_ano[i]).hasClass('active') && jQuery(inputs_ano[i]).val().length <= 0) {
+                    aerrors.push(jQuery(inputs_ano[i]).attr('name'));
+                }
+                if (!jQuery(inputs_pri[i]).hasClass('active') && jQuery(inputs_pri[i]).val().length <= 0) {
+                    perrors.push(jQuery(inputs_pri[i]).attr('name'));
+                }
+                if (!jQuery(inputs_rad[i]).hasClass('active') && jQuery(inputs_rad[i]).parent().hasClass('checked')) {
+                    chk.push(jQuery(inputs_rad[i]).attr('id'));
+                }
+            });
+
+            if (aerrors.length < 1 && perrors.length < 1 && chk.length == 1) {
+                var save_ano = [],
+                    save_pri = [],
+                    prelist = '',
+                    prepric = '';
+
+                var rad = jQuery('#'+chk[0]).parents('div[id^=div]').attr('id');
+                prelist = jQuery('#'+rad).find('input[name^=ano]').val();
+                prepric = jQuery('#'+rad).find('input[name^=pri]').val();
+
+                jQuery.each(inputs_ano, function(i) {
+                    if (!jQuery(inputs_ano[i]).hasClass('active') && 
+                        jQuery('#'+rad).find('input[name^=ano]').attr('id') != jQuery(inputs_ano[i]).attr('id')) {
+                        save_ano.push(jQuery(inputs_ano[i]).val());
+                    }
+                    if (!jQuery(inputs_pri[i]).hasClass('active') &&
+                        jQuery('#'+rad).find('input[name^=pri]').attr('id') != jQuery(inputs_pri[i]).attr('id')) {
+                        save_pri.push(jQuery(inputs_pri[i]).val());
+                    }
+                });
+
+                console.log(save_ano);
+                console.log(save_pri);
+                console.log(prelist);
+                console.log(prepric);
+
+                // jQuery.ajax({
+                //     url: "",
+                //     data: {
+                //         prelist: prelist,
+                //         prepric: prepric,
+                //         lists: save_ano,
+                //         prices: save_pri
+                //     },
+                //     type: "POST",
+                //     success:function(data){
+                //       if(data){
+                //             jQuery('.msgsuccess').fadeIn(1600, function() {
+                //                 jQuery('.msgsuccess').fadeOut('slow');
+                //             });
+                //             deleteFields();
+                //             id = '';
+                //         }
+                //         else{
+                //             jQuery('.msgerror').fadeIn(1600);
+                //         }
+                //         jQuery('body','html',window, document).animate(
+                //                                             {scrollTop:0}, 
+                //                                             1000);
+                //     }
+                // });
+                removeFields('input[name^=ano]');
+
+            } else{
+
+                for(var e in aerrors) {
+                    if (!jQuery('input[name='+aerrors[e]+']').hasClass('active')) {
+                        jQuery('input[name='+aerrors[e]+']').addClass('error');
+                    }
+                };
+
+                for(var e in perrors) {
+                    if (!jQuery('input[name='+perrors[e]+']').hasClass('active')) {
+                        jQuery('input[name='+perrors[e]+']').addClass('error');
+                    }
+                };
+
+                jQuery('.msgerror').fadeIn(600);
+                
+
+            };
+
+            jQuery('body','html', window, document).animate({scrollTop: 0}, 1000);
+
+        } else{
+            product
+                .siblings('div')
+                .addClass('ellol');
+            jQuery('.exists').fadeIn(600);
+            jQuery('body','html', window, document).animate({scrollTop: 0}, 1000);
+        };
+                
+
+    });
 
 </script>
 
