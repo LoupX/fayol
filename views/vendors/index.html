@@ -287,7 +287,7 @@ function chk(id, s) {
         resp = jQuery('span#resp');
 
     if(s == 'True') {
-        var ans = confirm('¿Está seguro?.');
+        var ans = confirm('¿Está seguro que quiere deshabilitar este proveedor?.');
 
         if(ans) {
             jQuery.ajax({
@@ -305,8 +305,8 @@ function chk(id, s) {
             //jQuery('#b').parent('span').addClass('checked');
             //jQuery('#vendors_select').find('option[value='+id+']').remove();
             cleanFields();
-            jQuery('#vendors_select_chzn').remove();
-            jQuery('#vendors_select').val('').removeClass('chzn-done').chosen();
+            //jQuery('#vendors_select_chzn').remove();
+            //jQuery('#vendors_select').val('').removeClass('chzn-done').chosen();
 
             if(jQuery('#a').parent('span').hasClass('checked')) {
                 ajaxFilter('TRUE');
@@ -327,29 +327,34 @@ function chk(id, s) {
       }        
     }
     else {
-        jQuery.ajax({
-          url: "{{=URL(c='vendors_ajax', f='toggle_vendor_status')}}",
-          type: 'POST',
-          data: { id: id, status: s }
-        });
-        status.parent().addClass('checked');
-        status.attr('onclick','chk('+id+',"True")');
-        resp.html('Activado.');
-        //ajaxFilter('FALSE');
-        //jQuery('#vendors_select').find('option[value='+id+']').remove();
-        cleanFields();
-        jQuery('#vendors_select_chzn').remove();
-        jQuery('#vendors_select').val('').removeClass('chzn-done').chosen();
+        var ans = confirm('¿Está seguro que quiere habilitar este proveedor?.');
 
-        if(jQuery('#a').parent('span').hasClass('checked')) {
-            ajaxFilter('TRUE');
-        } else if(jQuery('#b').parent('span').hasClass('checked')) {
-            ajaxFilter('FALSE');
+        if(ans) {
+            jQuery.ajax({
+              url: "{{=URL(c='vendors_ajax', f='toggle_vendor_status')}}",
+              type: 'POST',
+              data: { id: id, status: s }
+            });
+            status.parent().addClass('checked');
+            status.attr('onclick','chk('+id+',"True")');
+            resp.html('Activado.');
+            //ajaxFilter('FALSE');
+            //jQuery('#vendors_select').find('option[value='+id+']').remove();
+            cleanFields();
+            //jQuery('#vendors_select_chzn').remove();
+            //jQuery('#vendors_select').val('').removeClass('chzn-done').chosen();
+
+            if(jQuery('#a').parent('span').hasClass('checked')) {
+                ajaxFilter('TRUE');
+            } else if(jQuery('#b').parent('span').hasClass('checked')) {
+                ajaxFilter('FALSE');
+            } else {
+                ajaxFilter('ANY');
+            }
         } else {
-            ajaxFilter('ANY');
+            resp.html('Desactivado.');
+            status.parent().removeClass('checked');
         }
-        //jQuery('#vendors_select_chzn').remove();
-        //jQuery('#vendors_select').val('').removeClass('chzn-done').chosen();
     }
   
 }
