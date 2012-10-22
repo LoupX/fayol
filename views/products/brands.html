@@ -111,17 +111,14 @@
             return false;
         });
 
-        jQuery('.stdtable input:checkbox').on("change", function(e){
-            console.log(e.currentTarget.value);
+        jQuery('.checker input:checkbox').on("click", function(e){
+            console.log('changed');
             jQuery.ajax({
                 url: "{{=URL(c='products_ajax', f='toggle_brand')}}",
                 type: "POST",
                 data: {
                     id:e.currentTarget.value
                 },
-                success: function(data){
-                    console.log(data);
-                }
             });
         })
     }
@@ -140,7 +137,7 @@
                 aaData[cont] = [
                     description.name, 
                     description.description, 
-                    "<div class=\"checker\" id=\"uniform-undefined\"><span class=\"checked\"><input type=\"checkbox\" " + checked + " value=\"" + brand.id + "\" /></span></div>", 
+                    "<input type=\"checkbox\" " + checked + " value=\"" + brand.id + "\" />", 
                     "<a href=\"{{=URL(c='products', f='brand_quickedit.html')}}?id=" + brand.id + "\" class=\"toggle\">Editar</a>"
                 ];
                 cont++;
@@ -172,10 +169,10 @@
                     {"sTitle":"", "sClass":"center"}
                 ]
             });
-            quickEdit();
         },
         complete: function() {
-	    	jQuery('.dataTables_length select, .dataTables_length input').uniform();  
+	    	jQuery('.dataTables_length select, .dataTables_length input, .stdtable input').uniform();  
+            quickEdit();
         }
     });
     
