@@ -184,10 +184,12 @@ def get_units():
     return str(data)
 
 @auth.requires_login()
-def get_product_information(id):
-    #id = request.vars.id
+def get_product_information():
+    id = request.vars.id
     data = dict()
     row = None
+    row_vendors = None
+    row_price_list = None
     try:
         query = db.products.id==id
         query &= db.products.id==db.product_descriptions.product_id
@@ -195,6 +197,15 @@ def get_product_information(id):
         query &= db.products.category_id==db.category_descriptions.category_id
         query &= db.products.unit_id==db.units.id
         row = db(query).select().as_list()
+        query_vendors = db.product_to_vendor.product_id==id
+        query_vendors &= db.vendors.id==db.product_to_vendor.vendor_id
+        query_vendors &= db.products.id==db.product_to_vendor.id
+        row_vendors = db(query_vendors).select(db.vendors.id,
+            db.vendors.name).as_list()
+        ppl = db.product_price_lists
+        row_price_list = db(ppl.product_id==id).select(
+            ppl.id, ppl.name, ppl.price, ppl.is_default,
+            ppl.status).as_list()
     except Exception as e:
         db.rollback()
 
@@ -205,7 +216,10 @@ def get_product_information(id):
             for k in data[r]:
                 if type(data[r][k]) is datetime.datetime:
                     data[r][k] = str(data[r][k])
-
+    if row_vendors:
+        data['vendors'] = row_vendors
+    if row_price_list:
+        data['price_list'] = row_price_list
     from gluon.contrib import simplejson
     data = simplejson.dumps(data)
     return str(data)
