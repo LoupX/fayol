@@ -40,7 +40,7 @@ def brand_quickedit():
         row = db.brand_descriptions[id]
         name = row.name
         description = row.description
-    except:
+    except Exception as e:
         db.rollback()
         response.write(e)
     return dict(title=title, name=name, description=description)
