@@ -106,8 +106,10 @@ def create_product():
         return ''
     else:
         try:
-            row_category = db.category_descriptions[vars.category_id]
-            row_brand = db.brand_descriptions[vars.brand_id]
+            row_category = db(db.category_descriptions.category_id==
+                vars.category_id).select().first()
+            row_brand = db(db.brand_descriptions.brand_id==
+                vars.brand_id).select().first()
             code = '{}{}{}'.format(
                 row_category.name[0:2].decode('utf-8').upper(),
                 row_brand.name[0:2].decode('utf-8').upper(), id)

@@ -83,7 +83,7 @@
                 toggleData.append(data);                        //inject data read from server
                 parentRow.next().fadeIn();                      //show inserted new row
                 parentRow.addClass('hiderow');                  //hide this row to look like replacing the newly inserted row
-                jQuery('input,select').uniform();
+                //jQuery('input,select').uniform();
             });
 
             jQuery('.toggledata button.update').live('click',function(){
@@ -173,8 +173,14 @@
                 ]
             });
             quickEdit();
+        },
+        complete: function() {
+	    	jQuery('.dataTables_length select, .dataTables_length input').uniform();  
         }
     });
+    
+       
+ 
 </script>
 
 </body>

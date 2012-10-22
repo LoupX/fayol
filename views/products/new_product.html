@@ -201,7 +201,7 @@
         success: function(results) {
         	options = "";
             for(k in results){
-	        	options += "<option value=\"" + results[k].category_descriptions.id + "\">" + results[k].category_descriptions.name + "</option>";
+	        	options += "<option value=\"" + results[k].categories.id + "\">" + results[k].category_descriptions.name + "</option>";
 	        }
             category	
                 .html(options)
@@ -231,9 +231,19 @@
     jQuery("#form_product").validate({
             rules: {
                 name: "required",
+                standard_cost: {
+                	number: true,
+	                required: false
+                },
+                markup: {
+                    number: true,
+                    required: false
+                },
             },
             messages: {
                 name: "Ingrese el nombre del producto",
+                standard_cost: "Ingrese numeros decimales",
+                markup: "Ingrese numeros decimales"
             }
         });
 
@@ -261,7 +271,7 @@
                     part_number:jQuery('#part_number').val(),
                     serial_number:jQuery('#serial_number').val(),
                     category_id:jQuery('#category').val(),
-                    vendors:jQuery('#vendors').val(),
+                    vendors:jQuery('#vendors').val() ? (jQuery('#vendors').val()) : '',
                     standard_cost:jQuery('#standard_cost').val(),
                     markup:jQuery('#markup').val(),
                     description:jQuery('#description').val(),
