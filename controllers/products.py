@@ -32,16 +32,17 @@ def brands():
 
 @auth.requires_login()
 def brand_quickedit():
-    title = 'Marcas'
-    id = request.vars.id
-    name = ""
-    description = ""
     try:
+        title = 'Marcas'
+        id = request.vars.id
+        name = ""
+        description = ""
         row = db.brand_descriptions[id]
         name = row.name
         description = row.description
-    except:
+    except Exception as e:
         db.rollback()
+        response.write(e)
     return dict(title=title, name=name, description=description)
 
 @auth.requires_login()
