@@ -3,10 +3,6 @@
 {{block scripts_extra}}
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.dataTables.min.js')}}"></script>
 
-<script type="text/javascript" src="{{=URL('static', 'js/custom/forms.js')}}"></script>
-<script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.tagsinput.min.js')}}"></script>
-<script type="text/javascript" src="{{=URL('static', 'js/plugins/charCount.js')}}"></script>
-<script type="text/javascript" src="{{=URL('static', 'js/plugins/ui.spinner.min.js')}}"></script>
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/chosen.jquery.min.js')}}"></script>
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.validate.min.js')}}"></script>
 {{end}}
@@ -171,12 +167,11 @@
             });
         },
         complete: function() {
-	    	jQuery('.dataTables_length select, .dataTables_length input, .stdtable input').uniform();  
+	    	jQuery('.dataTables_length select, .dataTables_length input, .stdtable').uniform();  
+	    	jQuery('input:checkbox').uniform();
             quickEdit();
         }
     });
-    
-       
  
 </script>
 
