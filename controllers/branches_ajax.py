@@ -66,8 +66,8 @@ def get_branch_information():
     except:
         db.rollback()
 
-    import datetime
     if row:
+        import datetime
         data = row[0]
         for r in data:
             for k in data[r]:
@@ -102,9 +102,8 @@ def get_warehouse_information():
     except:
         db.rollback()
 
-    import datetime
-
     if row:
+        import datetime
         data = row[0]
         for r in data:
             for k in data[r]:

@@ -67,31 +67,34 @@ def create_unit():
 
 @auth.requires_login()
 def create_product():
+    id = None
     data = dict()
     data_description = dict()
     vars = request.vars
 
     data['brand_id'] = vars.brand_id
     data['unit_id'] = vars.unit_id
-    data['alternative_code'] = vars.alternative_code
-    data['part_number'] = vars.part_number
-    data['serial_number'] = vars.serial_number
-    data['model'] = vars.model
+    data['category_id'] = vars.category_id
+    data['alternative_code'] = vars.alternative_code.decode('utf-8').upper()
+    data['part_number'] = vars.part_number.decode('utf-8').upper()
+    data['serial_number'] = vars.serial_number.decode('utf-8').upper()
+    data['model'] = vars.model.decode('utf-8').upper()
     data['standard_cost'] = vars.standard_cost
     data['markup'] = vars.markup
 
-    data_description['name'] = vars.name
-    data_description['alternative_name'] = vars.alternative_name
-    data_description['description'] = vars.description
+    data_description['name'] = vars.name.decode('utf-8').upper()
+    data_description['alternative_name'] = vars.alternative_name.decode('utf-8').upper()
+    data_description['description'] = vars.description.decode('utf-8').upper()
 
     try:
         id = db.products.insert(**data)
         if id:
             data_description['product_id'] = id
             db.product_descriptions.insert(**data_description)
-            for k in vars['vendors[]']:
-                db.product_to_vendor.insert(product_id=id,
-                    vendor_id=vars['vendors[]'][k])
+            if vars['vendors[]']:
+                for k in vars['vendors[]']:
+                    db.product_to_vendor.insert(product_id=id,
+                        vendor_id=k)
     except SyntaxError as e:
         db.rollback()
         if 'duplicate field' in e:
@@ -102,8 +105,25 @@ def create_product():
         db.rollback()
         return ''
     else:
-        db.commit()
-        return id
+        try:
+            row_category = db.category_descriptions[vars.category_id]
+            row_brand = db.brand_descriptions[vars.brand_id]
+            code = '{}{}{}'.format(
+                row_category.name[0:2].decode('utf-8').upper(),
+                row_brand.name[0:2].decode('utf-8').upper(), id)
+            result = db(db.products.id==id).update(code=code)
+        except Exception as e:
+            db.rollback()
+            return ''
+        else:
+            if result==1:
+                db.commit()
+                return str(id)
+            else:
+                db.rollback()
+                return ''
+
+
 
 @auth.requires_login()
 def get_brands():
@@ -164,10 +184,39 @@ def get_units():
     return str(data)
 
 @auth.requires_login()
+def get_product_information(id):
+    #id = request.vars.id
+    data = dict()
+    row = None
+    try:
+        query = db.products.id==id
+        query &= db.products.id==db.product_descriptions.product_id
+        query &= db.products.brand_id==db.brand_descriptions.brand_id
+        query &= db.products.category_id==db.category_descriptions.category_id
+        query &= db.products.unit_id==db.units.id
+        row = db(query).select().as_list()
+    except Exception as e:
+        db.rollback()
+
+    if row:
+        data = row[0]
+        import datetime
+        for r in data:
+            for k in data[r]:
+                if type(data[r][k]) is datetime.datetime:
+                    data[r][k] = str(data[r][k])
+
+    from gluon.contrib import simplejson
+    data = simplejson.dumps(data)
+    return str(data)
+
+
+@auth.requires_login()
 def update_brand():
     data = dict()
     id = request.vars.id
-    data['name'] = request.vars.name.decode('utf-8').upper()
+    if request.vars.name:
+        data['name'] = request.vars.name.decode('utf-8').upper()
     data['description'] = request.vars.description.decode('utf-8').upper()
     try:
         result = db(db.brand_descriptions.brand_id==id).update(**data)
@@ -191,7 +240,8 @@ def update_brand():
 def update_category():
     data = dict()
     id = request.vars.id
-    data['name'] = request.vars.name.decode('utf-8').upper()
+    if request.vars.name:
+        data['name'] = request.vars.name.decode('utf-8').upper()
     data['description'] = request.vars.description.decode('utf-8').upper()
     try:
         result = db(db.category_descriptions.category_id==id).update(**data)
@@ -216,7 +266,8 @@ def update_category():
 def update_unit():
     data = dict()
     id = request.vars.id
-    data['name'] = request.vars.name.decode('utf-8').upper()
+    if request.vars.name:
+        data['name'] = request.vars.name.decode('utf-8').upper()
     data['abbreviation'] = request.vars.abbreviation.decode('utf-8').upper()
     try:
         result = db(db.units.id==id).update(**data)

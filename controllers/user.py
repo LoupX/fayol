@@ -67,7 +67,6 @@ def login():
     auth.login_bare(usr, pwd)
     if auth.is_logged_in():
         attempts(0)
-        #redirect(URL(c='index'))
         return 'true'
     else:
         attempts()

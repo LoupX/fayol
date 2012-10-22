@@ -56,7 +56,7 @@
 
 <script type="text/javascript">
 
-	
+    var result = false;
 
     function quickEdit(){
         jQuery('.stdtable a.toggle').on("click", function(){                                
@@ -84,6 +84,28 @@
                 parentRow.next().fadeIn();                      //show inserted new row
                 parentRow.addClass('hiderow');                  //hide this row to look like replacing the newly inserted row
                 jQuery('input,select').uniform();
+            });
+
+            jQuery('.toggledata button.update').live('click',function(){
+                jQuery(this).parents('.toggledata').animate({height: 0},200, function(){
+                    jQuery(this).parents('tr').prev().removeClass('hiderow');
+                    if(result) {    
+                        var prev = jQuery(this).parents('tr').prev().find('td'),
+                            curr = jQuery(this).parents('tr').find('#name, #description');
+                        jQuery(prev[0]).html(jQuery(curr[0]).val().toUpperCase()); 
+                        jQuery(prev[1]).html(jQuery(curr[1]).val().toUpperCase());   
+                    }                                           
+                    jQuery(this).parents('tr').remove();
+                });
+                return false;
+            });
+
+            jQuery('.toggledata button.cancel').live('click',function(){
+                jQuery(this).parents('.toggledata').animate({height: 0},200, function(){
+                    jQuery(this).parents('tr').prev().removeClass('hiderow');                                            
+                    jQuery(this).parents('tr').remove();
+                });
+                return false;
             });
                     
             return false;
