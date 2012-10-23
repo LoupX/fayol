@@ -75,6 +75,7 @@
 </div><!--bodywrapper-->
 
 <script type="text/javascript">
+jQuery('.dataTables_length select, input:checkbox, input:radio').uniform();
 
 jQuery.ajax({
 	        url: "{{=URL(c='products_ajax', f='get_brands')}}",
@@ -125,39 +126,15 @@ jQuery.ajax({
 	                ]
 	            });
 	            
-		    	jQuery('.dataTables_length select').uniform();  
-		    	jQuery('input:checkbox').uniform();
-		    	jQuery('input:radio').uniform();
+		    	jQuery('.dataTables_length select, input:checkbox, input:radio').uniform();
 	            quickEdit();
-	            //jQuery('#table tbody tr').hide();
-	            
-	            var ena = jQuery('#table tbody tr td').find('span.checked');
-	        console.log(ena);
+                toggleBrand();
+                jQuery('#table_paginate span, #table_length select').on('click', function() {
+                    jQuery('.dataTables_length select, input:checkbox, input:radio').uniform();
+                    toggleBrand();
+                });
 	        }
 	    });
-
-////// get active vendors //////
-//ajaxFilter('TRUE'); 
-
-	function ajaxFilter(who) {
-    	
-    	
-    	/*
-if(who == 'TRUE') {
-    	console.log(ena);
-    		for(var i = 0; i < ena.length; i++) {
-    			if(jQuery(ena[i]).parent().hasClass('checked')) {
-	    			jQuery(ena[i]).closest('tr').show();
-    			}
-	    		
-    		}
-	    	
-    	}
-*/
-    	
-    }
-
-    var result = false;
 
         
     function quickEdit(){
@@ -213,7 +190,10 @@ if(who == 'TRUE') {
                     
             return false;
         });
+    }
 
+    function toggleBrand() {
+        jQuery('.stdtable input:checkbox').unbind('change');
         jQuery('.stdtable input:checkbox').on("change", function(e){
             console.log(e.currentTarget.value);
             jQuery.ajax({
@@ -226,7 +206,7 @@ if(who == 'TRUE') {
                     console.log(data);
                 }
             });
-        })
+        });
     }
 
 
