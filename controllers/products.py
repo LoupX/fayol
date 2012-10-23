@@ -37,7 +37,7 @@ def brand_quickedit():
     name = ""
     description = ""
     try:
-        row = db(db.brand_descriptions.brand_id==id).select().first()
+        row = db.brand_descriptions[id]
         name = row.name
         description = row.description
     except:

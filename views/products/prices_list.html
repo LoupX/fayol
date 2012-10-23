@@ -29,7 +29,7 @@
             <div class="notibar msgerror" style="display:none;">
                         <a class="close"></a>
                         <!-- Ocurrió un error con los datos del formulario. -->
-                        <p>Seleccione al menos un precio como predeterminado y/o llena los campos.</p>
+                        <p>Seleccione al menos un precio como predeterminado y/o llena los campos resaltados.</p>
                 </div>
 
                 <div class="notibar msgsuccess" style="display:none;">
@@ -239,7 +239,7 @@
         });    
     }
 
-    jQuery('#submit').live('click', function(e) {
+    jQuery('#submit').on('click', function(e) {
         e.preventDefault();
         jQuery('.msgsuccess').hide();
         jQuery('.msgerror').hide();
@@ -279,21 +279,13 @@
                 prelist = jQuery('#'+rad).find('input[name^=ano]').val();
                 prepric = jQuery('#'+rad).find('input[name^=pri]').val();
 
-                jQuery.each(inputs_ano, function(i) {
-                    if (!jQuery(inputs_ano[i]).hasClass('active') && 
-                        jQuery('#'+rad).find('input[name^=ano]').attr('id') != jQuery(inputs_ano[i]).attr('id')) {
-                        save_ano.push(jQuery(inputs_ano[i]).val());
-                    }
-                    if (!jQuery(inputs_pri[i]).hasClass('active') &&
-                        jQuery('#'+rad).find('input[name^=pri]').attr('id') != jQuery(inputs_pri[i]).attr('id')) {
-                        save_pri.push(jQuery(inputs_pri[i]).val());
-                    }
-                });
+                for(var i = 0; i < inputs_ano.length; i++) {
+                    if (!jQuery(inputs_ano[i]).hasClass('active')) {
+                        save_ano[i] = {'name': jQuery(inputs_ano[i]).val(), 'price': jQuery(inputs_pri[i]).val()};
+                    };
+                }
 
                 // console.log(save_ano);
-                // console.log(save_pri);
-                // console.log(prelist);
-                // console.log(prepric);
 
                 // jQuery.ajax({
                 //     url: "",
@@ -324,13 +316,13 @@
 
             } else{
 
-                for(var e = 0; e < aerrors.length; e++) {
+                for(var e in aerrors) {
                     if (!jQuery('input[name='+aerrors[e]+']').hasClass('active')) {
                         jQuery('input[name='+aerrors[e]+']').addClass('error');
                     }
                 };
 
-                for(var e = 0; e < perrors.length; e++) {
+                for(var e in perrors) {
                     if (!jQuery('input[name='+perrors[e]+']').hasClass('active')) {
                         jQuery('input[name='+perrors[e]+']').addClass('error');
                     }
@@ -346,7 +338,7 @@
         } else{
             product
                 .siblings('div')
-                    .addClass('ellol');
+                .addClass('ellol');
             jQuery('.exists').fadeIn(600);
             scrollThis();
         };

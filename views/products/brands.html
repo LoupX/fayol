@@ -2,7 +2,6 @@
 
 {{block scripts_extra}}
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.dataTables.min.js')}}"></script>
-
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/chosen.jquery.min.js')}}"></script>
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.validate.min.js')}}"></script>
 {{end}}
@@ -20,6 +19,7 @@
             
         </div><!--pageheader-->
         
+<<<<<<< HEAD
         <p style="margin-top:20px;">
               <span class="formwrapper" style="margin-left:20px;">
                     <input type="radio" id="a" name="filtervendors" value="true" onclick="ajaxFilter(this.value)" checked="checked"/> Habilitados &nbsp; &nbsp;
@@ -28,23 +28,40 @@
               </span>
         </p>
         
+=======
+>>>>>>> e4666ed45e12d5be3e96a96a175d7f5e468aca54
         <div id="contentwrapper" class="contentwrapper">
+            <div class="notibar msgerror" style="display:none;">
+                <a class="close"></a>
+                <p>Ocurrió un error con los datos del formulario.</p>
+            </div>
+
+            <div class="notibar exists" style="display:none;">
+                <a class="close"></a>
+                <p>Ese proveedor existe, para editarlo vaya a la sección de ver proveedor. </p>
+            </div>
+
+            <div class="notibar msgsuccess" style="display:none;">
+                <a class="close"></a>
+                <p>Se han guardado los datos del formulario.</p>
+            </div>
+
             <table cellpadding="0" cellspacing="0" border="0" class="stdtable" id="table">
                 <thead>
                     <tr>
-                        <th width="25%" class="head0">Nombre</th>
-                        <th width="55%" class="head1">Descripción </th>
-                        <th width="10%" class="head0">Estatus </th>
-                        <th width="10%" class="head1">&nbsp;</th>
+                        <th class="head0">Nombre</th>
+                        <th class="head1">Descripción </th>
+                        <th class="head0">Estatus </th>
+                        <th class="head1">&nbsp;</th>
                         
                     </tr>
                 </thead>
                 <tfoot>
                     <tr>
-                        <th width="25%" class="head0">Nombre</th>
-                        <th width="55%" class="head1">Descripción </th>
-                        <th width="10%" class="head0">Estatus </th>
-                        <th width="10%" class="head1">&nbsp;</th>
+                        <th class="head0">Nombre</th>
+                        <th class="head1">Descripción </th>
+                        <th class="head0">Estatus </th>
+                        <th class="head1">&nbsp;</th>
                         
                     </tr>
                 </tfoot>
@@ -143,8 +160,63 @@ if(who == 'TRUE') {
 
     var result = false;
 
+        jQuery.ajax({
+        url: "{{=URL(c='products_ajax', f='get_brands')}}",
+        type: "POST",
+        dataType: "json",
+        success:function(data){
+            cont = 0;
+            aaData = [];
+            for(row in data){
+                brand = data[row].brands;
+                description = data[row].brand_descriptions;
+                checked = (brand.status) ? "checked=\"checked\"" : "";
+                aaData[cont] = [
+                    description.name, 
+                    description.description, 
+                    "<div class=\"checker\" id=\"uniform-undefined\"><span class=\"checked\"><input type=\"checkbox\" " + checked + " value=\"" + brand.id + "\" /></span></div>", 
+                    "<a href=\"{{=URL(c='products', f='brand_quickedit.html')}}?id=" + brand.id + "\" class=\"toggle\">Editar</a>"
+                ];
+                cont++;
+            }
+            
+        },
+        complete: function() {
+            jQuery("#table").dataTable( {
+                "oLanguage": {
+                    "sProcessing": "Procesando...",
+                    "sLengthMenu": "Ver _MENU_ registros",
+                    "sZeroRecords": "No se encontraron registros",
+                    "sEmptyTable": "No hay registros en esta tabla",
+                    "sLoadingRecords": "Cargando...",
+                    "sInfo": "Viendo _START_ - _END_ de _TOTAL_ registros",
+                    "sInfoEmpty": "Viendo 0 - 0 de 0 registros",
+                    "sInfoFiltered": "(Flitrado de _MAX_ registros totales)",
+                    "sSearch": "Buscar",
+                    "oPaginate": {
+                        "sFirst":"Primero",
+                        "sPrevious":"Anterior",
+                        "sNext":"Siguiente",
+                        "sLast":"Ultimo"
+                    },
+                },
+                "sPaginationType": "full_numbers",
+                "aaData": aaData,
+                "aoColumns": [
+                    {"sTitle":"Nombre"},
+                    {"sTitle":"Descripción"},
+                    {"sTitle":"Estatus", "sClass":"center"},
+                    {"sTitle":"", "sClass":"center"}
+                ]
+            });
+            quickEdit();
+            jQuery('.dataTables_length select, .dataTables_length input').uniform();  
+        }
+    });
+
     function quickEdit(){
-        jQuery('.stdtable a.toggle').on("click", function(){                                
+        jQuery('#table').on("click", 'a', function(e){ 
+            e.preventDefault();                               
             //this is to hide current open quick view in a table 
             jQuery(this).parents('table').find('tr').each(function(){
                 jQuery(this).removeClass('hiderow');
@@ -196,19 +268,28 @@ if(who == 'TRUE') {
             return false;
         });
 
-        jQuery('.checker input:checkbox').on("click", function(e){
-            console.log('changed');
+        jQuery('.stdtable input:checkbox').on("change", function(e){
+            console.log(e.currentTarget.value);
             jQuery.ajax({
                 url: "{{=URL(c='products_ajax', f='toggle_brand')}}",
                 type: "POST",
                 data: {
                     id:e.currentTarget.value
                 },
+                success: function(data){
+                    console.log(data);
+                }
             });
         })
     }
 
+<<<<<<< HEAD
     
+=======
+
+    
+       
+>>>>>>> e4666ed45e12d5be3e96a96a175d7f5e468aca54
  
 </script>
 
