@@ -19,6 +19,7 @@
             
         </div><!--pageheader-->
         
+
         <p style="margin-top:20px;">
               <span class="formwrapper" style="margin-left:20px;">
                     <input type="radio" id="a" name="filtervendors" value="true" onclick="ajaxFilter(this.value)" checked="checked"/> Habilitados &nbsp; &nbsp;
@@ -26,7 +27,8 @@
                     <input type="radio" id="c" name="filtervendors" value="any" onclick="ajaxFilter(this.value)"/> Todos &nbsp; &nbsp;
               </span>
         </p>
-       
+        
+
         <div id="contentwrapper" class="contentwrapper">
             <div class="notibar msgerror" style="display:none;">
                 <a class="close"></a>
@@ -155,8 +157,9 @@ if(who == 'TRUE') {
     	
     }
 
- 
+    var result = false;
 
+        
     function quickEdit(){
         jQuery('#table').on("click", 'a', function(e){ 
             e.preventDefault();                               
@@ -225,6 +228,8 @@ if(who == 'TRUE') {
             });
         })
     }
+
+
  
 </script>
 
