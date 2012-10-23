@@ -523,7 +523,7 @@ body.withmenucoll2 { background-position: 35px 0; } /* with menu style 2 in coll
 /***********************************/
 
 
-.contentwrapper { padding: 20px; }
+.contentwrapper { padding: 5px 20px 20px 20px; }
 .contentwrapper p { margin: 20px 0; }
 .withrightpanel { margin-right: 260px; }
 .subcontent { position: relative; }
