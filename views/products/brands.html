@@ -19,6 +19,7 @@
             
         </div><!--pageheader-->
         
+
         <p style="margin-top:20px;">
               <span class="formwrapper" style="margin-left:20px;">
                     <input type="radio" id="a" name="filtervendors" value="TRUE" onclick="ajaxFilter(this.value)" checked="checked"/> Habilitados &nbsp; &nbsp;
@@ -26,7 +27,8 @@
                     <input type="radio" id="c" name="filtervendors" value="ANY" onclick="ajaxFilter(this.value)"/> Todos &nbsp; &nbsp;
               </span>
         </p>
-       
+        
+
         <div id="contentwrapper" class="contentwrapper">
             <div class="notibar msgerror" style="display:none;">
                 <a class="close"></a>
@@ -81,7 +83,7 @@
     jQuery('.formwrapper input:radio').on('change', function(e) {
         ajaxFilter(e.currentTarget.value);
     });
-
+    
     function ajaxFilter(query) {
         jQuery.ajax({
             url: "{{=URL(c='products_ajax', f='get_brands')}}",
@@ -149,7 +151,6 @@
         });
     }
  
-
     function quickEdit(){
         jQuery('#table').on("click", 'a', function(e){ 
             e.preventDefault();                               
@@ -226,6 +227,8 @@
             });
         });
     }
+
+
  
 </script>
 
