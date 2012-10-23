@@ -239,7 +239,7 @@
         });    
     }
 
-    jQuery('#submit').live('click', function(e) {
+    jQuery('#submit').on('click', function(e) {
         e.preventDefault();
         jQuery('.msgsuccess').hide();
         jQuery('.msgerror').hide();
@@ -279,21 +279,13 @@
                 prelist = jQuery('#'+rad).find('input[name^=ano]').val();
                 prepric = jQuery('#'+rad).find('input[name^=pri]').val();
 
-                jQuery.each(inputs_ano, function(i) {
-                    if (!jQuery(inputs_ano[i]).hasClass('active') && 
-                        jQuery('#'+rad).find('input[name^=ano]').attr('id') != jQuery(inputs_ano[i]).attr('id')) {
-                        save_ano.push(jQuery(inputs_ano[i]).val());
-                    }
-                    if (!jQuery(inputs_pri[i]).hasClass('active') &&
-                        jQuery('#'+rad).find('input[name^=pri]').attr('id') != jQuery(inputs_pri[i]).attr('id')) {
-                        save_pri.push(jQuery(inputs_pri[i]).val());
-                    }
-                });
+                for(var i = 0; i < inputs_ano.length; i++) {
+                    if (!jQuery(inputs_ano[i]).hasClass('active')) {
+                        save_ano[i] = {'name': jQuery(inputs_ano[i]).val(), 'price': jQuery(inputs_pri[i]).val()};
+                    };
+                }
 
                 // console.log(save_ano);
-                // console.log(save_pri);
-                // console.log(prelist);
-                // console.log(prepric);
 
                 // jQuery.ajax({
                 //     url: "",
