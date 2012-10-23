@@ -287,10 +287,15 @@
                         uid = 0;
                         cid = 0;
                         recargarvendors();
+                        jQuery('#brands').attr('tabindex','4');
                         jQuery('#brands_chzn').remove();
                         jQuery('#brands').val('').removeClass('chzn-done').chosen();
+                        
+                        jQuery('#unit').attr('tabindex','6');
                         jQuery('#unit_chzn').remove();
                         jQuery('#unit').val('').removeClass('chzn-done').chosen();
+                        
+                        jQuery('#category').attr('tabindex','9');
                         jQuery('#category_chzn').remove();
                         jQuery('#category').val('').removeClass('chzn-done').chosen();
                     }

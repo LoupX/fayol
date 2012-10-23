@@ -28,34 +28,55 @@
 <script type="text/javascript">
     jQuery("#submit").on("click", function(e){
         e.preventDefault();
-        jQuery.ajax({
-            url: "{{=URL(c='products_ajax', f='update_brand')}}",
-            type: "POST",
-            data: { 
-                id:{{=request.vars.id}},
-                name:jQuery('#name').val(),
-                description:jQuery('#description').val(),
+        
+        jQuery("#form_brand").validate({
+            rules: {
+                name: "required",
+                
             },
-            success:function(data){
-                if(data != 0 && data){
-                        jQuery('.msgsuccess').fadeIn(1600, function() {
-                            jQuery('.msgsuccess').fadeOut('slow');
-                        });
+            messages: {
+                name: "Ingrese el nombre de la marca",
+            }
+        });
+        
+        if(jQuery("#form_brand").valid()) {
+        
+	        jQuery.ajax({
+	            url: "{{=URL(c='products_ajax', f='update_brand')}}",
+	            type: "POST",
+	            data: { 
+	                id:{{=request.vars.id}},
+	                name:jQuery('#name').val(),
+	                description:jQuery('#description').val(),
+	            },
+	            success:function(data){
+	                if(data != 0 && data){
+	                    jQuery('.toggledata button.update').fadeIn(1600,function(){
+			                jQuery(this).parents('.toggledata').animate({height: 0},200, function(){
+			                    jQuery(this).parents('tr').prev().removeClass('hiderow');
+			                    if(result) {    
+			                        var prev = jQuery(this).parents('tr').prev().find('td'),
+			                            curr = jQuery(this).parents('tr').find('#name, #description');
+			                        jQuery(prev[0]).html(jQuery(curr[0]).val().toUpperCase()); 
+			                        jQuery(prev[1]).html(jQuery(curr[1]).val().toUpperCase());   
+			                    }                                           
+			                    jQuery(this).parents('tr').remove();
+			                });
+			                return false;
+				        });
                         result = true;
                         toggleData.append(data);                        //inject data read from server
-                   }
-                    else if(data == 0) {
-                        jQuery('.exists').fadeIn(1600);
-                        result = false;
-                    }
-                    else{
-                        jQuery('.msgerror').fadeIn(1600);
-                        result = false;
-                    }
-                    jQuery('body','html',window).animate(
-                                                        {scrollTop:0}, 
-                                                        1000);
-            }
-        })
+	                }
+	                else if(data == 0) { 
+	                    result = false;
+	                }
+	                else{
+	                    result = false;
+	                }
+	            }
+	        });
+       
+       } /* valid */
+       
     })
 </script>

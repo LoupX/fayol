@@ -30,21 +30,7 @@
         
 
         <div id="contentwrapper" class="contentwrapper">
-            <div class="notibar msgerror" style="display:none;">
-                <a class="close"></a>
-                <p>Ocurrió un error con los datos del formulario.</p>
-            </div>
-
-            <div class="notibar exists" style="display:none;">
-                <a class="close"></a>
-                <p>Ese proveedor existe, para editarlo vaya a la sección de ver proveedor. </p>
-            </div>
-
-            <div class="notibar msgsuccess" style="display:none;">
-                <a class="close"></a>
-                <p>Se han guardado los datos del formulario.</p>
-            </div>
-
+        
             <table cellpadding="0" cellspacing="0" border="0" class="stdtable" id="table">
                 <thead>
                     <tr>
@@ -178,20 +164,6 @@
                 parentRow.next().fadeIn();                      //show inserted new row
                 parentRow.addClass('hiderow');                  //hide this row to look like replacing the newly inserted row
                 //jQuery('input,select').uniform();
-            });
-
-            jQuery('.toggledata button.update').live('click',function(){
-                jQuery(this).parents('.toggledata').animate({height: 0},200, function(){
-                    jQuery(this).parents('tr').prev().removeClass('hiderow');
-                    if(result) {    
-                        var prev = jQuery(this).parents('tr').prev().find('td'),
-                            curr = jQuery(this).parents('tr').find('#name, #description');
-                        jQuery(prev[0]).html(jQuery(curr[0]).val().toUpperCase()); 
-                        jQuery(prev[1]).html(jQuery(curr[1]).val().toUpperCase());   
-                    }                                           
-                    jQuery(this).parents('tr').remove();
-                });
-                return false;
             });
 
             jQuery('.toggledata button.cancel').live('click',function(){
