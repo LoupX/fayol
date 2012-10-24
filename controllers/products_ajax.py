@@ -155,9 +155,14 @@ def get_brands():
 @auth.requires_login()
 def get_categories():
     data = []
+    q = request.vars.query.upper() if request.vars.query else None
     try:
-        data = db(db.category_descriptions.category_id==
-                 db.categories.id).select().as_list()
+        query = db.category_descriptions.category_id==db.categories.id
+        if q == 'TRUE':
+            query &= db.categories.status==True
+        elif q == 'FALSE':
+            query &= db.categories.status==False
+        data = db(query).select().as_list()
     except:
         db.rollback()
 
@@ -176,7 +181,12 @@ def get_categories():
 def get_units():
     data = []
     try:
-        data = db(db.units).select().as_list()
+        query = db.units
+        if q == 'TRUE':
+            query &= db.units.status==True
+        elif q == 'FALSE':
+            query &= db.units.status==False
+        data = db(query).select().as_list()
     except:
         db.rollback()
 
