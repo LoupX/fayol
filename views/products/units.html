@@ -19,59 +19,34 @@
             
         </div><!--pageheader-->
         
+        <p style="margin-top:20px;">
+              <span class="formwrapper" style="margin-left:20px;">
+                    <input type="radio" id="a" name="filtervendors" value="TRUE" onclick="ajaxFilter(this.value)" checked="checked"/> Habilitados &nbsp; &nbsp;
+                    <input type="radio" id="b" name="filtervendors"  value="FALSE" onclick="ajaxFilter(this.value)"/> Deshabilitados &nbsp; &nbsp;
+                    <input type="radio" id="c" name="filtervendors" value="ANY" onclick="ajaxFilter(this.value)"/> Todos &nbsp; &nbsp;
+              </span>
+        </p>
+        
         <div id="contentwrapper" class="contentwrapper">
             
             <table cellpadding="0" cellspacing="0" border="0" class="stdtable" id="dyntable">
-                    <colgroup>
-                        <col class="con0" />
-                        <col class="con1" />
-                        <col class="con0" />
-                        <col class="con1" />
-                        <col class="con0" />
-                    </colgroup>
-                    <thead>
-                        <tr>
-                            <th class="head0">Nombre</th>
-                            <th class="head1">Abreviación </th>
-                            <th class="head0">estatus </th>
-                            <th class="head1">&nbsp;</th>
-                        </tr>
-                    </thead>
-                    <tfoot>
-                        <tr>
-                            <th class="head0">Nombre</th>
-                            <th class="head1">Abreviación </th>
-                            <th class="head0">estatus </th>
-                            <th class="head1">&nbsp;</th>
-                        </tr>
-                    </tfoot>
-                    <tbody>
-                        <tr class="gradeX">
-                            <td width="35%">Centímetros</td>
-                            <td width="25%">cm</td>
-                            <td width="15%" style="text-align: center;"> <input type="checkbox" name="check2" checked="checked" /> </td>
-                            <td width="15%" class="center" style="text-align: center;"><a href="{{=URL(c='products', f='units_quickedit.html')}}" class="toggle">Editar</a></td>
-                        </tr>
-                        <tr class="gradeC">
-                            <td>Litros</td>
-                            <td>l</td>
-                            <td style="text-align: center;"> <input type="checkbox" name="check2" checked="checked" /> </td>
-                            <td class="center" style="text-align: center;"><a href="{{=URL(c='products', f='units_quickedit.html')}}" class="toggle">Editar</a></td>
-                        </tr>
-                        <tr class="gradeA">
-                            <td>Kilometros</td>
-                            <td>km</td>
-                            <td style="text-align: center;"> <input type="checkbox" name="check2" checked="checked" /> </td>
-                            <td class="center" style="text-align: center;"><a href="{{=URL(c='products', f='units_quickedit.html')}}" class="toggle">Editar</a></td>
-                        </tr>
-                        <tr class="gradeA">
-                            <td>Milimetros</td>
-                            <td>ml</td>
-                            <td style="text-align: center;"> <input type="checkbox" name="check2" checked="checked" /> </td>
-                            <td class="center" style="text-align: center;"><a href="{{=URL(c='products', f='units_quickedit.html')}}" class="toggle">Editar</a></td>
-                        </tr>
-                    </tbody>
-                </table>    
+                <thead>
+                    <tr>
+                        <th class="head0">Nombre</th>
+                        <th class="head1">Abreviación </th>
+                        <th class="head0">estatus </th>
+                        <th class="head1">&nbsp;</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th class="head0">Nombre</th>
+                        <th class="head1">Abreviación </th>
+                        <th class="head0">estatus </th>
+                        <th class="head1">&nbsp;</th>
+                    </tr>
+                </tfoot>
+            </table>    
         
         </div><!--contentwrapper-->
         
@@ -94,7 +69,7 @@
     
     function ajaxFilter(query) {
         jQuery.ajax({
-            url: "{{=URL(c='products_ajax', f='get_brands')}}",
+            url: "{{=URL(c='products_ajax', f='get_units')}}",
             type: "POST",
             data: {query: query},
             dataType: "json",
@@ -102,14 +77,13 @@
                 cont = 0;
                 aaData = new Array();
                 for(row in data){
-                    brand = data[row].brands;
-                    description = data[row].brand_descriptions;
-                    checked = (brand.status) ? "checked=\"checked\"" : "";
+                    unit = data[row];
+                    checked = (unit.status) ? "checked=\"checked\"" : "";
                     aaData[cont] = [
-                            description.name, 
-                            description.description, 
-                            "<input type=\"checkbox\" " + checked + " value=\"" + brand.id + "\" />", 
-                            "<a href=\"{{=URL(c='products', f='brand_quickedit.html')}}?id=" + brand.id + "\" class=\"toggle\">Editar</a>"
+                            unit.name, 
+                            unit.description, 
+                            "<input type=\"checkbox\" " + checked + " value=\"" + unit.id + "\" />", 
+                            "<a href=\"{{=URL(c='products', f='units_quickedit.html')}}?id=" + unit.id + "\" class=\"toggle\">Editar</a>"
                         ];
                    cont++;
                 }
@@ -144,7 +118,7 @@
             "aaData": aaData,
             "aoColumns": [
                 {"sTitle":"Nombre"},
-                {"sTitle":"Descripción"},
+                {"sTitle":"Abreviación"},
                 {"sTitle":"Estatus", "sClass":"center"},
                 {"sTitle":"", "sClass":"center"}
             ]
@@ -204,7 +178,7 @@
         jQuery('.stdtable input:checkbox').unbind('change');
         jQuery('.stdtable input:checkbox').on("change", function(e){
             jQuery.ajax({
-                url: "{{=URL(c='products_ajax', f='toggle_brand')}}",
+                url: "{{=URL(c='products_ajax', f='toggle_unit')}}",
                 type: "POST",
                 data: {
                     id:e.currentTarget.value

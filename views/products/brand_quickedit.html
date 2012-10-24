@@ -3,6 +3,7 @@
         <p>
             <label for="title">Nombre</label>
             <input type="text" name="name" id="name" value="{{=name}}" />
+            <label></label>
         </p>    
     </div><!-- one_half -->
     
@@ -64,6 +65,13 @@
                         toggleData.append(data);                        //inject data read from server
 	                }
 	                else if(data == 0) { 
+	                	var label = '<label for="name" generated="true" class="error" style=""> Esta marca ya existe </label>',
+	                	    name = jQuery('#name');
+	                	name.closest('p').find(':last-child').remove()
+	                	name
+	                		.removeClass('valid')
+	                		.addClass('error')                		
+	                		.closest('p').append(label);
 	                    result = false;
 	                }
 	                else{
