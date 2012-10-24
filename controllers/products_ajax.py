@@ -45,16 +45,6 @@ def create_category():
         return str(dict(category_id=c_id, category_description_id=cd_id))
 
 @auth.requires_login()
-def create_price():
-    data = dict()
-    v = request.vars
-    if v.product_id:
-        data['product_id'] = v.product_id
-    if v.name:
-        data['name'] = v.name
-    data['price'] = v.price
-
-@auth.requires_login()
 def create_unit():
     data = dict()
     if request.vars.measuring_unit and request.vars.abbreviation:
@@ -68,6 +58,33 @@ def create_unit():
             return 0
         else:
             return ''
+    except Exception as e:
+        db.rollback()
+        return ''
+    else:
+        db.commit()
+        return str(id)
+
+@auth.requires_login()
+def create_price():
+    data = dict()
+    v = request.vars
+    if v.product_id:
+        data['product_id'] = v.product_id
+    if v.name:
+        data['name'] = v.name
+    data['price'] = v.price
+
+    try:
+        query = db.product_price_lists.product_id==data['product_id']
+        rows = db(query).select()
+        if not rows:
+            data['is_default'] = True
+    except:
+        db.rollback()
+
+    try:
+        id = db.product_price_lists.insert(**data)
     except Exception as e:
         db.rollback()
         return ''
@@ -220,7 +237,7 @@ def get_products():
     try:
         query = db.products.status==True
         if q == 'ANY':
-             query = None
+             query = db.products
         if q == 'FALSE':
             query = db.products.status==False
         query &= db.products.id==db.product_descriptions.product_id
