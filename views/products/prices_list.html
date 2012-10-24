@@ -115,6 +115,7 @@ var product = jQuery("#product");
 var namelist = jQuery('#name-list');
 var price = jQuery('#price');
 var productid = '';
+var oTable = jQuery('#table');
 
     ///////// get products /////////
     get_products();
@@ -142,11 +143,17 @@ var productid = '';
         if (productid != '') {
             namelist.attr('disabled', false);
             price.attr('disabled', false);
+            oTable.dataTable().fnClearTable();
             sendId(productid);
         } else{
-            namelist.attr('disabled', true);
-            price.attr('disabled', true);
+            namelist
+                .attr('disabled', true)
+                .val('');
+            price
+                .attr('disabled', true)
+                .val('');
             productid = '';
+            oTable.dataTable().fnClearTable();
         }
         
     });
@@ -160,6 +167,7 @@ var productid = '';
         jQuery('.msgsuccess').hide();
         jQuery('.msgerror').hide();
         jQuery('.exists').hide();
+        var listid = '';
 
         // Validate form and shit as usual....
         if (productid != '') { 
@@ -171,7 +179,11 @@ var productid = '';
                 jQuery('.msgerror').fadeIn(600);
             } else {
                 //sendId(productid);
-                
+                saveNewList(productid, namelist.val(), price.val());
+                oTable.dataTable().fnClearTable();
+                sendId(productid);
+                namelist.val('');
+                price.val('');
             }; 
             
         } else{
@@ -186,30 +198,56 @@ var productid = '';
 
     });
 
+    function saveNewList(id, namelist, price) {
+        jQuery.ajax({
+            url: "{{=URL(c='products_ajax', f='create_price')}}",
+            type: "POST",
+            data: { 
+                    product_id: id,
+                    name: namelist,
+                    price: price
+                },
+            success: function(data){
+                if (data) {
+                    jQuery('.msgsuccess').fadeIn(900, function() {
+                        jQuery(this).fadeOut(200);
+                    });
+                } else{
+                    jQuery('.msgerror').fadeIn(600);
+                };
+            }
+        });
+    }
+
     function sendId(id) {
+        var theresdata = '';
         jQuery.ajax({
             url: "{{=URL(c='products_ajax', f='get_product_information')}}",
             type: "POST",
             data: { id: id},
             dataType: "json",
-            success:function(data){
-                // cont = 0;
-                // aaData = new Array();
-                // for(row in data){
-                //     brand = data[row].brands;
-                //     description = data[row].brand_descriptions;
-                //     checked = (brand.status) ? "checked=\"checked\"" : "";
-                //     aaData[cont] = [
-                //             description.name, 
-                //             description.description, 
-                //             "<input type=\"radio\" " + checked + " value=\"" + brand.id + "\" />", 
-                //             "<a href=\"{{=URL(c='products', f='brand_quickedit.html')}}?id=" + brand.id + "\" class=\"toggle\">Editar</a>"
-                //         ];
-                //    cont++;
-                // }
+            success: function(data){
+                cont = 0;
+                aaData = new Array();
+                // console.log(data.price_list);
+                theresdata = data.price_list;
+                if(theresdata){
+                    for(e = 0; e < data.price_list.length; e++) {
+                        checked = (data.price_list[e].is_default == true) ? "checked=\"checked\"" : ""
+                        aaData[cont] = [
+                            data.price_list[e].name, 
+                            data.price_list[e].price, 
+                            '<input type="radio" value="'+id+'" name="radios" '+checked+'/>', 
+                            "<a href=\"{{=URL(c='products', f='list_quickedit.html')}}?id="+data.price_list[e].id +"\" class=\"toggle\">Editar</a>"
+                            ];
+                        cont++;
+                    }
+                }
             },
             complete: function() {
-                // loadTable(aaData);
+                if(theresdata) {
+                    loadTable(aaData);
+                }
             }
         });
     }
@@ -237,9 +275,9 @@ var productid = '';
             "sPaginationType": "full_numbers",
             "aaData": aaData,
             "aoColumns": [
-                {"sTitle":"Nombre"},
-                {"sTitle":"Descripción"},
-                {"sTitle":"Estatus", "sClass":"center"},
+                {"sTitle":"Nombre de la lista"},
+                {"sTitle":"Precio"},
+                {"sTitle":"Predeterminado", "sClass":"center"},
                 {"sTitle":"", "sClass":"center"}
             ]
         });

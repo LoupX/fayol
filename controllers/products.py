@@ -25,6 +25,20 @@ def prices_list():
     return dict(title=title, current=current)
 
 @auth.requires_login()
+def list_quickedit():
+    title = 'Productos'
+    id = request.vars.id
+    name = ""
+    price = ""
+    try:
+        row = db(db.product_price_lists.id==id).select().first()
+        name = row.name
+        price = row.price
+    except:
+        db.rollback()
+    return dict(title=title, name=name, price=price)
+
+@auth.requires_login()
 def brands():
     title = 'Marcas'
     current = ['menu_catalogs', 'sidebar_brand', 'sub_brand_read']

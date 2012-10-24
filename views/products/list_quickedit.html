@@ -1,0 +1,59 @@
+<form action="" method="post" class="quickform" id="form_list">
+    <div class="one_half">
+        <p>
+            <label for="title">Nombre de la lista</label>
+            <input type="text" name="name" id="name" value="{{=name}}" />
+            <label></label>
+        </p>    
+    </div><!-- one_half -->
+    
+    <div class="one_half last">
+         <p>
+            <label for="title">Precio</label>
+            <input type="text" name="price" id="price" value="{{=price}}" />
+        </p>
+    </div><!-- one_half last -->
+    
+    <br clear="all" />
+    
+    <div class="quickformbutton">
+        <button class="update" id="submit">Actualizar</button>
+        <button class="cancel">Cancelar</button>
+    </div><!-- button -->
+</form>
+
+<script type="text/javascript">
+    jQuery("#submit").on("click", function(e){
+        e.preventDefault();
+        
+        jQuery("#form_list").validate({
+            rules: {
+                name: "required",
+                price: "required"
+                
+            },
+            messages: {
+                name: "Ingrese el nombre de la lista.",
+                price: "Ingrese el precio."
+            }
+        });
+        
+        if(jQuery("#form_list").valid()) {
+        
+            jQuery.ajax({
+                url: "{{=URL(c='products_ajax', f='update_brand')}}",
+                type: "POST",
+                data: { 
+                    id:{{=request.vars.id}},
+                    name:jQuery('#name').val(),
+                    price:jQuery('#price').val(),
+                },
+                success:function(data){
+                    console.log('this');
+                }
+            });
+       
+       } /* valid */
+       
+    })
+</script>
