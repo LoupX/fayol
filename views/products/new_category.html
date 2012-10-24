@@ -75,8 +75,10 @@
         
         jQuery("#form_category").validate({
             rules: {
-                name: "required",
-                
+            	name: {
+                    minlength: 2,
+                    required: true
+                },
             },
             messages: {
                 name: "Ingrese el nombre de la categoría",
