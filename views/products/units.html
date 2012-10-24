@@ -81,7 +81,7 @@
                     checked = (unit.status) ? "checked=\"checked\"" : "";
                     aaData[cont] = [
                             unit.name, 
-                            unit.description, 
+                            unit.abbreviation, 
                             "<input type=\"checkbox\" " + checked + " value=\"" + unit.id + "\" />", 
                             "<a href=\"{{=URL(c='products', f='units_quickedit.html')}}?id=" + unit.id + "\" class=\"toggle\">Editar</a>"
                         ];
