@@ -125,11 +125,15 @@
             ]
         });
         
-        jQuery('.dataTables_length select, input:checkbox, input:radio').uniform();
+        jQuery('input:checkbox, input:radio').uniform();
         quickEdit();
         togglestatus();
-        jQuery('#table_paginate span, #table_length select').on('click', function() {
-            jQuery('.dataTables_length select, input:checkbox, input:radio').uniform();
+        jQuery('#table_length select').on('change', function() {
+            jQuery('input:checkbox, input:radio').uniform();
+            togglestatus();
+        });
+        jQuery('#table_paginate span').on('click', function() {
+            jQuery('input:checkbox, input:radio').uniform();
             togglestatus();
         });
     }
@@ -160,7 +164,6 @@
                 toggleData.append(data);                        //inject data read from server
                 parentRow.next().fadeIn();                      //show inserted new row
                 parentRow.addClass('hiderow');                  //hide this row to look like replacing the newly inserted row
-                //jQuery('input,select').uniform();
             });
 
             jQuery('.toggledata button.cancel').live('click',function(){

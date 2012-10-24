@@ -160,11 +160,12 @@ def get_brands():
     q = request.vars.query.upper() if request.vars.query else None
     try:
         query = db.brand_descriptions.brand_id==db.brands.id
-        query &= db.brands.status==True
         if q == 'ANY':
             query = db.brand_descriptions.brand_id==db.brands.id
         elif q == 'FALSE':
             query &= db.brands.status==False
+        else:
+            query &= db.brands.status==True
         data = db(query).select().as_list()
     except:
         db.rollback()
@@ -186,11 +187,12 @@ def get_categories():
     q = request.vars.query.upper() if request.vars.query else None
     try:
         query = db.category_descriptions.category_id==db.categories.id
-        query &= db.categories.status==True
         if q == 'ANY':
             query = db.category_descriptions.category_id==db.categories.id
         elif q == 'FALSE':
             query &= db.categories.status==False
+        else:
+            query &= db.categories.status==True
         data = db(query).select().as_list()
     except:
         db.rollback()
