@@ -33,16 +33,9 @@
                         <h3>Producto: "Nombre del producto"</h3>
                     </div><!--contenttitle-->
                     
-                    <ul class="buttonlist" style="float:right;">
-                        <li style="display:none;"><button class="stdbtn btn_blue">Form Button</button></li>
-                        <li><button id="edit" class="stdbtn btn_orange">Editar</button></li>
-                        <li><button id="btnenable" class="stdbtn btn_red" onclick='cambiarClase(); return false;'>Deshabilitar</button></li>
-                   </ul>
-                    	
-                    
             </div><!--subcontent-->	   
             
-            <div class="one_half" style="margin-bottom:40px;">
+            <div class="one_half" style="">
               
               <table cellpadding="0" cellspacing="0" class="table invoice">
                	  <tr>
@@ -55,11 +48,11 @@
                   </tr>
                   <tr>
                    	  <td>Nombre alternativo:</td>
-                      <td><strong id="name_alt"></strong></td>
+                      <td><strong id="alternative_name"></strong></td>
                   </tr>
                	  <tr>
                	    <td>Código alternativo:</td>
-               	    <td><strong id="code_alt"></strong></td>
+               	    <td><strong id="alternative_code"></strong></td>
            	      </tr>
                   <tr>
                 	  <td>Marca:</td>
@@ -72,37 +65,46 @@
               </table>
             </div><!--one_half-->
             
-			<div class="one_half last" style="margin-bottom:40px;">
+			<div class="one_half last" style="margin-bottom: 5px;">
            
               <table cellpadding="0" cellspacing="0" class="table invoice">
               	  <tr>
                 	  <td>Unidad de medida:</td>
-                	  <td><strong id="locality"></strong></td>
+                	  <td><strong id="locality" id="unit"></strong></td>
               	  </tr>
               	  <tr>
                	    <td>Unidad de parte:</td>
-               	    <td><strong id="zip_code"></strong></td>
+               	    <td><strong id="zip_code" id="part_number"></strong></td>
            	      </tr>
               	  <tr>
                 	  <td width="30%">Numero de serie:</td>
-                	  <td width="70%"><strong id="corporate"></strong></td>
+                	  <td width="70%"><strong id="serial_number"></strong></td>
               	  </tr>
               	  <tr>
                 	  <td>Categoría:</td>
-                	  <td><strong id="rfc"></strong></td>
+                	  <td><strong id="category"></strong></td>
               	  </tr>
               	  <tr>
                 	  <td>Proveedores:</td>
-                	  <td><strong id="tax_regime"></strong></td>
+                	  <td><strong id="vendors"></strong></td>
               	  </tr>
               	  <tr>
+                	  <td>Costo estandar:</td>
+                	  <td><strong id="standard_cost"></strong></td>
+              	  </tr>
+              	  <tr>
+                	  <td>Margen de utilidad:</td>
+                	  <td><strong id="markup"></strong></td>
+              	  </tr>
+
+              	  <tr>
                 	  <td>Descripción:</td>
-                	  <td><strong id="tax_regime"></strong></td>
+                	  <td><strong id="description"></strong></td>
               	  </tr>
               </table>
             </div><!--one_half-->
             
-            <div class="one_half" style="margin-bottom:40px;">
+            <div class="one_half" style="margin-bottom:40px; margin-top: -38px;">
            
               <table cellpadding="0" cellspacing="0" class="table invoice" style="margin-top:-4px;">
               	  <tr>
@@ -114,6 +116,11 @@
                   </tr>
               </table>
             </div><!--one_half-->
+            
+            <a href="#" id="edit_warehouse" data-id="" style="float:right;">
+                <span class="stdbtn btn_orange">Editar</span>
+            </a>
+
             
             <br clear="all"/> 
             	
@@ -209,136 +216,6 @@
 	</div><!-- centercontent -->   
 </div><!--bodywrapper-->  
     
-<script>
-var branches_select = jQuery('.chzn-select'),
-    id = 0;
-
-function ajaxFilter(who) {
-    //console.log(which);
-    cleanFields();
-
-    jQuery.ajax({ 
-        url: "{{=URL(c='branches_ajax', f='get_branches')}}",
-        type: 'POST',         
-        success: function (data) {
-          jQuery('#branches_select')
-            .html('')
-            .append(data)
-            .prepend('<option value="lol">Seleccionar</option>');
-            vendors.trigger("liszt:updated");
-          }
-    });
-  }
-
-branches_select.change( function() {
-  ////clean fields
-  cleanFields();
-
-  id = jQuery(this).find(':selected').val();
-
-  if(id != '') {
-    var name = jQuery('#name'),
-        address = jQuery('#address'),
-        colony = jQuery('#colony'),
-        state = jQuery('#state'),
-        municipality = jQuery('#municipality'),
-        locality = jQuery('#locality'),
-        zip_code = jQuery('#zip_code'),
-        corporate = jQuery('#corporate'),
-        rfc = jQuery('#rfc'),
-        tax_regime = jQuery('#tax_regime'),
-        status = jQuery('input[name=status]'),
-        resp = jQuery('span#resp');
-        resp.html('');
-
-    //console.log(id);
-    //insert here an ajax function and shit
-    jQuery.ajax({ 
-      url: "{{=URL(c='branches', f='testing')}}",
-      type: "POST",
-      data: { id: id }, 
-      dataType:"json",
-      success: function (data) {
-        //receive something like data = {"name":"name","state":"state"}
-        name.html(data['name']);
-        address.html(data['address']);
-        colony.html(data['colony']);
-        state.html(data['state']);
-        municipality.html(data['municipality']);
-        locality.html(data['locality']);
-        zip_code.html(data['zip_code']);
-        corporate.html(data['corporate']);
-        rfc.html(data['rfc']);
-        tax_regime.html(data['tax_regime']);
-        
-        status.val(id).removeAttr('disabled');
-        status.parent().parent().removeClass('disabled'); 
-
-        if (data['status'] == 'True') {
-          status.parent().addClass('checked');
-          resp.html('Activado.');
-        } else{
-          status.parent().removeClass('checked');
-          resp.html('Desactivado.');
-        };
-        
-      }
-    });     
-  }
-
-});
-
-jQuery('input[name=status]').live('click', function() {
-  var i = jQuery(this).val(),
-      resp = jQuery('span#resp');
-  //ajax
-  if (i != 0) {
-    jQuery.ajax({ 
-      url: '', 
-      type: 'POST',         
-      data: { i: i }, 
-      success: function (data) {
-        //data = Activado o Desactivado
-        resp.html('algo');
-      }
-    }); 
-  }
-});
-
-function cleanFields() {
-  var name = jQuery('#name'),
-      address = jQuery('#address'),
-      colony = jQuery('#colony'),
-      state = jQuery('#state'),
-      municipality = jQuery('#municipality'),
-      locality = jQuery('#locality'),
-      zip_code = jQuery('#zip_code'),
-      corporate = jQuery('#corporate'),
-      rfc = jQuery('#rfc'),
-      tax_regime = jQuery('#tax_regime'),
-      
-      status = jQuery('input[name=status]'),
-      resp = jQuery('span#resp');
-
-      status.val('').attr('disabled',true);
-      status
-        .parent()
-          .removeClass('checked')
-          .parent()
-            .addClass('disabled');
-      resp.html('');
-
-  var elements = [name, address, colony, state, municipality, locality, zip_code, 
-                  corporate, rfc, tax_regime];
-
-  for(var e in elements) {
-    elements[e].html('');
-  }
-}
-
-
-</script>
-
 </body>
 
 </html>
