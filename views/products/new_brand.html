@@ -68,22 +68,23 @@
 
 <script type="text/javascript">
     
+	jQuery("#form_brand").validate({
+        rules: {
+        	name: {
+                minlength: 2,
+                required: true
+            },
+        },
+        messages: {
+            name: "Ingrese el nombre de la marca con un mínimo de 2 caracteres",
+        }
+    });
+
     //form and shit
     //send form
     jQuery('#submit').live('click', function(e) {
         e.preventDefault();
         
-        jQuery("#form_brand").validate({
-            rules: {
-            	name: {
-                    minlength: 2,
-                    required: true
-                },
-            },
-            messages: {
-                name: "Ingrese el nombre de la marca con un minimo de 2 caracteres",
-            }
-        });
         
         jQuery('.msgerror').hide();
         jQuery('.exists').hide();
