@@ -127,12 +127,12 @@
         jQuery('#table_length select, input:checkbox, input:radio').uniform();
         quickEdit();
         togglestatus();
-        jQuery('#table_length select').on('change', function() {
-            jQuery('input:checkbox, input:radio').uniform();
-            togglestatus();
-        });
-        jQuery('#table_paginate span').on('click', function() {
-            jQuery('input:checkbox, input:radio').uniform();
+        setEvents();
+    }
+
+    function setEvents() {
+        jQuery('#table_paginate span, #table_length select').on('click change', function(e) {
+            jQuery('#table input:checkbox, #table input:radio').uniform();
             togglestatus();
         });
     }
@@ -198,8 +198,6 @@
             });
         });
     }
-
-
  
 </script>
 
