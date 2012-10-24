@@ -84,7 +84,7 @@ def units():
 
 @auth.requires_login()
 def units_quickedit():
-        title = 'Unidades de medida'
+    title = 'Unidades de medida'
     id = request.vars.id
     name = ""
     abbreviation = ""
