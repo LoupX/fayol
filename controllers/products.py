@@ -65,7 +65,16 @@ def new_category():
 @auth.requires_login()
 def categories_quickedit():
     title = 'Categorías'
-    return dict(title=title)
+    id = request.vars.id
+    name = ""
+    description = ""
+    try:
+        row = db.category_descriptions[id]
+        name = row.name
+        description = row.description
+    except:
+        db.rollback()
+    return dict(title=title, name=name, description=description)
 
 @auth.requires_login()
 def units():
@@ -75,8 +84,17 @@ def units():
 
 @auth.requires_login()
 def units_quickedit():
-    title = 'Unidades de medida'
-    return dict(title=title)
+        title = 'Unidades de medida'
+    id = request.vars.id
+    name = ""
+    abbreviation = ""
+    try:
+        row = db.units[id]
+        name = row.name
+        abbreviation = row.abbreviation
+    except:
+        db.rollback()
+    return dict(title=title, name=name, abbreviation=abbreviation)
 
 @auth.requires_login()
 def new_unit():

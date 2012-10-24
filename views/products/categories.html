@@ -2,12 +2,6 @@
 
 {{block scripts_extra}}
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.dataTables.min.js')}}"></script>
-<script type="text/javascript" src="{{=URL('static', 'js/custom/tables.js')}}"></script>
-
-<script type="text/javascript" src="{{=URL('static', 'js/custom/forms.js')}}"></script>
-<script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.tagsinput.min.js')}}"></script>
-<script type="text/javascript" src="{{=URL('static', 'js/plugins/charCount.js')}}"></script>
-<script type="text/javascript" src="{{=URL('static', 'js/plugins/ui.spinner.min.js')}}"></script>
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/chosen.jquery.min.js')}}"></script>
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.validate.min.js')}}"></script>
 {{end}}
@@ -25,62 +19,36 @@
             
         </div><!--pageheader-->
         
+        <p style="margin-top:20px;">
+              <span class="formwrapper" style="margin-left:20px;">
+                    <input type="radio" id="a" name="filtervendors" value="TRUE" onclick="ajaxFilter(this.value)" checked="checked"/> Habilitados &nbsp; &nbsp;
+                    <input type="radio" id="b" name="filtervendors"  value="FALSE" onclick="ajaxFilter(this.value)"/> Deshabilitados &nbsp; &nbsp;
+                    <input type="radio" id="c" name="filtervendors" value="ANY" onclick="ajaxFilter(this.value)"/> Todos &nbsp; &nbsp;
+              </span>
+        </p>
+        
         <div id="contentwrapper" class="contentwrapper">
             
-            <table cellpadding="0" cellspacing="0" border="0" class="stdtable" id="dyntable">
-                    <colgroup>
-                        <col class="con0" />
-                        <col class="con1" />
-                        <col class="con0" />
-                        <col class="con1" />
-                        <col class="con0" />
-                    </colgroup>
-                    <thead>
-                        <tr>
-                            <th class="head0">Nombre</th>
-                            <th class="head1">Descripción </th>
-                            <th class="head0">Estatus </th>
-                            <th class="head1">&nbsp;</th>
-                            
-                        </tr>
-                    </thead>
-                    <tfoot>
-                        <tr>
-                            <th class="head0">Nombre</th>
-                            <th class="head1">Descripción </th>
-                            <th class="head0">Estatus </th>
-                            <th class="head1">&nbsp;</th>
-                            
-                        </tr>
-                    </tfoot>
-                    <tbody>
-                        <tr class="gradeX">
-                            <td width="20%">Nombre</td>
-                            <td width="50%">descripción de la categoría</td>
-                            <td width="15%" style="text-align: center;"> <input type="checkbox" name="check2" checked="checked" /> </td>
-                            <td width="15%" class="center" style="text-align: center;"><a href="{{=URL(c='products', f='categories_quickedit.html')}}" class="toggle">Editar</a></td>
-                        </tr>
-                        <tr class="gradeC">
-                            <td>Nombre</td>
-                            <td>descripción de la categoría</td>
-                            <td style="text-align: center;"> <input type="checkbox" name="check2" checked="checked" /> </td>
-                            <td class="center" style="text-align: center;"><a href="{{=URL(c='products', f='categories_quickedit.html')}}" class="toggle">Editar</a></td>
-                        </tr>
-                        <tr class="gradeA">
-                            <td>Nombre</td>
-                            <td>descripción de la categoría</td>
-                            <td style="text-align: center;"> <input type="checkbox" name="check2" checked="checked" /> </td>
-                            <td class="center" style="text-align: center;"><a href="{{=URL(c='products', f='categories_quickedit.html')}}" class="toggle">Editar</a></td>
-                        </tr>
-                        <tr class="gradeA">
-                            <td>Nombre</td>
-                            <td>descripción de la categoría</td>
-                            <td style="text-align: center;"> <input type="checkbox" name="check2" checked="checked" /> </td>
-                            <td class="center" style="text-align: center;"><a href="{{=URL(c='products', f='categories_quickedit.html')}}" class="toggle">Editar</a></td>
-                        </tr>
-                    </tbody>
-                </table>    
-        
+            <table cellpadding="0" cellspacing="0" border="0" class="stdtable" id="table">
+                <thead>
+                    <tr>
+                        <th class="head0">Nombre</th>
+                        <th class="head1">Descripción </th>
+                        <th class="head0">Estatus </th>
+                        <th class="head1">&nbsp;</th>
+                        
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th class="head0">Nombre</th>
+                        <th class="head1">Descripción </th>
+                        <th class="head0">Estatus </th>
+                        <th class="head1">&nbsp;</th>
+                        
+                    </tr>
+                </tfoot>
+            </table>          
         </div><!--contentwrapper-->
         
         <br clear="all" />
@@ -89,6 +57,150 @@
     
     
 </div><!--bodywrapper-->
+
+<script type="text/javascript">
+    
+    jQuery('.dataTables_length select, input:checkbox, input:radio').uniform();
+
+    ajaxFilter('TRUE');
+
+    jQuery('.formwrapper input:radio').on('change', function(e) {
+        ajaxFilter(e.currentTarget.value);
+    });
+    
+    function ajaxFilter(query) {
+        jQuery.ajax({
+            url: "{{=URL(c='products_ajax', f='get_categories')}}",
+            type: "POST",
+            data: {query: query},
+            dataType: "json",
+            success:function(data){
+                cont = 0;
+                aaData = new Array();
+                for(row in data){
+                    category = data[row].categories;
+                    description = data[row].category_descriptions;
+                    checked = (category.status) ? "checked=\"checked\"" : "";
+                    aaData[cont] = [
+                            description.name, 
+                            description.description, 
+                            "<input type=\"checkbox\" " + checked + " value=\"" + category.id + "\" />", 
+                            "<a href=\"{{=URL(c='products', f='categories_quickedit.html')}}?id=" + category.id + "\" class=\"toggle\">Editar</a>"
+                        ];
+                   cont++;
+                }
+            },
+            complete: function() {
+            	loadTable(aaData);
+            }
+        });
+    }
+    
+    function loadTable(aaData) {
+        jQuery("#table").dataTable( {
+            "bDestroy": true,
+            "oLanguage": {
+                "sProcessing": "Procesando...",
+                "sLengthMenu": "Ver _MENU_ registros",
+                "sZeroRecords": "No se encontraron registros",
+                "sEmptyTable": "No hay registros en esta tabla",
+                "sLoadingRecords": "Cargando...",
+                "sInfo": "Viendo _START_ - _END_ de _TOTAL_ registros",
+                "sInfoEmpty": "Viendo 0 - 0 de 0 registros",
+                "sInfoFiltered": "(Flitrado de _MAX_ registros totales)",
+                "sSearch": "Buscar",
+                "oPaginate": {
+                    "sFirst":"Primero",
+                    "sPrevious":"Anterior",
+                    "sNext":"Siguiente",
+                    "sLast":"Ultimo"
+                },
+            },
+            "sPaginationType": "full_numbers",
+            "aaData": aaData,
+            "aoColumns": [
+                {"sTitle":"Nombre"},
+                {"sTitle":"Descripción"},
+                {"sTitle":"Estatus", "sClass":"center"},
+                {"sTitle":"", "sClass":"center"}
+            ]
+        });
+        
+        jQuery('.dataTables_length select, input:checkbox, input:radio').uniform();
+        quickEdit();
+        togglestatus();
+        jQuery('#table_paginate span, #table_length select').on('click', function() {
+            jQuery('.dataTables_length select, input:checkbox, input:radio').uniform();
+            togglestatus();
+        });
+    }
+ 
+    function quickEdit(){
+        jQuery('#table').on("click", 'a', function(e){ 
+            e.preventDefault();                               
+            //this is to hide current open quick view in a table 
+            jQuery(this).parents('table').find('tr').each(function(){
+                jQuery(this).removeClass('hiderow');
+                if(jQuery(this).hasClass('togglerow'))
+                    jQuery(this).remove();
+            });
+            
+            var parentRow = jQuery(this).parents('tr');
+            var numcols = parentRow.find('td').length + 1;              //get the number of columns in a table. Added 1 for new row to be inserted              
+            var url = jQuery(this).attr('href');
+            
+            //this will insert a new row next to this element's row parent
+            parentRow.after('<tr class="togglerow"><td colspan="'+numcols+'"><div class="toggledata"></div></td></tr>');
+            
+            var toggleData = parentRow.next().find('.toggledata');
+            
+            parentRow.next().hide();
+            
+            //get data from server
+            jQuery.post(url,function(data){
+                toggleData.append(data);                        //inject data read from server
+                parentRow.next().fadeIn();                      //show inserted new row
+                parentRow.addClass('hiderow');                  //hide this row to look like replacing the newly inserted row
+                //jQuery('input,select').uniform();
+            });
+
+            jQuery('.toggledata button.cancel').live('click',function(){
+                jQuery(this).parents('.toggledata').animate({height: 0},200, function(){
+                    jQuery(this).parents('tr').prev().removeClass('hiderow');                                            
+                    jQuery(this).parents('tr').remove();
+                });
+                return false;
+            });
+                    
+            return false;
+        });
+    }
+
+    function togglestatus() {
+        jQuery('.stdtable input:checkbox').unbind('change');
+        jQuery('.stdtable input:checkbox').on("change", function(e){
+            jQuery.ajax({
+                url: "{{=URL(c='products_ajax', f='toggle_category')}}",
+                type: "POST",
+                data: {
+                    id:e.currentTarget.value
+                },
+                success: function(data){
+                    if(!jQuery('#c').is(':checked')) {
+                        oTable = jQuery('#table').dataTable();
+                        var row = jQuery(e.currentTarget).closest('tr').get(0);
+                        oTable.fnDeleteRow(oTable.fnGetPosition(row));
+                        togglestatus();
+                        jQuery('.dataTables_length select, input:checkbox, input:radio').uniform();
+                    }
+                }
+            });
+        });
+    }
+
+
+ 
+</script>
 
 </body>
 </html>

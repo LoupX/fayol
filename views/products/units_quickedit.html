@@ -1,25 +1,78 @@
-<h4>Editar Unidad de medida</h4>
-<br />
-<form action="" method="post" class="quickform">
+<form action="" method="post" class="quickform" id="form_unit">
 	<div class="one_half">
         <p>
             <label for="title">Nombre</label>
-            <input type="text" name="unit_name" />
+            <input type="text" name="name" id="name" value="{{=name}}"/>
         </p>    
     </div><!-- one_half -->
     
     <div class="one_half last">
          <p>
             <label for="title">Abreviación</label>
-            <input type="text" name="unit_abbreviation" />
+            <input type="text" name="abbreviation" id="abbreviation" value="{{=abbreviation}}"/>
         </p>
     </div><!-- one_half last -->
     
     <br clear="all" />
     
     <div class="quickformbutton">
-    	<button class="update">Actualizar</button>
+    	<button class="update" id="submit">Actualizar</button>
         <button class="cancel">Cancelar</button>
-        <span class="loading"><img src="../../images/loaders/loader3.gif" alt="" />Actualizando cambios...</span>
     </div><!-- button -->
 </form>
+
+<script type="text/javascript">
+    jQuery("#submit").on("click", function(e){
+        e.preventDefault();
+        
+        jQuery("#form_unit").validate({
+            rules: {
+                name: "required",
+                
+            },
+            messages: {
+                name: "Ingrese el nombre de la unidad de medida",
+            }
+        });
+        
+        if(jQuery("#form_unit").valid()) {
+        
+	        jQuery.ajax({
+	            url: "{{=URL(c='products_ajax', f='update_unit')}}",
+	            type: "POST",
+	            data: { 
+	                id:{{=request.vars.id}},
+	                name:jQuery('#name').val(),
+	                description:jQuery('#abbreviation').val(),
+	            },
+	            success:function(data){
+	                if(data != 0 && data){
+	                    jQuery('.toggledata button.update').fadeIn(1600,function(){
+			                jQuery(this).parents('.toggledata').animate({height: 0},200, function(){
+			                    jQuery(this).parents('tr').prev().removeClass('hiderow');
+			                    if(result) {    
+			                        var prev = jQuery(this).parents('tr').prev().find('td'),
+			                            curr = jQuery(this).parents('tr').find('#name, #abbreviation');
+			                        jQuery(prev[0]).html(jQuery(curr[0]).val().toUpperCase()); 
+			                        jQuery(prev[1]).html(jQuery(curr[1]).val().toUpperCase());   
+			                    }                                           
+			                    jQuery(this).parents('tr').remove();
+			                });
+			                return false;
+				        });
+                        result = true;
+                        toggleData.append(data);                        //inject data read from server
+	                }
+	                else if(data == 0) { 
+	                    result = false;
+	                }
+	                else{
+	                    result = false;
+	                }
+	            }
+	        });
+       
+       } /* valid */
+       
+    })
+</script>

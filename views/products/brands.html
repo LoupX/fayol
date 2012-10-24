@@ -18,7 +18,6 @@
             <h1 class="pagetitle">{{=title}}</h1>
             
         </div><!--pageheader-->
-        
 
         <p style="margin-top:20px;">
               <span class="formwrapper" style="margin-left:20px;">
@@ -28,7 +27,6 @@
               </span>
         </p>
         
-
         <div id="contentwrapper" class="contentwrapper">
         
             <table cellpadding="0" cellspacing="0" border="0" class="stdtable" id="table">
@@ -130,10 +128,10 @@
         
         jQuery('.dataTables_length select, input:checkbox, input:radio').uniform();
         quickEdit();
-        toggleBrand();
+        togglestatus();
         jQuery('#table_paginate span, #table_length select').on('click', function() {
             jQuery('.dataTables_length select, input:checkbox, input:radio').uniform();
-            toggleBrand();
+            togglestatus();
         });
     }
  
@@ -178,7 +176,7 @@
         });
     }
 
-    function toggleBrand() {
+    function togglestatus() {
         jQuery('.stdtable input:checkbox').unbind('change');
         jQuery('.stdtable input:checkbox').on("change", function(e){
             jQuery.ajax({
@@ -192,7 +190,7 @@
                         oTable = jQuery('#table').dataTable();
                         var row = jQuery(e.currentTarget).closest('tr').get(0);
                         oTable.fnDeleteRow(oTable.fnGetPosition(row));
-                        toggleBrand();
+                        togglestatus();
                         jQuery('.dataTables_length select, input:checkbox, input:radio').uniform();
                     }
                 }
