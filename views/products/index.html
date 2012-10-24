@@ -88,18 +88,19 @@
 
                     description = data[row].product_descriptions;
                     prices = data[row].product_price_lists;
-                    vendors = data[row].product_to_vendor;
                     product = data[row].products;
+                    category = data[row].category_descriptions;
+                    brand = data[row].brand_descriptions;
                     
                     checked = (products.status) ? "checked=\"checked\"" : "";
                     aaData[cont] = [
                     		product.code,
                             description.name, 
-                            product.category,
-                            product.brand,
+                            category.name,
+                            brand.name,
                             prices.price,
                             "<input type=\"checkbox\" " + checked + " value=\"" + product.id + "\" />", 
-                            "<a href=\"{{=URL(c='products', f='view_product.html')}}?id=" + product.id + "\" class=\"toggle\">Ver</a>"
+                            "<a href=\"{{=URL(c='products', f='view_product.html')}}?id=" + product.id + "\">Ver</a>"
                         ];
                    cont++;
                 }
