@@ -184,8 +184,7 @@ def get_units():
     data = []
     q = request.vars.query.upper() if request.vars.query else None
     try:
-        query = db.units
-        query &= db.units.status==True
+        query = db.units.status==True
         if q == 'ANY':
             query = db.units
         elif q == 'FALSE':
@@ -193,7 +192,6 @@ def get_units():
         data = db(query).select().as_list()
     except Exception as e:
         db.rollback()
-        print e
 
     if data:
         import datetime
