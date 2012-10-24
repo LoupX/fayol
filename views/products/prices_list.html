@@ -55,10 +55,6 @@
                             <span class="field">
                                 <select id="product" name="product" data-placeholder="Seleccionar" style="width:350px;" tabindex="1">
                                     <option value="">Seleccionar</option>
-                                    <option value="1">Producto9</option>
-                                    <option value="2">Producto8</option>
-                                    <option value="3">Producto7</option>
-                                    <option value="4">Producto6</option>
                                 </select>
                             </span>
                         </p>
@@ -116,12 +112,27 @@
 
 <script type="text/javascript">
 var product = jQuery("#product");
-
-    product.chosen();
-
 var namelist = jQuery('#name-list');
 var price = jQuery('#price');
 var productid = '';
+
+    ///////// get products /////////
+    get_products();
+    function get_products() {
+        jQuery.ajax({
+            url: "{{=URL(c='products_ajax', f='get_products')}}",
+            type: "POST",
+            dataType: "json",
+            success: function(data){
+                for(d = 0; d < data.length; d++) {
+                    product.append('<option value='+data[d].product_descriptions.id+'>'+data[d].product_descriptions.name+'</option>');
+                }
+            },
+            complete: function() {
+                product.chosen();
+            }
+        });
+    }
 
    ///////// change method for product`s select /////////
     product.change(function() {
@@ -160,6 +171,7 @@ var productid = '';
                 jQuery('.msgerror').fadeIn(600);
             } else {
                 //sendId(productid);
+                
             }; 
             
         } else{
@@ -178,7 +190,8 @@ var productid = '';
         jQuery.ajax({
             url: "{{=URL(c='products_ajax', f='get_product_information')}}",
             type: "POST",
-            data: {id: id},
+            data: { id: id},
+            dataType: "json",
             success:function(data){
                 // cont = 0;
                 // aaData = new Array();
