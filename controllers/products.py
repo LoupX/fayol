@@ -37,7 +37,7 @@ def brand_quickedit():
     name = ""
     description = ""
     try:
-        row = db.brand_descriptions[id]
+        row = db(db.brand_descriptions.brand_id==id).select().first()
         name = row.name
         description = row.description
     except:
@@ -69,7 +69,7 @@ def categories_quickedit():
     name = ""
     description = ""
     try:
-        row = db.category_descriptions[id]
+        row = db(db.category_descriptions.category_id==id).select().first()
         name = row.name
         description = row.description
     except:
