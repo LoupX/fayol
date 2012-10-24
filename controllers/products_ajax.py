@@ -237,7 +237,7 @@ def get_products():
     try:
         query = db.products.status==True
         if q == 'ANY':
-             query = db.products
+             query = db.products.id>0
         if q == 'FALSE':
             query = db.products.status==False
         query &= db.products.id==db.product_descriptions.product_id
