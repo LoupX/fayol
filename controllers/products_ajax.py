@@ -188,7 +188,7 @@ def get_units():
         if q == 'ANY':
             query = db.units
         elif q == 'FALSE':
-            query &= db.units.status==False
+            query = db.units.status==False
         data = db(query).select().as_list()
     except Exception as e:
         db.rollback()
