@@ -2,8 +2,8 @@
 
 {{block scripts_extra}}
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.dataTables.min.js')}}"></script>
-<script type="text/javascript" src="{{=URL('static', 'js/custom/tables.js')}}"></script>
-<script type="text/javascript" src="{{=URL('static', 'js/custom/forms.js')}}"></script>	
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/chosen.jquery.min.js')}}"></script>
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.validate.min.js')}}"></script>
 {{end}}
 
 {{block sidebar_menu}}
@@ -32,24 +32,24 @@
                 <table cellpadding="0" cellspacing="0" border="0" class="stdtable" id="table">
                     <thead>
                         <tr>
-                            <th class="head0">Código</th>
-                            <th class="head1">Nombre</th>
-                            <th class="head0">Categoría</th>
-                            <th class="head1">Marca</th>
-                            <th class="head0">Precio</th>
-                            <th class="head1">Ver</th>
-                            <th class="head0"></th>
+                            <th width="20%" class="head0">Código</th>
+                            <th width="20%" class="head1">Nombre</th>
+                            <th width="15%" class="head0">Categoría</th>
+                            <th width="15%" class="head1">Marca</th>
+                            <th width="14%" class="head0">Precio</th>
+                            <th width="8%" class="head1">Ver</th>
+                            <th width="8%" class="head0"></th>
                         </tr>
                     </thead>
                     <tfoot>
                         <tr>
-                            <th class="head0">Código</th>
-                            <th class="head1">Nombre</th>
-                            <th class="head0">Categoría</th>
-                            <th class="head1">Marca</th>
-                            <th class="head0">Precio</th>
-                            <th class="head1">Ver</th>
-                            <th class="head0">Editar</th>
+                            <th width="20%" class="head0">Código</th>
+                            <th width="20%" class="head1">Nombre</th>
+                            <th width="15%" class="head0">Categoría</th>
+                            <th width="15%" class="head1">Marca</th>
+                            <th width="14%" class="head0">Precio</th>
+                            <th width="8%" class="head1">Ver</th>
+                            <th width="8%" class="head0"></th>
                         </tr>
                     </tfoot>
                 </table>
@@ -91,14 +91,40 @@
                     product = data[row].products;
                     category = data[row].category_descriptions;
                     brand = data[row].brand_descriptions;
+                    price = 'No asignado';
                     
-                    checked = (products.status) ? "checked=\"checked\"" : "";
+                    checked = (product.status) ? "checked=\"checked\"" : "";
+                    
+                    if(prices.length > 0) {
+                    	for(k in prices) {
+                    		if(prices[k].is_default){
+	                    		price = prices[k].price 
+	                    		price = price.toString();
+	                    		price = '$' + price;
+	                    	}
+                    	}
+                    }
+                    else{
+	                    if(product.standard_cost != null && product.markup != null){
+		                    try{
+			                    sc = parseFloat(product.standard_cost);
+			                    m = (parseFloat(product.markup)/100)+1;
+			                    price = sc*m;
+			                    price = price.toString();
+			                    price = '$' + price;
+		                    }
+		                    catch(error){
+			                    
+		                    }
+	                    }
+                    }
+                    
                     aaData[cont] = [
                     		product.code,
                             description.name, 
                             category.name,
                             brand.name,
-                            prices.price,
+                            price,
                             "<input type=\"checkbox\" " + checked + " value=\"" + product.id + "\" />", 
                             "<a href=\"{{=URL(c='products', f='view_product.html')}}?id=" + product.id + "\">Ver</a>"
                         ];
@@ -145,7 +171,6 @@
         });
         
         jQuery('.dataTables_length select, input:checkbox, input:radio').uniform();
-        quickEdit();
         togglestatus();
         jQuery('#table_paginate span, #table_length select').on('click', function() {
             jQuery('.dataTables_length select, input:checkbox, input:radio').uniform();
@@ -153,47 +178,6 @@
         });
     }
  
-    function quickEdit(){
-        jQuery('#table').on("click", 'a', function(e){ 
-            e.preventDefault();                               
-            //this is to hide current open quick view in a table 
-            jQuery(this).parents('table').find('tr').each(function(){
-                jQuery(this).removeClass('hiderow');
-                if(jQuery(this).hasClass('togglerow'))
-                    jQuery(this).remove();
-            });
-            
-            var parentRow = jQuery(this).parents('tr');
-            var numcols = parentRow.find('td').length + 1;              //get the number of columns in a table. Added 1 for new row to be inserted              
-            var url = jQuery(this).attr('href');
-            
-            //this will insert a new row next to this element's row parent
-            parentRow.after('<tr class="togglerow"><td colspan="'+numcols+'"><div class="toggledata"></div></td></tr>');
-            
-            var toggleData = parentRow.next().find('.toggledata');
-            
-            parentRow.next().hide();
-            
-            //get data from server
-            jQuery.post(url,function(data){
-                toggleData.append(data);                        //inject data read from server
-                parentRow.next().fadeIn();                      //show inserted new row
-                parentRow.addClass('hiderow');                  //hide this row to look like replacing the newly inserted row
-                //jQuery('input,select').uniform();
-            });
-
-            jQuery('.toggledata button.cancel').live('click',function(){
-                jQuery(this).parents('.toggledata').animate({height: 0},200, function(){
-                    jQuery(this).parents('tr').prev().removeClass('hiderow');                                            
-                    jQuery(this).parents('tr').remove();
-                });
-                return false;
-            });
-                    
-            return false;
-        });
-    }
-
     function togglestatus() {
         jQuery('.stdtable input:checkbox').unbind('change');
         jQuery('.stdtable input:checkbox').on("change", function(e){
@@ -209,7 +193,7 @@
                         var row = jQuery(e.currentTarget).closest('tr').get(0);
                         oTable.fnDeleteRow(oTable.fnGetPosition(row));
                         togglestatus();
-                        jQuery('.dataTables_length select, input:checkbox, input:radio').uniform();
+                        jQuery('input:checkbox, input:radio').uniform();
                     }
                 }
             });
