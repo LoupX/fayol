@@ -204,6 +204,48 @@ def get_units():
     return str(data)
 
 @auth.requires_login()
+def get_products():
+    rows = None
+    q = request.vars.query.upper() if request.vars.query else None
+    try:
+        query = db.products.status==True
+        if q == 'ANY':
+             query = None
+        if q == 'FALSE':
+            query = db.products.status==False
+        query &= db.products.id==db.product_descriptions.product_id
+        query &= db.products.brand_id==db.brand_descriptions.brand_id
+        query &= db.products.category_id==db.category_descriptions.category_id
+        query &= db.products.unit_id==db.units.id
+        rows = db(query).select().as_list()
+        for row in rows:
+            id = row['products']['id']
+            query_vendors = db.product_to_vendor.product_id==id
+            query_vendors &= db.vendors.id==db.product_to_vendor.vendor_id
+            query_vendors &= db.products.id==db.product_to_vendor.product_id
+            row_vendors = db(query_vendors).select(db.vendors.id,
+                db.vendors.name).as_list()
+            ppl = db.product_price_lists
+            row_price_list = db(ppl.product_id==id).select(
+                ppl.id, ppl.name, ppl.price, ppl.is_default,
+                ppl.status).as_list()
+            row['vendors'] = row_vendors
+            row['product_price_lists'] = row_price_list
+    except Exception as e:
+        db.rollback()
+    if rows:
+        import datetime
+        for row in rows:
+            for key in row:
+                for k in row[key]:
+                    if (type(k) is str and
+                        type(row[key][k]) is datetime.datetime):
+                        row[key][k] = str(row[key][k])
+    from gluon.contrib import simplejson
+    rows = simplejson.dumps(rows)
+    return str(rows)
+
+@auth.requires_login()
 def get_product_information():
     id = request.vars.id
     data = dict()
@@ -219,7 +261,7 @@ def get_product_information():
         row = db(query).select().as_list()
         query_vendors = db.product_to_vendor.product_id==id
         query_vendors &= db.vendors.id==db.product_to_vendor.vendor_id
-        query_vendors &= db.products.id==db.product_to_vendor.id
+        query_vendors &= db.products.id==db.product_to_vendor.product_id
         row_vendors = db(query_vendors).select(db.vendors.id,
             db.vendors.name).as_list()
         ppl = db.product_price_lists
