@@ -45,6 +45,16 @@ def create_category():
         return str(dict(category_id=c_id, category_description_id=cd_id))
 
 @auth.requires_login()
+def create_price():
+    data = dict()
+    v = request.vars
+    if v.product_id:
+        data['product_id'] = v.product_id
+    if v.name:
+        data['name'] = v.name
+    data['price'] = v.price
+
+@auth.requires_login()
 def create_unit():
     data = dict()
     if request.vars.measuring_unit and request.vars.abbreviation:
@@ -401,6 +411,22 @@ def toggle_unit():
     try:
         row = db(db.units.id==id).select().first()
         result = db(db.units.id==id).update(status=(not row.status))
+    except Exception as e:
+        db.rollback()
+        return ''
+    else:
+        db.commit()
+        if result == 1:
+            return True
+        else:
+            return ''
+
+@auth.requires_login()
+def toggle_product():
+    id = request.vars.id
+    try:
+        row = db(db.products.id==id).select().first()
+        result = db(db.products.id==id).update(status=(not row.status))
     except Exception as e:
         db.rollback()
         return ''
