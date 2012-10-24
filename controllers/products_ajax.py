@@ -133,8 +133,9 @@ def get_brands():
     q = request.vars.query.upper() if request.vars.query else None
     try:
         query = db.brand_descriptions.brand_id==db.brands.id
-        if q == 'TRUE':
-            query &= db.brands.status==True
+        query &= db.brands.status==True
+        if q == 'ANY':
+            query = db.brand_descriptions.brand_id==db.brands.id
         elif q == 'FALSE':
             query &= db.brands.status==False
         data = db(query).select().as_list()
@@ -158,8 +159,9 @@ def get_categories():
     q = request.vars.query.upper() if request.vars.query else None
     try:
         query = db.category_descriptions.category_id==db.categories.id
-        if q == 'TRUE':
-            query &= db.categories.status==True
+        query &= db.categories.status==True
+        if q == 'ANY':
+            query = db.category_descriptions.category_id==db.categories.id
         elif q == 'FALSE':
             query &= db.categories.status==False
         data = db(query).select().as_list()
@@ -180,15 +182,18 @@ def get_categories():
 @auth.requires_login()
 def get_units():
     data = []
+    q = request.vars.query.upper() if request.vars.query else None
     try:
         query = db.units
-        if q == 'TRUE':
-            query &= db.units.status==True
+        query &= db.units.status==True
+        if q == 'ANY':
+            query = db.units
         elif q == 'FALSE':
             query &= db.units.status==False
         data = db(query).select().as_list()
-    except:
+    except Exception as e:
         db.rollback()
+        print e
 
     if data:
         import datetime
