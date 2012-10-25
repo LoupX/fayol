@@ -2,7 +2,6 @@
 
 {{block scripts_extra}}
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.maskedinput.js')}}"></script>
-
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.validate.min.js')}}"></script>
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/chosen.jquery.min.js')}}"></script>
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.dataTables.min.js')}}"></script>
@@ -168,7 +167,6 @@
             jQuery('#standard_cost').val(data.products['standard_cost']);
             jQuery('#markup').val(data.products['markup']);
             jQuery('#description').val(data.product_descriptions['description']);
-             
             bid = (data.brand_descriptions['brand_id'] == null) ? '': data.brand_descriptions['brand_id'];
             uid = (data.units['id'] == null) ? '': data.units['id'];
             cid = (data.category_descriptions['category_id'] == null) ? '': data.category_descriptions['category_id'];
