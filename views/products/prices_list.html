@@ -237,8 +237,8 @@ var oTable = jQuery('#table');
                         aaData[cont] = [
                             data.price_list[e].name, 
                             data.price_list[e].price, 
-                            '<input type="radio" value="'+id+'" name="radios" '+checked+'/>', 
-                            "<a href=\"{{=URL(c='products', f='list_quickedit.html')}}?id="+data.price_list[e].id +"\" class=\"toggle\">Editar</a>"
+                            '<input type="radio" value="'+data.price_list[e].id+'" name="radios" '+checked+'/>', 
+                            "<a href=\"{{=URL(c='products', f='list_quickedit.html')}}?id="+data.price_list[e].id+"\" class=\"toggle\">Editar</a>"
                             ];
                         cont++;
                     }
@@ -333,22 +333,16 @@ var oTable = jQuery('#table');
     }
 
     function togglestatus() {
-        jQuery('.stdtable input:checkbox').unbind('change');
-        jQuery('.stdtable input:checkbox').on("change", function(e){
+        // jQuery('.stdtable input:checkbox').unbind('change');
+        jQuery('.stdtable input:radio').on("change", function(e){
             jQuery.ajax({
-                url: "{{=URL(c='products_ajax', f='toggle_brand')}}",
+                url: "{{=URL(c='products_ajax', f='update_default_price')}}",
                 type: "POST",
                 data: {
                     id:e.currentTarget.value
                 },
                 success: function(data){
-                    if(!jQuery('#c').is(':checked')) {
-                        oTable = jQuery('#table').dataTable();
-                        var row = jQuery(e.currentTarget).closest('tr').get(0);
-                        oTable.fnDeleteRow(oTable.fnGetPosition(row));
-                        togglestatus();
-                        jQuery('.dataTables_length select, input:checkbox, input:radio').uniform();
-                    }
+                    console.log(data);
                 }
             });
         });
