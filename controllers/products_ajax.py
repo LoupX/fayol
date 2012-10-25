@@ -414,6 +414,27 @@ def update_default_price():
             return ''
 
 @auth.requires_login()
+def update_price():
+    id = request.vars.id
+    data = dict()
+    if request.vars.name:
+        data['name'] = request.vars.name
+    data['price'] = request.vars.price
+    try:
+        query = db.product_price_lists.id==id
+        result = db(query).update(**data)
+    except Exception as e:
+        db.rollback()
+        return ''
+    else:
+        if result == 1:
+            db.commit()
+            return True
+        else:
+            db.rollback()
+            return ''
+
+@auth.requires_login()
 def toggle_brand():
     id = request.vars.id
     try:
