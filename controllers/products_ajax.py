@@ -398,10 +398,10 @@ def update_default_price():
     try:
         product_id = db(db.product_price_lists.id==id).select(
             db.product_price_lists.product_id).first()
-        product_id = id.product_id
+        product_id = product_id.product_id
         db(db.product_price_lists.product_id==product_id).update(
             is_default=False)
-        result = db(db.product_price_lists.id==id).update(is_default==True)
+        result = db(db.product_price_lists.id==id).update(is_default=True)
     except Exception as e:
         db.rollback()
         return ''
