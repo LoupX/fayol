@@ -24,7 +24,7 @@
                 <div id="basicform" class="subcontent">
                                 
                     <div class="contenttitle2">
-                        <h3>Producto: "Nombre del producto"</h3>
+                        <h3 id="name">Producto: ""</h3>
                     </div><!--contenttitle-->
                     
             </div><!--subcontent-->	   
@@ -36,10 +36,10 @@
                    	  <td width="30%">Código:</td>
                       <td width="70%"><strong id="code"></strong></td>
                   </tr>
-               	  <tr>
+               	  <!--<tr>
                    	  <td width="30%">Nombre:</td>
                       <td width="70%"><strong id="name"></strong></td>
-                  </tr>
+                  </tr>-->
                   <tr>
                    	  <td>Nombre alternativo:</td>
                       <td><strong id="alternative_name"></strong></td>
@@ -67,11 +67,11 @@
                 	  <td><strong id="unit"></strong></td>
               	  </tr>
               	  <tr>
-               	    <td>Unidad de parte:</td>
+               	    <td>Número de parte:</td>
                	    <td><strong id="part_number"></strong></td>
            	      </tr>
               	  <tr>
-                	  <td width="30%">Numero de serie:</td>
+                	  <td width="30%">Número de serie:</td>
                 	  <td width="70%"><strong id="serial_number"></strong></td>
               	  </tr>
               	  <tr>
@@ -242,7 +242,7 @@ var id = {{=request.vars.id}}
       dataType:"json",
       success: function (data) {
 	        code.html(data.products['code']);
-            name_product.html(data.product_descriptions['name']);
+            name_product.html("Producto: \"" + data.product_descriptions['name'] + "\"");
             alternative_name.html(data.product_descriptions['alternative_name']);
             alternative_code.html(data.products['alternative_code']);
             brand_id.html(data.brand_descriptions['name']);
@@ -256,7 +256,10 @@ var id = {{=request.vars.id}}
             {
 	            v_name += data.vendors[k]['name'] + ', ';
             }
-            v_name = v_name.slice(0, (v_name.length-2)) + '.';
+            v_name = v_name.slice(0, (v_name.length-2));
+            if(v_name != ''){
+              v_name += '.';
+            }
             vendors.html(v_name);            
             standard_cost.html(data.products['standard_cost']);
             markup.html(data.products['markup']);
@@ -273,13 +276,13 @@ var id = {{=request.vars.id}}
 	          status_product.parent().addClass('checked');
 	          status_product.attr('onclick','chk('+id+',"True")');
 			  status_product.attr('disabled','disabled');
-	          resp.html('Activado.');
+	          resp.html('Activado');
 			  resp.attr('style','color:#59BF04');
 	        } else{
 	          status_product.parent().removeClass('checked');
 	          status_product.attr('onclick','chk('+id+',"False")');
 			  status_product.attr('disabled','disabled');
-	          resp.html('Desactivado.');
+	          resp.html('Desactivado');
 			  resp.attr('style','color:#A31314');
 	        };
            
