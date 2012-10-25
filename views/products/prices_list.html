@@ -76,18 +76,14 @@
                         	<button id="submit" class="submit radius2">Guardar</button>
                         </p>
                     </form>
-                   
-
-            </div><!--subcontent-->  
-            <br>
-            <table cellpadding="0" cellspacing="0" border="0" class="stdtable" id="table">
+                    <br>
+                    <table cellpadding="0" cellspacing="0" border="0" class="stdtable" id="table" style="display: none;">
                 <thead>
                     <tr>
                         <th class="head0">Nombre de la lista</th>
                         <th class="head1">Precio</th>
                         <th class="head0">Predeterminado</th>
                         <th class="head1">&nbsp;</th>
-                        
                     </tr>
                 </thead>
                 <tfoot>
@@ -99,7 +95,10 @@
                         
                     </tr>
                 </tfoot>
-            </table>   
+            </table>
+                   
+
+            </div><!--subcontent-->     
         
         </div><!--contentwrapper-->
         
@@ -116,7 +115,7 @@ var namelist = jQuery('#name-list');
 var price = jQuery('#price');
 var productid = '';
 var oTable = jQuery('#table');
-
+var globalid = '';
     ///////// get products /////////
     get_products();
     function get_products() {
@@ -145,6 +144,7 @@ var oTable = jQuery('#table');
             price.attr('disabled', false);
             oTable.dataTable().fnClearTable();
             sendId(productid);
+            //globalid = productid;
         } else{
             namelist
                 .attr('disabled', true)
@@ -153,7 +153,9 @@ var oTable = jQuery('#table');
                 .attr('disabled', true)
                 .val('');
             productid = '';
-            oTable.dataTable().fnClearTable();
+            //globalid = productid;
+            oTable.dataTable().fnDestroy();
+            oTable.hide();
         }
         
     });
@@ -178,9 +180,8 @@ var oTable = jQuery('#table');
                 price.addClass('error');
                 jQuery('.msgerror').fadeIn(600);
             } else {
-                //sendId(productid);
                 saveNewList(productid, namelist.val(), price.val());
-                oTable.dataTable().fnClearTable();
+                oTable.fnClearTable();
                 sendId(productid);
                 namelist.val('');
                 price.val('');
@@ -242,6 +243,11 @@ var oTable = jQuery('#table');
                             ];
                         cont++;
                     }
+                    oTable.show();
+                }
+                else {
+                    oTable.fnDestroy()
+                    jQuery('#table').hide();
                 }
             },
             complete: function() {
@@ -255,30 +261,18 @@ var oTable = jQuery('#table');
     function loadTable(aaData) {
         jQuery("#table").dataTable( {
             "bDestroy": true,
-            "oLanguage": {
-                "sProcessing": "Procesando...",
-                "sLengthMenu": "Ver _MENU_ registros",
-                "sZeroRecords": "No se encontraron registros",
-                "sEmptyTable": "No hay registros en esta tabla",
-                "sLoadingRecords": "Cargando...",
-                "sInfo": "Viendo _START_ - _END_ de _TOTAL_ registros",
-                "sInfoEmpty": "Viendo 0 - 0 de 0 registros",
-                "sInfoFiltered": "(Flitrado de _MAX_ registros totales)",
-                "sSearch": "Buscar",
-                "oPaginate": {
-                    "sFirst":"Primero",
-                    "sPrevious":"Anterior",
-                    "sNext":"Siguiente",
-                    "sLast":"Ultimo"
-                },
-            },
-            "sPaginationType": "full_numbers",
+            "bPaginate": false,
+            "bLengthChange": false,
+            "bFilter": true,
+            "bSort": true,
+            "bInfo": false,
+            "bAutoWidth": true,
             "aaData": aaData,
             "aoColumns": [
-                {"sTitle":"Nombre de la lista"},
-                {"sTitle":"Precio"},
-                {"sTitle":"Predeterminado", "sClass":"center"},
-                {"sTitle":"", "sClass":"center"}
+                {"sTitle": "Nombre"},
+                {"sTitle": "Precio"},
+                {"sTitle": "Predeterminado", "sClass":"center"},
+                {"sTitle": "", "sClass":"center"}
             ]
         });
         
@@ -333,17 +327,14 @@ var oTable = jQuery('#table');
     }
 
     function togglestatus() {
-        // jQuery('.stdtable input:checkbox').unbind('change');
         jQuery('.stdtable input:radio').on("change", function(e){
             jQuery.ajax({
                 url: "{{=URL(c='products_ajax', f='update_default_price')}}",
                 type: "POST",
-                data: {
-                    id:e.currentTarget.value
-                },
-                success: function(data){
-                    console.log(data);
-                }
+                data: { id: e.currentTarget.value } //,
+                // complete: function() {
+                //     sendId(globalid);
+                // }
             });
         });
     }
