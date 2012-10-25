@@ -1,8 +1,12 @@
 {{extend 'base/layout.html'}}
 
 {{block scripts_extra}}
-<script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.validate.min.js')}}"></script>	
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.maskedinput.js')}}"></script>
+
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.validate.min.js')}}"></script>
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/chosen.jquery.min.js')}}"></script>
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.dataTables.min.js')}}"></script>
+<script type="text/javascript" src="{{=URL('static', 'js/custom/dualselector.js')}}"></script>
 <style type="text/css">
     .ellol {
         border: 1px solid red;
@@ -11,7 +15,7 @@
 {{end}}
 
 {{block sidebar_menu}}
-{{include 'branches/sidebar.html'}}
+{{include 'products/sidebar.html'}}
 {{end}}
 
 {{block content}}
@@ -28,94 +32,97 @@
         	<div id="validation" class="subcontent">
             	
             		<div class="contenttitle2">
-                        <h3>Editar sucursal</h3>
+                        <h3>Nuevo producto</h3>
                     </div><!--contenttitle-->
-            				
-            		<div class="notibar msgerror" style="display:none;">
+         
+					<div class="notibar msgerror" style="display:none;">
                     	<a class="close"></a>
                     	<p>Ocurrió un error con los datos del formulario.</p>
                     </div>
 
                 	<div class="notibar exists" style="display:none;">
                    		<a class="close"></a>
-                   		<p>Ese proveedor existe, para editarlo vaya a la sección de ver proveedor. </p>
+                    	<p>Este producto ya existe, para editarlo vaya a la sección de ver producto. </p>
                     </div>
 
                 	<div class="notibar msgsuccess" style="display:none;">
                         <a class="close"></a>
                         <p>Se han guardado los datos del formulario.</p>
-                    </div>		
-            						
-                    <form id="form_branch_office" class="stdform stdform2" method="post" action="">
-                    	
-	                    <p>
-	                       	<label>Nombre</label>
-	                        <span class="field"><input type="text" name="name" id="name" class="smallinput"/></span>
-	                    </p>
-	                    
-	                    <div class="contenttitle2">
-                        <h3>Domicilio</h3>
-                        </div>  
-	                     
-	                    <p style="border-top: 1px #ddd solid;">
-	                       	<label>Dirección</label>
-	                        <span class="field"><input type="text" name="address" id="address" class="smallinput"/></span>
+                    </div>
+            	
+                    <form id="form_product" class="stdform stdform2" method="post" action="">           	                        
+                        <p>
+	                        	<label>Nombre *</label>
+	                            <span class="field"><input type="text" name="name" id="name" class="smallinput" tabindex="1"/></span>
 	                    </p>
 	                    <p>
-	                       	<label>Colonia</label>
-	                        <span class="field"><input type="text" name="suburb" id="suburb" class="smallinput"/></span>
+	                        	<label>Nombre alternativo</label>
+	                            <span class="field"><input type="text" name="alternative_name" id="alternative_name" class="smallinput" tabindex="2"/></span>
+	                    </p>
+	                    <p>
+	                        	<label>Código alternativo</label>
+	                            <span class="field"><input type="text" name="alternative_code" id="alternative_code" class="smallinput" tabindex="3"/></span>
 	                    </p>
 	                    <p style="margin-top: 1px;">
-                            <label>Estado</label>
+                            <label>Marca *</label>
                             <span class="field">
-                                <!-- <select name="states" id="states">
-                                </select> -->
-                                <select id="states" name="states" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="3">
+                                <select id="brands" name="brands" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="4">
                                   </select>
                             </span>
                         </p>
-                        
                         <p style="margin-top: 1px;">
-                            <label>Municipio</label>
-                            <span id="municipality_container"class="field">
-                            <select name="municipality" id="municipality" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="4">
-                            </select>
+	                        	<label>Modelo</label>
+	                            <span class="field"><input type="text" name="model" id="model" class="smallinput" tabindex="5"/></span>
+	                    </p>
+	                    <p style="margin-top: 1px;">
+                            <label>Unidad de medida *</label>
+                            <span class="field">
+                                <select id="unit" name="unit" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="6">
+                                  </select>
                             </span>
                         </p>
-
                         <p style="margin-top: 1px;">
-                            <label>Población</label>
-                            <span class="field" id="locality_container">
-                            <select name="locality" id="locality" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="5">
-                            </select>
+	                        	<label>Número de parte</label>
+	                            <span class="field"><input type="text" name="part_number" id="part_number" class="smallinput" tabindex="7"/></span>
+	                    </p>
+	                    <p>
+	                        	<label>Número de serie</label>
+	                            <span class="field"><input type="text" name="serial_number" id="serial_number" class="smallinput" tabindex="8"/></span>
+	                    </p>
+	                    <p style="margin-top: 1px;">
+                            <label>Categoría *</label>
+                            <span class="field">
+                                <select id="category" name="category" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="9">
+                                  </select>
                             </span>
                         </p>
- 	                    <p style="margin-top: 1px;">
-                            <label>Código postal</label>
-                            <span class="field"><input type="text" name="zip_code" id="zip_code" class="smallinput" maxlength="5" tabindex="6"/></span>
+	                    <p style="margin-top:1px;">
+	                        	<label>Proveedores</label>
+	                            <span class="field">
+                            	<select name="vendors" id="vendors" multiple="multiple" size="10" data-placeholder="Seleccionar" class="chzn-select" tabindex="10"></select>
+                               
+                                </span>
+	                    </p>
+	                    <p>
+	                        	<label>Costo estandar</label>
+	                            <span class="field"><input type="text" name="standard_cost" id="standard_cost" class="smallinput" placeholder="0.00" tabindex="11"/></span>
+	                    </p>
+	                    <p>
+	                        	<label>Margen de utilidad</label>
+	                            <span class="field"><input type="text" name="markup" id="markup" class="smallinput" tabindex="12"/></span>
+	                    </p>
+	                    <p>
+                        		<label>Descripción</label>
+                        		<span class="field"><textarea cols="80" rows="5" name="description" id="description" class="smallinput" tabindex="13"></textarea></span>
                         </p>
 	                    
-	                    <div class="contenttitle2">
-                        <h3>Información fiscal</h3>
-                        </div> 
-                        
-                        <p  style="border-top: 1px #ddd solid;">
-	                       	<label>Razón social</label>
-	                        <span class="field"><input type="text" name="business_name" id="business_name" class="smallinput"/></span>
-	                    </p>
-	                    <p>
-	                       	<label>R.F.C.</label>
-	                        <span class="field"><input type="text" name="rfc" id="rfc" class="smallinput" maxlength="13"/></span>
-	                    </p>
-	                    <p>
-	                       	<label>Regimen fiscal</label>
-	                        <span class="field"><input type="text" name="tax" id="tax" class="smallinput"/></span>
-	                    </p>
-                        
-	                    <p class="stdformbutton">
-                        	<button id="submit" class="submit radius2">Guardar</button>
+                        <p class="stdformbutton">
+                        	<button id="submit" class="submit radius2" tabindex="14">Guardar</button>
                         </p>
+                        
+                        
                     </form>
+                   
 
             </div><!--subcontent-->     
         
@@ -123,8 +130,8 @@
         
         <br clear="all" />
         
-	</div><!-- centercontent -->   
-    
+	</div><!-- centercontent -->
+        
 </div><!--bodywrapper-->
 
 <script type="text/javascript">
@@ -132,139 +139,70 @@
 //////////// Ajax for selects ////////////
     jQuery(".chzn-select").chosen();
 
-    var state = jQuery('#states'),
-        municipality = jQuery('#municipality'),
-        locality = jQuery('#locality');
-    var s = '',
-        m = '',
-        l = '';
-    
-    var sid,
-        mid,
-        lid;
+    var brand_id = jQuery('#brands'),
+        unit_id = jQuery('#unit'),
+        category_id = jQuery('#category');
+        
+    var b = '',
+        u = '',
+        c = '';
+        
+    var bid,
+        uid,
+        cid;
 
 //////////// get info ////////////
     jQuery.ajax({
-        url: "{{=URL(c='branches_ajax', f='get_branch_information')}}",
+        url: "{{=URL(c='products_ajax', f='get_product_information')}}",
         data: { id: "{{=id}}" },
         type: "POST",
         dataType:"json",
         success:function(data){
             //console.log(data);
-            jQuery('#name').val(data.branches['name']);
-            jQuery('#address').val(data.company_addresses['address']);
-            jQuery('#suburb').val(data.company_addresses['suburb']);
-            jQuery('#zip_code').val(data.company_addresses['zip_code']);
-            jQuery('#business_name').val(data.company_tax_info['business_name']);
-            jQuery('#rfc').val(data.company_tax_info['rfc']);
-            jQuery('#tax').val(data.company_tax_info['tax']);
-            sid = (data.company_addresses['state_id'] == null) ? '': data.company_addresses['state_id'];
-            mid = (data.company_addresses['municipality_id'] == null) ? '': data.company_addresses['municipality_id'];
-            lid = (data.company_addresses['locality_id'] == null) ? '': data.company_addresses['locality_id'];
-            selectS(sid);
-            selectM(sid, mid);
-            selectL(mid, lid); 
+            jQuery('#name').val(data.product_descriptions['name']);
+            jQuery('#alternative_name').val(data.product_descriptions['alternative_name']);
+            jQuery('#alternative_code').val(data.products['alternative_code']);
+            jQuery('#model').val(data.products['model']);
+            jQuery('#part_number').val(data.products['part_number']);
+            jQuery('#serial_number').val(data.products['serial_number']);
+            jQuery('#standard_cost').val(data.products['standard_cost']);
+            jQuery('#markup').val(data.products['markup']);
+            jQuery('#description').val(data.product_descriptions['description']);
+             
+            bid = (data.brand_descriptions['brand_id'] == null) ? '': data.brand_descriptions['brand_id'];
+            uid = (data.units['id'] == null) ? '': data.units['id'];
+            cid = (data.category_descriptions['category_id'] == null) ? '': data.category_descriptions['category_id'];
         }
     });
 
-//Sirve ^
-//////////// get municipalities ////////////
-    state.change( function() {
-        sid = jQuery(this).find(':selected').val();
-        if(sid != '') {
-        state.siblings('div').removeClass('ellol');
-            jQuery.ajax({
-                type: "POST",
-                url: "{{=URL(c='common', f='get_municipalities')}}",
-                data: {id: sid},
-                success: function(results) {
-                    municipality
-                        .html(results)
-                        .prepend('<option value="">Seleccionar</option>')
-                        .trigger("liszt:updated");
-                    locality
-                        .html('')
-                        .prepend('<option value="">Seleccionar</option>')
-                        .trigger("liszt:updated");
-                }
-            });
-        }
-        else {
-            municipality
-                .html('')
-                .prepend('<option value="">Seleccionar</option>')
-                .trigger("liszt:updated");
-            locality
-                .html('')
-                .prepend('<option value="">Seleccionar</option>')
-                .trigger("liszt:updated");
-            mid = '';
-            lid = '';
-        }
-    });
-    
-    locality.change( function() {
-        lid = jQuery(this).find(':selected').val();
-        if(lid != '') {
-	        locality.siblings('div').removeClass('ellol');
-        }
-    });
+//////////// get brands, units & categories ////////////
 
-//////////// get localities ////////////
-    municipality.change( function() {
-        mid = jQuery(this).find(':selected').val();
-        if(mid != '') {
-        	municipality.siblings('div').removeClass('ellol');
-            jQuery.ajax({
-                type: "POST",
-                data: {municipality_id: mid},
-                url: "{{=URL(c='common', f='get_localities')}}",
-                success: function(results) {
-                    locality
-                        .html(results)
-                        .prepend('<option value="">Seleccionar</option>')
-                        .trigger("liszt:updated");
-                }
-            });
-        }
-        else {
-            locality
-                    .html('')
-                    .prepend('<option value="">Seleccionar</option>')
-                    .trigger("liszt:updated");
-            lid = '';
-        }
-    });
+
 
 //////////// validate form ////////////
-    jQuery("#form_branch_office").validate({
+    jQuery("#form_product").validate({
             rules: {
                 name: "required",
-                address : "required",
-                suburb : "required",
-                zip_code: {
-                    required: false,
-                    digits: true,
-                    minlength: 5
+                standard_cost: {
+                	number: true,
+	                required: false
                 },
-                rfc: {
-                    minlength: 10,
-                    maxlength:13,
+                markup: {
+                    number: true,
                     required: false
-                }
+                },
             },
             messages: {
-                name: "Ingrese el nombre de la surcursal",
-                address: "Ingrese la dirección de la surcursal",
-                suburb: "Ingrese la colonia de la surcursal",
-                zip_code: "Este campo debe tener 5 números.",
-                rfc: "R.F.C. inválido."
+                name: "Ingrese el nombre del producto",
+                standard_cost: "Ingrese numeros decimales",
+                markup: "Ingrese numeros decimales"
             }
     });
     
 //////////// send form ////////////
     jQuery('#submit').live('click', function(e) {
         e.preventDefault();
+        
         valState(sid);
         valLoc(lid);
         valMun(mid);

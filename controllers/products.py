@@ -17,6 +17,12 @@ def view_product():
     title = 'Productos'
     current = ['menu_catalogs', 'sidebar_products', 'sub_products_read']
     return dict(title=title, current=current)
+    
+@auth.requires_login()
+def update_product():
+	title = 'Productos'
+	current = ['menu_catalogs', 'sidebar_products', 'sub_products_read']
+	return dict(title=title, current=current)
 
 @auth.requires_login()
 def prices_list():
