@@ -4,6 +4,8 @@
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.tagsinput.min.js')}}"></script>
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/chosen.jquery.min.js')}}"></script>
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.validate.min.js')}}"></script>
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.dataTables.min.js')}}"></script>
+<script type="text/javascript" src="{{=URL('static', 'js/custom/tables.js')}}"></script>
 {{end}}
 
 {{block sidebar_menu}}
@@ -122,86 +124,25 @@
                         <h3>Lista de precios del producto</h3>
                 </div><!--contenttitle-->
             
-            	<table cellpadding="0" cellspacing="0" border="0" class="stdtable" id="dyntable">
-                    <colgroup>
-                        <col class="con0" />
-                        <col class="con1" />
-                        <col class="con0" />
-                        <col class="con1" />
-                        <col class="con0" />
-                        <col class="con1" />
-                        <col class="con0" />
-                    </colgroup>
-                    <thead>
-                        <tr>
-                            <th class="head0">Código</th>
-                            <th class="head1">Nombre</th>
-                            <th class="head0">Categoría</th>
-                            <th class="head1">Marca</th>
-                            <th class="head0">Precio</th>
-                            <th class="head1">Ver</th>
-                            <th class="head0"></th>
-                        </tr>
-                    </thead>
-                    <tfoot>
-                        <tr>
-                            <th class="head0">Código</th>
-                            <th class="head1">Nombre</th>
-                            <th class="head0">Categoría</th>
-                            <th class="head1">Marca</th>
-                            <th class="head0">Precio</th>
-                            <th class="head1">Ver</th>
-                            <th class="head0">Editar</th>
-                        </tr>
-                    </tfoot>
-                    <tbody>
-                        <tr class="gradeX">
-                            <td>Trident</td>
-                            <td>Internet Explorer 4.0</td>
-                            <td>Win 95+</td>
-                            <td class="center">4</td>
-                            <td class="center">X</td>
-                            <td><a href="{{=URL(c='products', f='view_product')}}">Ver</a></td>
-                            <td class="center">Editar</th>                            
-                        </tr>
-                        <tr class="gradeC">
-                            <td>Trident</td>
-                            <td>Internet Explorer 5.0</td>
-                            <td>Win 95+</td>
-                            <td class="center">5</td>
-                            <td class="center">C</td>
-                            <td><a href="{{=URL(c='products', f='view_product')}}">Ver</a></td>
-                            <td class="center">Editar</th>
-                        </tr>
-                        <tr class="gradeA">
-                            <td>Trident</td>
-                            <td>Internet Explorer 5.5</td>
-                            <td>Win 95+</td>
-                            <td class="center">5.5</td>
-                            <td class="center">A</td>
-                            <td><a href="{{=URL(c='products', f='view_product')}}">Ver</a></td>
-                            <td class="center">Editar</th>
-                        </tr>
-                        <tr class="gradeA">
-                            <td>Trident</td>
-                            <td>Internet Explorer 6</td>
-                            <td>Win 98+</td>
-                            <td class="center">6</td>
-                            <td class="center">A</td>
-                            <td><a href="{{=URL(c='products', f='view_product')}}">Ver</a></td>
-                            <td class="center">Editar</th>
-                        </tr>
-                        <tr class="gradeA">
-                            <td>Trident</td>
-                            <td>Internet Explorer 7</td>
-                            <td>Win XP SP2+</td>
-                            <td class="center">7</td>
-                            <td class="center">A</td>
-                            <td><a href="{{=URL(c='products', f='view_product')}}">Ver</a></td>
-                            <td class="center">Editar</th>
-                        </tr>
-                    </tbody>
-                </table>
+            	<table cellpadding="0" cellspacing="0" border="0" class="stdtable" id="liststable">
+                <thead>
+                    <tr>
+                        <th class="head0">Nombre de la lista</th>
+                        <th class="head1">Precio</th>
+                        <th class="head0">Predeterminado</th>
+                        <th class="head1">&nbsp;</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th class="head0">Nombre de la lista</th>
+                        <th class="head1">Precio</th>
+                        <th class="head0">Predeterminado</th>
+                        <th class="head1">&nbsp;</th>
+                        
+                    </tr>
+                </tfoot>
+            </table>
             
         </div><!--contentwrapper-->
         
@@ -287,7 +228,123 @@ var id = {{=request.vars.id}}
 	        };
            
       }
-  });     
+  });  
+
+  ///////// get price´s list /////////  
+  var theresdata = ''; 
+  var oTable = jQuery('#liststable');
+  jQuery.ajax({
+      url: "{{=URL(c='products_ajax', f='get_product_information')}}",
+      type: "POST",
+      data: { id: id},
+      dataType: "json",
+      success: function(data){
+          cont = 0;
+          aaData = new Array();
+          theresdata = data.price_list;
+
+          if(theresdata){
+              for(e = 0; e < data.price_list.length; e++) {
+                  checked = (data.price_list[e].is_default == true) ? "checked=\"checked\"" : ""
+                  aaData[cont] = [
+                      data.price_list[e].name, 
+                      data.price_list[e].price, 
+                      '<input type="radio" value="'+data.price_list[e].id+'" name="radios" '+checked+'/>', 
+                       "<a href=\"{{=URL(c='products', f='list_quickedit')}}?id="+data.price_list[e].id+"\" class=\"toggle\">Editar</a>"
+                    ];
+                  cont++;
+              }
+              oTable.show();
+          }
+          else {
+              oTable.fnDestroy();
+              jQuery('#table').hide();
+          }
+      },
+      complete: function() {
+          if(theresdata) {
+              loadTable(aaData);
+          }
+      }
+  });
+
+function loadTable(aaData) {
+        oTable.dataTable( {
+            "bDestroy": true,
+            "bPaginate": false,
+            "bLengthChange": false,
+            "bFilter": true,
+            "bSort": true,
+            "bInfo": false,
+            "bAutoWidth": true,
+            "aaData": aaData,
+            "aoColumns": [
+                {"sTitle": "Nombre"},
+                {"sTitle": "Precio"},
+                {"sTitle": "Predeterminado", "sClass":"center"},
+                {"sTitle": "", "sClass":"center"}
+            ]
+        });
+        
+        jQuery('.dataTables_length select, input:checkbox, input:radio').uniform();
+        quickEdit();
+        togglestatus();
+        jQuery('#table_paginate span, #table_length select').on('click', function() {
+            jQuery('.dataTables_length select, input:checkbox, input:radio').uniform();
+            togglestatus();
+        });
+    }
+
+    function quickEdit(){
+        jQuery('#liststable').on("click", 'a', function(e){ 
+            e.preventDefault();                               
+            //this is to hide current open quick view in a table 
+            jQuery(this).parents('table').find('tr').each(function(){
+                jQuery(this).removeClass('hiderow');
+                if(jQuery(this).hasClass('togglerow'))
+                    jQuery(this).remove();
+            });
+            
+            var parentRow = jQuery(this).parents('tr');
+            var numcols = parentRow.find('td').length + 1;              //get the number of columns in a table. Added 1 for new row to be inserted              
+            var url = jQuery(this).attr('href');
+            
+            //this will insert a new row next to this element's row parent
+            parentRow.after('<tr class="togglerow"><td colspan="'+numcols+'"><div class="toggledata"></div></td></tr>');
+            
+            var toggleData = parentRow.next().find('.toggledata');
+            
+            parentRow.next().hide();
+            
+            //get data from server
+            jQuery.post(url,function(data){
+                toggleData.append(data);                        //inject data read from server
+                parentRow.next().fadeIn();                      //show inserted new row
+                parentRow.addClass('hiderow');                  //hide this row to look like replacing the newly inserted row
+                //jQuery('input,select').uniform();
+            });
+
+            jQuery('.toggledata button.cancel').live('click',function(){
+                jQuery(this).parents('.toggledata').animate({height: 0},200, function(){
+                    jQuery(this).parents('tr').prev().removeClass('hiderow');                                            
+                    jQuery(this).parents('tr').remove();
+                });
+                return false;
+            });
+                    
+            return false;
+        });
+    }
+
+    function togglestatus() {
+        jQuery('.stdtable input:radio').on("change", function(e){
+            jQuery.ajax({
+                url: "{{=URL(c='products_ajax', f='update_default_price')}}",
+                type: "POST",
+                data: { id: e.currentTarget.value }
+            });
+        });
+    }
     
 </script>    
     
