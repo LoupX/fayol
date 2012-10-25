@@ -142,6 +142,7 @@
     var brand_id = jQuery('#brands'),
         unit_id = jQuery('#unit'),
         category_id = jQuery('#category');
+        vendors = jQuery('#vendors');
         
     var b = '',
         u = '',
@@ -158,7 +159,6 @@
         type: "POST",
         dataType:"json",
         success:function(data){
-            //console.log(data);
             jQuery('#name').val(data.product_descriptions['name']);
             jQuery('#alternative_name').val(data.product_descriptions['alternative_name']);
             jQuery('#alternative_code').val(data.products['alternative_code']);
@@ -172,7 +172,11 @@
             bid = (data.brand_descriptions['brand_id'] == null) ? '': data.brand_descriptions['brand_id'];
             uid = (data.units['id'] == null) ? '': data.units['id'];
             cid = (data.category_descriptions['category_id'] == null) ? '': data.category_descriptions['category_id'];
-        }
+            selectBrands(bid);
+            selectUnit(uid);
+            selectCategory(cid);
+            selectVendor(data.vendors);
+        },
     });
 
 //////////// get brands, units & categories ////////////
@@ -216,7 +220,7 @@
         if(jQuery("#form_branch_office").valid() && sid != null && mid != null && lid != null && valState(sid) && valLoc(lid) && valMun(mid)) {
         console.log('in');
              jQuery.ajax({
-                url: "{{=URL(c='branches_ajax', f='update_branch')}}",
+                url: "{{=URL(c='common', f='echo')}}",
                 data: { 
                 	name:jQuery('#name').val(),
                     address:jQuery('#address').val(),
@@ -257,59 +261,94 @@
         }
     });
 
-    function selectS(id) {
+    function selectBrands(id) {
         jQuery.ajax({
             type: "POST",
-            url: "{{=URL(c='common', f='get_states')}}",
-            success: function(results) {
-                state
-                    .html(results)
+            url: "{{=URL(c='products_ajax', f='get_brands')}}",
+            dataType: "json",
+            success: function(data) {
+                options = '';
+                for(key in data){
+                    val = data[key].brand_descriptions;
+                    options += '<option value="' + val.brand_id + '">' + val.name + '</option>\n';
+                }
+                brand_id
+                    .html(options)
                     .prepend('<option value="">Selecccionar</option>')
                     .trigger("liszt:updated");
                 },
             complete: function() {
-                state
+                brand_id
                     .find('option[value='+id+']').attr('selected',true)
                     .trigger("liszt:updated");
             }
         });
-
     }
 
-    function selectM(v, id) {
+    function selectUnit(id) {
         jQuery.ajax({
             type: "POST",
-            url: "{{=URL(c='common', f='get_municipalities')}}",
-            data: {id: v},
-            success: function(results) {
-                municipality
-                    .html(results)
+            url: "{{=URL(c='products_ajax', f='get_units')}}",
+            dataType: "json",
+            success: function(data) {
+                options = '';
+                for(key in data){
+                    val = data[key];
+                    options += '<option value="' + val.id + '">' + val.name + '</option>\n';
+                }
+                unit_id
+                    .html(options)
                     .prepend('<option value="">Selecccionar</option>')
+                    .trigger("liszt:updated");
+                },
+            complete: function() {
+                unit_id
+                    .find('option[value='+id+']').attr('selected',true)
+                    .trigger("liszt:updated");
+            }
+        });
+    }
+
+    function selectCategory(id) {
+        jQuery.ajax({
+            type: "POST",
+            url: "{{=URL(c='products_ajax', f='get_categories')}}",
+            dataType: "json",
+            success: function(data) {
+                options = '';
+                for(key in data){
+                    val = data[key].category_descriptions;
+                    options += '<option value="' + val.category_id + '">' + val.name + '</option>\n';
+                }
+                category_id
+                    .html(options)
+                    .prepend('<option value="">Selecccionar</option>')
+                    .trigger("liszt:updated");
+                },
+            complete: function() {
+                category_id
+                    .find('option[value='+id+']').attr('selected',true)
+                    .trigger("liszt:updated");
+            }
+        });
+    }
+
+    function selectVendor(ids) {
+        jQuery.ajax({
+            type: "POST",
+            url: "{{=URL(c='vendors_ajax', f='get_vendors')}}",
+            success: function(results) {
+                vendors 
+                    .html(results)
                     .trigger("liszt:updated");
             },
             complete: function() {
-                municipality
-                    .find('option[value='+id+']').attr('selected',true)
-                    .trigger("liszt:updated");
-            }
-        });
-    }
-
-    function selectL(v, id) {
-        jQuery.ajax({
-                type: "POST",
-                data: {municipality_id: v},
-                url: "{{=URL(c='common', f='get_localities')}}",
-                success: function(results) {
-                    locality
-                        .html(results)
-                        .prepend('<option value="">Selecccionar</option>')
-                        .trigger("liszt:updated");
-                },
-                complete: function() {
-                    locality
+                for(k in ids) {
+                    id = ids[k].id;
+                    vendors
                         .find('option[value='+id+']').attr('selected',true)
                         .trigger("liszt:updated");
+                }
             }
         });
     }
