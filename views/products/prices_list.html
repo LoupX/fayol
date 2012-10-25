@@ -5,6 +5,8 @@
 <script type="text/javascript" src="{{=URL('static', 'js/custom/tables.js')}}"></script>
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/chosen.jquery.min.js')}}"></script>	
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/scroll.js')}}"></script>
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.validate.min.js')}}"></script>
+
 <style type="text/css">
     .ellol {
         border: 1px solid red;
@@ -51,7 +53,7 @@
                        
                     <form id="form_agent2" class="stdform stdform2" method="post" action="">
                          <p style="margin-top: 1px;">
-                            <label>Productos</label>
+                            <label>Listas de precios.</label>
                             <span class="field">
                                 <select id="product" name="product" data-placeholder="Seleccionar" style="width:350px;" tabindex="1">
                                     <option value="">Seleccionar</option>
@@ -59,7 +61,7 @@
                             </span>
                         </p>
                         <p style="margin-top: 1px;">
-                            <label>Nombre de la lista</label>
+                            <label>Nombre</label>
                             <span class="field">
                                 <input type="text" id="name-list" name="name-list" class="smallinput" onfocus="remove_Class(this.id);"disabled>
                             </span>
@@ -239,7 +241,7 @@ var globalid = '';
                             data.price_list[e].name, 
                             data.price_list[e].price, 
                             '<input type="radio" value="'+data.price_list[e].id+'" name="radios" '+checked+'/>', 
-                            "<a href=\"{{=URL(c='products', f='list_quickedit.html')}}?id="+data.price_list[e].id+"\" class=\"toggle\">Editar</a>"
+                            "<a href=\"{{=URL(c='products', f='list_quickedit')}}?id="+data.price_list[e].id+"\" class=\"toggle\">Editar</a>"
                             ];
                         cont++;
                     }

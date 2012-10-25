@@ -10,7 +10,7 @@
     <div class="one_half last">
          <p>
             <label for="title">Precio</label>
-            <input type="text" name="price" id="price" value="{{=price}}" />
+            <input type="text" name="pricelist" id="pricelist" value="{{=price}}" />
         </p>
     </div><!-- one_half last -->
     
@@ -23,33 +23,52 @@
 </form>
 
 <script type="text/javascript">
-    jQuery("#submit").on("click", function(e){
-        e.preventDefault();
-        
-        jQuery("#form_list").validate({
+    jQuery("#form_list").validate({
             rules: {
                 name: "required",
-                price: "required"
+                pricelist: "required"
                 
             },
             messages: {
                 name: "Ingrese el nombre de la lista.",
-                price: "Ingrese el precio."
+                pricelist: "Ingrese el precio."
             }
         });
+
+    jQuery(".quickformbutton > #submit").on("click", function(e){
+        e.preventDefault();
         
         if(jQuery("#form_list").valid()) {
-        
+
             jQuery.ajax({
-                url: "{{=URL(c='products_ajax', f='update_brand')}}",
+                url: "{{=URL(c='products_ajax', f='update_price')}}",
                 type: "POST",
                 data: { 
-                    id:{{=request.vars.id}},
-                    name:jQuery('#name').val(),
-                    price:jQuery('#price').val(),
+                    id: {{=request.vars.id}},
+                    name: jQuery('#name').val(),
+                    price: jQuery('#pricelist').val(),
                 },
                 success:function(data){
-                    console.log('this');
+                    if(data != 0 && data){
+                        jQuery('.toggledata button.update').fadeIn(1600,function(){
+                            jQuery(this).parents('.toggledata').animate({height: 0},200, function(){
+                                jQuery(this).parents('tr').prev().removeClass('hiderow');
+                                if(result) {    
+                                    var prev = jQuery(this).parents('tr').prev().find('td'),
+                                        curr = jQuery(this).parents('tr').find('#name, #pricelist');
+                                    jQuery(prev[0]).html(jQuery(curr[0]).val().toUpperCase()); 
+                                    jQuery(prev[1]).html(jQuery(curr[1]).val().toUpperCase());   
+                                }                                           
+                                jQuery(this).parents('tr').remove();
+                            });
+                            return false;
+                        });
+                        result = true;
+                        toggleData.append(data);                        //inject data read from server
+                    }
+                    else{
+                        result = false;
+                    }
                 }
             });
        
