@@ -68,22 +68,22 @@
 
 <script type="text/javascript">
     
+   jQuery("#form_measuring_unit").validate({
+        rules: {
+            measuring_unit: "required",
+            abbreviation: "required",
+            
+        },
+        messages: {
+            measuring_unit: "Ingrese el nombre de la unidad de medida",
+            abbreviation: "Ingrese una abreviación para la unidad de medida"
+        }
+    });
+    
     //form and shit
     //send form
     jQuery('#submit').live('click', function(e) {
         e.preventDefault();
-        
-        jQuery("#form_measuring_unit").validate({
-            rules: {
-                measuring_unit: "required",
-                abbreviation: "required",
-                
-            },
-            messages: {
-                measuring_unit: "Ingrese el nombre de la unidad de medida",
-                abbreviation: "Ingrese una abreviación para la unidad de medida"
-            }
-        });
         
         jQuery('.msgerror').hide();
         jQuery('.exists').hide();

@@ -187,7 +187,6 @@ branches_select.change( function() {
         resp = jQuery('span#resp');
         resp.html('');
 
-    //console.log(id);
     //insert here an ajax function and shit
     jQuery.ajax({ 
       url: "{{=URL(c='branches_ajax', f='get_branch_information')}}",
@@ -195,8 +194,6 @@ branches_select.change( function() {
       data: { id: id }, 
       dataType:"json",
       success: function (data) {
-        //console.log(data);
-        //receive something like data = {"name":"name","state":"state"}
         name.html(data.branches['name']);       
         suburb.html(data.company_addresses['suburb'])
         address.html(data.company_addresses['address']);       
@@ -229,23 +226,6 @@ branches_select.change( function() {
   }
 
 });
-
-/*jQuery('input[name=status]').live('click', function() {
-  var i = jQuery(this).val(),
-      resp = jQuery('span#resp');
-  //ajax
-  if (i != 0) {
-    jQuery.ajax({ 
-      url: '', 
-      type: 'POST',         
-      data: { i: i }, 
-      success: function (data) {
-        //data = Activado o Desactivado
-        resp.html('algo');
-      }
-    }); 
-  }
-});*/
 
 function cleanFields() {
   jQuery('#edit_branch').removeAttr('href');

@@ -1,13 +1,7 @@
 {{extend 'base/layout.html'}}
   
 {{block scripts_extra}}
-<script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.dataTables.min.js')}}"></script>
-<script type="text/javascript" src="{{=URL('static', 'js/custom/tables.js')}}"></script>
-
-<script type="text/javascript" src="{{=URL('static', 'js/custom/forms.js')}}"></script>
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.tagsinput.min.js')}}"></script>
-<script type="text/javascript" src="{{=URL('static', 'js/plugins/charCount.js')}}"></script>
-<script type="text/javascript" src="{{=URL('static', 'js/plugins/ui.spinner.min.js')}}"></script>
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/chosen.jquery.min.js')}}"></script>
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.validate.min.js')}}"></script>
 {{end}}
@@ -56,7 +50,7 @@
            	      </tr>
                   <tr>
                 	  <td>Marca:</td>
-                	  <td><strong id="brand"></strong></td>
+                	  <td><strong id="brand_id"></strong></td>
               	  </tr>
               	  <tr>
                 	  <td>Modelo:</td>
@@ -70,11 +64,11 @@
               <table cellpadding="0" cellspacing="0" class="table invoice">
               	  <tr>
                 	  <td>Unidad de medida:</td>
-                	  <td><strong id="locality" id="unit"></strong></td>
+                	  <td><strong id="unit"></strong></td>
               	  </tr>
               	  <tr>
                	    <td>Unidad de parte:</td>
-               	    <td><strong id="zip_code" id="part_number"></strong></td>
+               	    <td><strong id="part_number"></strong></td>
            	      </tr>
               	  <tr>
                 	  <td width="30%">Numero de serie:</td>
@@ -117,7 +111,7 @@
               </table>
             </div><!--one_half-->
             
-            <a href="#" id="edit_warehouse" data-id="" style="float:right;">
+            <a href="#" id="edit_product" data-id="" style="float:right;">
                 <span class="stdbtn btn_orange">Editar</span>
             </a>
 
@@ -215,6 +209,84 @@
         
 	</div><!-- centercontent -->   
 </div><!--bodywrapper-->  
+    
+<script type="text/javascript">
+var id = {{=request.vars.id}}
+	
+	jQuery('input:checkbox').uniform();
+
+    var code = jQuery('#code'),	
+    	name_product = jQuery('#name'),
+        alternative_name = jQuery('#alternative_name'),
+        alternative_code = jQuery('#alternative_code'),
+        brand_id = jQuery('#brand_id'),
+        model = jQuery('#model'),
+        unit = jQuery('#unit'),       
+        part_number = jQuery('#part_number'),
+        serial_number = jQuery('#serial_number'),
+        category = jQuery('#category'),  
+        vendors = jQuery('#vendors'), 
+        standard_cost = jQuery('#standard_cost'), 
+        markup = jQuery('#markup'), 
+        description = jQuery('#description'),       
+        status_product = jQuery('input[name=status]'),
+        resp = jQuery('span#resp');
+        resp.html('');
+
+//////////// get info ////////////
+
+  jQuery.ajax({ 
+      url: "{{=URL(c='products_ajax', f='get_product_information')}}",
+      type: "POST",
+      data: { id: id }, 
+      dataType:"json",
+      success: function (data) {
+	        code.html(data.products['code']);
+            name_product.html(data.product_descriptions['name']);
+            alternative_name.html(data.product_descriptions['alternative_name']);
+            alternative_code.html(data.products['alternative_code']);
+            brand_id.html(data.brand_descriptions['name']);
+            model.html(data.products['model']);
+            unit.html(data.units['name']);
+            part_number.html(data.products['part_number']);
+            serial_number.html(data.products['serial_number']);
+            category.html(data.category_descriptions['name']);  
+            v_name = '';
+            for(k in data.vendors)
+            {
+	            v_name += data.vendors[k]['name'] + ', ';
+            }
+            v_name = v_name.slice(0, (v_name.length-2)) + '.';
+            vendors.html(v_name);            
+            standard_cost.html(data.products['standard_cost']);
+            markup.html(data.products['markup']);
+            description.html(data.product_descriptions['description']);
+        
+	        jQuery('#edit_product')
+	        .attr('href', "{{=URL(c='products', f='update_product')}}"+'?id='+data.products.id);
+	        
+	        status_product.val(id).removeAttr('disabled');
+	        status_product.parent().parent().removeClass('disabled'); 
+	        status_product.parent().parent().attr('style', 'display:none;'); 
+	
+	        if (data.products['status'] == true) {
+	          status_product.parent().addClass('checked');
+	          status_product.attr('onclick','chk('+id+',"True")');
+			  status_product.attr('disabled','disabled');
+	          resp.html('Activado.');
+			  resp.attr('style','color:#59BF04');
+	        } else{
+	          status_product.parent().removeClass('checked');
+	          status_product.attr('onclick','chk('+id+',"False")');
+			  status_product.attr('disabled','disabled');
+	          resp.html('Desactivado.');
+			  resp.attr('style','color:#A31314');
+	        };
+           
+      }
+  });     
+    
+</script>    
     
 </body>
 
