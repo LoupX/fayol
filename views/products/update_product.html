@@ -150,6 +150,28 @@
     var bid,
         uid,
         cid;
+///////// change methods for selects /////////
+    brand_id.change( function() {
+        bid = jQuery(this).find(':selected').val();
+        if(bid != '') {
+            brand_id.siblings('div').removeClass('ellol');
+        }
+    });
+    
+    unit_id.change( function() {
+        uid = jQuery(this).find(':selected').val();
+        if(uid != '') {
+            unit_id.siblings('div').removeClass('ellol');
+        }
+    });
+    
+    category_id.change( function() {
+        cid = jQuery(this).find(':selected').val();
+        if(cid != '') {
+            category_id.siblings('div').removeClass('ellol');
+        }
+    });
+
 
 //////////// get info ////////////
     jQuery.ajax({
@@ -186,8 +208,8 @@
             rules: {
                 name: "required",
                 standard_cost: {
-                	number: true,
-	                required: false
+                    number: true,
+                    required: false
                 },
                 markup: {
                     number: true,
@@ -199,48 +221,62 @@
                 standard_cost: "Ingrese numeros decimales",
                 markup: "Ingrese numeros decimales"
             }
-    });
-    
-//////////// send form ////////////
+        });
+
+//////////// send form ////////////                 
     jQuery('#submit').live('click', function(e) {
         e.preventDefault();
-        
-        valState(sid);
-        valLoc(lid);
-        valMun(mid);
-        
-        var sendid = '{{=request.vars.id}}';
+        valbra(bid);
+        valuni(uid);
+        valcat(cid);
         
         jQuery('.msgerror').hide();
         jQuery('.exists').hide();
         jQuery('.msgsuccess').hide();
 
-        if(jQuery("#form_branch_office").valid() && sid != null && mid != null && lid != null && valState(sid) && valLoc(lid) && valMun(mid)) {
-        console.log('in');
+        if(jQuery("#form_product").valid() && valbra(bid) && valuni(uid) && valcat(cid)) {
              jQuery.ajax({
-                url: "{{=URL(c='common', f='echo')}}",
+                url: "{{=URL(c='products_ajax', f='')}}", //add here your python's function to update products
                 data: { 
-                	name:jQuery('#name').val(),
-                    address:jQuery('#address').val(),
-                    suburb:jQuery('#suburb').val(),
-                    state: sid,
-                    municipality: mid,
-                    locality: lid,
-                    zip_code:jQuery('#zip_code').val(),
-                    business_name:jQuery('#business_name').val(),
-                    rfc:jQuery('#rfc').val(),
-                    tax:jQuery('#tax').val(),
-                    id: sendid
+                    name:jQuery('#name').val(),
+                    alternative_name:jQuery('#alternative_name').val(),
+                    alternative_code:jQuery('#alternative_code').val(),
+                    brand_id:jQuery('#brands').val(),
+                    model:jQuery('#model').val(),
+                    unit_id:jQuery('#unit').val(),
+                    part_number:jQuery('#part_number').val(),
+                    serial_number:jQuery('#serial_number').val(),
+                    category_id:jQuery('#category').val(),
+                    vendors:jQuery('#vendors').val() ? (jQuery('#vendors').val()) : '',
+                    standard_cost:jQuery('#standard_cost').val(),
+                    markup:jQuery('#markup').val(),
+                    description:jQuery('#description').val(),
+                    id: id;
                 },
                 type: 'POST',
                 success:function(data){
                     if(data != 0 && data){
                         jQuery('.msgsuccess').fadeIn(1600, function() {
                             jQuery('.msgsuccess').fadeOut('slow');
+                            redirect();
                         });
-                        sid, mid, lid = 0;
-                        id = '';
-                        setTimeout('redirect()', 1600);
+
+                        // deleteFields();
+                        // bid = 0;
+                        // uid = 0;
+                        // cid = 0;
+
+                        // jQuery('#brands').attr('tabindex','4');
+                        // jQuery('#brands_chzn').remove();
+                        // jQuery('#brands').val('').removeClass('chzn-done').chosen();
+                        
+                        // jQuery('#unit').attr('tabindex','6');
+                        // jQuery('#unit_chzn').remove();
+                        // jQuery('#unit').val('').removeClass('chzn-done').chosen();
+                        
+                        // jQuery('#category').attr('tabindex','9');
+                        // jQuery('#category_chzn').remove();
+                        // jQuery('#category').val('').removeClass('chzn-done').chosen();
                     }
                     else if(data == 0) {
                         jQuery('.exists').fadeIn(1600);
@@ -258,6 +294,52 @@
             jQuery('body','html',window, document).animate({scrollTop:0},1000);
         }
     });
+
+    function valbra(s) {
+        var bol;
+        if (s != 0) {
+            bol = true;
+            jQuery('#brands').siblings('div').removeClass('ellol');
+        } else if(s != null){
+            bol = false;
+            jQuery('#brands').siblings('div').addClass('ellol');
+        } else{
+            bol = false;
+            jQuery('#brands').siblings('div').addClass('ellol');
+        };
+        return bol
+    }
+    
+    function valuni(s) {
+        var bol;
+        if (s != 0) {
+            bol = true;
+            jQuery('#unit').siblings('div').removeClass('ellol');
+        } else if(s != null){
+            bol = false;
+            jQuery('#unit').siblings('div').addClass('ellol');
+        } else{
+            bol = false;
+            jQuery('#unit').siblings('div').addClass('ellol');
+        };
+        return bol
+    }
+    
+    function valcat(s) {
+        var bol;
+        if (s != 0) {
+            bol = true;
+            jQuery('#category').siblings('div').removeClass('ellol');
+        } else if(s != null){
+            bol = false;
+            jQuery('#category').siblings('div').addClass('ellol');
+        } else{
+            bol = false;
+            jQuery('#category').siblings('div').addClass('ellol');
+        };
+        return bol
+    }
+
 
     function selectBrands(id) {
         jQuery.ajax({
@@ -352,53 +434,10 @@
     }
 
     function redirect() {
-        window.location.replace("{{=URL(c='branches', f='branch_office')}}");
+        window.location.replace("{{=URL(c='products', f='index')}}");
     }
     
-    function valState(ss) {
-    var bol;
-    if (ss != 0) {
-        bol = true;
-        jQuery('#states').siblings('div').removeClass('ellol');
-    } else if(ss != null){
-        bol = false;
-        jQuery('#states').siblings('div').addClass('ellol');
-    } else{
-        bol = false;
-        jQuery('#states').siblings('div').addClass('ellol');
-    };
-    return bol
-    }
-    
-    function valLoc(ss) {
-    var bol;
-    if (ss != 0) {
-        bol = true;
-        jQuery('#locality').siblings('div').removeClass('ellol');
-    } else if(ss != null){
-        bol = false;
-        jQuery('#locality').siblings('div').addClass('ellol');
-    } else{
-        bol = false;
-        jQuery('#locality').siblings('div').addClass('ellol');
-    };
-    return bol
-    }
-    
-    function valMun(ss) {
-    var bol;
-    if (ss != 0) {
-        bol = true;
-        jQuery('#municipality').siblings('div').removeClass('ellol');
-    } else if(ss != null){
-        bol = false;
-        jQuery('#municipality').siblings('div').addClass('ellol');
-    } else{
-        bol = false;
-        jQuery('#municipality').siblings('div').addClass('ellol');
-    };
-    return bol
-    }
+
 
     
 </script>
