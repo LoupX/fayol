@@ -67,7 +67,9 @@
 
 <script type="text/javascript">
     
-    jQuery('.dataTables_length select, input:checkbox, input:radio').uniform();
+    var contador = "1";	
+    
+    /*jQuery('.dataTables_length select, input:checkbox, input:radio').uniform();*/
 
     ajaxFilter('TRUE');
 
@@ -125,7 +127,7 @@
                             category.name,
                             brand.name,
                             price,
-                            "<input type=\"checkbox\" " + checked + " value=\"" + product.id + "\" />", 
+                            "<div class='checker' id='uniform-undefined'><span class='checked'><input type=\"checkbox\" " + checked + " value=\"" + product.id + "\" /></span></div>", 
                             "<a href=\"{{=URL(c='products', f='view_product')}}?id=" + product.id + "\">Ver</a>"
                         ];
                    cont++;
@@ -170,10 +172,10 @@
             ]
         });
         
-        jQuery('.dataTables_length select, input:checkbox, input:radio').uniform();
+        /*jQuery('.dataTables_length select, input:checkbox, input:radio').uniform();*/
         togglestatus();
         jQuery('#table_paginate span, #table_length select').on('click', function() {
-            jQuery('.dataTables_length select, input:checkbox, input:radio').uniform();
+            /*jQuery('.dataTables_length select, input:checkbox, input:radio').uniform();*/
             togglestatus();
         });
     }
@@ -193,14 +195,35 @@
                         var row = jQuery(e.currentTarget).closest('tr').get(0);
                         oTable.fnDeleteRow(oTable.fnGetPosition(row));
                         togglestatus();
-                        jQuery('input:checkbox, input:radio').uniform();
+                        /*jQuery('input:checkbox, input:radio').uniform();*/
                     }
                 }
             });
         });
+        
+        if(contador == "1")
+        {
+	        jQuery('input:radio').uniform();
+	        jQuery('select').uniform();
+	        contador++;
+        }
+        else
+        {
+	        no_uniform();
+	        jQuery('input:radio').uniform();
+	        jQuery('select').uniform();
+        }
+  
     }
 
-
+    function no_uniform()
+    {
+        jQuery('input:radio').unwrap().unwrap();
+    	jQuery('select').siblings("span").remove();
+    	jQuery('select').unwrap();
+    	jQuery('input:radio').unbind(".uniform");
+    	jQuery('select').unbind(".uniform"); 
+    }
  
 </script>
 

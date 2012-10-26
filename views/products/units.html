@@ -59,7 +59,9 @@
 
 <script type="text/javascript">
     
-    jQuery('.dataTables_length select, input:checkbox, input:radio').uniform();
+    var contador = "1";	
+    
+    /*jQuery('.dataTables_length select, input:checkbox, input:radio').uniform();*/
 
     ajaxFilter('TRUE');
 
@@ -82,7 +84,7 @@
                     aaData[cont] = [
                             units.name, 
                             units.abbreviation, 
-                            "<input type=\"checkbox\" " + checked + " value=\"" + units.id + "\" />", 
+                            "<div class='checker' id='uniform-undefined'><span class='checked'><input type=\"checkbox\" " + checked + " value=\"" + units.id + "\" /></span></div>", 
                             "<a href=\"{{=URL(c='products', f='units_quickedit.html')}}?id=" + units.id + "\" class=\"toggle\">Editar</a>"
                         ];
                    cont++;
@@ -124,7 +126,7 @@
             ]
         });
         
-        jQuery('#table_length select, input:checkbox, input:radio').uniform();
+        /*jQuery('#table_length select, input:checkbox, input:radio').uniform();*/
         quickEdit();
         togglestatus();
         setEvents();
@@ -132,7 +134,7 @@
 
     function setEvents() {
         jQuery('#table_paginate span, #table_length select').on('click change', function(e) {
-            jQuery('#table input:checkbox, #table input:radio').uniform();
+            /*jQuery('#table input:checkbox, #table input:radio').uniform();*/
             togglestatus();
         });
     }
@@ -192,11 +194,33 @@
                         var row = jQuery(e.currentTarget).closest('tr').get(0);
                         oTable.fnDeleteRow(oTable.fnGetPosition(row));
                         togglestatus();
-                        jQuery('.dataTables_length select, input:checkbox, input:radio').uniform();
+                        /*jQuery('.dataTables_length select, input:checkbox, input:radio').uniform();*/
                     }
                 }
             });
         });
+        
+        if(contador == "1")
+        {
+	        jQuery('input:radio').uniform();
+	        jQuery('select').uniform();
+	        contador++;
+        }
+        else
+        {
+	        no_uniform();
+	        jQuery('input:radio').uniform();
+	        jQuery('select').uniform();
+        }
+    }
+ 
+    function no_uniform()
+    {
+        jQuery('input:radio').unwrap().unwrap();
+    	jQuery('select').siblings("span").remove();
+    	jQuery('select').unwrap();
+    	jQuery('input:radio').unbind(".uniform");
+    	jQuery('select').unbind(".uniform"); 
     }
  
 </script>
