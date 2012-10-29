@@ -63,7 +63,7 @@
 	var contador = "1";	
 	
     ajaxFilter('TRUE');
-
+    
     jQuery('.formwrapper input:radio').on('change', function(e) {
         ajaxFilter(e.currentTarget.value);
     });
@@ -81,10 +81,11 @@
                     brand = data[row].brands;
                     description = data[row].brand_descriptions;
                     checked = (brand.status) ? "checked=\"checked\"" : "";
+                    checker_span = (brand.status) ? "class=\"checked\"" : "";
                     aaData[cont] = [
                             description.name, 
                             description.description, 
-                            "<div class='checker' id='uniform-undefined'><span class='checked'><input type=\"checkbox\" " + checked + " value=\"" + brand.id + "\" /></span></div>", 
+                            "<div class='checker' id='uniform-undefined'><span " + checker_span + "><input type=\"checkbox\" " + checked + " value=\"" + brand.id + "\" /></span></div>",
                             "<a href=\"{{=URL(c='products', f='brand_quickedit.html')}}?id=" + brand.id + "\" class=\"toggle\">Editar</a>"
                         ];
                    cont++;
@@ -97,7 +98,7 @@
     }
     
     function loadTable(aaData) {
-        jQuery("#table").dataTable( {
+        jQuery("#table").dataTable( {      	
             "bDestroy": true,
             "oLanguage": {
                 "sProcessing": "Procesando...",
@@ -180,6 +181,7 @@
     function togglestatus() {
         jQuery('.stdtable input:checkbox').unbind('change');
         jQuery('.stdtable input:checkbox').on("change", function(e){
+        	jQuery.uniform.update(e.currentTarget);
             jQuery.ajax({
                 url: "{{=URL(c='products_ajax', f='toggle_brand')}}",
                 type: "POST",
@@ -220,7 +222,6 @@
     	jQuery('input:radio').unbind(".uniform");
     	jQuery('select').unbind(".uniform"); 
    }
- 
 </script>
 
 </body>

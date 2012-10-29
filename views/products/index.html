@@ -95,6 +95,7 @@
                     brand = data[row].brand_descriptions;
                     price = 'No asignado';
                     
+                    checker_span = (product.status) ? "class=\"checked\"" : "";
                     checked = (product.status) ? "checked=\"checked\"" : "";
                     
                     if(prices.length > 0) {
@@ -127,7 +128,7 @@
                             category.name,
                             brand.name,
                             price,
-                            "<div class='checker' id='uniform-undefined'><span class='checked'><input type=\"checkbox\" " + checked + " value=\"" + product.id + "\" /></span></div>", 
+                            "<div class='checker' id='uniform-undefined'><span " + checker_span + "><input type=\"checkbox\" " + checked + " value=\"" + product.id + "\" /></span></div>", 
                             "<a href=\"{{=URL(c='products', f='view_product')}}?id=" + product.id + "\">Ver</a>"
                         ];
                    cont++;
@@ -172,10 +173,8 @@
             ]
         });
         
-        /*jQuery('.dataTables_length select, input:checkbox, input:radio').uniform();*/
         togglestatus();
         jQuery('#table_paginate span, #table_length select').on('click', function() {
-            /*jQuery('.dataTables_length select, input:checkbox, input:radio').uniform();*/
             togglestatus();
         });
     }
@@ -183,6 +182,7 @@
     function togglestatus() {
         jQuery('.stdtable input:checkbox').unbind('change');
         jQuery('.stdtable input:checkbox').on("change", function(e){
+        	jQuery.uniform.update(e.currentTarget);
             jQuery.ajax({
                 url: "{{=URL(c='products_ajax', f='toggle_product')}}",
                 type: "POST",

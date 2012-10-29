@@ -61,8 +61,6 @@
 	
 	var contador = "1";	
     
-    /*jQuery('.dataTables_length select, input:checkbox, input:radio').uniform();*/
-
     ajaxFilter('TRUE');
 
     jQuery('.formwrapper input:radio').on('change', function(e) {
@@ -82,10 +80,11 @@
                     category = data[row].categories;
                     description = data[row].category_descriptions;
                     checked = (category.status) ? "checked=\"checked\"" : "";
+                    checker_span = (category.status) ? "class=\"checked\"" : "";
                     aaData[cont] = [
                             description.name, 
                             description.description, 
-                            "<div class='checker' id='uniform-undefined'><span class='checked'><input type=\"checkbox\" " + checked + " value=\"" + category.id + "\" /></span></div>", 
+                            "<div class='checker' id='uniform-undefined'><span " + checker_span + "><input type=\"checkbox\" " + checked + " value=\"" + category.id + "\" /></span></div>", 
                             "<a href=\"{{=URL(c='products', f='categories_quickedit.html')}}?id=" + category.id + "\" class=\"toggle\">Editar</a>"
                         ];
                    cont++;
@@ -127,7 +126,7 @@
             ]
         });
         
-        /*jQuery('#table_length select, input:checkbox, input:radio').uniform();*/
+        
         quickEdit();
         togglestatus();
         setEvents();
@@ -135,7 +134,6 @@
 
     function setEvents() {
         jQuery('#table_paginate span, #table_length select').on('click change', function(e) {
-            /*jQuery('#table input:checkbox, #table input:radio').uniform();*/
             togglestatus();
         });
     }
@@ -183,6 +181,7 @@
     function togglestatus() {
         jQuery('.stdtable input:checkbox').unbind('change');
         jQuery('.stdtable input:checkbox').on("change", function(e){
+        	jQuery.uniform.update(e.currentTarget);
             jQuery.ajax({
                 url: "{{=URL(c='products_ajax', f='toggle_category')}}",
                 type: "POST",
@@ -195,7 +194,6 @@
                         var row = jQuery(e.currentTarget).closest('tr').get(0);
                         oTable.fnDeleteRow(oTable.fnGetPosition(row));
                         togglestatus();
-                        /*jQuery('.dataTables_length select, input:checkbox, input:radio').uniform();*/
                     }
                 }
             });

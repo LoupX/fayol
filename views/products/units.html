@@ -81,10 +81,11 @@
                 for(row in data){
                     units = data[row];  
                     checked = (units.status) ? "checked=\"checked\"" : "";
+                    checker_span = (units.status) ? "class=\"checked\"" : "";
                     aaData[cont] = [
                             units.name, 
                             units.abbreviation, 
-                            "<div class='checker' id='uniform-undefined'><span class='checked'><input type=\"checkbox\" " + checked + " value=\"" + units.id + "\" /></span></div>", 
+                            "<div class='checker' id='uniform-undefined'><span " + checker_span + "><input type=\"checkbox\" " + checked + " value=\"" + units.id + "\" /></span></div>", 
                             "<a href=\"{{=URL(c='products', f='units_quickedit.html')}}?id=" + units.id + "\" class=\"toggle\">Editar</a>"
                         ];
                    cont++;
@@ -182,6 +183,7 @@
     function togglestatus() {
         jQuery('.stdtable input:checkbox').unbind('change');
         jQuery('.stdtable input:checkbox').on("change", function(e){
+        	jQuery.uniform.update(e.currentTarget);
             jQuery.ajax({
                 url: "{{=URL(c='products_ajax', f='toggle_unit')}}",
                 type: "POST",
@@ -194,7 +196,6 @@
                         var row = jQuery(e.currentTarget).closest('tr').get(0);
                         oTable.fnDeleteRow(oTable.fnGetPosition(row));
                         togglestatus();
-                        /*jQuery('.dataTables_length select, input:checkbox, input:radio').uniform();*/
                     }
                 }
             });
