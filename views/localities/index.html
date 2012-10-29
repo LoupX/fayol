@@ -1,0 +1,99 @@
+{{extend 'base/layout.html'}}
+
+{{block scripts_extra}}
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.dataTables.min.js')}}"></script>
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/chosen.jquery.min.js')}}"></script>
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.validate.min.js')}}"></script>
+{{end}}
+
+{{block sidebar_menu}}
+{{include 'localities/sidebar.html'}}
+{{end}}
+
+{{block content}}
+    <div class="centercontent">
+    
+        <div class="pageheader">
+        
+            <h1 class="pagetitle">{{=title}}</h1>
+            
+        </div><!--pageheader-->
+        
+        <div id="contentwrapper" class="contentwrapper">
+        
+            <table cellpadding="0" cellspacing="0" border="0" class="stdtable" id="table">
+                <thead>
+                    <tr>
+                        <th class="head0">Ciudad</th>
+                        <th class="head1">Municipio </th>
+                        <th class="head0">Estado </th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th class="head0">Ciudad</th>
+                        <th class="head1">Municipio </th>
+                        <th class="head0">Estado </th>    
+                    </tr>
+                </tfoot>
+            </table>
+        </div><!--contentwrapper-->
+        
+        <br clear="all" />
+        
+	</div><!-- centercontent -->
+    
+    
+</div><!--bodywrapper-->
+
+<script type="text/javascript">
+
+   ajaxFilter('TRUE');
+    
+    function ajaxFilter(query) {
+        jQuery.ajax({
+            url: "{{=URL(c='common', f='get_all_localities')}}",
+            type: "POST",
+            data: {query: query},
+            dataType: "json",
+           
+            complete: function() {
+            	loadTable(aaData);
+            }
+        });
+    }
+    
+    function loadTable(aaData) {
+        jQuery("#table").dataTable( {      	
+            "bDestroy": true,
+            "oLanguage": {
+                "sProcessing": "Procesando...",
+                "sLengthMenu": "Ver _MENU_ registros",
+                "sZeroRecords": "No se encontraron registros",
+                "sEmptyTable": "No hay registros en esta tabla",
+                "sLoadingRecords": "Cargando...",
+                "sInfo": "Viendo _START_ - _END_ de _TOTAL_ registros",
+                "sInfoEmpty": "Viendo 0 - 0 de 0 registros",
+                "sInfoFiltered": "(Flitrado de _MAX_ registros totales)",
+                "sSearch": "Buscar",
+                "oPaginate": {
+                    "sFirst":"Primero",
+                    "sPrevious":"Anterior",
+                    "sNext":"Siguiente",
+                    "sLast":"Ultimo"
+                },
+            },
+            "sPaginationType": "full_numbers",
+            "aaData": aaData,
+            "aoColumns": [
+                {"sTitle":"Ciudad"},
+                {"sTitle":"Municipio"},
+                {"sTitle":"Estado"}
+            ]
+        });
+    }
+</script>
+
+</body>
+</html>
+{{end}}
