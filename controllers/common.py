@@ -68,6 +68,23 @@ def get_localities():
     return options
 
 @auth.requires_login()
+def get_all_localities():
+    try:
+        query = db.localities.id>0
+        query &= db.localities.municipality_id==db.municipalities.id
+        query &= db.municipalities.state_id==db.states.id
+        result = db(query).select(
+            db.localities.name, db.municipalities.name,
+            db.states.name).as_list()
+    except:
+        db.rollback()
+        return ''
+    else:
+        from gluon.contrib import simplejson
+        result = simplejson.dumps(result)
+        return str(result)
+
+@auth.requires_login()
 def get_banks():
     b = db.banks
     rows = []
