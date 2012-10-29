@@ -47,25 +47,63 @@
                 
                     <form id="form_product" class="stdform stdform2" method="post" action="">                                       
                         <p>
-                                <label>Nombre *</label>
-                                <span class="field"><input type="text" name="name" id="name" class="smallinput" tabindex="1"/></span>
+                            <label>Nombre del Paquete*</label>
+                            <span class="field"><input type="text" name="name" id="name" class="smallinput" tabindex="1"/></span>
                         </p>
                         <p style="margin-top:1px;">
-                                <label>Productos</label>
-                                <span class="field">
-                                <select name="products" id="products" multiple="multiple" size="10" data-placeholder="Seleccionar" class="chzn-select" tabindex="2"></select>
-                               
-                                </span>
+                            <label>Productos</label>
+                            <span class="field">
+                                <select name="products" id="products" multiple="multiple" size="10" data-placeholder="Seleccionar" class="chzn-select" tabindex="2"></select>  
+                            </span>
+                        </p>
+                        <p>
+                            <label>Costo estandar</label>
+                            <span class="field">
+                                <input type="text" name="standard_cost" id="standard_cost" class="smallinput" placeholder="0.00" tabindex="3"/>
+                            </span>
+                        </p>
+                        <p>
+                            <label>Margen de utilidad</label>
+                            <span class="field"><input type="text" name="markup" id="markup" class="smallinput" tabindex="4"/></span>
+                        </p>
+                        <p>
+                            <label>Descripción</label>
+                            <span class="field">
+                                <textarea cols="80" rows="5" name="description" id="description" class="smallinput" tabindex="5"></textarea>
+                            </span>
                         </p>
                         <p class="stdformbutton">
-                            <button id="submit" class="submit radius2" tabindex="14">Guardar</button>
+                            <button id="submit" class="submit radius2" tabindex="6">Guardar</button>
                         </p>
                         
                         
                     </form>
                    
 
-            </div><!--subcontent-->     
+            </div><!--subcontent-->
+
+            <table cellpadding="0" cellspacing="0" border="0" class="stdtable" id="table">
+                    <thead>
+                        <tr>
+                            <th width="20%" class="head0">Código</th>
+                            <th width="20%" class="head1">Nombre</th>
+                            <th width="15%" class="head0">Categoría</th>
+                            <th width="15%" class="head1">Marca</th>
+                            <th width="14%" class="head0">Precio</th>
+                            <th width="8%" class="head0"></th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th width="20%" class="head0">Código</th>
+                            <th width="20%" class="head1">Nombre</th>
+                            <th width="15%" class="head0">Categoría</th>
+                            <th width="15%" class="head1">Marca</th>
+                            <th width="14%" class="head0">Precio</th>
+                            <th width="8%" class="head0"></th>
+                        </tr>
+                    </tfoot>
+                </table>     
         
         </div><!--contentwrapper-->
         
@@ -97,6 +135,130 @@
             complete: function() {
                 product.chosen();
             }
+        });
+    }
+
+    ajaxFilter('TRUE');
+    function ajaxFilter(query) {
+        jQuery.ajax({
+            url: "{{=URL(c='products_ajax', f='get_products')}}",
+            type: "POST",
+            data: {query: query},
+            dataType: "json",
+            success:function(data){
+                cont = 0;
+                aaData = new Array();
+                for(row in data){
+
+                    description = data[row].product_descriptions;
+                    prices = data[row].product_price_lists;
+                    product = data[row].products;
+                    category = data[row].category_descriptions;
+                    brand = data[row].brand_descriptions;
+                    price = 'No asignado';
+                    
+                    checked = (product.status) ? "checked=\"checked\"" : "";
+                    
+                    if(prices.length > 0) {
+                        for(k in prices) {
+                            if(prices[k].is_default){
+                                price = prices[k].price 
+                                price = price.toString();
+                                price = '$' + price;
+                            }
+                        }
+                    }
+                    else{
+                        if(product.standard_cost != null && product.markup != null){
+                            try{
+                                sc = parseFloat(product.standard_cost);
+                                m = (parseFloat(product.markup)/100)+1;
+                                price = sc*m;
+                                price = price.toString();
+                                price = '$' + price;
+                            }
+                            catch(error){
+                                
+                            }
+                        }
+                    }
+                    
+                    aaData[cont] = [
+                            product.code,
+                            description.name, 
+                            category.name,
+                            brand.name,
+                            price, 
+                            "<a href=\"" + product.id + "\">Agregar</a>"
+                        ];
+                   cont++;
+                }
+            },
+            complete: function() {
+                loadTable(aaData);
+            }
+        });
+    }
+    
+    function loadTable(aaData) {
+        jQuery("#table").dataTable( {
+            "bDestroy": true,
+            "oLanguage": {
+                "sProcessing": "Procesando...",
+                "sLengthMenu": "Ver _MENU_ registros",
+                "sZeroRecords": "No se encontraron registros",
+                "sEmptyTable": "No hay registros en esta tabla",
+                "sLoadingRecords": "Cargando...",
+                "sInfo": "Viendo _START_ - _END_ de _TOTAL_ registros",
+                "sInfoEmpty": "Viendo 0 - 0 de 0 registros",
+                "sInfoFiltered": "(Flitrado de _MAX_ registros totales)",
+                "sSearch": "Buscar",
+                "oPaginate": {
+                    "sFirst":"Primero",
+                    "sPrevious":"Anterior",
+                    "sNext":"Siguiente",
+                    "sLast":"Ultimo"
+                },
+            },
+            "sPaginationType": "full_numbers",
+            "aaData": aaData,
+            "aoColumns": [
+                {"sTitle":"Código"},
+                {"sTitle":"Nombre"},
+                {"sTitle":"Categoría"},
+                {"sTitle":"Marca"},
+                {"sTitle":"Precio"},
+                {"sTitle":"", "sClass":"center"}
+            ]
+        });
+        
+        /*jQuery('.dataTables_length select, input:checkbox, input:radio').uniform();*/
+        togglestatus();
+        jQuery('#table_paginate span, #table_length select').on('click', function() {
+            /*jQuery('.dataTables_length select, input:checkbox, input:radio').uniform();*/
+            togglestatus();
+        });
+    }
+ 
+    function togglestatus() {
+        jQuery('.stdtable input:checkbox').unbind('change');
+        jQuery('.stdtable input:checkbox').on("change", function(e){
+            jQuery.ajax({
+                url: "{{=URL(c='products_ajax', f='toggle_product')}}",
+                type: "POST",
+                data: {
+                    id:e.currentTarget.value
+                },
+                success: function(data){
+                    if(!jQuery('#c').is(':checked')) {
+                        oTable = jQuery('#table').dataTable();
+                        var row = jQuery(e.currentTarget).closest('tr').get(0);
+                        oTable.fnDeleteRow(oTable.fnGetPosition(row));
+                        togglestatus();
+                        /*jQuery('input:checkbox, input:radio').uniform();*/
+                    }
+                }
+            });
         });
     }
 

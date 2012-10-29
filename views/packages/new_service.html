@@ -1,0 +1,122 @@
+{{extend 'base/layout.html'}}
+
+{{block scripts_extra}}
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.maskedinput.js')}}"></script>
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.validate.min.js')}}"></script>
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/chosen.jquery.min.js')}}"></script>
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.dataTables.min.js')}}"></script>
+<script type="text/javascript" src="{{=URL('static', 'js/custom/dualselector.js')}}"></script>
+<style type="text/css">
+    .ellol {
+        border: 1px solid red;
+    }    
+</style>
+{{end}}
+
+{{block sidebar_menu}}
+{{include 'packages/sidebar.html'}}
+{{end}}
+
+{{block content}}
+    <div class="centercontent">
+    
+        <div class="pageheader">
+        
+            <h1 class="pagetitle">{{=title}}</h1>
+            
+        </div><!--pageheader-->
+        
+        <div id="contentwrapper" class="contentwrapper">
+        
+            <div id="validation" class="subcontent">
+         
+                    <div class="notibar msgerror" style="display:none;">
+                        <a class="close"></a>
+                        <p>Ocurrió un error con los datos del formulario.</p>
+                    </div>
+
+                    <div class="notibar exists" style="display:none;">
+                        <a class="close"></a>
+                        <p>Este Servicio ya existe, para editarlo vaya a la sección de ver paquetes. </p>
+                    </div>
+
+                    <div class="notibar msgsuccess" style="display:none;">
+                        <a class="close"></a>
+                        <p>Se han guardado los datos del formulario.</p>
+                    </div>
+                
+                    <form id="form_product" class="stdform stdform2" method="post" action="">                                       
+                        <p>
+                            <label>Nombre del Servicio*</label>
+                            <span class="field"><input type="text" name="name" id="name" class="smallinput" tabindex="1"/></span>
+                        </p>
+                        <p style="margin-top:1px;">
+                            <label>Productos</label>
+                            <span class="field">
+                                <select name="products" id="products" multiple="multiple" size="10" data-placeholder="Seleccionar" class="chzn-select" tabindex="2"></select>  
+                            </span>
+                        </p>
+                        <p>
+                            <label>Costo estandar</label>
+                            <span class="field">
+                                <input type="text" name="standard_cost" id="standard_cost" class="smallinput" placeholder="0.00" tabindex="3"/>
+                            </span>
+                        </p>
+                        <p>
+                            <label>Margen de utilidad</label>
+                            <span class="field"><input type="text" name="markup" id="markup" class="smallinput" tabindex="4"/></span>
+                        </p>
+                        <p>
+                            <label>Descripción</label>
+                            <span class="field">
+                                <textarea cols="80" rows="5" name="description" id="description" class="smallinput" tabindex="5"></textarea>
+                            </span>
+                        </p>
+                        <p class="stdformbutton">
+                            <button id="submit" class="submit radius2" tabindex="6">Guardar</button>
+                        </p>
+                        
+                        
+                    </form>
+                   
+
+            </div><!--subcontent-->     
+        
+        </div><!--contentwrapper-->
+        
+        <br clear="all" />
+        
+    </div><!-- centercontent -->
+        
+</div><!--bodywrapper-->
+
+<script type="text/javascript">
+
+//jQuery(".chzn-select").chosen();
+    var product = jQuery('#products');
+
+///////// get products /////////
+    get_products();
+    function get_products() {
+        jQuery.ajax({
+            url: "{{=URL(c='products_ajax', f='get_products')}}",
+            type: "POST",
+            dataType: "json",
+            success: function(data){
+                if(data) {
+                    for(d = 0; d < data.length; d++) {
+                        product.append('<option value='+data[d].product_descriptions.id+'>'+data[d].product_descriptions.name+'</option>');
+                    }
+                }
+            },
+            complete: function() {
+                product.chosen();
+            }
+        });
+    }
+
+
+</script>
+</body>
+</html>
+{{end}}
