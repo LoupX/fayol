@@ -134,7 +134,7 @@
 </div><!--bodywrapper-->
 
 <script type="text/javascript">
-{{id=request.vars.id}}
+    var id = {{=request.vars.id}}
 //////////// Ajax for selects ////////////
     jQuery(".chzn-select").chosen();
 
@@ -176,7 +176,7 @@
 //////////// get info ////////////
     jQuery.ajax({
         url: "{{=URL(c='products_ajax', f='get_product_information')}}",
-        data: { id: "{{=id}}" },
+        data: { id: id },
         type: "POST",
         dataType:"json",
         success:function(data){
@@ -236,7 +236,7 @@
 
         if(jQuery("#form_product").valid() && valbra(bid) && valuni(uid) && valcat(cid)) {
              jQuery.ajax({
-                url: "{{=URL(c='products_ajax', f='')}}", //add here your python's function to update products
+                url: "{{=URL(c='products_ajax', f='update_product')}}", //add here your python's function to update products
                 data: { 
                     name:jQuery('#name').val(),
                     alternative_name:jQuery('#alternative_name').val(),
@@ -251,7 +251,7 @@
                     standard_cost:jQuery('#standard_cost').val(),
                     markup:jQuery('#markup').val(),
                     description:jQuery('#description').val(),
-                    id: id;
+                    id: id
                 },
                 type: 'POST',
                 success:function(data){
@@ -434,7 +434,7 @@
     }
 
     function redirect() {
-        window.location.replace("{{=URL(c='products', f='index')}}");
+        //window.location.replace("{{=URL(c='products', f='index')}}");
     }
     
 

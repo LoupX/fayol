@@ -72,7 +72,7 @@ def create_price():
     if v.product_id:
         data['product_id'] = v.product_id
     if v.name:
-        data['name'] = v.name
+        data['name'] = v.name.decode('utf-8').upper()
     data['price'] = v.price
 
     try:
@@ -151,8 +151,6 @@ def create_product():
             else:
                 db.rollback()
                 return ''
-
-
 
 @auth.requires_login()
 def get_brands():
@@ -418,7 +416,7 @@ def update_price():
     id = request.vars.id
     data = dict()
     if request.vars.name:
-        data['name'] = request.vars.name
+        data['name'] = request.vars.name.decode('utf-8').upper()
     data['price'] = request.vars.price
     try:
         query = db.product_price_lists.id==id
@@ -433,6 +431,48 @@ def update_price():
         else:
             db.rollback()
             return ''
+
+@auth.requires_login()
+def update_product():
+    id = request.vars.id
+    data = dict()
+    data_description = dict()
+    vars = request.vars
+
+    data['brand_id'] = vars.brand_id
+    data['unit_id'] = vars.unit_id
+    data['category_id'] = vars.category_id
+    data['alternative_code'] = vars.alternative_code.decode('utf-8').upper()
+    data['part_number'] = vars.part_number.decode('utf-8').upper()
+    data['serial_number'] = vars.serial_number.decode('utf-8').upper()
+    data['model'] = vars.model.decode('utf-8').upper()
+    data['standard_cost'] = vars.standard_cost
+    data['markup'] = vars.markup
+
+    data_description['name'] = vars.name.decode('utf-8').upper()
+    data_description['alternative_name'] = vars.alternative_name.decode('utf-8').upper()
+    data_description['description'] = vars.description.decode('utf-8').upper()
+
+    try:
+        db(db.products.id==id).update(**data)
+        db(db.product_descriptions.product_id==id).update(**data_description)
+        db(db.product_to_vendor.product_id==id).delete()
+        if vars['vendors[]']:
+            for k in vars['vendors[]']:
+                db.product_to_vendor.insert(product_id=id,
+                    vendor_id=k)
+    except SyntaxError as e:
+        db.rollback()
+        if 'duplicate field' in e:
+            return 0
+        else:
+            return ''
+    except:
+        db.rollback()
+        return ''
+    else:
+        db.commit()
+        return True
 
 @auth.requires_login()
 def toggle_brand():
