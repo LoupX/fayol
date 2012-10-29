@@ -243,6 +243,9 @@
     function togglestatus() {
         jQuery('.stdtable input:checkbox').unbind('change');
         jQuery('.stdtable input:checkbox').on("change", function(e){
+            product
+                .find('option[value='+jQuery(this).attr('id')+']').attr('selected',true)
+                .trigger("liszt:updated");
             jQuery.ajax({
                 url: "{{=URL(c='products_ajax', f='toggle_product')}}",
                 type: "POST",
