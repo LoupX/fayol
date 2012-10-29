@@ -183,7 +183,7 @@ var globalid = '';
                 jQuery('.msgerror').fadeIn(600);
             } else {
                 saveNewList(productid, namelist.val(), price.val());
-                oTable.fnClearTable();
+                oTable.dataTable().fnClearTable();
                 sendId(productid);
                 namelist.val('');
                 price.val('');
