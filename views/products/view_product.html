@@ -124,21 +124,21 @@
                         <h3>Lista de precios del producto</h3>
                 </div><!--contenttitle-->
             
-            	<table cellpadding="0" cellspacing="0" border="0" class="stdtable" id="liststable">
+            	<table cellpadding="0" cellspacing="0" border="0" class="stdtable" id="liststable" style="display: none;">
                 <thead>
                     <tr>
-                        <th class="head0">Nombre de la lista</th>
-                        <th class="head1">Precio</th>
-                        <th class="head0">Predeterminado</th>
-                        <th class="head1">&nbsp;</th>
+                        <th class="head0" width="30%">Nombre de la lista</th>
+                        <th class="head1" width="30%">Precio</th>
+                        <th class="head0" width="20%">Predeterminado</th>
+                        <th class="head1" width="20%">&nbsp;</th>
                     </tr>
                 </thead>
                 <tfoot>
                     <tr>
-                        <th class="head0">Nombre de la lista</th>
-                        <th class="head1">Precio</th>
-                        <th class="head0">Predeterminado</th>
-                        <th class="head1">&nbsp;</th>
+                        <th class="head0" width="30%">Nombre de la lista</th>
+                        <th class="head1" width="30%">Precio</th>
+                        <th class="head0" width="20%">Predeterminado</th>
+                        <th class="head1" width="20%">&nbsp;</th>
                         
                     </tr>
                 </tfoot>
@@ -257,7 +257,7 @@ var id = {{=request.vars.id}}
               oTable.show();
           }
           else {
-              oTable.fnDestroy();
+              oTable.dataTable().fnDestroy();
               jQuery('#table').hide();
           }
       },
