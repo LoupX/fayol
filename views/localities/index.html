@@ -52,11 +52,26 @@
     
     function ajaxFilter(query) {
         jQuery.ajax({
-            url: "{{=URL(c='common', f='get_all_localities')}}",
+            url: "{{=URL(c='common', f='echo')}}",
             type: "POST",
             data: {query: query},
             dataType: "json",
-           
+            success:function(data){
+                cont = 0;
+                aaData = new Array();
+                for(row in data){
+                    brand = data[row].brands;
+                    description = data[row].brand_descriptions;
+                    checked = (brand.status) ? "checked=\"checked\"" : "";
+                    checker_span = (brand.status) ? "class=\"checked\"" : "";
+                    aaData[cont] = [
+                            description.name, 
+                            description.description, 
+                            description.description
+                        ];
+                   cont++;
+                }
+            },
             complete: function() {
             	loadTable(aaData);
             }
