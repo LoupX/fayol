@@ -79,6 +79,7 @@ def create_price():
         c = db(db.product_price_lists.product_id==data['product_id']).count()
     except:
         db.rollback()
+        return ''
     else:
         if c >= 10:
             return '0'

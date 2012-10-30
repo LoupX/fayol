@@ -210,6 +210,27 @@ def update_price():
             return ''
 
 @auth.requires_login()
+def update_default_price():
+    id = request.vars.id
+    try:
+        service_id = db(db.service_price_lists.id==id).select(
+            db.service_price_lists.service_id).first()
+        service_id = service_id.service_id
+        db(db.service_price_lists.service_id==service_id).update(
+            is_default=False)
+        result = db(db.service_price_lists.id==id).update(is_default=True)
+    except Exception as e:
+        db.rollback()
+        return ''
+    else:
+        if result == 1:
+            db.commit()
+            return True
+        else:
+            db.rollback()
+            return ''
+
+@auth.requires_login()
 def toggle_service():
     id = request.vars.id
     try:
