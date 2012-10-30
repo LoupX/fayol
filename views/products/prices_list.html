@@ -122,7 +122,7 @@ var globalid = '';
             jQuery('#product-name').html("Nombre del producto Seleccionado: \"" + data.product_descriptions['name'] + "\""); 
       },
       complete: function() {
-        oTable.dataTable().fnClearTable();
+        //oTable.dataTable().fnClearTable();
         sendId(productid);
       }
   });  
@@ -178,8 +178,6 @@ var globalid = '';
         // Validate form and shit as usual....
         if (productid != '' && jQuery("#form_agent2").valid()) { 
                 saveNewList(productid, namelist.val(), price.val());
-                oTable.dataTable().fnClearTable();
-                sendId(productid);
                 namelist.val('');
                 price.val('');
             
@@ -211,6 +209,10 @@ var globalid = '';
                 } else{
                     jQuery('.msgerror').fadeIn(600);
                 };
+            },
+            complete: function() {
+                //oTable.dataTable().fnClearTable();
+                sendId(id);
             }
         });
     }
