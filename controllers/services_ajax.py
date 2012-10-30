@@ -140,8 +140,8 @@ def update_service():
 def toggle_service():
     id = request.vars.id
     try:
-        row = db(db.products.id==id).select(db.products.status).first()
-        result = db(db.products.id==id).update(status=(not row.status))
+        row = db(db.services.id==id).select(db.services.status).first()
+        result = db(db.services.id==id).update(status=(not row.status))
     except Exception as e:
         db.rollback()
         return ''
