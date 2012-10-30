@@ -101,6 +101,7 @@
                     	for(k in prices) {
                     		if(prices[k].is_default){
 	                    		price = prices[k].price 
+                                price = (Math.round(price*100)/100)
 	                    		price = price.toString();
 	                    		price = '$' + price;
 	                    	}

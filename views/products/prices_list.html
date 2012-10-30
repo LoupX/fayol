@@ -125,6 +125,7 @@ var globalid = '';
             url: "{{=URL(c='products_ajax', f='get_products')}}",
             type: "POST",
             dataType: "json",
+            data: { query:"ANY" },
             success: function(data){
                 for(d = 0; d < data.length; d++) {
                     product.append('<option value='+data[d].product_descriptions.id+'>'+data[d].product_descriptions.name+'</option>');
