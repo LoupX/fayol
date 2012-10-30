@@ -28,6 +28,12 @@ def view_service():
 
 @auth.requires_login()
 def new_service():
-    title = 'Nuevo Servicio'
+    title = 'Servicios'
     current = ['menu_catalogs']
     return dict(title=title,  current=current)
+
+@auth.requires_login()
+def update_service():
+    title = 'Servicios'
+    current = ['menu_catalogs']
+    return dict(title=title,  current=current)    
