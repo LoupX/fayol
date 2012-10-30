@@ -4,6 +4,7 @@
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.dataTables.min.js')}}"></script>
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/chosen.jquery.min.js')}}"></script>
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.validate.min.js')}}"></script>
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/chosen.jquery.min.js')}}"></script>    
 {{end}}
 
 {{block sidebar_menu}}
@@ -18,14 +19,6 @@
             <h1 class="pagetitle">{{=title}}</h1>
             
         </div><!--pageheader-->
-        
-        <p style="margin-top:20px;">
-              <span class="formwrapper" style="margin-left:20px;">
-                    <input type="radio" id="a" name="filtervendors" value="true" onclick="ajaxFilter(this.value)" checked="checked"/> Habilitados &nbsp; &nbsp;
-                    <input type="radio" id="b" name="filtervendors"  value="false" onclick="ajaxFilter(this.value)"/> Deshabilitados &nbsp; &nbsp;
-                    <input type="radio" id="c" name="filtervendors" value="any" onclick="ajaxFilter(this.value)"/> Todos &nbsp; &nbsp;
-              </span>
-        </p>
         
         <div id="contentwrapper" class="contentwrapper">
         
@@ -65,7 +58,156 @@
     
 </div><!--bodywrapper-->
 
+<script type="text/javascript">
+    ajaxFilter('TRUE');
+    function ajaxFilter(query) {
+        jQuery.ajax({
+            url: "{{=URL(c='products_ajax', f='get_products')}}",
+            type: "POST",
+            data: {query: query},
+            dataType: "json",
+            success:function(data){
+                cont = 0;
+                aaData = new Array();
+                for(row in data){
 
+                    description = data[row].product_descriptions;
+                    prices = data[row].product_price_lists;
+                    product = data[row].products;
+                    category = data[row].category_descriptions;
+                    brand = data[row].brand_descriptions;
+                    price = 'No asignado';
+                    
+                    checker_span = (product.status) ? "class=\"checked\"" : "";
+                    checked = (product.status) ? "checked=\"checked\"" : "";
+                    
+                    if(prices.length > 0) {
+                        for(k in prices) {
+                            if(prices[k].is_default){
+                                price = prices[k].price 
+                                price = price.toString();
+                                price = '$' + price;
+                            }
+                        }
+                    }
+                    else{
+                        if(product.standard_cost != null && product.markup != null){
+                            try{
+                                sc = parseFloat(product.standard_cost);
+                                m = (parseFloat(product.markup)/100)+1;
+                                price = sc*m;
+                                price = price.toString();
+                                price = '$' + price;
+                            }
+                            catch(error){
+                                
+                            }
+                        }
+                    }
+                    
+                    aaData[cont] = [
+                            product.code,
+                            description.name, 
+                            category.name,
+                            brand.name,
+                            price,
+                            "<div class='checker' id='uniform-undefined'><span " + checker_span + "><input type=\"checkbox\" " + checked + " value=\"" + product.id + "\" /></span></div>", 
+                            "<a href=\"{{=URL(c='products', f='view_product')}}?id=" + product.id + "\">Ver</a>"
+                        ];
+                   cont++;
+                }
+            },
+            complete: function() {
+                loadTable(aaData);
+            }
+        });
+    }
+    
+    function loadTable(aaData) {
+        jQuery("#table").dataTable( {
+            "bDestroy": true,
+            "oLanguage": {
+                "sProcessing": "Procesando...",
+                "sLengthMenu": "Ver _MENU_ registros",
+                "sZeroRecords": "No se encontraron registros",
+                "sEmptyTable": "No hay registros en esta tabla",
+                "sLoadingRecords": "Cargando...",
+                "sInfo": "Viendo _START_ - _END_ de _TOTAL_ registros",
+                "sInfoEmpty": "Viendo 0 - 0 de 0 registros",
+                "sInfoFiltered": "(Flitrado de _MAX_ registros totales)",
+                "sSearch": "Buscar",
+                "oPaginate": {
+                    "sFirst":"Primero",
+                    "sPrevious":"Anterior",
+                    "sNext":"Siguiente",
+                    "sLast":"Ultimo"
+                },
+            },
+            "sPaginationType": "full_numbers",
+            "aaData": aaData,
+            "aoColumns": [
+                {"sTitle":"Código"},
+                {"sTitle":"Nombre"},
+                {"sTitle":"Categoría"},
+                {"sTitle":"Marca"},
+                {"sTitle":"Precio"},
+                {"sTitle":"Estatus", "sClass":"center"},
+                {"sTitle":"", "sClass":"center"}
+            ]
+        });
+        
+        togglestatus();
+        jQuery('#table_paginate span, #table_length select').on('click', function() {
+            togglestatus();
+        });
+    }
+ 
+    function togglestatus() {
+        jQuery('.stdtable input:checkbox').unbind('change');
+        jQuery('.stdtable input:checkbox').on("change", function(e){
+            jQuery.uniform.update(e.currentTarget);
+            jQuery.ajax({
+                url: "{{=URL(c='products_ajax', f='toggle_product')}}",
+                type: "POST",
+                data: {
+                    id:e.currentTarget.value
+                },
+                success: function(data){
+                    if(!jQuery('#c').is(':checked')) {
+                        oTable = jQuery('#table').dataTable();
+                        var row = jQuery(e.currentTarget).closest('tr').get(0);
+                        oTable.fnDeleteRow(oTable.fnGetPosition(row));
+                        togglestatus();
+                        /*jQuery('input:checkbox, input:radio').uniform();*/
+                    }
+                }
+            });
+        });
+        
+        if(contador == "1")
+        {
+            jQuery('input:radio').uniform();
+            jQuery('select').uniform();
+            contador++;
+        }
+        else
+        {
+            no_uniform();
+            jQuery('input:radio').uniform();
+            jQuery('select').uniform();
+        }
+  
+    }
+
+    function no_uniform()
+    {
+        jQuery('input:radio').unwrap().unwrap();
+        jQuery('select').siblings("span").remove();
+        jQuery('select').unwrap();
+        jQuery('input:radio').unbind(".uniform");
+        jQuery('select').unbind(".uniform"); 
+    }   
+</script>
 </body>
 </html>
 {{end}}

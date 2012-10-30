@@ -6,6 +6,7 @@
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/chosen.jquery.min.js')}}"></script>
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.dataTables.min.js')}}"></script>
 <script type="text/javascript" src="{{=URL('static', 'js/custom/dualselector.js')}}"></script>
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/chosen.jquery.min.js')}}"></script>    
 <style type="text/css">
     .ellol {
         border: 1px solid red;
@@ -45,7 +46,7 @@
                         <p>Se han guardado los datos del formulario.</p>
                     </div>
                 
-                    <form id="form_product" class="stdform stdform2" method="post" action="">                                       
+                    <form id="form_package" class="stdform stdform2" method="post" action="">                                       
                         <p>
                             <label>Nombre del Paquete*</label>
                             <span class="field"><input type="text" name="name" id="name" class="smallinput" tabindex="1"/></span>
@@ -117,6 +118,7 @@
 
 //jQuery(".chzn-select").chosen();
     var product = jQuery('#products');
+    var options;
 
 ///////// get products /////////
     get_products();
@@ -128,12 +130,13 @@
             success: function(data){
                 if(data) {
                     for(d = 0; d < data.length; d++) {
-                        product.append('<option value='+data[d].product_descriptions.id+'>'+data[d].product_descriptions.name+'</option>');
+                        options += '<option value='+data[d].product_descriptions.id+'>'+data[d].product_descriptions.name+'</option>';
                     }
                 }
             },
             complete: function() {
-                product.chosen();
+                jQuery('#products').append(options);
+                jQuery('#products').chosen();
             }
         });
     }
@@ -189,13 +192,20 @@
                             category.name,
                             brand.name,
                             price, 
-                            "<a href=\"" + product.id + "\">Agregar</a>"
+                            '<a href="'+product.id+'" class="addToInput">Agregar</a>'
                         ];
                    cont++;
                 }
             },
             complete: function() {
                 loadTable(aaData);
+                jQuery('.addToInput').on('click', function(e) {
+                    e.preventDefault();
+                    var rid = jQuery(this).attr('href');
+                    jQuery('#products')
+                        .find('option[value='+rid+']').attr('selected',true)
+                        .trigger("liszt:updated");
+                });
             }
         });
     }
@@ -231,39 +241,85 @@
                 {"sTitle":"", "sClass":"center"}
             ]
         });
-        
-        /*jQuery('.dataTables_length select, input:checkbox, input:radio').uniform();*/
-        togglestatus();
-        jQuery('#table_paginate span, #table_length select').on('click', function() {
-            /*jQuery('.dataTables_length select, input:checkbox, input:radio').uniform();*/
-            togglestatus();
+    }
+
+    jQuery("#form_package").validate({
+            rules: {
+                name: "required",
+                standard_cost: {
+                    number: true,
+                    required: false
+                },
+                markup: {
+                    number: true,
+                    required: false
+                },
+            },
+            messages: {
+                name: "Ingrese el nombre del paquete",
+                standard_cost: "Ingrese numeros decimales",
+                markup: "Ingrese numeros decimales"
+            }
         });
+
+    //////////// send form ////////////                 
+    jQuery('#submit').live('click', function(e) {
+        e.preventDefault();
+        
+        jQuery('.msgerror').hide();
+        jQuery('.exists').hide();
+        jQuery('.msgsuccess').hide();
+
+        if(jQuery("#form_package").valid()) {
+             jQuery.ajax({
+                url: "{{=URL(c='products_ajax', f='create_product')}}",
+                data: { 
+                    name:jQuery('#name').val(),
+                    vendors:jQuery('#products').val() ? (jQuery('#products').val()) : '',
+                    standard_cost:jQuery('#standard_cost').val(),
+                    markup:jQuery('#markup').val(),
+                    description:jQuery('#description').val(),
+                },
+                type: 'POST',
+                success:function(data){
+                    if(data != 0 && data){
+                        jQuery('.msgsuccess').fadeIn(1600, function() {
+                            jQuery('.msgsuccess').fadeOut('slow');
+                        });
+                        deleteFields();
+                    }
+                    else if(data == 0) {
+                        jQuery('.exists').fadeIn(1600);
+                    }
+                    else{
+                        jQuery('.msgerror').fadeIn(1600);
+                    }
+                    jQuery('body','html',window).animate(
+                                                        {scrollTop:0}, 
+                                                        1000);
+                }
+            }); 
+        } else {
+            jQuery('.msgerror').fadeIn(1600);
+            jQuery('body','html',window, document).animate({scrollTop:0},1000);
+        }
+    });
+
+///////////// Borrar campos /////////////
+
+    function deleteFields() {
+        jQuery('#name').val('');
+        jQuery('#products')
+            .find('option')
+            .first()
+            .attr('selected',true)
+            .trigger("liszt:updated");
+        jQuery('#standard_cost').val('');
+        jQuery('#markup').val('');
+        jQuery('#description').val('');
     }
  
-    function togglestatus() {
-        jQuery('.stdtable input:checkbox').unbind('change');
-        jQuery('.stdtable input:checkbox').on("change", function(e){
-            product
-                .find('option[value='+jQuery(this).attr('id')+']').attr('selected',true)
-                .trigger("liszt:updated");
-            jQuery.ajax({
-                url: "{{=URL(c='products_ajax', f='toggle_product')}}",
-                type: "POST",
-                data: {
-                    id:e.currentTarget.value
-                },
-                success: function(data){
-                    if(!jQuery('#c').is(':checked')) {
-                        oTable = jQuery('#table').dataTable();
-                        var row = jQuery(e.currentTarget).closest('tr').get(0);
-                        oTable.fnDeleteRow(oTable.fnGetPosition(row));
-                        togglestatus();
-                        /*jQuery('input:checkbox, input:radio').uniform();*/
-                    }
-                }
-            });
-        });
-    }
+    
 
 
 </script>

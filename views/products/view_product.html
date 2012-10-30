@@ -119,7 +119,7 @@
             
             <br clear="all"/> 
             	
-            	<div class="contenttitle2">
+            	<div class="contenttitle2" id="liststittle" style="display: none;">
                         <h3>Lista de precios del producto</h3>
                 </div><!--contenttitle-->
             
@@ -254,10 +254,12 @@ var id = {{=request.vars.id}}
                   cont++;
               }
               oTable.show();
+              jQuery('#liststittle').show();
           }
           else {
               oTable.dataTable().fnDestroy();
               jQuery('#table').hide();
+              jQuery('#liststittle').hide();
           }
       },
       complete: function() {
