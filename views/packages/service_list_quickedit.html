@@ -1,0 +1,81 @@
+<form action="" method="post" class="quickform" id="form_list">
+    <div class="one_half">
+        <p>
+            <label for="title">Nombre de la lista</label>
+            <input type="text" name="name" id="name" value="{{=name}}" />
+            <label></label>
+        </p>    
+    </div><!-- one_half -->
+    
+    <div class="one_half last">
+         <p>
+            <label for="title">Precio</label>
+            <input type="text" name="pricelist" id="pricelist" value="{{=price}}" />
+        </p>
+    </div><!-- one_half last -->
+    
+    <br clear="all" />
+    
+    <div class="quickformbutton">
+        <button class="update" id="submit">Actualizar</button>
+        <button class="cancel">Cancelar</button>
+    </div><!-- button -->
+</form>
+
+<script type="text/javascript">
+    jQuery("#form_list").validate({
+            rules: {
+                name: "required",
+                pricelist: {
+                    number: true,
+                    required: false
+                }
+                
+            },
+            messages: {
+                name: "Ingrese el nombre de la lista.",
+                pricelist: "Ingrese el precio."
+            }
+        });
+
+    jQuery(".quickformbutton > #submit").on("click", function(e){
+        e.preventDefault();
+        
+        if(jQuery("#form_list").valid()) {
+
+            jQuery.ajax({
+                url: "{{=URL(c='products_ajax', f='update_price')}}",
+                type: "POST",
+                data: { 
+                    id: {{=request.vars.id}},
+                    name: jQuery('#name').val(),
+                    price: jQuery('#pricelist').val(),
+                },
+                success:function(data){
+                    if(data != 0 && data){
+                        jQuery('.toggledata button.update').fadeIn(1600,function(){
+                            jQuery(this).parents('.toggledata').animate({height: 0},200, function(){
+                                jQuery(this).parents('tr').prev().removeClass('hiderow');
+                                if(result) {    
+                                    var prev = jQuery(this).parents('tr').prev().find('td'),
+                                        curr = jQuery(this).parents('tr').find('#name, #pricelist');
+                                    jQuery(prev[0]).html(jQuery(curr[0]).val().toUpperCase()); 
+                                    jQuery(prev[1]).html(jQuery(curr[1]).val().toUpperCase());   
+                                }                                           
+                                jQuery(this).parents('tr').remove();
+                            });
+                            return false;
+                        });
+                        result = true;
+                        toggleData.append(data);                        //inject data read from server
+                    }
+                    else{
+                        result = false;
+                    }
+                }
+            });
+       
+       } /* valid */
+       
+    })
+</script>

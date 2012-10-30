@@ -36,4 +36,10 @@ def new_service():
 def update_service():
     title = 'Servicios'
     current = ['menu_catalogs', 'sidebar_services', 'sub_services_read']
-    return dict(title=title,  current=current)    
+    return dict(title=title,  current=current)
+    
+@auth.requires_login()
+def service_prices_list():
+    title = 'Servicios'
+    current = ['menu_catalogs', 'sidebar_services', 'sub_services_read']
+    return dict(title=title,  current=current)

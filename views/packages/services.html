@@ -36,8 +36,9 @@
                             <th width="20%" class="head1">Nombre</th>
                             <th width="15%" class="head0">Código alternativo</th>
                             <th width="15%" class="head1">Estatus</th>
-                            <th width="8%" class="head0"></th>
-                            <th width="8%" class="head0"></th>
+                            <th width="10%" class="head1"></th>
+                            <th width="10%" class="head0"></th>
+                            <th width="10%" class="head0"></th>
                         </tr>
                     </thead>
                     <tfoot>
@@ -45,9 +46,10 @@
                             <th width="20%" class="head0">Código</th>
                             <th width="20%" class="head1">Nombre</th>
                             <th width="15%" class="head0">Código alternativo</th>
-                            <th width="15%" class="head1">Estatus</th>
-                            <th width="8%" class="head0"></th>
-                            <th width="8%" class="head0"></th>
+                            <th width="15%" class="head1">Estatus</th
+                            <th width="10%" class="head1"></th>
+                            <th width="10%" class="head0"></th>
+                            <th width="10%" class="head0"></th>
                         </tr>
                     </tfoot>
                 </table>
@@ -95,6 +97,7 @@
                             description.name, 
                             services.alternative_code,
                             "<div class='checker' id='uniform-undefined'><span " + checker_span + "><input type=\"checkbox\" " + checked + " value=\"" + services.id + "\" /></span></div>", 
+                            "<a href=\"{{=URL(c='packages', f='service_prices_list')}}?id=" + services.id + "\">Agregar</a>",
                             "<a href=\"{{=URL(c='packages', f='view_service')}}?id=" + services.id + "\">Ver</a>",
                             "<a href=\"{{=URL(c='packages', f='update_service')}}?id=" + services.id + "\">Editar</a>"
                         ];
@@ -134,6 +137,7 @@
                 {"sTitle":"Nombre"},
                 {"sTitle":"Código alternativo"},
                 {"sTitle":"Estatus", "sClass":"center"},
+                {"sTitle":"Lista de<br/> precios", "sClass":"center"},
                 {"sTitle":"", "sClass":"center"},
                 {"sTitle":"", "sClass":"center"}
             ]
