@@ -71,7 +71,7 @@
     
     /*jQuery('.dataTables_length select, input:checkbox, input:radio').uniform();*/
 
-    ajaxFilter('TRUE');
+    ajaxFilter(jQuery('.formwrapper input:radio').val());
 
     jQuery('.formwrapper input:radio').on('change', function(e) {
         ajaxFilter(e.currentTarget.value);
