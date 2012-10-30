@@ -70,8 +70,10 @@
     var contador = "1";	
     
     /*jQuery('.dataTables_length select, input:checkbox, input:radio').uniform();*/
-
-    ajaxFilter(jQuery('.formwrapper input:radio').val());
+    jQuery(document).ready(function() {
+        alert('load' + jQuery('.formwrapper input:radio').val());
+        ajaxFilter(jQuery('.formwrapper input:radio').val());
+    });
 
     jQuery('.formwrapper input:radio').on('change', function(e) {
         ajaxFilter(e.currentTarget.value);
