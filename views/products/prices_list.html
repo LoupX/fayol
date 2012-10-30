@@ -31,7 +31,7 @@
             <div class="notibar msgerror" style="display:none;">
                         <a class="close"></a>
                         <!-- Ocurrió un error con los datos del formulario. -->
-                        <p>Llene los campos resaltados.</p>
+                        <p>Ocurrió un error con los datos del formulario.</p>
                 </div>
 
                 <div class="notibar msgsuccess" style="display:none;">
@@ -40,7 +40,7 @@
                     </div>
                 <div class="notibar exists" style="display:none;">
                         <a class="close"></a>
-                        <p>Seleccione un producto.</p>
+                        <p>No se puede agregar mas de 10 listas por producto.</p>
                     </div>
         
         	<div id="validation" class="subcontent">
@@ -177,25 +177,14 @@ var globalid = '';
 
         // Validate form and shit as usual....
         if (productid != '' && jQuery("#form_agent2").valid()) { 
-            if (namelist.val().length <= 0) {
-                namelist.addClass('error');
-                jQuery('.msgerror').fadeIn(600);
-            } else if (price.val().length <= 0) {
-                price.addClass('error');
-                jQuery('.msgerror').fadeIn(600);
-            } else {
                 saveNewList(productid, namelist.val(), price.val());
                 oTable.dataTable().fnClearTable();
                 sendId(productid);
                 namelist.val('');
                 price.val('');
-            }; 
             
         } else{
-            product
-                .siblings('div')
-                    .addClass('ellol');
-            jQuery('.exists').fadeIn(600);
+            jQuery('.msgerror').fadeIn(600);
         };
 
          scrollThis();
@@ -213,10 +202,12 @@ var globalid = '';
                     price: price
                 },
             success: function(data){
-                if (data) {
+                if (data != 0) {
                     jQuery('.msgsuccess').fadeIn(900, function() {
                         jQuery(this).fadeOut(200);
                     });
+                } else if( data == 0) {
+                    jQuery('.exists').fadeIn(600);
                 } else{
                     jQuery('.msgerror').fadeIn(600);
                 };
