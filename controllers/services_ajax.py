@@ -8,14 +8,10 @@ def create_service():
     vars = request.vars
 
     data['alternative_code'] = vars.alternative_code.decode('utf-8').upper()
-    data['part_number'] = vars.part_number.decode('utf-8').upper()
-    data['serial_number'] = vars.serial_number.decode('utf-8').upper()
-    data['model'] = vars.model.decode('utf-8').upper()
     data['standard_cost'] = vars.standard_cost
     data['markup'] = vars.markup
 
     data_description['name'] = vars.name.decode('utf-8').upper()
-    data_description['alternative_name'] = vars.alternative_name.decode('utf-8').upper()
     data_description['description'] = vars.description.decode('utf-8').upper()
 
     try:
@@ -118,14 +114,10 @@ def update_service():
     vars = request.vars
 
     data['alternative_code'] = vars.alternative_code.decode('utf-8').upper()
-    data['part_number'] = vars.part_number.decode('utf-8').upper()
-    data['serial_number'] = vars.serial_number.decode('utf-8').upper()
-    data['model'] = vars.model.decode('utf-8').upper()
     data['standard_cost'] = vars.standard_cost
     data['markup'] = vars.markup
 
     data_description['name'] = vars.name.decode('utf-8').upper()
-    data_description['alternative_name'] = vars.alternative_name.decode('utf-8').upper()
     data_description['description'] = vars.description.decode('utf-8').upper()
 
     try:
