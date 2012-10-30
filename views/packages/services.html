@@ -94,9 +94,9 @@
                     		services.code,
                             description.name, 
                             services.alternative_code,
-                            "<div class='checker' id='uniform-undefined'><span " + checker_span + "><input type=\"checkbox\" " + checked + " value=\"" + product.id + "\" /></span></div>", 
-                            "<a href=\"{{=URL(c='packages', f='view_service')}}?id=" + product.id + "\">Ver</a>",
-                            "<a href=\"{{=URL(c='packages', f='update_service')}}?id=" + product.id + "\">Editar</a>"
+                            "<div class='checker' id='uniform-undefined'><span " + checker_span + "><input type=\"checkbox\" " + checked + " value=\"" + services.id + "\" /></span></div>", 
+                            "<a href=\"{{=URL(c='packages', f='view_service')}}?id=" + services.id + "\">Ver</a>",
+                            "<a href=\"{{=URL(c='packages', f='update_service')}}?id=" + services.id + "\">Editar</a>"
                         ];
                    cont++;
                 }
@@ -133,7 +133,7 @@
                 {"sTitle":"Código"},
                 {"sTitle":"Nombre"},
                 {"sTitle":"Código alternativo"},
-                {"sTitle":"Estatus"},
+                {"sTitle":"Estatus", "sClass":"center"},
                 {"sTitle":"", "sClass":"center"},
                 {"sTitle":"", "sClass":"center"}
             ]

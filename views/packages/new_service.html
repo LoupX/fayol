@@ -93,9 +93,14 @@
 	jQuery("#form_service").validate({
         rules: {
         	name: "required",
+        	standard_cost: {
+                    number: true,
+                    required: false
+            },
         },
         messages: {
             name: "Ingrese el nombre del servicio",
+            standard_cost: "Ingrese unicamente numeros"
         }
     });
 
