@@ -76,6 +76,14 @@ def create_price():
     data['price'] = v.price
 
     try:
+        c = db(db.product_price_lists.product_id==data['product_id']).count()
+    except:
+        db.rollback()
+    else:
+        if c >= 10:
+            return '0'
+
+    try:
         query = db.product_price_lists.product_id==data['product_id']
         rows = db(query).select()
         if not rows:

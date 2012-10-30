@@ -44,6 +44,42 @@ def create_service():
                 return ''
 
 @auth.requires_login()
+def create_price():
+    data = dict()
+    v = request.vars
+    if v.service_id:
+        data['service_id'] = v.product_id
+    if v.name:
+        data['name'] = v.name.decode('utf-8').upper()
+    data['price'] = v.price
+
+    try:
+        c = db(db.service_price_lists.service_id==data['service_id']).count()
+    except:
+        db.rollback()
+        return ''
+    else:
+        if c >= 10:
+            return '0'
+
+    try:
+        query = db.service_price_lists.service_id==data['service_id']
+        rows = db(query).select()
+        if not rows:
+            data['is_default'] = True
+    except:
+        db.rollback()
+
+    try:
+        id = db.service_price_lists.insert(**data)
+    except Exception as e:
+        db.rollback()
+        return ''
+    else:
+        db.commit()
+        return str(id)
+
+@auth.requires_login()
 def get_services():
     rows = None
     q = request.vars.query.upper() if request.vars.query else None
@@ -107,6 +143,22 @@ def get_service_information():
     return str(data)
 
 @auth.requires_login()
+def get_price():
+    id = request.vars.id
+    data = dict()
+    pl = db.service_price_lists
+    try:
+        data = db(pl.service_id==id).select(
+            pl.id, pl.name, pl.price, pl.status,
+            pl.is_default, pl.service_id).as_list()
+    except:
+        db.rollback()
+
+    from gluon.contrib import simplejson
+    data = simplejson.dumps(data)
+    return str(data)
+
+@auth.requires_login()
 def update_service():
     id = request.vars.id
     data = dict()
@@ -137,11 +189,49 @@ def update_service():
         return True
 
 @auth.requires_login()
+def update_price():
+    id = request.vars.id
+    data = dict()
+    if request.vars.name:
+        data['name'] = request.vars.name.decode('utf-8').upper()
+    data['price'] = request.vars.price
+    try:
+        query = db.service_price_lists.id==id
+        result = db(query).update(**data)
+    except Exception as e:
+        db.rollback()
+        return ''
+    else:
+        db.commit()
+        if result == 1:
+            return True
+        else:
+            db.rollback()
+            return ''
+
+@auth.requires_login()
 def toggle_service():
     id = request.vars.id
     try:
         row = db(db.services.id==id).select(db.services.status).first()
         result = db(db.services.id==id).update(status=(not row.status))
+    except Exception as e:
+        db.rollback()
+        return ''
+    else:
+        db.commit()
+        if result == 1:
+            return True
+        else:
+            return ''
+
+@auth.requires_login()
+def toggle_price():
+    id = request.vars.id
+    pl = db.service_price_lists
+    try:
+        row = db(pl.id==id).select(pl.status).first()
+        result = db(pl.id==id).update(status=(not row.status))
     except Exception as e:
         db.rollback()
         return ''
