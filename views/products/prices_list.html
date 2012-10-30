@@ -111,29 +111,7 @@ var price = jQuery('#price');
 var productid = id;
 var oTable = jQuery('#table');
 var globalid = '';
-<<<<<<< HEAD
-    ///////// get products /////////
-    get_products();
-    function get_products() {
-        jQuery.ajax({
-            url: "{{=URL(c='products_ajax', f='get_products')}}",
-            type: "POST",
-            dataType: "json",
-            data: { query:"ANY" },
-            success: function(data){
-                for(d = 0; d < data.length; d++) {
-                    product.append('<option value='+data[d].product_descriptions.id+'>'+data[d].product_descriptions.name+'</option>');
-                }
-            },
-            complete: function() {
-                product.chosen();
-            }
-        });
-    }
-=======
- 
- //////////// get info ////////////
->>>>>>> bmbm
+
 
   jQuery.ajax({ 
       url: "{{=URL(c='products_ajax', f='get_product_information')}}",
