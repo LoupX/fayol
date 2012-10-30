@@ -26,7 +26,10 @@
     jQuery("#form_list").validate({
             rules: {
                 name: "required",
-                pricelist: "required"
+                pricelist: {
+                    number: true,
+                    required: false
+                }
                 
             },
             messages: {

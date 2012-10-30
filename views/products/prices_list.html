@@ -152,6 +152,21 @@ var globalid = '';
    //      }
         
    //  });
+   
+   jQuery("#form_agent2").validate({
+            rules: {
+                'name-list': "required",
+                price: {
+                    number: true,
+                    required: false
+                }
+                
+            },
+            messages: {
+                'name-list': "Ingrese el nombre de la lista.",
+                price: "Ingrese el precio."
+            }
+        });
 
     jQuery('#submit').on('click', function(e) {
         e.preventDefault();
@@ -161,7 +176,7 @@ var globalid = '';
         var listid = '';
 
         // Validate form and shit as usual....
-        if (productid != '') { 
+        if (productid != '' && jQuery("#form_agent2").valid()) { 
             if (namelist.val().length <= 0) {
                 namelist.addClass('error');
                 jQuery('.msgerror').fadeIn(600);
