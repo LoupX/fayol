@@ -21,9 +21,9 @@
         
         <p style="margin-top:20px;">
               <span class="formwrapper" style="margin-left:20px;">
-                    <input type="radio" id="a" name="filtervendors" value="true" onclick="ajaxFilter(this.value)" checked="checked"/> Habilitados &nbsp; &nbsp;
-                    <input type="radio" id="b" name="filtervendors"  value="false" onclick="ajaxFilter(this.value)"/> Deshabilitados &nbsp; &nbsp;
-                    <input type="radio" id="c" name="filtervendors" value="any" onclick="ajaxFilter(this.value)"/> Todos &nbsp; &nbsp;
+                    <input type="radio" id="a" name="filtervendors" value="true" checked="checked"/> Habilitados &nbsp; &nbsp;
+                    <input type="radio" id="b" name="filtervendors"  value="false" /> Deshabilitados &nbsp; &nbsp;
+                    <input type="radio" id="c" name="filtervendors" value="any" /> Todos &nbsp; &nbsp;
               </span>
         </p>
         
@@ -68,12 +68,9 @@
 <script type="text/javascript">
     
     var contador = "1";	
-    
-    /*jQuery('.dataTables_length select, input:checkbox, input:radio').uniform();*/
-    jQuery(document).ready(function() {
-        alert('load' + jQuery('.formwrapper input:radio').val());
-        ajaxFilter(jQuery('.formwrapper input:radio').val());
-    });
+
+    val = jQuery('.formwrapper input[name=filtervendors]:checked').val();
+    ajaxFilter(val);
 
     jQuery('.formwrapper input:radio').on('change', function(e) {
         ajaxFilter(e.currentTarget.value);
