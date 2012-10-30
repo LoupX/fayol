@@ -16,7 +16,13 @@ def new_package():
 #Views for Services
 @auth.requires_login()
 def services():
-    title = 'shit'
+    title = 'Servicios'
+    current = ['menu_catalogs']
+    return dict(title=title,  current=current)
+
+@auth.requires_login()
+def view_service():
+    title = 'Servicios'
     current = ['menu_catalogs']
     return dict(title=title,  current=current)
 

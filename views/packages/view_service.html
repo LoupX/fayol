@@ -9,7 +9,7 @@
 {{end}}
 
 {{block sidebar_menu}}
-{{include 'products/sidebar.html'}}
+{{include 'packages/sidebar.html'}}
 {{end}}
 
 {{block content}}
@@ -26,7 +26,7 @@
                 <div id="basicform" class="subcontent">
                                 
                     <div class="contenttitle2">
-                        <h3 id="name">Producto: ""</h3>
+                        <h3 id="name">Servicio: ""</h3>
                     </div><!--contenttitle-->
                     
             </div><!--subcontent-->	   
@@ -38,53 +38,15 @@
                    	  <td width="30%">Código:</td>
                       <td width="70%"><strong id="code"></strong></td>
                   </tr>
-               	  <!--<tr>
+               	  <tr>
                    	  <td width="30%">Nombre:</td>
                       <td width="70%"><strong id="name"></strong></td>
-                  </tr>-->
-                  <tr>
-                   	  <td>Nombre alternativo:</td>
-                      <td><strong id="alternative_name"></strong></td>
                   </tr>
                	  <tr>
                	    <td>Código alternativo:</td>
                	    <td><strong id="alternative_code"></strong></td>
            	      </tr>
                   <tr>
-                	  <td>Marca:</td>
-                	  <td><strong id="brand_id"></strong></td>
-              	  </tr>
-              	  <tr>
-                	  <td>Modelo:</td>
-                	  <td><strong id="model"></strong></td>
-              	  </tr>
-              </table>
-            </div><!--one_half-->
-            
-			<div class="one_half last" style="margin-bottom: 5px;">
-           
-              <table cellpadding="0" cellspacing="0" class="table invoice">
-              	  <tr>
-                	  <td>Unidad de medida:</td>
-                	  <td><strong id="unit"></strong></td>
-              	  </tr>
-              	  <tr>
-               	    <td>Número de parte:</td>
-               	    <td><strong id="part_number"></strong></td>
-           	      </tr>
-              	  <tr>
-                	  <td width="30%">Número de serie:</td>
-                	  <td width="70%"><strong id="serial_number"></strong></td>
-              	  </tr>
-              	  <tr>
-                	  <td>Categoría:</td>
-                	  <td><strong id="category"></strong></td>
-              	  </tr>
-              	  <tr>
-                	  <td>Proveedores:</td>
-                	  <td><strong id="vendors"></strong></td>
-              	  </tr>
-              	  <tr>
                 	  <td>Costo estandar:</td>
                 	  <td><strong id="standard_cost"></strong></td>
               	  </tr>
@@ -92,7 +54,6 @@
                 	  <td>Margen de utilidad:</td>
                 	  <td><strong id="markup"></strong></td>
               	  </tr>
-
               	  <tr>
                 	  <td>Descripción:</td>
                 	  <td><strong id="description"></strong></td>
@@ -100,49 +61,24 @@
               </table>
             </div><!--one_half-->
             
-            <div class="one_half" style="margin-bottom:40px; margin-top: -38px;">
+			<div class="one_half last" style="margin-bottom: 5px;">
            
-              <table cellpadding="0" cellspacing="0" class="table invoice" style="margin-top:-4px;">
+              <table cellpadding="0" cellspacing="0" class="table invoice" >
               	  <tr>
                    	  <td  width="30%">Estatus:</td>
                       <td  width="70%">
+                        <input type="checkbox" name="status" disabled>
                         <span id="resp"></span>
                       </td>
                   </tr>
               </table>
             </div><!--one_half-->
+           
             
             <a href="#" id="edit_product" data-id="" style="float:right;">
                 <span class="stdbtn btn_orange">Editar</span>
             </a>
 
-            
-            <br clear="all"/> 
-            	
-            	<div class="contenttitle2">
-                        <h3>Lista de precios del producto</h3>
-                </div><!--contenttitle-->
-            
-            	<table cellpadding="0" cellspacing="0" border="0" class="stdtable" id="liststable" style="display: none;">
-                <thead>
-                    <tr>
-                        <th class="head0" width="30%">Nombre de la lista</th>
-                        <th class="head1" width="30%">Precio</th>
-                        <th class="head0" width="20%">Predeterminado</th>
-                        <th class="head1" width="20%">&nbsp;</th>
-                    </tr>
-                </thead>
-                <tfoot>
-                    <tr>
-                        <th class="head0" width="30%">Nombre de la lista</th>
-                        <th class="head1" width="30%">Precio</th>
-                        <th class="head0" width="20%">Predeterminado</th>
-                        <th class="head1" width="20%">&nbsp;</th>
-                        
-                    </tr>
-                </tfoot>
-            </table>
-            
         </div><!--contentwrapper-->
         
         <br clear="all" />

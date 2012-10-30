@@ -45,16 +45,14 @@
                         <p>Se han guardado los datos del formulario.</p>
                     </div>
                 
-                    <form id="form_product" class="stdform stdform2" method="post" action="">                                       
+                    <form id="form_service" class="stdform stdform2" method="post" action="">                                       
                         <p>
                             <label>Nombre del Servicio*</label>
                             <span class="field"><input type="text" name="name" id="name" class="smallinput" tabindex="1"/></span>
                         </p>
-                        <p style="margin-top:1px;">
-                            <label>Productos</label>
-                            <span class="field">
-                                <select name="products" id="products" multiple="multiple" size="10" data-placeholder="Seleccionar" class="chzn-select" tabindex="2"></select>  
-                            </span>
+                        <p>
+                            <label>codigo alternativo</label>
+                            <span class="field"><input type="text" name="alternative_code" id="alternative_code" class="smallinput" tabindex="1"/></span>
                         </p>
                         <p>
                             <label>Costo estandar</label>
@@ -91,30 +89,69 @@
 </div><!--bodywrapper-->
 
 <script type="text/javascript">
+    
+	jQuery("#form_service").validate({
+        rules: {
+        	name: "required",
+        },
+        messages: {
+            name: "Ingrese el nombre del servicio",
+        }
+    });
 
-//jQuery(".chzn-select").chosen();
-    var product = jQuery('#products');
+    //form and shit
+    //send form
+    jQuery('#submit').live('click', function(e) {
+        e.preventDefault();
+        
+        
+        jQuery('.msgerror').hide();
+        jQuery('.exists').hide();
+        jQuery('.msgsuccess').hide();
 
-///////// get products /////////
-    get_products();
-    function get_products() {
-        jQuery.ajax({
-            url: "{{=URL(c='products_ajax', f='get_products')}}",
-            type: "POST",
-            dataType: "json",
-            success: function(data){
-                if(data) {
-                    for(d = 0; d < data.length; d++) {
-                        product.append('<option value='+data[d].product_descriptions.id+'>'+data[d].product_descriptions.name+'</option>');
+        if(jQuery("#form_service").valid()) {
+
+             jQuery.ajax({
+                url: "{{=URL(c='services_ajax', f='create_service')}}",
+                data: { 
+                    name:jQuery('#name').val(),
+                    alternative_code:jQuery('#alternative_code').val(),
+                    standard_cost:jQuery('#standard_cost').val(),
+                    markup:jQuery('#markup').val(),
+                    description:jQuery('#description').val()
+                },
+                type: 'POST',
+                success:function(data){
+                    if(data != 0 && data){
+                        jQuery('.msgsuccess').fadeIn(1600, function() {
+                            jQuery('.msgsuccess').fadeOut('slow');
+                        });
+                        deleteFields();
+                   }
+                    else if(data == 0) {
+                        jQuery('.exists').fadeIn(1600);
                     }
+                    else{
+                        jQuery('.msgerror').fadeIn(1600);
+                    }
+                    jQuery('body','html',window).animate(
+                                                        {scrollTop:0}, 
+                                                        1000);
                 }
-            },
-            complete: function() {
-                product.chosen();
-            }
-        });
-    }
+            }); 
+        } else {
+            jQuery('.msgerror').fadeIn(1600);
+            jQuery('body','html',window, document).animate({scrollTop:0},1000);
+        }
+    });
 
+    function deleteFields() {
+        jQuery('#name').val('');
+        jQuery('#alternative_code').val('');
+        jQuery('#standard_cost').val('');
+        jQuery('#markup').val('');
+        jQuery('#description').val('');
+    }
 
 </script>
 </body>

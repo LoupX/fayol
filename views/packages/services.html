@@ -1,0 +1,198 @@
+{{extend 'base/layout.html'}}
+
+{{block scripts_extra}}
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.dataTables.min.js')}}"></script>
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/chosen.jquery.min.js')}}"></script>
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.validate.min.js')}}"></script>
+{{end}}
+
+{{block sidebar_menu}}
+{{include 'packages/sidebar.html'}}
+{{end}}
+
+{{block content}}
+    <div class="centercontent">
+    
+        <div class="pageheader">
+        
+            <h1 class="pagetitle">{{=title}}</h1>
+            
+        </div><!--pageheader-->
+        
+        <p style="margin-top:20px;">
+              <span class="formwrapper" style="margin-left:20px;">
+                    <input type="radio" id="a" name="filtervendors" value="true" onclick="ajaxFilter(this.value)" checked="checked"/> Habilitados &nbsp; &nbsp;
+                    <input type="radio" id="b" name="filtervendors"  value="false" onclick="ajaxFilter(this.value)"/> Deshabilitados &nbsp; &nbsp;
+                    <input type="radio" id="c" name="filtervendors" value="any" onclick="ajaxFilter(this.value)"/> Todos &nbsp; &nbsp;
+              </span>
+        </p>
+        
+        <div id="contentwrapper" class="contentwrapper">
+        
+                <table cellpadding="0" cellspacing="0" border="0" class="stdtable" id="table">
+                    <thead>
+                        <tr>
+                            <th width="20%" class="head0">Código</th>
+                            <th width="20%" class="head1">Nombre</th>
+                            <th width="15%" class="head0">Código alternativo</th>
+                            <th width="15%" class="head1">Estatus</th>
+                            <th width="8%" class="head0"></th>
+                            <th width="8%" class="head0"></th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th width="20%" class="head0">Código</th>
+                            <th width="20%" class="head1">Nombre</th>
+                            <th width="15%" class="head0">Código alternativo</th>
+                            <th width="15%" class="head1">Estatus</th>
+                            <th width="8%" class="head0"></th>
+                            <th width="8%" class="head0"></th>
+                        </tr>
+                    </tfoot>
+                </table>
+	       
+	       
+        
+        </div><!--contentwrapper-->
+        
+        <br clear="all" />
+        
+	</div><!-- centercontent -->
+    
+    
+</div><!--bodywrapper-->
+
+<script type="text/javascript">
+    
+    var contador = "1";	
+
+    ajaxFilter('TRUE');
+
+    jQuery('.formwrapper input:radio').on('change', function(e) {
+        ajaxFilter(e.currentTarget.value);
+    });
+    
+    function ajaxFilter(query) {
+        jQuery.ajax({
+            url: "{{=URL(c='services_ajax', f='get_services')}}",
+            type: "POST",
+            data: {query: query},
+            dataType: "json",
+            success:function(data){
+                cont = 0;
+                aaData = new Array();
+                for(row in data){
+
+                    services = data[row].services;
+                    description = data[row].service_descriptions;
+                    
+                    checker_span = (services.status) ? "class=\"checked\"" : "";
+                    checked = (services.status) ? "checked=\"checked\"" : "";
+                    
+                    aaData[cont] = [
+                    		services.code,
+                            description.name, 
+                            services.alternative_code,
+                            "<div class='checker' id='uniform-undefined'><span " + checker_span + "><input type=\"checkbox\" " + checked + " value=\"" + product.id + "\" /></span></div>", 
+                            "<a href=\"{{=URL(c='packages', f='view_service')}}?id=" + product.id + "\">Ver</a>",
+                            "<a href=\"{{=URL(c='packages', f='update_service')}}?id=" + product.id + "\">Editar</a>"
+                        ];
+                   cont++;
+                }
+            },
+            complete: function() {
+            	loadTable(aaData);
+            }
+        });
+    }
+    
+    function loadTable(aaData) {
+        jQuery("#table").dataTable( {
+            "bDestroy": true,
+            "oLanguage": {
+                "sProcessing": "Procesando...",
+                "sLengthMenu": "Ver _MENU_ registros",
+                "sZeroRecords": "No se encontraron registros",
+                "sEmptyTable": "No hay registros en esta tabla",
+                "sLoadingRecords": "Cargando...",
+                "sInfo": "Viendo _START_ - _END_ de _TOTAL_ registros",
+                "sInfoEmpty": "Viendo 0 - 0 de 0 registros",
+                "sInfoFiltered": "(Flitrado de _MAX_ registros totales)",
+                "sSearch": "Buscar",
+                "oPaginate": {
+                    "sFirst":"Primero",
+                    "sPrevious":"Anterior",
+                    "sNext":"Siguiente",
+                    "sLast":"Ultimo"
+                },
+            },
+            "sPaginationType": "full_numbers",
+            "aaData": aaData,
+            "aoColumns": [
+                {"sTitle":"Código"},
+                {"sTitle":"Nombre"},
+                {"sTitle":"Código alternativo"},
+                {"sTitle":"Estatus"},
+                {"sTitle":"", "sClass":"center"},
+                {"sTitle":"", "sClass":"center"}
+            ]
+        });
+        
+        togglestatus();
+        jQuery('#table_paginate span, #table_length select').on('click', function() {
+            togglestatus();
+        });
+    }
+ 
+    function togglestatus() {
+        jQuery('.stdtable input:checkbox').unbind('change');
+        jQuery('.stdtable input:checkbox').on("change", function(e){
+        	jQuery.uniform.update(e.currentTarget);
+            jQuery.ajax({
+                url: "{{=URL(c='services_ajax', f='toggle_service')}}",
+                type: "POST",
+                data: {
+                    id:e.currentTarget.value
+                },
+                success: function(data){
+                    if(!jQuery('#c').is(':checked')) {
+                        oTable = jQuery('#table').dataTable();
+                        var row = jQuery(e.currentTarget).closest('tr').get(0);
+                        oTable.fnDeleteRow(oTable.fnGetPosition(row));
+                        togglestatus();
+                        /*jQuery('input:checkbox, input:radio').uniform();*/
+                    }
+                }
+            });
+        });
+        
+        if(contador == "1")
+        {
+	        jQuery('input:radio').uniform();
+	        jQuery('select').uniform();
+	        contador++;
+        }
+        else
+        {
+	        no_uniform();
+	        jQuery('input:radio').uniform();
+	        jQuery('select').uniform();
+        }
+  
+    }
+
+    function no_uniform()
+    {
+        jQuery('input:radio').unwrap().unwrap();
+    	jQuery('select').siblings("span").remove();
+    	jQuery('select').unwrap();
+    	jQuery('input:radio').unbind(".uniform");
+    	jQuery('select').unbind(".uniform"); 
+    }
+ 
+</script>
+
+</body>
+</html>
+{{end}}
