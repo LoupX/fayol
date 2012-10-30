@@ -26,7 +26,7 @@ def update_product():
 
 @auth.requires_login()
 def prices_list():
-    title = 'Productos'
+    title = 'Lista de Precios'
     current = ['menu_catalogs', 'sidebar_products', 'sub_products_prices']
     return dict(title=title, current=current)
 

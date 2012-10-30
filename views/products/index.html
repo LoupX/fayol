@@ -37,7 +37,8 @@
                             <th width="15%" class="head0">Categoría</th>
                             <th width="15%" class="head1">Marca</th>
                             <th width="14%" class="head0">Precio</th>
-                            <th width="8%" class="head1">Ver</th>
+                            <th width="8%" class="head1">Estatus</th>
+                            <th width="8%" class="head1">Listas</th>
                             <th width="8%" class="head0"></th>
                         </tr>
                     </thead>
@@ -48,7 +49,8 @@
                             <th width="15%" class="head0">Categoría</th>
                             <th width="15%" class="head1">Marca</th>
                             <th width="14%" class="head0">Precio</th>
-                            <th width="8%" class="head1">Ver</th>
+                            <th width="8%" class="head1">Estatus</th>
+                            <th width="8%" class="head1">Listas</th>
                             <th width="8%" class="head0"></th>
                         </tr>
                     </tfoot>
@@ -130,7 +132,8 @@
                             brand.name,
                             price,
                             "<div class='checker' id='uniform-undefined'><span " + checker_span + "><input type=\"checkbox\" " + checked + " value=\"" + product.id + "\" /></span></div>", 
-                            "<a href=\"{{=URL(c='products', f='view_product')}}?id=" + product.id + "\">Ver</a>"
+                            "<a href=\"{{=URL(c='products', f='prices_list')}}?id=" + product.id + "\">Agregar</a>",
+                            "<a href=\"{{=URL(c='products', f='view_product')}}?id=" + product.id + "\">Ver</a>"  
                         ];
                    cont++;
                 }
@@ -170,6 +173,7 @@
                 {"sTitle":"Marca"},
                 {"sTitle":"Precio"},
                 {"sTitle":"Estatus", "sClass":"center"},
+                {"sTitle":"Listas", "sClass":"center"},
                 {"sTitle":"", "sClass":"center"}
             ]
         });

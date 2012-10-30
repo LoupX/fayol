@@ -45,32 +45,25 @@
         
         	<div id="validation" class="subcontent">
             	
-            		<div class="contenttitle2">
-                        <h3>Seleccione un producto</h3>
+            		<div class="contenttitle2" style="width=100%;">
+                        <h3 id="product-name">Nombre del producto Seleccionado:</h3>
                     </div><!--contenttitle-->
             	    <br />   
+                    <br />
                     <!--contenttitle-->   
                        
                     <form id="form_agent2" class="stdform stdform2" method="post" action="">
-                         <p style="margin-top: 1px;">
-                            <label>Listas de precios.</label>
-                            <span class="field">
-                                <select id="product" name="product" data-placeholder="Seleccionar" style="width:350px;" tabindex="1">
-                                    <option value="">Seleccionar</option>
-                                </select>
-                            </span>
-                        </p>
                         <p style="margin-top: 1px;">
                             <label>Nombre</label>
                             <span class="field">
-                                <input type="text" id="name-list" name="name-list" class="smallinput" onfocus="remove_Class(this.id);"disabled>
+                                <input type="text" id="name-list" name="name-list" class="smallinput">
                             </span>
                         </p>
 
                         <p style="margin-top: 1px;">
                             <label>Precio</label>
                             <span class="field">
-                                <input type="text" id="price" name="price" class="smallinput" onfocus="remove_Class(this.id);" disabled>
+                                <input type="text" id="price" name="price" class="smallinput">
                             </span>
                         </p>
 
@@ -112,12 +105,13 @@
 </div><!--bodywrapper-->
 
 <script type="text/javascript">
-var product = jQuery("#product");
+var id = {{=request.vars.id}};
 var namelist = jQuery('#name-list');
 var price = jQuery('#price');
-var productid = '';
+var productid = id;
 var oTable = jQuery('#table');
 var globalid = '';
+<<<<<<< HEAD
     ///////// get products /////////
     get_products();
     function get_products() {
@@ -136,36 +130,50 @@ var globalid = '';
             }
         });
     }
+=======
+ 
+ //////////// get info ////////////
+>>>>>>> bmbm
 
-   ///////// change method for product`s select /////////
-    product.change(function() {
-        jQuery(this).siblings('div').removeClass('ellol');
-        productid = jQuery(this).find(':selected').val();
+  jQuery.ajax({ 
+      url: "{{=URL(c='products_ajax', f='get_product_information')}}",
+      type: "POST",
+      data: { id: id }, 
+      dataType:"json",
+      success: function(data) {
+            jQuery('#product-name').html("Nombre del producto Seleccionado: \"" + data.product_descriptions['name'] + "\""); 
+      },
+      complete: function() {
+        oTable.dataTable().fnClearTable();
+        sendId(productid);
+      }
+  });  
 
-        if (productid != '') {
-            namelist.attr('disabled', false);
-            price.attr('disabled', false);
-            oTable.dataTable().fnClearTable();
-            sendId(productid);
-            //globalid = productid;
-        } else{
-            namelist
-                .attr('disabled', true)
-                .val('');
-            price
-                .attr('disabled', true)
-                .val('');
-            productid = '';
-            //globalid = productid;
-            oTable.dataTable().fnDestroy();
-            oTable.hide();
-        }
+   // ///////// change method for product`s select /////////
+   //  product.change(function() {
+   //      jQuery(this).siblings('div').removeClass('ellol');
+   //      productid = jQuery(this).find(':selected').val();
+
+   //      if (productid != '') {
+   //          namelist.attr('disabled', false);
+   //          price.attr('disabled', false);
+   //          oTable.dataTable().fnClearTable();
+   //          sendId(productid);
+   //          //globalid = productid;
+   //      } else{
+   //          namelist
+   //              .attr('disabled', true)
+   //              .val('');
+   //          price
+   //              .attr('disabled', true)
+   //              .val('');
+   //          productid = '';
+   //          //globalid = productid;
+   //          oTable.dataTable().fnDestroy();
+   //          oTable.hide();
+   //      }
         
-    });
-
-    function remove_Class(who) {
-        jQuery('#'+who).removeClass('error');
-    }
+   //  });
 
     jQuery('#submit').on('click', function(e) {
         e.preventDefault();
