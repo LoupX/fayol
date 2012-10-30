@@ -98,6 +98,7 @@
 jQuery(".chzn-select").chosen();
 
 var id = {{=request.vars.id}}
+var ids = {{=request.vars.id}}
 
 ////// get info //////
 
@@ -154,7 +155,7 @@ jQuery.ajax({
                     standard_cost:standard_cost,
                     markup:markup,
                     description:description,
-                    id:jQuery('#sid').val(),
+                    id:id,
                 },
                 type: "POST",
                 success:function(data){
@@ -163,7 +164,7 @@ jQuery.ajax({
                             jQuery('.msgsuccess').fadeOut('slow');
                         });
                         id = '';
-                        /*setTimeout('redirect()', 1600);*/
+                        setTimeout('redirect()', 1600);
                     }
                     else{
                         jQuery('.msgerror').fadeIn(1600);
@@ -183,7 +184,7 @@ jQuery.ajax({
 });
 
 function redirect() {
-        window.location.replace("{{=URL(c='packages', f='view_service')}}?id="+id);
+        window.location.replace("{{=URL(c='packages', f='view_service')}}?id="+ids);
     }       
             
 </script>

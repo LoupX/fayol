@@ -17,23 +17,23 @@ def new_package():
 @auth.requires_login()
 def services():
     title = 'Servicios'
-    current = ['menu_catalogs']
+    current = ['menu_catalogs', 'sidebar_services', 'sub_services_read']
     return dict(title=title,  current=current)
 
 @auth.requires_login()
 def view_service():
     title = 'Servicios'
-    current = ['menu_catalogs']
+    current = ['menu_catalogs', 'sidebar_services', 'sub_services_read']
     return dict(title=title,  current=current)
 
 @auth.requires_login()
 def new_service():
     title = 'Servicios'
-    current = ['menu_catalogs']
+    current = ['menu_catalogs', 'sidebar_services', 'sub_services_new']
     return dict(title=title,  current=current)
 
 @auth.requires_login()
 def update_service():
     title = 'Servicios'
-    current = ['menu_catalogs']
+    current = ['menu_catalogs', 'sidebar_services', 'sub_services_read']
     return dict(title=title,  current=current)    
