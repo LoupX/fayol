@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 db.define_table('inventory_entries',
-    Fied('serie', 'string'),
+    Field('serie', 'string'),
     Field('folio', 'string'),
     Field('branch_id'),
     Field('warehouse_id'),
