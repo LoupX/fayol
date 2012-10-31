@@ -266,13 +266,10 @@ newDataTable();
                 url: "{{=URL(c='common', f='echo')}}",
                 type: "POST",
                 data: {
-                    id: {{=request.vars.id}},
+                    id: 1,
                     products: products
                 },
-                success: function(data){
-                    if (true) {
-                        redirect();
-                    };
+                success: function(data) {
                 }
             });
 
