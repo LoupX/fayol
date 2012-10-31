@@ -176,7 +176,7 @@
 //////////// get info ////////////
     jQuery.ajax({
         url: "{{=URL(c='products_ajax', f='get_product_information')}}",
-        data: { id: id },
+        data: { id: {{=request.vars.id}} },
         type: "POST",
         dataType:"json",
         success:function(data){
@@ -251,7 +251,7 @@
                     standard_cost:jQuery('#standard_cost').val(),
                     markup:jQuery('#markup').val(),
                     description:jQuery('#description').val(),
-                    id: id
+                    id: {{=request.vars.id}}
                 },
                 type: 'POST',
                 success:function(data){
