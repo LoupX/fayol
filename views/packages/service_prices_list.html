@@ -188,7 +188,7 @@ var globalid = '';
             }
         });
     }
-
+  
     function sendId(id) {
         var theresdata = '';
         jQuery.ajax({
@@ -208,14 +208,14 @@ var globalid = '';
                             data.service_price_lists[e].name, 
                             data.service_price_lists[e].price, 
                             '<input type="radio" value="'+data.service_price_lists[e].id+'" name="radios" '+checked+'/>', 
-                            "<a href=\"{{=URL(c='products', f='list_quickedit')}}?id="+data.service_price_lists[e].id+"\" class=\"toggle\">Editar</a>"
+                            "<a href=\"{{=URL(c='products', f='service_list_quickedit')}}?id="+data.service_price_lists[e].id+"\" class=\"toggle\">Editar</a>"
                             ];
                         cont++;
                     }
                     oTable.show();
                 }
                 else {
-                    oTable.fnDestroy();
+                    //oTable.fnDestroy();
                     jQuery('#table').hide();
                 }
             },

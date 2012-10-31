@@ -44,7 +44,7 @@
         if(jQuery("#form_list").valid()) {
 
             jQuery.ajax({
-                url: "{{=URL(c='products_ajax', f='update_price')}}",
+                url: "{{=URL(c='services_ajax', f='update_price')}}",
                 type: "POST",
                 data: { 
                     id: {{=request.vars.id}},
