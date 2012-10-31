@@ -5,9 +5,8 @@
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.validate.min.js')}}"></script>
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/chosen.jquery.min.js')}}"></script>
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.dataTables.min.js')}}"></script>
-<script type="text/javascript" src="{{=URL('static', 'js/plugins/chosen.jquery.min.js')}}"></script>
-<script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.smartWizard-2.0.min.js')}}"></script>  
-<script type="text/javascript" src="{{=URL('static', 'js/plugins/scroll.js')}}"></script>    
+<script type="text/javascript" src="{{=URL('static', 'js/custom/dualselector.js')}}"></script>
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/chosen.jquery.min.js')}}"></script>    
 <style type="text/css">
     .ellol {
         border: 1px solid red;
@@ -46,124 +45,35 @@
                         <a class="close"></a>
                         <p>Se han guardado los datos del formulario.</p>
                     </div>
-
-                    <!-- START OF DEFAULT WIZARD -->
-                    <form class="stdform" method="post" action="" id="form_package">
-                    <div id="wizard" class="wizard">
-                        <br />
-                        <ul class="hormenu">
-                            <li>
-                                <a href="#wiz1step1" onclick="javascript:void(0);" id="w1">
-                                    <span class="h2">Paso 1</span>
-                                    <span class="dot"><span></span></span>
-                                    <span class="label">Información Básica</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#wiz1step2" onclick="javascript:void(0);" id="w2">
-                                    <span class="h2">Paso 2</span>
-                                    <span class="dot"><span></span></span>
-                                    <span class="label">Agregar Productos</span>
-                                </a>
-                            </li>
-                        </ul>
-                        
-                        <br clear="all" /><br /><br />
-                            
-                        <div id="wiz1step1" class="formwiz">
-                            <h4>Paso 1: Información Básica</h4>
-                            <p>
+                
+                    <form id="form_package" class="stdform stdform2" method="post" action="">                                       
+                        <p>
                             <label>Nombre del Paquete*</label>
                             <span class="field"><input type="text" name="name" id="name" class="smallinput" tabindex="1"/></span>
-                            </p>
-                            <p>
-                                <label>Costo estandar</label>
-                                <span class="field">
-                                    <input type="text" name="standard_cost" id="standard_cost" class="smallinput" placeholder="0.00" tabindex="3"/>
-                                </span>
-                            </p>
-                            <p>
-                                <label>Margen de utilidad</label>
-                                <span class="field"><input type="text" name="markup" id="markup" class="smallinput" tabindex="4"/></span>
-                            </p>
-                            <p>
-                                <label>Descripción</label>
-                                <span class="field">
-                                    <textarea cols="80" rows="5" name="description" id="description" class="smallinput" tabindex="5"></textarea>
-                                </span>
-                            </p>
-                            <p class="stdformbutton">
-                                <button id="submit" class="submit radius2" tabindex="6">Guardar</button>
-                            </p>                    
-                            
-                        </div><!--#wiz1step1-->
+                        </p>
+                        <p>
+                            <label>Costo estandar</label>
+                            <span class="field">
+                                <input type="text" name="standard_cost" id="standard_cost" class="smallinput" placeholder="0.00" tabindex="3"/>
+                            </span>
+                        </p>
+                        <p>
+                            <label>Margen de utilidad</label>
+                            <span class="field"><input type="text" name="markup" id="markup" class="smallinput" tabindex="4"/></span>
+                        </p>
+                        <p>
+                            <label>Descripción</label>
+                            <span class="field">
+                                <textarea cols="80" rows="5" name="description" id="description" class="smallinput" tabindex="5"></textarea>
+                            </span>
+                        </p>
+                        <p class="stdformbutton">
+                            <button id="submit" class="submit radius2" tabindex="6">Guardar</button>
+                        </p>
+                        <a href="{{=URL(c='packages', f='select_products')}}">ir</a>
                         
-                        <div id="wiz1step2" class="formwiz">
-                            <h4>Paso 2: Agregar Productos</h4>
-                            
-                                <table cellpadding="0" cellspacing="0" border="0" class="stdtable" id="table">
-            <thead>
-                <tr>
-                    <th width="20%" class="head0">Código</th>
-                    <th width="20%" class="head1">Nombre</th>
-                    <th width="15%" class="head0">Categoría</th>
-                    <th width="15%" class="head1">Marca</th>
-                    <th width="14%" class="head0">Precio</th>
-                    <th width="8%" class="head0"></th>
-                    <th width="8%" class="head0" style="display: none;"></th>
-                </tr>
-            </thead>
-            <tfoot>
-                <tr>
-                    <th width="20%" class="head0">Código</th>
-                    <th width="20%" class="head1">Nombre</th>
-                    <th width="15%" class="head0">Categoría</th>
-                    <th width="15%" class="head1">Marca</th>
-                    <th width="14%" class="head0">Precio</th>
-                    <th width="8%" class="head0"></th>
-                    <th width="8%" class="head0" style="display: none;"></th>
-                </tr>
-            </tfoot>
-        </table>  
-
-                                <br>
-                                <br>
-
-                                <div class="contenttitle2">
-                                    <h3>Productos agregados.</h3>
-                                </div><!--contenttitle-->
-
-                                <table cellpadding="0" cellspacing="0" border="0" class="stdtable" id="newtable"  >
-                                    <thead>
-                                        <tr>
-                                            <th class="head1">Nombre</th>
-                                            <th class="head0">Cantidad</th>
-                                            <th class="head0"></th>
-                                            <th class="head0" style="display: none;"></th>
-                                        </tr>
-                                    </thead>
-                                    <tfoot>
-                                        <tr>
-                                            <th class="head1">Nombre</th>
-                                            <th class="head0">Cantidad</th>
-                                            <th class="head0"></th>
-                                            <th class="head0" style="display: none;"></th>
-                                        </tr>
-                                    </tfoot>
-                                </table>
-   
-                                <p class="stdformbutton" style="margin-top: 1px;">
-                                    <button id="submit2" class="submit radius2">Guardar</button>
-                                </p>
-  
-                                                                                               
-                        </div><!--#wiz1step2-->
                         
-                    </div><!--#wizard-->
                     </form>
-                    <!-- END OF DEFAULT WIZARD -->
-                
-  
                    
 
             </div><!--subcontent-->
@@ -177,39 +87,6 @@
 </div><!--bodywrapper-->
 
 <script type="text/javascript">
-
-jQuery('#wizard').smartWizard(
-    {
-    // Properties
-    selected: 0,  // Selected Step, 0 = first step   
-    keyNavigation: false, // Enable/Disable key navigation(left and right keys are used if enabled)
-    enableAllSteps: false,  // Enable/Disable all steps on first load
-    transitionEffect: 'fade', // Effect on navigation, none/fade/slide/slideleft
-    contentURL:null, // specifying content url enables ajax content loading
-    contentCache:true, // cache step contents, if false content is fetched always from ajax url
-    cycleSteps: false, // cycle step navigation
-    enableFinishButton: false, // makes finish button enabled always
-    errorSteps:[],    // array of step numbers to highlighting as error steps
-    labelNext:'Siguiente', // label for Next button
-    labelPrevious: 'Atras', // label for Previous button
-    labelFinish:'Fin',  // label for Finish button        
-    // Events
-    onLeaveStep: null, // triggers when leaving a step
-    onShowStep: null,  // triggers when showing a step
-    onFinish: null  // triggers when Finish button is clicked
- });
-//buttonPrevious buttonDisabled - buttonNext - buttonFinish buttonDisabled
-jQuery('.buttonPrevious, .buttonNext, .buttonFinish').hide();
-//jQuery('ul.hormenu a').attr('href', 'javascript:void(0);');
-
-jQuery('a.buttonNext').click(function(e) {
-    e.preventDefault();
-    jQuery('#wiz1step1').remove();
-    jQuery('.buttonPrevious, .buttonNext, .buttonFinish').hide();
-    jQuery('#w1').attr('href', '#');
-});
-
-
 
 //jQuery(".chzn-select").chosen();
     var product = jQuery('#products');
@@ -267,11 +144,11 @@ jQuery('a.buttonNext').click(function(e) {
              jQuery.ajax({
                 url: "{{=URL(c='products_ajax', f='create_product')}}",
                 data: { 
-                    name: jQuery('#name').val(),
-                    vendors: jQuery('#products').val() ? (jQuery('#products').val()) : '',
-                    standard_cost: jQuery('#standard_cost').val(),
-                    markup: jQuery('#markup').val(),
-                    description: jQuery('#description').val(),
+                    name:jQuery('#name').val(),
+                    vendors:jQuery('#products').val() ? (jQuery('#products').val()) : '',
+                    standard_cost:jQuery('#standard_cost').val(),
+                    markup:jQuery('#markup').val(),
+                    description:jQuery('#description').val(),
                 },
                 type: 'POST',
                 success:function(data){
@@ -280,7 +157,6 @@ jQuery('a.buttonNext').click(function(e) {
                             jQuery('.msgsuccess').fadeOut('slow');
                         });
                         deleteFields();
-                        
                     }
                     else if(data == 0) {
                         jQuery('.exists').fadeIn(1600);
@@ -297,8 +173,6 @@ jQuery('a.buttonNext').click(function(e) {
             jQuery('.msgerror').fadeIn(1600);
             jQuery('body','html',window, document).animate({scrollTop:0},1000);
         }
-        jQuery('.buttonPrevious, .buttonFinish').hide();
-        jQuery('.buttonNext').show();
     });
 
 ///////////// Borrar campos /////////////
@@ -314,182 +188,6 @@ jQuery('a.buttonNext').click(function(e) {
         jQuery('#markup').val('');
         jQuery('#description').val('');
     }
-
-///////// data tables /////////
-//
-//
-var nt = jQuery('#newtable'),
-    pt = jQuery('#table');
-newDataTable();
-
-    ajaxFilter('TRUE');
-    function ajaxFilter(query) {
-        jQuery.ajax({
-            url: "{{=URL(c='products_ajax', f='get_products')}}",
-            type: "POST",
-            data: {query: query},
-            dataType: "json",
-            success:function(data){
-                cont = 0;
-                aaData = new Array();
-                for(row in data){
-
-                    description = data[row].product_descriptions;
-                    prices = data[row].product_price_lists;
-                    product = data[row].products;
-                    category = data[row].category_descriptions;
-                    brand = data[row].brand_descriptions;
-                    price = 'No asignado';
-                    
-                    checked = (product.status) ? "checked=\"checked\"" : "";
-                    
-                    if(prices.length > 0) {
-                        for(k in prices) {
-                            if(prices[k].is_default){
-                                price = prices[k].price 
-                                price = price.toString();
-                                price = '$' + price;
-                            }
-                        }
-                    }
-                    else{
-                        if(product.standard_cost != null && product.markup != null){
-                            try{
-                                sc = parseFloat(product.standard_cost);
-                                m = (parseFloat(product.markup)/100)+1;
-                                price = sc*m;
-                                price = price.toString();
-                                price = '$' + price;
-                            }
-                            catch(error){
-                                
-                            }
-                        }
-                    }
-                    
-                    aaData[cont] = [
-                            product.code,
-                            description.name, 
-                            category.name,
-                            brand.name,
-                            price, 
-                            '<a href="javascript:void(0);" onclick="addProducts(this);">Agregar</a>',
-                            product.id
-                        ];
-                   cont++;
-                }
-            },
-            complete: function() {
-                loadTable(aaData);
-            }
-        });
-    }
-    
-    function loadTable(aaData) {
-        jQuery("#table").dataTable( {
-            "bDestroy": true,
-            "bPaginate": false,
-            "bLengthChange": false,
-            "bFilter": false,
-            "bSort": true,
-            "bInfo": false,
-            "bAutoWidth": true,
-            "aaData": aaData,
-            "aoColumns": [
-                {"sTitle":"Código"},
-                {"sTitle":"Nombre"},
-                {"sTitle":"Categoría"},
-                {"sTitle":"Marca"},
-                {"sTitle":"Precio"},
-                {"sTitle":"", "sClass":"center"}
-            ]
-        });
-        jQuery('#table_wrapper select').uniform();
-    }
-
-    function newDataTable() {
-        nt.dataTable({
-            "bDestroy": true,
-            "oLanguage": {
-                "sProcessing": "Procesando...",
-                "sLengthMenu": "Ver _MENU_ registros",
-                "sZeroRecords": "No se encontraron registros",
-                "sEmptyTable": "No hay registros en esta tabla",
-                "sLoadingRecords": "Cargando...",
-                "sInfo": "Viendo _START_ - _END_ de _TOTAL_ registros",
-                "sInfoEmpty": "Viendo 0 - 0 de 0 registros",
-                "sInfoFiltered": "(Flitrado de _MAX_ registros totales)",
-                "sSearch": "Buscar",
-                "oPaginate": {
-                    "sFirst":"Primero",
-                    "sPrevious":"Anterior",
-                    "sNext":"Siguiente",
-                    "sLast":"Ultimo"
-                },
-            },
-            "sPaginationType": "full_numbers",
-            "aoColumns": [
-                {"sTitle":"Nombre"},
-                {"sTitle":"Cantidad"},
-                {"sTitle":"", "sClass":"center"}
-            ]
-        });
-        jQuery('#newtable_wrapper select').uniform();
-    }
-
-    ///////// click event to add products to new package /////////
-    function addProducts(tr)  {
-            var row = jQuery(tr).closest('tr').get(0);
-            var newrow = pt.dataTable().fnGetData(row);
-
-            var resp = prompt('¿Cuantos productos desea agregar?',1);
-
-            if(resp > 0) {
-                nt.dataTable().fnAddData([
-                            newrow[1],
-                            resp,
-                            '<a href="javascript:void(0);" onclick="removeRow(this);">remover</a>',
-                            newrow[6]
-                ]);
-            } else {
-                alert('Se requiere la cantidad.');
-            };
-
-    }
-
-    function removeRow(tr) {
-        var row = jQuery(tr).closest('tr').get(0);
-        var pos = nt.dataTable().fnGetPosition(row)
-        nt.dataTable().fnDeleteRow(pos);
-    }
-
-    jQuery('#submit2').click(function(e) {
-        e.preventDefault();
-        if(nt.dataTable().fnGetData().length > 0) {
-            var products = [];
-            for(e = 0; e < nt.dataTable().fnGetData().length; e++) {
-                products[e] = {"id": nt.dataTable().fnGetData(e)[3], "amount": nt.dataTable().fnGetData(e)[1] }
-            }
-            //console.log(products);
-            jQuery.ajax({
-                url: "{{=URL(c='products_ajax', f='toggle_product')}}",
-                type: "POST",
-                data: {
-                    id: {{=request.vars.id}},
-                    products: products
-                },
-                success: function(data){
-                    if (true) {
-                        redirect();
-                    };
-                }
-            });
-
-        } else {
-            jQuery('.msgerror').show();
-        };
-        scrollThis();
-    });
  
     
 
