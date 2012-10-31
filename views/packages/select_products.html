@@ -1,0 +1,288 @@
+{{extend 'base/layout.html'}}
+
+{{block scripts_extra}}
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.maskedinput.js')}}"></script>
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.validate.min.js')}}"></script>
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.dataTables.min.js')}}"></script>
+<script type="text/javascript" src="{{=URL('static', 'js/custom/dualselector.js')}}"></script>
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/chosen.jquery.min.js')}}"></script>
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/scroll.js')}}"></script>    
+{{end}}
+
+{{block sidebar_menu}}
+{{include 'packages/sidebar.html'}}
+{{end}}
+
+{{block content}}
+<div class="centercontent">
+    <div class="pageheader">
+        <h1 class="pagetitle">{{=title}}</h1>
+            
+    </div><!--pageheader-->
+        
+    <div id="contentwrapper" class="contentwrapper">
+        <div class="notibar msgerror" style="display:none;">
+            <a class="close"></a>
+            <!-- Ocurrió un error con los datos del formulario. -->
+            <p>Agregue almenos un produto.</p>
+        </div>
+
+        <div class="contenttitle2">
+            <h3>Agregar los productos al paquete.</h3>
+        </div><!--contenttitle-->
+
+        <table cellpadding="0" cellspacing="0" border="0" class="stdtable" id="table">
+            <thead>
+                <tr>
+                    <th width="20%" class="head0">Código</th>
+                    <th width="20%" class="head1">Nombre</th>
+                    <th width="15%" class="head0">Categoría</th>
+                    <th width="15%" class="head1">Marca</th>
+                    <th width="14%" class="head0">Precio</th>
+                    <th width="8%" class="head0"></th>
+                    <th width="8%" class="head0" style="display: none;"></th>
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <th width="20%" class="head0">Código</th>
+                    <th width="20%" class="head1">Nombre</th>
+                    <th width="15%" class="head0">Categoría</th>
+                    <th width="15%" class="head1">Marca</th>
+                    <th width="14%" class="head0">Precio</th>
+                    <th width="8%" class="head0"></th>
+                    <th width="8%" class="head0" style="display: none;"></th>
+                </tr>
+            </tfoot>
+        </table>  
+
+        <br>
+        <br>
+
+        <div class="contenttitle2">
+            <h3>Productos agregados.</h3>
+        </div><!--contenttitle-->
+
+        <table cellpadding="0" cellspacing="0" border="0" class="stdtable" id="newtable" width="50%" >
+            <thead>
+                <tr>
+                    <th width="40%" class="head1">Nombre</th>
+                    <th width="40%" class="head0">Cantidad</th>
+                    <th width="10%" class="head0"></th>
+                    <th width="10%" class="head0" style="display: none;"></th>
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <th width="40%" class="head1">Nombre</th>
+                    <th width="40%" class="head0">Cantidad</th>
+                    <th width="10%" class="head0"></th>
+                    <th width="10%" class="head0" style="display: none;"></th>
+                </tr>
+            </tfoot>
+        </table>
+
+        <br>
+        <br>   
+        <form>
+            <p class="stdformbutton" style="margin-top: 1px;">
+                <button id="submit" class="submit radius2">Guardar</button>
+            </p>
+        </form>
+
+    </div><!--contentwrapper-->
+    
+        
+</div><!--bodywrapper-->
+
+<script type="text/javascript">
+
+var nt = jQuery('#newtable'),
+    pt = jQuery('#table');
+newDataTable();
+
+    ajaxFilter('TRUE');
+    function ajaxFilter(query) {
+        jQuery.ajax({
+            url: "{{=URL(c='products_ajax', f='get_products')}}",
+            type: "POST",
+            data: {query: query},
+            dataType: "json",
+            success:function(data){
+                cont = 0;
+                aaData = new Array();
+                for(row in data){
+
+                    description = data[row].product_descriptions;
+                    prices = data[row].product_price_lists;
+                    product = data[row].products;
+                    category = data[row].category_descriptions;
+                    brand = data[row].brand_descriptions;
+                    price = 'No asignado';
+                    
+                    checked = (product.status) ? "checked=\"checked\"" : "";
+                    
+                    if(prices.length > 0) {
+                        for(k in prices) {
+                            if(prices[k].is_default){
+                                price = prices[k].price 
+                                price = price.toString();
+                                price = '$' + price;
+                            }
+                        }
+                    }
+                    else{
+                        if(product.standard_cost != null && product.markup != null){
+                            try{
+                                sc = parseFloat(product.standard_cost);
+                                m = (parseFloat(product.markup)/100)+1;
+                                price = sc*m;
+                                price = price.toString();
+                                price = '$' + price;
+                            }
+                            catch(error){
+                                
+                            }
+                        }
+                    }
+                    
+                    aaData[cont] = [
+                            product.code,
+                            description.name, 
+                            category.name,
+                            brand.name,
+                            price, 
+                            '<a href="javascript:void(0);" onclick="addProducts(this);">Agregar</a>',
+                            product.id
+                        ];
+                   cont++;
+                }
+            },
+            complete: function() {
+                loadTable(aaData);
+            }
+        });
+    }
+    
+    function loadTable(aaData) {
+        jQuery("#table").dataTable( {
+            "bDestroy": true,
+            "oLanguage": {
+                "sProcessing": "Procesando...",
+                "sLengthMenu": "Ver _MENU_ registros",
+                "sZeroRecords": "No se encontraron registros",
+                "sEmptyTable": "No hay registros en esta tabla",
+                "sLoadingRecords": "Cargando...",
+                "sInfo": "Viendo _START_ - _END_ de _TOTAL_ registros",
+                "sInfoEmpty": "Viendo 0 - 0 de 0 registros",
+                "sInfoFiltered": "(Flitrado de _MAX_ registros totales)",
+                "sSearch": "Buscar",
+                "oPaginate": {
+                    "sFirst":"Primero",
+                    "sPrevious":"Anterior",
+                    "sNext":"Siguiente",
+                    "sLast":"Ultimo"
+                },
+            },
+            "sPaginationType": "full_numbers",
+            "aaData": aaData,
+            "aoColumns": [
+                {"sTitle":"Código"},
+                {"sTitle":"Nombre"},
+                {"sTitle":"Categoría"},
+                {"sTitle":"Marca"},
+                {"sTitle":"Precio"},
+                {"sTitle":"", "sClass":"center"}
+            ]
+        });
+        jQuery('#table_wrapper select').uniform();
+    }
+
+    function newDataTable() {
+        nt.dataTable({
+            "bDestroy": true,
+            "oLanguage": {
+                "sProcessing": "Procesando...",
+                "sLengthMenu": "Ver _MENU_ registros",
+                "sZeroRecords": "No se encontraron registros",
+                "sEmptyTable": "No hay registros en esta tabla",
+                "sLoadingRecords": "Cargando...",
+                "sInfo": "Viendo _START_ - _END_ de _TOTAL_ registros",
+                "sInfoEmpty": "Viendo 0 - 0 de 0 registros",
+                "sInfoFiltered": "(Flitrado de _MAX_ registros totales)",
+                "sSearch": "Buscar",
+                "oPaginate": {
+                    "sFirst":"Primero",
+                    "sPrevious":"Anterior",
+                    "sNext":"Siguiente",
+                    "sLast":"Ultimo"
+                },
+            },
+            "sPaginationType": "full_numbers",
+            "aoColumns": [
+                {"sTitle":"Nombre"},
+                {"sTitle":"Cantidad"},
+                {"sTitle":"", "sClass":"center"}
+            ]
+        });
+        jQuery('#newtable_wrapper select').uniform();
+    }
+
+    ///////// click event to add products to new package /////////
+    function addProducts(tr)  {
+            var row = jQuery(tr).closest('tr').get(0);
+            var newrow = pt.dataTable().fnGetData(row);
+
+            var resp = prompt('¿Cuantos productos desea agregar?',1);
+
+            if(resp > 0) {
+                nt.dataTable().fnAddData([
+                            newrow[1],
+                            resp,
+                            '<a href="javascript:void(0);" onclick="removeRow(this);">remover</a>',
+                            newrow[6]
+                ]);
+            } else {
+                alert('Se requiere la cantidad.');
+            };
+
+    }
+
+    function removeRow(tr) {
+        var row = jQuery(tr).closest('tr').get(0);
+        var pos = nt.dataTable().fnGetPosition(row)
+        nt.dataTable().fnDeleteRow(pos);
+    }
+
+    jQuery('#submit').click(function(e) {
+        e.preventDefault();
+        if(nt.dataTable().fnGetData().length > 0) {
+            var products = [];
+            for(e = 0; e < nt.dataTable().fnGetData().length; e++) {
+                products[e] = {"id": nt.dataTable().fnGetData(e)[3], "amount": nt.dataTable().fnGetData(e)[1] }
+            }
+            //console.log(products);
+            jQuery.ajax({
+                url: "{{=URL(c='products_ajax', f='toggle_product')}}",
+                type: "POST",
+                data: {
+                    id: {{=request.vars.id}},
+                    products: products
+                },
+                success: function(data){
+                    if (true) {
+                        redirect();
+                    };
+                }
+            });
+
+        } else {
+            jQuery('.msgerror').show();
+        };
+        scrollThis();
+    });
+    
+</script>
+</body>
+</html>
+{{end}}

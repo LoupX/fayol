@@ -13,6 +13,12 @@ def new_package():
     current = ['menu_catalogs']
     return dict(title=title,  current=current)
 
+@auth.requires_login()
+def select_products():
+    title = 'Seleccionar productos para agregar al paquete.'
+    current = ['menu_catalogs']
+    return dict(title=title,  current=current)
+
 #Views for Services
 @auth.requires_login()
 def services():
