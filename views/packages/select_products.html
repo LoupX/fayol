@@ -263,16 +263,13 @@ newDataTable();
             }
             //console.log(products);
             jQuery.ajax({
-                url: "{{=URL(c='products_ajax', f='toggle_product')}}",
+                url: "{{=URL(c='', f='')}}",
                 type: "POST",
                 data: {
-                    id: {{=request.vars.id}},
+                    id: 1,
                     products: products
                 },
-                success: function(data){
-                    if (true) {
-                        redirect();
-                    };
+                success: function(data) {
                 }
             });
 
