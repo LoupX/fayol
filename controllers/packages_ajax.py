@@ -33,7 +33,8 @@ def create_package():
 
 @auth.requires_login()
 def create_package_product():
-    
+    id = request.vars.id
+    products = request.vars.products
 
 @auth.requires_login()
 def create_price():

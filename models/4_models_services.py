@@ -17,7 +17,7 @@ db.define_table('services',
 
 db.define_table('service_descriptions',
     Field('service_id', 'reference services', notnull=True),
-    Field('name', 'string', notnull=True),
+    Field('name', 'string', notnull=True, unique=True),
     Field('description', 'text'),
     migrate=MIGRATE)
 

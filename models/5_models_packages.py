@@ -2,6 +2,7 @@
 
 db.define_table('packages',
     Field('code', 'string', unique=True),
+    Field('alternative_code', 'string'),
     Field('standard_cost', 'decimal(12,2)'),
     Field('markup', 'decimal(5,2)'),
     Field('status', 'boolean', default=True),
@@ -15,7 +16,7 @@ db.define_table('packages',
 
 db.define_table('package_descriptions',
     Field('package_id', 'reference packages', notnull=True),
-    Field('name', 'string', notnull=True),
+    Field('name', 'string', notnull=True, unique=True),
     Field('description', 'text'),
     migrate=MIGRATE)
 
@@ -27,7 +28,7 @@ db.define_table('package_to_product',
 
 db.define_table('package_price_lists',
     Field('package_id', 'reference packages', notnull=True),
-    Field('name', 'string', required=True, notnull=True),
+    Field('name', 'string', notnull=True),
     Field('price', 'decimal(12,2)', default=0.00),
     Field('is_default', 'boolean', default=False),
     Field('status', 'boolean', default=True),
