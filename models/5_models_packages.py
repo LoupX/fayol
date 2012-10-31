@@ -2,8 +2,6 @@
 
 db.define_table('packages',
     Field('code', 'string', unique=True),
-    Field('alternative_code', 'string'),
-    Field('image', 'upload', uploadfield=True),
     Field('standard_cost', 'decimal(12,2)'),
     Field('markup', 'decimal(5,2)'),
     Field('status', 'boolean', default=True),
@@ -15,16 +13,16 @@ db.define_table('packages',
         update=auth.user.id if auth.user else 0),
     migrate=MIGRATE)
 
-db.define_table('package_to_product',
-    Field('package_id', 'reference packages'),
-    Field('product_id', 'reference products'),
-    Field('quantity', 'integer', ),
-    migrate=MIGRATE)
-
 db.define_table('package_descriptions',
     Field('package_id', 'reference packages', notnull=True),
     Field('name', 'string', notnull=True),
     Field('description', 'text'),
+    migrate=MIGRATE)
+
+db.define_table('package_to_product',
+    Field('package_id', 'reference packages'),
+    Field('product_id', 'reference products'),
+    Field('quantity', 'integer', ),
     migrate=MIGRATE)
 
 db.define_table('package_price_lists',
