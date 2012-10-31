@@ -258,7 +258,7 @@
                     if(data != 0 && data){
                         jQuery('.msgsuccess').fadeIn(1600, function() {
                             jQuery('.msgsuccess').fadeOut('slow');
-                            redirect();
+                            redirect({{=request.vars.id}});
                         });
 
                         // deleteFields();
@@ -433,7 +433,7 @@
         });
     }
 
-    function redirect() {
+    function redirect(id) {
         window.location.replace("{{=URL(c='products', f='view_product')}}?id="+id);
     }
     
