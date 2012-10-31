@@ -75,6 +75,11 @@
             </a>
 
          <br clear="all"/> 
+         
+         <div class="contenttitle2">
+                <h3 id="name">Lista de precios</h3>
+         </div><!--contenttitle-->
+         
             	
             	<div class="contenttitle2" id="liststittle" style="display: none;">
                         <h3>Lista de precios del servicio</h3>
@@ -184,7 +189,7 @@ var id = {{=request.vars.id}}
                       data.price_list[e].name, 
                       data.price_list[e].price, 
                       '<input type="radio" value="'+data.price_list[e].id+'" name="radios" '+checked+'/>', 
-                       "<a href=\"{{=URL(c='products', f='list_quickedit')}}?id="+data.price_list[e].id+"\" class=\"toggle\">Editar</a>"
+                       "<a href=\"{{=URL(c='packages', f='service_list_quickedit')}}?id="+data.price_list[e].id+"\" class=\"toggle\">Editar</a>"
                     ];
                   cont++;
               }

@@ -2,7 +2,7 @@
     <div class="one_half">
         <p>
             <label for="title">Nombre de la lista</label>
-            <input type="text" name="name" id="name" value="{{=name}}" />
+            <input type="text" name="namel" id="namel" value="{{=name}}" />
             <label></label>
         </p>    
     </div><!-- one_half -->
@@ -25,7 +25,7 @@
 <script type="text/javascript">
     jQuery("#form_list").validate({
             rules: {
-                name: "required",
+                namel: "required",
                 pricelist: {
                     number: true,
                     required: false
@@ -33,7 +33,7 @@
                 
             },
             messages: {
-                name: "Ingrese el nombre de la lista.",
+                namel: "Ingrese el nombre de la lista.",
                 pricelist: "Ingrese el precio."
             }
         });
@@ -48,7 +48,7 @@
                 type: "POST",
                 data: { 
                     id: {{=request.vars.id}},
-                    name: jQuery('#name').val(),
+                    name: jQuery('#namel').val(),
                     price: jQuery('#pricelist').val(),
                 },
                 success:function(data){
@@ -58,7 +58,7 @@
                                 jQuery(this).parents('tr').prev().removeClass('hiderow');
                                 if(result) {    
                                     var prev = jQuery(this).parents('tr').prev().find('td'),
-                                        curr = jQuery(this).parents('tr').find('#name, #pricelist');
+                                        curr = jQuery(this).parents('tr').find('#namel, #pricelist');
                                     jQuery(prev[0]).html(jQuery(curr[0]).val().toUpperCase()); 
                                     jQuery(prev[1]).html(jQuery(curr[1]).val().toUpperCase());   
                                 }                                           

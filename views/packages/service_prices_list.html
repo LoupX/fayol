@@ -72,7 +72,7 @@
                         </p>
                     </form>
                     <br>
-                    <table cellpadding="0" cellspacing="0" border="0" class="stdtable" id="table" style="display: none;">
+                    <table cellpadding="0" cellspacing="0" border="0" class="stdtable" id="table" style="display:none;">
                 <thead>
                     <tr>
                         <th class="head0" width="30%">Nombre de la lista</th>
@@ -199,16 +199,16 @@ var globalid = '';
             success: function(data){
                 cont = 0;
                 aaData = new Array();
-                // console.log(data.service_price_lists);
-                theresdata = data.service_price_lists;
+                // console.log(data.price_list);
+                theresdata = data.price_list;
                 if(theresdata){
-                    for(e = 0; e < data.service_price_lists.length; e++) {
-                        checked = (data.service_price_lists[e].is_default == true) ? "checked=\"checked\"" : ""
+                    for(e = 0; e < data.price_list.length; e++) {
+                        checked = (data.price_list[e].is_default == true) ? "checked=\"checked\"" : ""
                         aaData[cont] = [
-                            data.service_price_lists[e].name, 
-                            data.service_price_lists[e].price, 
-                            '<input type="radio" value="'+data.service_price_lists[e].id+'" name="radios" '+checked+'/>', 
-                            "<a href=\"{{=URL(c='products', f='service_list_quickedit')}}?id="+data.service_price_lists[e].id+"\" class=\"toggle\">Editar</a>"
+                            data.price_list[e].name, 
+                            data.price_list[e].price, 
+                            '<input type="radio" value="'+data.price_list[e].id+'" name="radios" '+checked+'/>', 
+                            "<a href=\"{{=URL(c='packages', f='service_list_quickedit')}}?id="+data.price_list[e].id+"\" class=\"toggle\">Editar</a>"
                             ];
                         cont++;
                     }

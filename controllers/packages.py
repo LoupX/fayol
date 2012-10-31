@@ -43,3 +43,18 @@ def service_prices_list():
     title = 'Servicios'
     current = ['menu_catalogs', 'sidebar_services', 'sub_services_read']
     return dict(title=title,  current=current)
+    
+@auth.requires_login()
+def service_list_quickedit():
+    title = 'Servicios'
+    id = request.vars.id
+    name = ""
+    price = ""
+    try:
+        row = db(db.service_price_lists.id==id).select().first()
+        name = row.name
+        price = row.price
+    except:
+        db.rollback()
+    current = ['menu_catalogs', 'sidebar_services', 'sub_services_read']
+    return dict(title=title, name=name, price=price,  current=current)
