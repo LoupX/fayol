@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+"""
 db.define_table('inventory_entries',
     Field('serie', 'string'),
     Field('folio', 'string'),
@@ -29,5 +30,4 @@ db.define_table('product_to_stock',
     Field('stock'),
     migrate=MIGRATE
 )
-
-
+"""
