@@ -48,7 +48,9 @@ def create_price():
     data = dict()
     v = request.vars
     if v.service_id:
-        data['service_id'] = v.product_id
+        data['service_id'] = v.service_id
+    else:
+        return ''
     if v.name:
         data['name'] = v.name.decode('utf-8').upper()
     data['price'] = v.price
