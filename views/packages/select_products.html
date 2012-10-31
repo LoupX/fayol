@@ -236,29 +236,12 @@ newDataTable();
             var resp = prompt('¿Cuantos productos desea agregar?',1);
 
             if(resp > 0) {
-                if(nt.dataTable().fnGetData().length == 0) {
-                    nt.dataTable().fnAddData([
-                        newrow[1],
-                        resp,
-                        '<a href="javascript:void(0);" onclick="removeRow(this);">remover</a>',
-                        newrow[6]
-                    ]); 
-            
-                } else {
-                    for(e = 0; e < nt.dataTable().fnGetData().length; e++) {
-                        if(nt.dataTable().fnGetData(e)[3] == newrow[6]) {
-                            resp = parseInt(nt.dataTable().fnGetData(e)[1]) + parseInt(resp);
-                            nt.dataTable().fnDeleteRow(e);   
-                        }
-                    }
-                    nt.dataTable().fnAddData([
-                        newrow[1],
-                        resp,
-                        '<a href="javascript:void(0);" onclick="removeRow(this);">remover</a>',
-                        newrow[6]
-                    ]);
-                };
-                
+                nt.dataTable().fnAddData([
+                            newrow[1],
+                            resp,
+                            '<a href="javascript:void(0);" onclick="removeRow(this);">remover</a>',
+                            newrow[6]
+                ]);
             } else {
                 alert('Se requiere la cantidad.');
             };
