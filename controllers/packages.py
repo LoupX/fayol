@@ -3,14 +3,14 @@
 #Views for Packages
 @auth.requires_login()
 def index():
-    title = 'Paquetes y Servicios'
-    current = ['menu_catalogs']
+    title = 'Paquetes'
+    current = ['menu_catalogs', 'sidebar_packages', 'sub_packages_read']
     return dict(title=title,  current=current)
 
 @auth.requires_login()
 def new_package():
     title = 'Nuevo Paquete'
-    current = ['menu_catalogs']
+    current = ['menu_catalogs', 'sidebar_packages', 'sub_packages_new']
     return dict(title=title,  current=current)
 
 @auth.requires_login()
