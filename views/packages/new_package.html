@@ -70,7 +70,7 @@
                         <p class="stdformbutton">
                             <button id="submit" class="submit radius2" tabindex="6">Guardar</button>
                         </p>
-                        <a href="{{=URL(c='packages', f='select_products')}}">ir</a>
+                        <!-- <a href="{{=URL(c='packages', f='select_products')}}">ir</a> -->
                         
                         
                     </form>
@@ -142,21 +142,21 @@
 
         if(jQuery("#form_package").valid()) {
              jQuery.ajax({
-                url: "{{=URL(c='products_ajax', f='create_product')}}",
+                url: "{{=URL(c='packages_ajax', f='create_package')}}",
                 data: { 
-                    name:jQuery('#name').val(),
-                    vendors:jQuery('#products').val() ? (jQuery('#products').val()) : '',
-                    standard_cost:jQuery('#standard_cost').val(),
-                    markup:jQuery('#markup').val(),
-                    description:jQuery('#description').val(),
+                    name: jQuery('#name').val(),
+                    standard_cost: jQuery('#standard_cost').val(),
+                    markup: jQuery('#markup').val(),
+                    description: jQuery('#description').val()
                 },
                 type: 'POST',
                 success:function(data){
                     if(data != 0 && data){
                         jQuery('.msgsuccess').fadeIn(1600, function() {
                             jQuery('.msgsuccess').fadeOut('slow');
+                            redirect(data)
                         });
-                        deleteFields();
+
                     }
                     else if(data == 0) {
                         jQuery('.exists').fadeIn(1600);
@@ -187,6 +187,10 @@
         jQuery('#standard_cost').val('');
         jQuery('#markup').val('');
         jQuery('#description').val('');
+    }
+
+    function redirect(id) {
+        window.location.replace("{{=URL(c='packages', f='select_products')}}?id="+id);
     }
  
     
