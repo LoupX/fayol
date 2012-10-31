@@ -259,7 +259,7 @@ newDataTable();
             }
             //console.log(products);
             jQuery.ajax({
-                url: "{{=URL(c='common', f='echo')}}",
+                url: "{{=URL(c='packages_ajax', f='create_package_product')}}",
                 type: "POST",
                 data: {
                     id: 1,

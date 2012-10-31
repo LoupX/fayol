@@ -34,8 +34,11 @@ def create_package():
 
 @auth.requires_login()
 def create_package_product():
-    id = request.vars.id
-    products = request.vars.products
+    data = str(request.vars)
+    from gluon.contrib import simplejson
+    data = simplejson.loads(data)
+    response.write(data)
+    return str(data['products'])
 
 @auth.requires_login()
 def create_price():

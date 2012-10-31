@@ -458,6 +458,16 @@ def update_product():
     data['standard_cost'] = vars.standard_cost
     data['markup'] = vars.markup
 
+    row_category = db(db.category_descriptions.category_id==
+                      vars.category_id).select().first()
+    row_brand = db(db.brand_descriptions.brand_id==
+                   vars.brand_id).select().first()
+    code = '{}{}{}'.format(
+        row_category.name[0:2].decode('utf-8').upper(),
+        row_brand.name[0:2].decode('utf-8').upper(), id)
+
+    data['code'] = code
+
     data_description['name'] = vars.name.decode('utf-8').upper()
     data_description['alternative_name'] = vars.alternative_name.decode('utf-8').upper()
     data_description['description'] = vars.description.decode('utf-8').upper()
