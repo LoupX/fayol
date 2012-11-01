@@ -280,8 +280,11 @@ newDataTable();
 
         if(nt.dataTable().fnGetData().length > 0) {
             var products = [];
+            var helper = 0;
             for(e = 0; e < nt.dataTable().fnGetData().length; e++) {
-                products[e] = {"id": nt.dataTable().fnGetData(e)[3], "amount": parseInt(nt.dataTable().fnGetData(e)[1]) }
+                helper = parseInt(nt.dataTable().fnGetData(e)[1]);
+                helper = (helper <= 0) ? 1 : helper;
+                products[e] = {"id": parseInt(nt.dataTable().fnGetData(e)[3]), "amount": helper }
             }
             
             jQuery.ajax({
