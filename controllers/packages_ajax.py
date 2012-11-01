@@ -38,14 +38,13 @@ def create_package_product():
     products = request.vars.products
     from gluon.contrib import simplejson
     products = simplejson.loads(products)
-    test = []
     try:
         db(db.package_to_product.package_id==id).delete()
         for k in products:
             data = dict(package_id=id, product_id=k['id'],
                 quantity=k['amount'])
-            db(db.package_to_product).insert(**data)
-    except:
+            db.package_to_product.insert(**data)
+    except Exception as e:
         db.rollback()
         return ''
     else:
