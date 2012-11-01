@@ -124,7 +124,13 @@ var warehouses_select = jQuery('#warehouses_select'),
     id = 0;
 
 ////// get active vendors //////
-ajaxFilter('TRUE'); 
+
+val = jQuery('.formwrapper input[name=filterbranches]:checked').val();
+    ajaxFilter(val);
+
+    jQuery('.formwrapper input:radio').on('change', function(e) {
+        ajaxFilter(e.currentTarget.value);
+    });
 
 function ajaxFilter(who) {
     //console.log(which);
@@ -132,17 +138,23 @@ function ajaxFilter(who) {
     jQuery('#warehouses_select').val('').removeClass('chzn-done').chosen();
     cleanFields();
 
-    jQuery.ajax({ 
+    var swarehouse = jQuery('#warehouses_select');
+    
+    jQuery.ajax({
+        type: "POST",
         url: "{{=URL(c='branches_ajax', f='get_warehouses')}}",
-        type: 'POST',
-        data: { query: who },          
-        success: function (data) {
-          jQuery('#warehouses_select')
-            .html('')
-            .append(data)
-            .prepend('<option value="lol">Seleccionar</option>')
-            .trigger("liszt:updated");
-          }
+        dataType: "json",
+        data: {query: who},
+        success: function(results) {
+        	options = "";
+        	for(k in results){
+	        	options += "<option value=\"" + results[k].id + "\">" + results[k].name + "</option>";
+	        }
+            swarehouse	
+                .html(options)
+                .prepend('<option value="">Selecccionar</option>')
+                .trigger("liszt:updated");
+            }
     });
   }
 

@@ -144,10 +144,15 @@ var branches_select = jQuery('#branches_select'),
     id = 0;
 
 ////// get active vendors //////
-ajaxFilter('TRUE'); 
+
+val = jQuery('.formwrapper input[name=filterbranches]:checked').val();
+    ajaxFilter(val);
+
+    jQuery('.formwrapper input:radio').on('change', function(e) {
+        ajaxFilter(e.currentTarget.value);
+    });
 
 function ajaxFilter(who) {
-    //console.log(which);
     jQuery('#branches_select_chzn').remove();
     jQuery('#branches_select').val('').removeClass('chzn-done').chosen();
     cleanFields();
@@ -158,6 +163,7 @@ function ajaxFilter(who) {
         type: "POST",
         url: "{{=URL(c='branches_ajax', f='get_branches')}}",
         dataType: "json",
+        data: {query: who},
         success: function(results) {
         	options = "";
         	for(k in results){

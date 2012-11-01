@@ -8,9 +8,7 @@
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.dataTables.min.js')}}"></script>
 <script type="text/javascript" src="{{=URL('static', 'js/custom/dualselector.js')}}"></script>
 <style type="text/css">
-    .ellol {
-        border: 1px solid red;
-    }    
+    .ellol { border: 1px solid red; }    
     .nover{display: none;}
 </style>
 {{end}}
@@ -47,24 +45,27 @@
                         <p>Se han guardado los datos del formulario.</p>
                     </div>
             	
-                    <form id="form_product" class="stdform stdform2" method="post" action="">           	                        
+                    <form id="form_entries" class="stdform stdform2" method="post" action="">           	                        
+                        
                         <p style="height:52px; padding-top:20px;">
 				              <span class="formwrapper" style="margin-left:20px;">
 				                    <input type="radio" id="radio_branch" name="radios" value="true" checked="checked"/> Sucursal &nbsp; &nbsp;
 				                    <input type="radio" id="radio_warehouse" name="radios"  value="false" /> Almacén &nbsp; &nbsp;
 				              </span>
 				        </p>
-				        <p class="" style="margin-top: 1px;">
+				        
+				        <p id="selectbranch" style="margin-top: 1px;">
                             <label>Sucursal</label>
                             <span class="field">
-                                <select id="branch" name="branch" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="1">
+                                <select id="branch" name="branch" data-placeholder="Seleccionar" class="chzn-select" style="" tabindex="1">
                                   </select>
                             </span>
                         </p>
-                        <p class="nover" style="margin-top: 1px;">
+                        
+                        <p id="selectware" style="margin-top: 1px;">
                             <label>Almacén</label>
                             <span class="field">
-                                <select id="warehouse" name="warehouse" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="1">
+                                <select id="warehouse" name="warehouse" data-placeholder="Seleccionar" class="chzn-select" style="" tabindex="1">
                                   </select>
                             </span>
                         </p>
@@ -116,9 +117,9 @@
 
 
 <script>
-
-	jQuery( "#date_receipt").datepicker();
-	jQuery('input:radio, select').uniform();
+	jQuery("#date_receipt").datepicker();
+	jQuery(".chzn-select").chosen();
+	jQuery("input:radio").uniform();
 	
 	var brands = jQuery('#radio_branch');
 	var ware = jQuery('#radio_warehouse');
@@ -127,13 +128,13 @@
 	{
 		if(ware.parent().hasClass("checked"))
 		{
-			jQuery('#brands').parent().parent().parent().removeClass('nover');
-			jQuery('#warehouse').parent().parent().parent().addClass('nover');
+			jQuery('#selectbranch').removeClass('nover');
+			jQuery('#selectware').addClass('nover');
 		}
 		else if(brands.parent().hasClass("checked"))
 		{
-			jQuery('#warehouse').parent().parent().parent().removeClass('nover');
-			jQuery('#brands').parent().parent().parent().addClass('nover');
+			jQuery('#selectware').removeClass('nover');
+			jQuery('#selectbranch').addClass('nover');
 		}
 	}
 	
@@ -143,17 +144,17 @@
 	
 	///// Get branches & warehouses /////
 	
-	var branch = jQuery('#branch'),
-        warehouse = jQuery('#warehouse');
+	var branch = jQuery('#branch');
+    var warehouse = jQuery('#warehouse');
 	
 	jQuery.ajax({
         type: "POST",
-        url: "{{=URL(c='', f='get_branches')}}",
+        url: "{{=URL(c='branches_ajax', f='get_branches')}}",
         dataType: "json",
         success: function(results) {
         	options = "";
         	for(k in results){
-	        	options += "<option value=\"" + results[k].brands.id + "\">" + results[k].brand_descriptions.name + "</option>";
+	        	options += "<option value=\"" + results[k].id + "\">" + results[k].name + "</option>";
 	        }
             branch	
                 .html(options)
@@ -164,12 +165,12 @@
     
     jQuery.ajax({
         type: "POST",
-        url: "{{=URL(c='', f='get_warehouses')}}",
+        url: "{{=URL(c='branches_ajax', f='get_warehouses')}}",
         dataType: "json",
         success: function(results) {
         	options = "";
         	for(k in results){
-	        	options += "<option value=\"" + results[k].brands.id + "\">" + results[k].brand_descriptions.name + "</option>";
+	        	options += "<option value=\"" + results[k].id + "\">" + results[k].name + "</option>";
 	        }
             warehouse	
                 .html(options)
@@ -177,7 +178,7 @@
                 .trigger("liszt:updated");
             }
     });
-	
+
 </script>
 
 </body>
