@@ -34,11 +34,23 @@ def create_package():
 
 @auth.requires_login()
 def create_package_product():
-    data = str(request.vars)
+    id = request.vars.id
+    products = request.vars.products
     from gluon.contrib import simplejson
-    data = simplejson.loads(data)
-    response.write(data)
-    return str(data['products'])
+    products = simplejson.loads(products)
+    test = []
+    try:
+        db(db.package_to_product.package_id==id).delete()
+        for k in products:
+            data = dict(package_id=id, product_id=k['id'],
+                quantity=k['amount'])
+            db(db.package_to_product).insert(**data)
+    except:
+        db.rollback()
+        return ''
+    else:
+        db.commit()
+        return True
 
 @auth.requires_login()
 def create_price():
@@ -158,11 +170,6 @@ def update_package():
         else:
             db.rollback()
             return ''
-
-
-@auth.requires_login()
-def update_package_product():
-    pass
 
 @auth.requires_login()
 def update_price():
