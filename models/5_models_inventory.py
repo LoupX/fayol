@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
+
 db.define_table('concepts',
     Field('name', 'string'),
     migrate=MIGRATE)
@@ -8,7 +8,7 @@ db.define_table('inventory_entries',
     Field('branch_id', 'reference branches', default=0),
     Field('warehouse_id', 'reference warehouses', default=0),
     Field('reference', 'string'),
-    Field('notes', 'string'),
+    Field('description', 'string'),
     Field('concept_id', 'reference concepts', default=0),
     Field('date_added', 'datetime', default=request.now),
     Field('date_modified', 'datetime', default=request.now),
@@ -31,7 +31,7 @@ db.define_table('inventory_discounts',
     Field('branch_id', 'reference branches', default=0),
     Field('warehouse_id', 'reference warehouses', default=0),
     Field('reference', 'string'),
-    Field('notes', 'string'),
+    Field('description', 'string'),
     Field('concept_id', 'reference concepts', default=0),
     Field('date_added', 'datetime', default=request.now),
     Field('date_modified', 'datetime', default=request.now),
@@ -53,7 +53,7 @@ db.define_table('inventory_transfers',
     Field('destination_branch', 'reference branches', default=0),
     Field('desination_warehouse', 'reference warehouses', default=0),
     Field('reference', 'string'),
-    Field('notes', 'string'),
+    Field('description', 'string'),
     Field('concept_id', 'reference concepts', default=7),
     Field('date_added', 'datetime', default=request.now),
     Field('date_modified', 'datetime', default=request.now),
@@ -93,4 +93,3 @@ if db(db.concepts).isempty():
         raise HTTP(503, e)
     else:
         db.commit()
-"""
