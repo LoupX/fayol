@@ -103,11 +103,11 @@
                                 </span>
 	                    </p>
 	                    <p>
-	                        	<label>Costo estandar</label>
+	                        	<label>Costo estandar ($)</label>
 	                            <span class="field"><input type="text" name="standard_cost" id="standard_cost" class="smallinput" placeholder="0.00" tabindex="11"/></span>
 	                    </p>
 	                    <p>
-	                        	<label>Margen de utilidad</label>
+	                        	<label>Margen de utilidad (%)</label>
 	                            <span class="field"><input type="text" name="markup" id="markup" class="smallinput" tabindex="12"/></span>
 	                    </p>
 	                    <p>
@@ -199,18 +199,14 @@
         },
     });
 
-//////////// get brands, units & categories ////////////
-
-
-
 //////////// validate form ////////////
 
     jQuery("#form_product").validate({
             rules: {
                 name: "required",
                 standard_cost: {
-                    number: true,
-                    required: false
+                	number: true,
+	                required: false
                 },
                 markup: {
                     number: true,
@@ -223,7 +219,7 @@
                 markup: "Ingrese números enteros con máximo dos decimales"
             }
         });
-
+        
 //////////// send form ////////////                 
     jQuery('#submit').live('click', function(e) {
         e.preventDefault();
