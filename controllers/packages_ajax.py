@@ -96,8 +96,27 @@ def create_price():
         return str(id)
 
 @auth.requires_login()
-def get_package_information(id):
-    #id = request.vars.id
+def get_packages():
+    data = None
+    try:
+        p = db.packages
+        pd = db.package_descriptions
+        query = p.id>0
+        query &= p.id==pd.package_id
+        data = db(query).select(p.id, p.code, p.alternative_code,
+            p.standard_cost, p.markup, p.status, pd.name,
+            pd.description).as_list()
+    except:
+        db.rollback()
+
+    from gluon.contrib import simplejson
+    data = simplejson.dumps(data)
+    return str(data)
+
+
+@auth.requires_login()
+def get_package_information():
+    id = request.vars.id
     data = dict()
     row = None
     row_products = None
