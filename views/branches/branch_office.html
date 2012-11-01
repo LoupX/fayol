@@ -152,18 +152,24 @@ function ajaxFilter(who) {
     jQuery('#branches_select').val('').removeClass('chzn-done').chosen();
     cleanFields();
 
-    jQuery.ajax({ 
+    var branch = jQuery('#branches_select');
+    
+    jQuery.ajax({
+        type: "POST",
         url: "{{=URL(c='branches_ajax', f='get_branches')}}",
-        type: 'POST',
-        data: { query: who },          
-        success: function (data) {
-          jQuery('#branches_select')
-            .html('')
-            .append(data)
-            .prepend('<option value="">Seleccionar</option>')
-            .trigger("liszt:updated");
-          }
+        dataType: "json",
+        success: function(results) {
+        	options = "";
+        	for(k in results){
+	        	options += "<option value=\"" + results[k].id + "\">" + results[k].name + "</option>";
+	        }
+            branch	
+                .html(options)
+                .prepend('<option value="">Selecccionar</option>')
+                .trigger("liszt:updated");
+            }
     });
+    
   }
 
 branches_select.change( function() {
