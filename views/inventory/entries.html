@@ -1,0 +1,82 @@
+{{extend 'base/layout.html'}}
+
+{{block scripts_extra}}
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.maskedinput.js')}}"></script>
+
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.validate.min.js')}}"></script>
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/chosen.jquery.min.js')}}"></script>
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.dataTables.min.js')}}"></script>
+<script type="text/javascript" src="{{=URL('static', 'js/custom/dualselector.js')}}"></script>
+<style type="text/css">
+    .ellol {
+        border: 1px solid red;
+    }    
+</style>
+{{end}}
+
+{{block sidebar_menu}}
+{{include 'inventory/sidebar.html'}}
+{{end}}
+
+{{block content}}
+    <div class="centercontent">
+    
+        <div class="pageheader">
+        
+            <h1 class="pagetitle">{{=title}}</h1>
+            
+        </div><!--pageheader-->
+        
+        <div id="contentwrapper" class="contentwrapper">
+        
+        	<div id="validation" class="subcontent">
+         
+					<div class="notibar msgerror" style="display:none;">
+                    	<a class="close"></a>
+                    	<p>Ocurrió un error con los datos del formulario.</p>
+                    </div>
+
+                	<div class="notibar exists" style="display:none;">
+                   		<a class="close"></a>
+                    	<p>Este producto ya existe, para editarlo vaya a la sección de ver producto. </p>
+                    </div>
+
+                	<div class="notibar msgsuccess" style="display:none;">
+                        <a class="close"></a>
+                        <p>Se han guardado los datos del formulario.</p>
+                    </div>
+            	
+                    <form id="form_product" class="stdform stdform2" method="post" action="">           	                        
+                        <p style="height:52px; padding-top:20px;">
+				              <span class="formwrapper" style="margin-left:20px;">
+				                    <input type="radio" id="radio_branch" name="radios" value="true" checked="checked"/> Sucursal &nbsp; &nbsp;
+				                    <input type="radio" id="radio_warehouse" name="radios"  value="false" /> Almacen &nbsp; &nbsp;
+				              </span>
+				        </p>	                    
+                        <p class="stdformbutton">
+                        	<button id="submit" class="submit radius2" tabindex="14">Guardar</button>
+                        </p>
+                        
+                        
+                    </form>
+                   
+
+            </div><!--subcontent-->     
+        
+        </div><!--contentwrapper-->
+        
+        <br clear="all" />
+        
+	</div><!-- centercontent -->
+        
+</div><!--bodywrapper-->
+
+<script>
+
+
+
+</script>
+
+</body>
+</html>
+{{end}}
