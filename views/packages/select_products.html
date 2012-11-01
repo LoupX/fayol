@@ -262,8 +262,8 @@ newDataTable();
                 url: "{{=URL(c='packages_ajax', f='create_package_product')}}",
                 type: "POST",
                 data: {
-                    id: 1,
-                    products: products
+                    id: {{=request.vars.id}},
+                    products: JSON.stringify(products)
                 },
                 success: function(data) {
                 }

@@ -52,6 +52,10 @@
                             <span class="field"><input type="text" name="name" id="name" class="smallinput" tabindex="1"/></span>
                         </p>
                         <p>
+                            <label>Codigo alternativo</label>
+                            <span class="field"><input type="text" name="alternative_code" id="alternative_code" class="smallinput" tabindex="2"/></span>
+                        </p>
+                        <p>
                             <label>Costo estandar</label>
                             <span class="field">
                                 <input type="text" name="standard_cost" id="standard_cost" class="smallinput" placeholder="0.00" tabindex="3"/>
@@ -147,7 +151,8 @@
                     name: jQuery('#name').val(),
                     standard_cost: jQuery('#standard_cost').val(),
                     markup: jQuery('#markup').val(),
-                    description: jQuery('#description').val()
+                    description: jQuery('#description').val(),
+                    alternative_code: jQuery('#alternative_code').val()
                 },
                 type: 'POST',
                 success:function(data){
