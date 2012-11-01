@@ -98,10 +98,16 @@ def create_price():
 @auth.requires_login()
 def get_packages():
     data = None
+    q = request.vars.query.upper() if request.vars.query else None
+
     try:
         p = db.packages
         pd = db.package_descriptions
-        query = p.id>0
+        query = db.packages.status==True
+        if q == 'ANY':
+            query = db.packages.id > 0
+        if q == 'FALSE':
+            query = db.packages.status==False
         query &= p.id==pd.package_id
         data = db(query).select(p.id, p.code, p.alternative_code,
             p.standard_cost, p.markup, p.status, pd.name,
