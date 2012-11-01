@@ -36,8 +36,8 @@
                             <th width="20%" class="head1">Nombre</th>
                             <th width="15%" class="head0">Código alternativo</th>
                             <th width="15%" class="head1">Estatus</th>
-                            <th width="15%" class="head1"></th>
                             <th width="15%" class="head0"></th>
+                            <th width="15%" class="head1"></th>
                         </tr>
                     </thead>
                     <tfoot>
@@ -45,9 +45,9 @@
                             <th width="20%" class="head0">Código</th>
                             <th width="20%" class="head1">Nombre</th>
                             <th width="15%" class="head0">Código alternativo</th>
-                            <th width="15%" class="head1">Estatus</th
-                            <th width="15%" class="head1"></th>
+                            <th width="15%" class="head1">Estatus</th>
                             <th width="15%" class="head0"></th>
+                            <th width="15%" class="head1"></th>
                         </tr>
                     </tfoot>
                 </table>
@@ -67,7 +67,10 @@
     
     var contador = "1"; 
 
-    ajaxFilter('TRUE');
+    jQuery('#a, #b, #c').uniform();
+
+    val = jQuery('.formwrapper input[name=filtervendors]:checked').val();
+    ajaxFilter(val);
 
     jQuery('.formwrapper input:radio').on('change', function(e) {
         ajaxFilter(e.currentTarget.value);
@@ -75,35 +78,15 @@
     
     function ajaxFilter(query) {
         jQuery.ajax({
-            url: "{{=URL(c='services_ajax', f='get_services')}}",
+            url: "{{=URL(c='packages_ajax', f='get_get_package_information')}}",
             type: "POST",
             data: {query: query},
             dataType: "json",
             success:function(data){
-                cont = 0;
-                aaData = new Array();
-                for(row in data){
-
-                    services = data[row].services;
-                    description = data[row].service_descriptions;
-                    
-                    checker_span = (services.status) ? "class=\"checked\"" : "";
-                    checked = (services.status) ? "checked=\"checked\"" : "";
-                    
-                    aaData[cont] = [
-                            services.code,
-                            description.name, 
-                            services.alternative_code,
-                            "<div class='checker' id='uniform-undefined'><span " + checker_span + "><input type=\"checkbox\" " + checked + " value=\"" + 8+ "\" /></span></div>", 
-                            "<a href=\"{{=URL(c='packages', f='package_price_list')}}?id=" + 8 + "\">Agregar</a>",
-                            "<a href=\"{{=URL(c='packages', f='view_package')}}?id=" + 8 + "\">Ver</a>"//,
-                            //"<a href=\"{{=URL(c='packages', f='update_package')}}?id=" + 8 + "\">Editar</a>"
-                        ];
-                   cont++;
-                }
+                console.log(data);
             },
             complete: function() {
-                loadTable(aaData);
+                //loadTable(aaData);
             }
         });
     }
@@ -129,19 +112,11 @@
                 },
             },
             "sPaginationType": "full_numbers",
-            "aaData": aaData,
-            "aoColumns": [
-                {"sTitle":"Código"},
-                {"sTitle":"Nombre"},
-                {"sTitle":"Categoría"},
-                {"sTitle":"Marca"},
-                {"sTitle":"Precio"},
-                {"sTitle":"Estatus", "sClass":"center", "bSortable": false},
-                {"sTitle":"", "sClass":"center", "bSortable": false}
-            ]
+            "aaData": aaData
         });
         
         togglestatus();
+        //jQuery('#table_length select').uniform();
         jQuery('#table_paginate span, #table_length select').on('click', function() {
             togglestatus();
         });
