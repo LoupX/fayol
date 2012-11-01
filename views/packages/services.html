@@ -137,9 +137,9 @@
                     		services.code,
                             description.name, 
                             services.alternative_code,
-                            prices,
+                            price,
                             "<div class='checker' id='uniform-undefined'><span " + checker_span + "><input type=\"checkbox\" " + checked + " value=\"" + services.id + "\" /></span></div>", 
-                            "<a href=\"{{=URL(c='packages', f='service_prices_list')}}?id=" + services.id + "\">Agregar</a>",
+                            "<a href=\"{{=URL(c='packages', f='service_prices_list')}}?id=" + services.id + "\" class=" + addprice + ">Agregar</a>",
                             "<a href=\"{{=URL(c='packages', f='view_service')}}?id=" + services.id + "\">Ver</a>",
                             "<a href=\"{{=URL(c='packages', f='update_service')}}?id=" + services.id + "\">Editar</a>"
                         ];
