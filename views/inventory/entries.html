@@ -11,6 +11,7 @@
     .ellol {
         border: 1px solid red;
     }    
+    .nover{display: none;}
 </style>
 {{end}}
 
@@ -50,20 +51,20 @@
                         <p style="height:52px; padding-top:20px;">
 				              <span class="formwrapper" style="margin-left:20px;">
 				                    <input type="radio" id="radio_branch" name="radios" value="true" checked="checked"/> Sucursal &nbsp; &nbsp;
-				                    <input type="radio" id="radio_warehouse" name="radios"  value="false" /> Almacen &nbsp; &nbsp;
+				                    <input type="radio" id="radio_warehouse" name="radios"  value="false" /> Almacén &nbsp; &nbsp;
 				              </span>
 				        </p>
-				        <p style="margin-top: 1px;">
+				        <p class="" style="margin-top: 1px;">
                             <label>Sucursal</label>
                             <span class="field">
-                                <select id="brands" name="brands" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="4">
+                                <select id="brands" name="brands" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="1">
                                   </select>
                             </span>
                         </p>
-                        <p style="margin-top: 1px;">
-                            <label>Almacen</label>
+                        <p class="nover" id="warehousep" style="margin-top: 1px;">
+                            <label>Almacén</label>
                             <span class="field">
-                                <select id="brands" name="brands" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="4">
+                                <select id="warehouse" name="warehouse" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="1">
                                   </select>
                             </span>
                         </p>	                    
@@ -89,8 +90,27 @@
 
 	jQuery('input:radio, select').uniform();
 	
-	if()
-
+	var brands = jQuery('#radio_branch');
+	var ware = jQuery('#radio_warehouse');
+						
+	function changeradio()
+	{
+		if(ware.parent().hasClass("checked"))
+		{
+			jQuery('#brands').parent().parent().parent().removeClass('nover');
+			jQuery('#warehouse').parent().parent().parent().addClass('nover');
+		}
+		else if(brands.parent().hasClass("checked"))
+		{
+			jQuery('#warehouse').parent().parent().parent().removeClass('nover');
+			jQuery('#brands').parent().parent().parent().addClass('nover');
+		}
+	}
+	
+	jQuery("input:radio[name='radios']").on("change", function(){
+		changeradio();
+	});
+	
 </script>
 
 </body>
