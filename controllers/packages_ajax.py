@@ -6,12 +6,12 @@ def create_package():
     data_description = dict()
     vars = request.vars
 
-    data['alternative_code'] = vars.alternative_code
+    data['alternative_code'] = vars.alternative_code.decode('utf-8').upper()
     data['standard_cost'] = vars.standard_cost
     data['markup'] = vars.markup
 
-    data_description['name'] = vars.name
-    data_description['description'] = vars.description
+    data_description['name'] = vars.name.decode('utf-8').upper()
+    data_description['description'] = vars.description.decode('utf-8').upper()
 
     try:
         id = db.packages.insert(**data)
@@ -48,7 +48,16 @@ def create_price():
         data['package_id'] = v.package_id
     if v.name:
         data['name'] = v.name.decode('utf-8').upper()
-    data['price'] = v.price
+    else:
+        return ''
+    if v.price:
+        try:
+            if int(v.price) > 0:
+                data['price'] = v.price
+        except:
+            return ''
+    else:
+        return ''
 
     try:
         c = db(db.package_price_lists.package_id==data['package_id']).count()
@@ -76,19 +85,26 @@ def create_price():
         return str(id)
 
 @auth.requires_login()
-def get_package_information():
-    id = request.vars.id
+def get_package_information(id):
+    #id = request.vars.id
     data = dict()
     row = None
+    row_products = None
     row_price_list = None
     try:
         query = db.packages.id==id
         query &= db.packages.id==db.package_descriptions.package_id
         row = db(query).select().as_list()
-        spl = db.package_price_lists
-        row_price_list = db(spl.package_id==id).select(
-            spl.id, spl.name, spl.price, spl.is_default,
-            spl.status).as_list()
+        ptp = db.package_to_product
+        query = ptp.package_id==id
+        query &= ptp.product_id==db.product_descriptions.product_id
+        row_products = db(query).select(
+        ptp.ALL, db.product_descriptions.name,
+        db.product_descriptions.description).as_list()
+        pl = db.package_price_lists
+        row_price_list = db(pl.package_id==id).select(
+            pl.id, pl.name, pl.price, pl.is_default,
+            pl.status).as_list()
     except Exception as e:
         db.rollback()
 
@@ -101,6 +117,8 @@ def get_package_information():
                     data[r][k] = str(data[r][k])
     if row_price_list:
         data['price_list'] = row_price_list
+    if row_products:
+        data['products'] = row_products
     from gluon.contrib import simplejson
     data = simplejson.dumps(data)
     return str(data)
@@ -150,9 +168,21 @@ def update_package_product():
 def update_price():
     id = request.vars.id
     data = dict()
-    if request.vars.name:
-        data['name'] = request.vars.name.decode('utf-8').upper()
-    data['price'] = request.vars.price
+    v = request.vars
+
+    if v.name:
+        data['name'] = v.name.decode('utf-8').upper()
+    else:
+        return ''
+    if v.price:
+        try:
+            if int(v.price) > 0:
+                data['price'] = v.price
+        except:
+            return ''
+    else:
+        return ''
+
     try:
         query = db.package_price_lists.id==id
         result = db(query).update(**data)
