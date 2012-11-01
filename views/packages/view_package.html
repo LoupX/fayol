@@ -77,30 +77,22 @@
          <br clear="all"/> 
          
          <div class="contenttitle2" id="liststittle" style="display:">
-                        <h3>Prodctos del paquete</h3>
+                        <h3>Productos del paquete</h3>
               </div><!--contenttitle-->
 
             <table cellpadding="0" cellspacing="0" border="0" class="stdtable" id="table">
             <thead>
                 <tr>
-                    <th width="20%" class="head0">Código</th>
-                    <th width="20%" class="head1">Nombre</th>
-                    <th width="15%" class="head0">Categoría</th>
-                    <th width="15%" class="head1">Marca</th>
-                    <th width="14%" class="head0">Precio</th>
-                    <!-- <th width="8%" class="head0"></th> -->
-                    <th width="8%" class="head0" style="display: none;"></th>
+                    <th width="40%" class="head1">Nombre</th>
+                    <th width="40%" class="head0">Cantidad</th>
+                    <th width="20%" class="head1"></th>
                 </tr>
             </thead>
             <tfoot>
                 <tr>
-                    <th width="20%" class="head0">Código</th>
-                    <th width="20%" class="head1">Nombre</th>
-                    <th width="15%" class="head0">Categoría</th>
-                    <th width="15%" class="head1">Marca</th>
-                    <th width="14%" class="head0">Precio</th>
-                    <!-- <th width="8%" class="head0"></th> -->
-                    <th width="8%" class="head0" style="display: none;"></th>
+                    <th width="40%" class="head1">Nombre</th>
+                    <th width="40%" class="head0">Cantidad</th>
+                    <th width="20%" class="head1"></th>
                 </tr>
             </tfoot>
         </table>
@@ -139,7 +131,7 @@
                 </tfoot>
             </table>
             <br>
-            <a href="#" id="edit_package" data-id="" style="float:right;">
+            <a href="#" id="edit_list" data-id="" style="float:right;">
                 <span class="stdbtn btn_orange">Agregar/Editar</span>
             </a>
             <br><br>
@@ -169,15 +161,17 @@ var id = {{=request.vars.id}}
         resp.html('');
 
 //////////// get info ////////////
-  var theresdata = ''; 
-  var oTable = jQuery('#liststable');
+  var theresdata = '';
+  var theresdata2 = '';  
+  var oTable;
   jQuery.ajax({ 
       url: "{{=URL(c='packages_ajax', f='get_package_information')}}",
       type: "POST",
       data: { id: id }, 
       dataType:"json",
       success: function (data) {
-            code.html(data.packages['code']);
+
+          code.html(data.packages['code']);
             
             name_service.html("Producto: \"" + data.package_descriptions['name'] + "\"");
 
@@ -208,9 +202,14 @@ var id = {{=request.vars.id}}
               resp.attr('style','color:#A31314');
             };
 
-            cont = 0;
+          cont = 0;
           aaData = new Array();
           theresdata = data.price_list;
+
+          jQuery('#edit_list')
+                  .attr('href', "{{=URL(c='packages', f='package_price_list')}}"+'?id='+data.package_descriptions.package_id);
+          jQuery('#edit_package')
+                  .attr('href', "{{=URL(c='packages', f='select_products')}}"+'?id='+data.package_descriptions.package_id);
 
           if(theresdata){
               for(e = 0; e < data.price_list.length; e++) {
@@ -218,20 +217,44 @@ var id = {{=request.vars.id}}
                   aaData[cont] = [
                       data.price_list[e].name, 
                       data.price_list[e].price, 
-                      '<input type="radio" value="'+data.price_list[e].id+'" name="radios" '+checked+'/>',
+                      '<input type="radio" value="'+data.price_list[e].id+'" name="radios" '+checked+' onclick="togglestatus(this.value);"/>',
                       ''
                     ];
                   cont++;
               }
-              oTable.show();
+              jQuery('#liststable').show();
           }
           else {
-              oTable.dataTable().fnDestroy();
+              jQuery('#liststable').dataTable().fnDestroy();
+              jQuery('#liststable').hide();
+          }
+            
+          cont = 0;
+          aaData2 = [];
+          theresdata2 = data.products;
+
+          if(theresdata2){
+              for(e = 0; e < data.products.length; e++) {
+                  
+                  aaData2[cont] = [
+                      data.products[e].product_descriptions.name, 
+                      data.products[e].package_to_product.quantity,
+                      ''
+                    ];
+                  cont++;
+              }
+              jQuery('#table').show();
+          }
+          else {
+              jQuery('#table').dataTable().fnDestroy();
               jQuery('#table').hide();
           }
            
       },
       complete: function() {
+        if(theresdata2) {
+              loadTable2(aaData2);
+          }
         if(theresdata) {
               loadTable(aaData);
           }
@@ -239,7 +262,7 @@ var id = {{=request.vars.id}}
   });  
 
 function loadTable(aaData) {
-        oTable.dataTable( {
+        jQuery('#liststable').dataTable( {
             "bDestroy": true,
             "bPaginate": false,
             "bLengthChange": false,
@@ -251,13 +274,36 @@ function loadTable(aaData) {
         });
         
         jQuery('.dataTables_length select, input:checkbox, input:radio').uniform();
-        quickEdit();
-        togglestatus();
+        //quickEdit();
+        //togglestatus();
         jQuery('#table_paginate span, #table_length select').on('click', function() {
             jQuery('.dataTables_length select, input:checkbox, input:radio').uniform();
             togglestatus();
         });
     }
+
+function loadTable2(aaData) {
+        jQuery('#table').dataTable( {
+            "bDestroy": true,
+            "bPaginate": false,
+            "bLengthChange": false,
+            "bFilter": true,
+            "bSort": true,
+            "bInfo": false,
+            "bAutoWidth": true,
+            "aaData": aaData
+        });
+    }
+
+    function togglestatus(id) {
+            jQuery.ajax({
+                url: "{{=URL(c='packages_ajax', f='update_default_price')}}",
+                type: "POST",
+                data: { id: id }
+            });
+    }
+
+
 
 
     

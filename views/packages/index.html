@@ -37,7 +37,6 @@
                             <th width="15%" class="head0">Código alternativo</th>
                             <th width="15%" class="head1">Estatus</th>
                             <th width="15%" class="head0"></th>
-                            <th width="15%" class="head1"></th>
                         </tr>
                     </thead>
                     <tfoot>
@@ -47,7 +46,6 @@
                             <th width="15%" class="head0">Código alternativo</th>
                             <th width="15%" class="head1">Estatus</th>
                             <th width="15%" class="head0"></th>
-                            <th width="15%" class="head1"></th>
                         </tr>
                     </tfoot>
                 </table>
@@ -77,16 +75,42 @@
     });
     
     function ajaxFilter(query) {
+        var theresdata = '';
         jQuery.ajax({
-            url: "{{=URL(c='packages_ajax', f='get_get_package_information')}}",
+            url: "{{=URL(c='packages_ajax', f='get_packages')}}",
             type: "POST",
             data: {query: query},
             dataType: "json",
             success:function(data){
-                console.log(data);
+                cont = 0;
+                aaData = [];
+                theresdata = data;
+
+                if(theresdata){
+                    for(e = 0; e < data.length; e++) {
+                        checked = (data[e].packages.status == true) ? "checked=\"checked\"" : "";
+                        checker_span = (data[e].packages.status == true) ?  "class=\"checked\"" : "";
+                        aaData[cont] = [
+                            data[e].packages.code,
+                            data[e].package_descriptions.name,
+                            data[e].packages.alternative_code,
+                            "<div class='checker' id='uniform-undefined'><span " + checker_span + "><input type=\"checkbox\" " + checked + " value=\"" + data[e].packages.id + "\" /></span></div>", 
+                            "<a href=\"{{=URL(c='packages', f='view_package')}}?id="+data[e].packages.id+"\" class=\"toggle\">Ver</a>"
+                            
+                        ];
+                        cont++;
+                    }
+                    jQuery('#table').show();
+                }
+                else {
+                    //oTable.fnDestroy();
+                    jQuery('#table').hide();
+                }
             },
             complete: function() {
-                //loadTable(aaData);
+                if(theresdata) {
+                    loadTable(aaData);
+                }
             }
         });
     }
