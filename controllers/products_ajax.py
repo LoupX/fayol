@@ -78,7 +78,7 @@ def create_price():
         return ''
     if v.price:
         try:
-            if int(v.price) > 0:
+            if float(v.price) > 0:
                 data['price'] = v.price
         except:
             return ''
@@ -442,7 +442,7 @@ def update_price():
         return ''
     if v.price:
         try:
-            if int(v.price) > 0:
+            if float(v.price) > 0:
                 data['price'] = v.price
         except:
             return ''
