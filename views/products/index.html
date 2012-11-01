@@ -4,6 +4,10 @@
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.dataTables.min.js')}}"></script>
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/chosen.jquery.min.js')}}"></script>
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.validate.min.js')}}"></script>
+<style type="text/css">
+	.red{ color: #ef4747; }
+	.black{ color: #000; }
+</style>
 {{end}}
 
 {{block sidebar_menu}}
@@ -69,7 +73,8 @@
 
 <script type="text/javascript">
     
-    var contador = "1";	
+    var contador = "1";
+    var addprice = "";
 
     val = jQuery('.formwrapper input[name=filtervendors]:checked').val();
     ajaxFilter(val);
@@ -106,6 +111,7 @@
                                 price = (Math.round(price*100)/100)
 	                    		price = price.toString();
 	                    		price = '$' + price;
+	                    		addprice = "black"
 	                    	}
                     	}
                     }
@@ -117,7 +123,8 @@
 			                    price = sc*m;
                                 price = (Math.round(price*100)/100)
 			                    price = price.toString();
-			                    price = '$' + price;
+			                    price = '$' + price;   
+			                    addprice = "red" 
 		                    }
 		                    catch(error){
 			                    
@@ -132,7 +139,7 @@
                             brand.name,
                             price,
                             "<div class='checker' id='uniform-undefined'><span " + checker_span + "><input type=\"checkbox\" " + checked + " value=\"" + product.id + "\" /></span></div>", 
-                            "<a href=\"{{=URL(c='products', f='prices_list')}}?id=" + product.id + "\">Agregar</a>",
+                            "<a href=\"{{=URL(c='products', f='prices_list')}}?id=" + product.id + "\" class=" + addprice + ">Agregar</a>",
                             "<a href=\"{{=URL(c='products', f='view_product')}}?id=" + product.id + "\">Ver</a>"  
                         ];
                    cont++;
@@ -140,6 +147,10 @@
             },
             complete: function() {
             	loadTable(aaData);
+            	
+            	
+            	
+            	
             }
         });
     }

@@ -52,7 +52,21 @@
 				                    <input type="radio" id="radio_branch" name="radios" value="true" checked="checked"/> Sucursal &nbsp; &nbsp;
 				                    <input type="radio" id="radio_warehouse" name="radios"  value="false" /> Almacen &nbsp; &nbsp;
 				              </span>
-				        </p>	                    
+				        </p>
+				        <p style="margin-top: 1px;">
+                            <label>Sucursal</label>
+                            <span class="field">
+                                <select id="brands" name="brands" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="4">
+                                  </select>
+                            </span>
+                        </p>
+                        <p style="margin-top: 1px;">
+                            <label>Almacen</label>
+                            <span class="field">
+                                <select id="brands" name="brands" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="4">
+                                  </select>
+                            </span>
+                        </p>	                    
                         <p class="stdformbutton">
                         	<button id="submit" class="submit radius2" tabindex="14">Guardar</button>
                         </p>
@@ -73,7 +87,9 @@
 
 <script>
 
-
+	jQuery('input:radio, select').uniform();
+	
+	if()
 
 </script>
 

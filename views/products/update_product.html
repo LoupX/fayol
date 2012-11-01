@@ -204,6 +204,7 @@
 
 
 //////////// validate form ////////////
+
     jQuery("#form_product").validate({
             rules: {
                 name: "required",
@@ -218,8 +219,8 @@
             },
             messages: {
                 name: "Ingrese el nombre del producto",
-                standard_cost: "Ingrese numeros decimales",
-                markup: "Ingrese numeros decimales"
+                standard_cost: "Ingrese números enteros con máximo dos decimales",
+                markup: "Ingrese números enteros con máximo dos decimales"
             }
         });
 
