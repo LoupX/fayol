@@ -104,10 +104,10 @@ def get_services():
         rows = db(query).select().as_list()
         for row in rows:
             id = row['services']['id']
-            spl = db.service_price_lists
-            row_price_list = db(spl.service_id==id).select(
-                spl.id, spl.name, spl.price, spl.is_default,
-                ppl.status).as_list()
+            pl = db.service_price_lists
+            row_price_list = db(pl.service_id==id).select(
+                pl.id, pl.name, pl.price, pl.is_default,
+                pl.status).as_list()
             row['service_price_lists'] = row_price_list
     except Exception as e:
         db.rollback()
