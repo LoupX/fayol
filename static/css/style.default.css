@@ -1106,7 +1106,7 @@ form label.error { float: none; color: #f00; font-size: 11px; display: block; te
 .quickform input { width: 60%; color: #666; }
 .quickform input.xsmall { width: 20px; }
 .quickform input.small { width: 50px; }
-.quickform label { width: 100px; float: left; }
+.quickform label { width: 120px; float: left; }
 .quickform .quickformbutton button { 
 	margin-top: 10px; text-align: right; padding: 7px 20px; -moz-border-radius: 2px; -webkit-border-radius: 2px; border-radius: 2px; border: 0;
 	background: #eee; border: 1px solid #ccc; cursor: pointer; font-weight: bold; color: #666; 
