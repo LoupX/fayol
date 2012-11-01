@@ -57,7 +57,7 @@
 				        <p class="" style="margin-top: 1px;">
                             <label>Sucursal</label>
                             <span class="field">
-                                <select id="brands" name="brands" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="1">
+                                <select id="branch" name="branch" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="1">
                                   </select>
                             </span>
                         </p>
@@ -143,6 +143,9 @@
 	
 	///// Get branches & warehouses /////
 	
+	var branch = jQuery('#branch'),
+        warehouse = jQuery('#warehouse');
+	
 	jQuery.ajax({
         type: "POST",
         url: "{{=URL(c='', f='get_branches')}}",
@@ -152,7 +155,7 @@
         	for(k in results){
 	        	options += "<option value=\"" + results[k].brands.id + "\">" + results[k].brand_descriptions.name + "</option>";
 	        }
-            brand	
+            branch	
                 .html(options)
                 .prepend('<option value="">Selecccionar</option>')
                 .trigger("liszt:updated");
@@ -168,7 +171,7 @@
         	for(k in results){
 	        	options += "<option value=\"" + results[k].brands.id + "\">" + results[k].brand_descriptions.name + "</option>";
 	        }
-            brand	
+            warehouse	
                 .html(options)
                 .prepend('<option value="">Selecccionar</option>')
                 .trigger("liszt:updated");
