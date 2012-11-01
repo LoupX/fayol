@@ -40,13 +40,13 @@
                     </div>
                 <div class="notibar exists" style="display:none;">
                         <a class="close"></a>
-                        <p>No se puede agregar mas de 10 listas por servicio.</p>
+                        <p>No se puede agregar más de 10 listas por servicio.</p>
                     </div>
         
         	<div id="validation" class="subcontent">
             	
             		<div class="contenttitle2" style="width=100%;">
-                        <h3 id="service-name">Nombre del servicio Seleccionado:</h3>
+                        <h3 id="service-name">Servicio seleccionado:</h3>
                     </div><!--contenttitle-->
             	    <br />   
                     <br />
@@ -118,7 +118,7 @@ var globalid = '';
       data: { id: id }, 
       dataType:"json",
       success: function(data) {
-            jQuery('#service-name').html("Nombre del servicio Seleccionado: \"" + data.service_descriptions['name'] + "\""); 
+            jQuery('#service-name').html("Servicio seleccionado: \"" + data.service_descriptions['name'] + "\""); 
       },
       complete: function() {
         //oTable.dataTable().fnClearTable();
