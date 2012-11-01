@@ -5,40 +5,37 @@ def get_branches():
     b = db.branches
     q = request.vars.query
     query = b.status==True
-    rows = []
+    data = dict()
     if q == 'ANY':
         query = b
     elif q == 'FALSE':
         query = b.status == False
     try:
-        rows = db(query).select(b.name, b.id)
+        data = db(query).select(b.name, b.id).as_list()
     except:
         db.rollback()
-    options = str()
-    for row in rows:
-        options += str(OPTION(row.name, _value=row.id))
-        options += '\n'
-    return options
+    from gluon.contrib import simplejson
+    data = simplejson.dumps(data)
+    return str(data)    
 
 @auth.requires_login()
 def get_warehouses():
     w = db.warehouses
     q = request.vars.query
     query = w.status == True
-    rows = []
+    data = dict()
     if q == 'ANY':
         query = w
     elif q == 'FALSE':
         query = w.status == False
     try:
-        rows = db(query).select(w.name, w.id)
+        data = db(query).select(w.name, w.id).as_list()
     except:
         db.rollback()
-    options = str()
-    for row in rows:
-        options += str(OPTION(row.name, _value=row.id))
-        options += '\n'
-    return options
+
+    from gluon.contrib import simplejson
+    data = simplejson.dumps(data)
+    return str(data)
 
 @auth.requires_login()
 def get_branch_information():
