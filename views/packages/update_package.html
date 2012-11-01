@@ -71,6 +71,7 @@
                                 <textarea cols="80" rows="5" name="description" id="description" class="smallinput" tabindex="5"></textarea>
                             </span>
                         </p>
+                        <input type="hidden" value="" name"idinfo" id="idinfo">
                         <p class="stdformbutton">
                             <button id="submit" class="submit radius2" tabindex="6">Guardar</button>
                         </p>
@@ -96,7 +97,22 @@
     var product = jQuery('#products');
     var options;
 
+////// get info //////
 
+jQuery.ajax({
+        url: "{{=URL(c='packages_ajax', f='get_package_information')}}",
+        data: { id: "{{=request.vars.id}}" },
+        type: "POST",
+        dataType:"json",
+        success:function(data){
+            jQuery('#name').val(data.package_descriptions['name']);
+            jQuery('#alternative_code').val(data.packages['alternative_code']);
+            jQuery('#standard_cost').val(data.packages['standard_cost']);
+            jQuery('#markup').val(data.packages['markup']);
+            jQuery('#description').val(data.package_descriptions['description']);
+            jQuery('#idinfo').val(data.package_descriptions['id']);
+        },
+    });
 
     jQuery("#form_package").validate({
             rules: {
@@ -127,20 +143,22 @@
 
         if(jQuery("#form_package").valid()) {
              jQuery.ajax({
-                url: "{{=URL(c='packages_ajax', f='create_package')}}",
+                url: "{{=URL(c='packages_ajax', f='update_package')}}",
                 data: { 
                     name: jQuery('#name').val(),
                     standard_cost: jQuery('#standard_cost').val(),
                     markup: jQuery('#markup').val(),
                     description: jQuery('#description').val(),
-                    alternative_code: jQuery('#alternative_code').val()
+                    alternative_code: jQuery('#alternative_code').val(),
+                    package_id: '{{=request.vars.id}}',
+                    package_description_id: jQuery('#idinfo').val()
                 },
                 type: 'POST',
                 success:function(data){
                     if(data != 0 && data){
                         jQuery('.msgsuccess').fadeIn(1600, function() {
                             jQuery('.msgsuccess').fadeOut('slow');
-                            redirect(data)
+                            redirect({{=request.vars.id}})
                         });
 
                     }
@@ -176,7 +194,7 @@
     }
 
     function redirect(id) {
-        window.location.replace("{{=URL(c='packages', f='select_products')}}?id="+id);
+        window.location.replace("{{=URL(c='packages', f='view_package')}}?id="+id);
     }
  
     

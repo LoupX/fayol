@@ -38,7 +38,7 @@ def update_package():
     
 @auth.requires_login()
 def package_price_list():
-    title = 'Paquetes'
+    title = 'Listas de Precios'
     current = ['menu_catalogs', 'sidebar_packages', 'sub_packages_read']
     return dict(title=title,  current=current)
     

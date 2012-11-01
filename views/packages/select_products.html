@@ -23,6 +23,11 @@
             <p>Agregue almenos un produto.</p>
         </div>
 
+                    <div class="notibar msgsuccess" style="display:none;">
+                        <a class="close"></a>
+                        <p>Se han guardado los datos del formulario.</p>
+                    </div>
+
         <div class="contenttitle2">
             <h3>Agregar productos al paquete.</h3>
         </div><!--contenttitle-->
@@ -232,12 +237,29 @@ newDataTable();
             var resp = prompt('¿Cuantos productos desea agregar?',1);
 
             if(resp > 0) {
-                nt.dataTable().fnAddData([
-                            newrow[1],
-                            resp,
-                            '<a href="javascript:void(0);" onclick="removeRow(this);">remover</a>',
-                            newrow[6]
-                ]);
+                if(nt.dataTable().fnGetData().length == 0) {
+                    nt.dataTable().fnAddData([
+                        newrow[1],
+                        resp,
+                        '<a href="javascript:void(0);" onclick="removeRow(this);">remover</a>',
+                        newrow[6]
+                    ]); 
+            
+                } else {
+                    for(e = 0; e < nt.dataTable().fnGetData().length; e++) {
+                        if(nt.dataTable().fnGetData(e)[3] == newrow[6]) {
+                            resp = parseInt(nt.dataTable().fnGetData(e)[1]) + parseInt(resp);
+                            nt.dataTable().fnDeleteRow(e);   
+                        }
+                    }
+                    nt.dataTable().fnAddData([
+                        newrow[1],
+                        resp,
+                        '<a href="javascript:void(0);" onclick="removeRow(this);">remover</a>',
+                        newrow[6]
+                    ]);
+                };
+
             } else {
                 alert('Se requiere la cantidad.');
             };
@@ -252,10 +274,14 @@ newDataTable();
 
     jQuery('#submit').click(function(e) {
         e.preventDefault();
+        jQuery('.msgerror').hide();
+        jQuery('.msgsuccess').hide();
+        //jQuery('.exist').hide();
+
         if(nt.dataTable().fnGetData().length > 0) {
             var products = [];
             for(e = 0; e < nt.dataTable().fnGetData().length; e++) {
-                products[e] = {"id": nt.dataTable().fnGetData(e)[3], "amount": nt.dataTable().fnGetData(e)[1] }
+                products[e] = {"id": nt.dataTable().fnGetData(e)[3], "amount": parseInt(nt.dataTable().fnGetData(e)[1]) }
             }
             //console.log(products);
             jQuery.ajax({

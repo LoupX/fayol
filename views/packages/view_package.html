@@ -76,6 +76,40 @@
 
          <br clear="all"/> 
          
+         <div class="contenttitle2" id="liststittle" style="display:">
+                        <h3>Prodctos del paquete</h3>
+              </div><!--contenttitle-->
+
+            <table cellpadding="0" cellspacing="0" border="0" class="stdtable" id="table">
+            <thead>
+                <tr>
+                    <th width="20%" class="head0">Código</th>
+                    <th width="20%" class="head1">Nombre</th>
+                    <th width="15%" class="head0">Categoría</th>
+                    <th width="15%" class="head1">Marca</th>
+                    <th width="14%" class="head0">Precio</th>
+                    <!-- <th width="8%" class="head0"></th> -->
+                    <th width="8%" class="head0" style="display: none;"></th>
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <th width="20%" class="head0">Código</th>
+                    <th width="20%" class="head1">Nombre</th>
+                    <th width="15%" class="head0">Categoría</th>
+                    <th width="15%" class="head1">Marca</th>
+                    <th width="14%" class="head0">Precio</th>
+                    <!-- <th width="8%" class="head0"></th> -->
+                    <th width="8%" class="head0" style="display: none;"></th>
+                </tr>
+            </tfoot>
+        </table>
+        <br>
+        <a href="#" id="edit_package" data-id="" style="float:right;">
+                <span class="stdbtn btn_orange">Agregar/Editar</span>
+            </a>
+            <br><br>
+
          <div class="contenttitle2">
                 <h3 id="name">Lista de precios</h3>
          </div><!--contenttitle-->
@@ -104,6 +138,13 @@
                     </tr>
                 </tfoot>
             </table>
+            <br>
+            <a href="#" id="edit_package" data-id="" style="float:right;">
+                <span class="stdbtn btn_orange">Agregar/Editar</span>
+            </a>
+            <br><br>
+
+             
             
         </div><!--contentwrapper-->
         
@@ -147,7 +188,7 @@ var id = {{=request.vars.id}}
             description.html(data.package_descriptions['description']);
         
             jQuery('#edit_service')
-            .attr('href', "{{=URL(c='packages', f='update_service')}}"+'?id='+data.packages.id);
+            .attr('href', "{{=URL(c='packages', f='update_package')}}"+'?id='+data.packages.id);
             
             status_service.val(id).removeAttr('disabled');
             status_service.parent().parent().removeClass('disabled'); 
@@ -177,8 +218,8 @@ var id = {{=request.vars.id}}
                   aaData[cont] = [
                       data.price_list[e].name, 
                       data.price_list[e].price, 
-                      '<input type="radio" value="'+data.price_list[e].id+'" name="radios" '+checked+'/>', 
-                       "<a href=\"{{=URL(c='packages', f='package_price_list')}}?id="+{{=request.vars.id}}+"\" class=\"toggle\">Editar</a>"
+                      '<input type="radio" value="'+data.price_list[e].id+'" name="radios" '+checked+'/>',
+                      ''
                     ];
                   cont++;
               }
@@ -206,13 +247,7 @@ function loadTable(aaData) {
             "bSort": true,
             "bInfo": false,
             "bAutoWidth": true,
-            "aaData": aaData,
-            "aoColumns": [
-                {"sTitle": "Nombre"},
-                {"sTitle": "Precio"},
-                {"sTitle": "Predeterminado", "sClass":"center"},
-                {"sTitle": "", "sClass":"center"}
-            ]
+            "aaData": aaData
         });
         
         jQuery('.dataTables_length select, input:checkbox, input:radio').uniform();
