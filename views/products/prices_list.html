@@ -119,7 +119,7 @@ var globalid = '';
       data: { id: id }, 
       dataType:"json",
       success: function(data) {
-            jQuery('#product-name').html("Nombre del producto Seleccionado: \"" + data.product_descriptions['name'] + "\""); 
+            jQuery('#product-name').html("Producto seleccionado: \"" + data.product_descriptions['name'] + "\""); 
       },
       complete: function() {
         //oTable.dataTable().fnClearTable();
