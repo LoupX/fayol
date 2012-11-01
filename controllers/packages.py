@@ -19,6 +19,11 @@ def select_products():
     current = ['menu_catalogs', 'sidebar_packages', 'sub_packages_new']
     return dict(title=title,  current=current)
 
+def update_select_products():
+    title = 'Actualizar productos del paquete.'
+    current = ['menu_catalogs', 'sidebar_packages', 'sub_packages_read']
+    return dict(title=title,  current=current)
+
 def view_package():
     title = 'Paquetes'
     current = ['menu_catalogs', 'sidebar_packages', 'sub_packages_read']

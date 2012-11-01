@@ -209,7 +209,7 @@ var id = {{=request.vars.id}}
           jQuery('#edit_list')
                   .attr('href', "{{=URL(c='packages', f='package_price_list')}}"+'?id='+data.package_descriptions.package_id);
           jQuery('#edit_package')
-                  .attr('href', "{{=URL(c='packages', f='select_products')}}"+'?id='+data.package_descriptions.package_id);
+                  .attr('href', "{{=URL(c='packages', f='update_select_products')}}"+'?id='+data.package_descriptions.package_id);
 
           if(theresdata){
               for(e = 0; e < data.price_list.length; e++) {
