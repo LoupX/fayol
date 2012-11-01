@@ -155,7 +155,12 @@ var vendors_select = jQuery('#vendors_select'),
     id = 0;
 
 ////// get active vendors //////
-ajaxFilter('TRUE'); 
+val = jQuery('.formwrapper input[name=filtervendors]:checked').val();
+    ajaxFilter(val);
+
+    jQuery('.formwrapper input:radio').on('change', function(e) {
+        ajaxFilter(e.currentTarget.value);
+    });
 
 function ajaxFilter(who) {
     //console.log(which);
