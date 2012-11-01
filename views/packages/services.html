@@ -4,6 +4,10 @@
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.dataTables.min.js')}}"></script>
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/chosen.jquery.min.js')}}"></script>
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.validate.min.js')}}"></script>
+<style type="text/css">
+	.red{ color: #ef4747; }
+	.black{ color: #000; }
+</style>
 {{end}}
 
 {{block sidebar_menu}}
@@ -35,7 +39,7 @@
                             <th width="15%" class="head0">Código</th>
                             <th width="15%" class="head1">Nombre</th>
                             <th width="15%" class="head0">Código alternativo</th>
-                            <!--<th width="10%" class="head1">Precio</th>-->
+                            <th width="10%" class="head1">Precio</th>
                             <th width="15%" class="head0">Estatus</th>
                             <th width="10%" class="head1"></th>
                             <th width="10%" class="head0"></th>
@@ -47,7 +51,7 @@
                             <th width="15%" class="head0">Código</th>
                             <th width="15%" class="head1">Nombre</th>
                             <th width="15%" class="head0">Código alternativo</th>
-                         <!--   <th width="10%" class="head1">Precio</th>-->
+                            <th width="10%" class="head1">Precio</th>
                             <th width="15%" class="head0">Estatus</th
                             <th width="10%" class="head1"></th>
                             <th width="10%" class="head0"></th>
@@ -92,13 +96,13 @@
 
                     services = data[row].services;
                     description = data[row].service_descriptions;
-                    //prices = data[row].service_price_lists;
-                    //price = 'No asignado';
+                    prices = data[row].service_price_lists;
+                    price = 'No asignado';
+                    //Fin precio
                     checker_span = (services.status) ? "class=\"checked\"" : "";
                     checked = (services.status) ? "checked=\"checked\"" : "";
                     
                     //Precio
-                    /* 
                     if(prices.length > 0) {
                         for(k in prices) {
                             if(prices[k].is_default){
@@ -127,15 +131,13 @@
                             }
                         }
                     }
-
-                    */ 
                     //Fin Precio    
 
                     aaData[cont] = [
                     		services.code,
                             description.name, 
                             services.alternative_code,
-                            //prices,
+                            prices,
                             "<div class='checker' id='uniform-undefined'><span " + checker_span + "><input type=\"checkbox\" " + checked + " value=\"" + services.id + "\" /></span></div>", 
                             "<a href=\"{{=URL(c='packages', f='service_prices_list')}}?id=" + services.id + "\">Agregar</a>",
                             "<a href=\"{{=URL(c='packages', f='view_service')}}?id=" + services.id + "\">Ver</a>",
@@ -176,7 +178,7 @@
                 {"sTitle":"Código"},
                 {"sTitle":"Nombre"},
                 {"sTitle":"Código alternativo"},
-                //{"sTitle":"Precio"},
+                {"sTitle":"Precio"},
                 {"sTitle":"Estatus", "sClass":"center"},
                 {"sTitle":"Lista de<br/> precios", "sClass":"center"},
                 {"sTitle":"", "sClass":"center", "bSortable": false},
