@@ -4,7 +4,6 @@
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.dataTables.min.js')}}"></script>
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/chosen.jquery.min.js')}}"></script>
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.validate.min.js')}}"></script>
-<script type="text/javascript" src="{{=URL('static', 'js/plugins/chosen.jquery.min.js')}}"></script>    
 {{end}}
 
 {{block sidebar_menu}}
@@ -20,6 +19,14 @@
             
         </div><!--pageheader-->
         
+        <p style="margin-top:20px;">
+              <span class="formwrapper" style="margin-left:20px;">
+                    <input type="radio" id="a" name="filtervendors" value="true" onclick="ajaxFilter(this.value)" checked="checked"/> Habilitados &nbsp; &nbsp;
+                    <input type="radio" id="b" name="filtervendors"  value="false" onclick="ajaxFilter(this.value)"/> Deshabilitados &nbsp; &nbsp;
+                    <input type="radio" id="c" name="filtervendors" value="any" onclick="ajaxFilter(this.value)"/> Todos &nbsp; &nbsp;
+              </span>
+        </p>
+        
         <div id="contentwrapper" class="contentwrapper">
         
                 <table cellpadding="0" cellspacing="0" border="0" class="stdtable" id="table">
@@ -27,22 +34,20 @@
                         <tr>
                             <th width="20%" class="head0">Código</th>
                             <th width="20%" class="head1">Nombre</th>
-                            <th width="15%" class="head0">Categoría</th>
-                            <th width="15%" class="head1">Marca</th>
-                            <th width="14%" class="head0">Precio</th>
-                            <th width="8%" class="head1">Ver</th>
-                            <th width="8%" class="head0"></th>
+                            <th width="15%" class="head0">Código alternativo</th>
+                            <th width="15%" class="head1">Estatus</th>
+                            <th width="15%" class="head1"></th>
+                            <th width="15%" class="head0"></th>
                         </tr>
                     </thead>
                     <tfoot>
                         <tr>
                             <th width="20%" class="head0">Código</th>
                             <th width="20%" class="head1">Nombre</th>
-                            <th width="15%" class="head0">Categoría</th>
-                            <th width="15%" class="head1">Marca</th>
-                            <th width="14%" class="head0">Precio</th>
-                            <th width="8%" class="head1">Ver</th>
-                            <th width="8%" class="head0"></th>
+                            <th width="15%" class="head0">Código alternativo</th>
+                            <th width="15%" class="head1">Estatus</th
+                            <th width="15%" class="head1"></th>
+                            <th width="15%" class="head0"></th>
                         </tr>
                     </tfoot>
                 </table>
@@ -59,10 +64,18 @@
 </div><!--bodywrapper-->
 
 <script type="text/javascript">
+    
+    var contador = "1"; 
+
     ajaxFilter('TRUE');
+
+    jQuery('.formwrapper input:radio').on('change', function(e) {
+        ajaxFilter(e.currentTarget.value);
+    });
+    
     function ajaxFilter(query) {
         jQuery.ajax({
-            url: "{{=URL(c='products_ajax', f='get_products')}}",
+            url: "{{=URL(c='services_ajax', f='get_services')}}",
             type: "POST",
             data: {query: query},
             dataType: "json",
@@ -71,48 +84,20 @@
                 aaData = new Array();
                 for(row in data){
 
-                    description = data[row].product_descriptions;
-                    prices = data[row].product_price_lists;
-                    product = data[row].products;
-                    category = data[row].category_descriptions;
-                    brand = data[row].brand_descriptions;
-                    price = 'No asignado';
+                    services = data[row].services;
+                    description = data[row].service_descriptions;
                     
-                    checker_span = (product.status) ? "class=\"checked\"" : "";
-                    checked = (product.status) ? "checked=\"checked\"" : "";
-                    
-                    if(prices.length > 0) {
-                        for(k in prices) {
-                            if(prices[k].is_default){
-                                price = prices[k].price 
-                                price = price.toString();
-                                price = '$' + price;
-                            }
-                        }
-                    }
-                    else{
-                        if(product.standard_cost != null && product.markup != null){
-                            try{
-                                sc = parseFloat(product.standard_cost);
-                                m = (parseFloat(product.markup)/100)+1;
-                                price = sc*m;
-                                price = price.toString();
-                                price = '$' + price;
-                            }
-                            catch(error){
-                                
-                            }
-                        }
-                    }
+                    checker_span = (services.status) ? "class=\"checked\"" : "";
+                    checked = (services.status) ? "checked=\"checked\"" : "";
                     
                     aaData[cont] = [
-                            product.code,
+                            services.code,
                             description.name, 
-                            category.name,
-                            brand.name,
-                            price,
-                            "<div class='checker' id='uniform-undefined'><span " + checker_span + "><input type=\"checkbox\" " + checked + " value=\"" + product.id + "\" /></span></div>", 
-                            "<a href=\"{{=URL(c='products', f='view_product')}}?id=" + product.id + "\">Ver</a>"
+                            services.alternative_code,
+                            "<div class='checker' id='uniform-undefined'><span " + checker_span + "><input type=\"checkbox\" " + checked + " value=\"" + 8+ "\" /></span></div>", 
+                            "<a href=\"{{=URL(c='packages', f='package_price_list')}}?id=" + 8 + "\">Agregar</a>",
+                            "<a href=\"{{=URL(c='packages', f='view_package')}}?id=" + 8 + "\">Ver</a>"//,
+                            //"<a href=\"{{=URL(c='packages', f='update_package')}}?id=" + 8 + "\">Editar</a>"
                         ];
                    cont++;
                 }
@@ -167,7 +152,7 @@
         jQuery('.stdtable input:checkbox').on("change", function(e){
             jQuery.uniform.update(e.currentTarget);
             jQuery.ajax({
-                url: "{{=URL(c='products_ajax', f='toggle_product')}}",
+                url: "{{=URL(c='packages_ajax', f='toggle_package')}}",
                 type: "POST",
                 data: {
                     id:e.currentTarget.value
@@ -206,8 +191,10 @@
         jQuery('select').unwrap();
         jQuery('input:radio').unbind(".uniform");
         jQuery('select').unbind(".uniform"); 
-    }   
+    }
+ 
 </script>
+
 </body>
 </html>
 {{end}}

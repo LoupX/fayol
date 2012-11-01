@@ -71,9 +71,19 @@ def create_price():
     v = request.vars
     if v.product_id:
         data['product_id'] = v.product_id
+
     if v.name:
         data['name'] = v.name.decode('utf-8').upper()
-    data['price'] = v.price
+    else:
+        return ''
+    if v.price:
+        try:
+            if int(v.price) > 0:
+                data['price'] = v.price
+        except:
+            return ''
+    else:
+        return ''
 
     try:
         c = db(db.product_price_lists.product_id==data['product_id']).count()
@@ -424,9 +434,21 @@ def update_default_price():
 def update_price():
     id = request.vars.id
     data = dict()
-    if request.vars.name:
-        data['name'] = request.vars.name.decode('utf-8').upper()
-    data['price'] = request.vars.price
+    v = request.vars
+
+    if v.name:
+        data['name'] = v.name.decode('utf-8').upper()
+    else:
+        return ''
+    if v.price:
+        try:
+            if int(v.price) > 0:
+                data['price'] = v.price
+        except:
+            return ''
+    else:
+        return ''
+
     try:
         query = db.product_price_lists.id==id
         result = db(query).update(**data)

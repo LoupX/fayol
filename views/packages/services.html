@@ -70,7 +70,8 @@
     
     var contador = "1";	
 
-    ajaxFilter('TRUE');
+    val = jQuery('.formwrapper input[name=filtervendors]:checked').val();
+    ajaxFilter(val);
 
     jQuery('.formwrapper input:radio').on('change', function(e) {
         ajaxFilter(e.currentTarget.value);
