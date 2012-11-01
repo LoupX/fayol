@@ -32,10 +32,11 @@
                 <table cellpadding="0" cellspacing="0" border="0" class="stdtable" id="table">
                     <thead>
                         <tr>
-                            <th width="20%" class="head0">Código</th>
-                            <th width="20%" class="head1">Nombre</th>
+                            <th width="15%" class="head0">Código</th>
+                            <th width="15%" class="head1">Nombre</th>
                             <th width="15%" class="head0">Código alternativo</th>
-                            <th width="15%" class="head1">Estatus</th>
+                            <!--<th width="10%" class="head1">Precio</th>-->
+                            <th width="15%" class="head0">Estatus</th>
                             <th width="10%" class="head1"></th>
                             <th width="10%" class="head0"></th>
                             <th width="10%" class="head0"></th>
@@ -43,10 +44,11 @@
                     </thead>
                     <tfoot>
                         <tr>
-                            <th width="20%" class="head0">Código</th>
-                            <th width="20%" class="head1">Nombre</th>
+                            <th width="15%" class="head0">Código</th>
+                            <th width="15%" class="head1">Nombre</th>
                             <th width="15%" class="head0">Código alternativo</th>
-                            <th width="15%" class="head1">Estatus</th
+                         <!--   <th width="10%" class="head1">Precio</th>-->
+                            <th width="15%" class="head0">Estatus</th
                             <th width="10%" class="head1"></th>
                             <th width="10%" class="head0"></th>
                             <th width="10%" class="head0"></th>
@@ -90,14 +92,50 @@
 
                     services = data[row].services;
                     description = data[row].service_descriptions;
-                    
+                    //prices = data[row].service_price_lists;
+                    //price = 'No asignado';
                     checker_span = (services.status) ? "class=\"checked\"" : "";
                     checked = (services.status) ? "checked=\"checked\"" : "";
                     
+                    //Precio
+                    /* 
+                    if(prices.length > 0) {
+                        for(k in prices) {
+                            if(prices[k].is_default){
+                                price = prices[k].price 
+                                price = (Math.round(price*100)/100)
+                                price = price.toString();
+                                price = '$' + price;
+                                addprice = "black"
+                            }
+                        }
+                    }
+                    else{
+                        addprice = "red"
+                        if(services.standard_cost != null && services.markup != null){
+                            try{
+                                sc = parseFloat(services.standard_cost);
+                                m = (parseFloat(services.markup)/100)+1;
+                                price = sc*m;
+                                price = (Math.round(price*100)/100)
+                                price = price.toString();
+                                price = '$' + price;   
+                                addprice = "red" 
+                            }
+                            catch(error){
+                                
+                            }
+                        }
+                    }
+
+                    */ 
+                    //Fin Precio    
+
                     aaData[cont] = [
                     		services.code,
                             description.name, 
                             services.alternative_code,
+                            //prices,
                             "<div class='checker' id='uniform-undefined'><span " + checker_span + "><input type=\"checkbox\" " + checked + " value=\"" + services.id + "\" /></span></div>", 
                             "<a href=\"{{=URL(c='packages', f='service_prices_list')}}?id=" + services.id + "\">Agregar</a>",
                             "<a href=\"{{=URL(c='packages', f='view_service')}}?id=" + services.id + "\">Ver</a>",
@@ -138,6 +176,7 @@
                 {"sTitle":"Código"},
                 {"sTitle":"Nombre"},
                 {"sTitle":"Código alternativo"},
+                //{"sTitle":"Precio"},
                 {"sTitle":"Estatus", "sClass":"center"},
                 {"sTitle":"Lista de<br/> precios", "sClass":"center"},
                 {"sTitle":"", "sClass":"center", "bSortable": false},
