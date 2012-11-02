@@ -291,27 +291,8 @@
 			                success:function(data){
 			                    if(data != 0 && data){
 			                        
-			                        //userpass();
+			                        redirect({{=request.vars.id}});
 			                        
-			                        /*
-			                        jQuery('.msgsuccess').fadeIn(1600, function() {
-			                            jQuery('.msgsuccess').fadeOut('slow');
-			                        });
-			                        bid = 0;
-			                        wid = 0;
-			                        cid = 0;
-			                        jQuery('#branch').attr('tabindex','1');
-			                        jQuery('#branch_chzn').remove();
-			                        jQuery('#branch').val('').removeClass('chzn-done').chosen();
-			                        
-			                        jQuery('#warehouse').attr('tabindex','1');
-			                        jQuery('#warehouse_chzn').remove();
-			                        jQuery('#warehouse').val('').removeClass('chzn-done').chosen();
-			                        
-			                        jQuery('#concept_id').attr('tabindex','4');
-			                        jQuery('#concept_id_chzn').remove();
-			                        jQuery('#concept_id').val('').removeClass('chzn-done').chosen();
-			                        */
 			                    }
 			                    else if(data == 0) {
 			                        jQuery('.exists').fadeIn(1600);
@@ -406,6 +387,12 @@
 		});
 		return false;
 	}
+	
+///// redirect  /////	
+
+function redirect(oldid) {
+        window.location.replace("{{=URL(c='inventory', f='products_entries')}}?id="+oldid);
+    }
 
 /*
 	function userpass()
