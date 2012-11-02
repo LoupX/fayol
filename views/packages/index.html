@@ -139,7 +139,7 @@
                             price,
                             "<div class='checker' id='uniform-undefined'><span " + checker_span + "><input type=\"checkbox\" " + checked + " value=\"" + data[e].packages.id + "\" /></span></div>", 
                             "<a href=\"{{=URL(c='packages', f='package_price_list')}}?id=" + data[e].packages.id + "\" class=" + addprice + ">Agregar</a>",
-                            "<a href=\"{{=URL(c='packages', f='view_package')}}?id=" + data[e].packages.id + "\" class=\"toggle\">Ver</a> - <a href=\"{{=URL(c='packages', f='update_package')}}?id=" + data[e].packages.id + "\" class=\"toggle\">Editar</a> "
+                            "<a href=\"{{=URL(c='packages', f='view_package')}}?id=" + data[e].packages.id + "\" class=\"toggle\">Ver</a> | <a href=\"{{=URL(c='packages', f='update_package')}}?id=" + data[e].packages.id + "\" class=\"toggle\">Editar</a> | <a href=\"{{=URL(c='packages', f='update_select_products')}}?id=" + data[e].packages.id + "\" class=\"toggle\">Agregar Productos</a>"
                             
                         ];
                         cont++;

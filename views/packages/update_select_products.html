@@ -223,13 +223,13 @@ var nt = jQuery('#newtable'),
                 cont2 = 0;
                 aaData2 = [];
                 theresdata2 = data.products;
-
+                console.log(data);
                 if(theresdata2){
                       for(e = 0; e < data.products.length; e++) {
                           aaData2[cont2] = [
                               data.products[e].product_descriptions.name, 
                               data.products[e].package_to_product.quantity,
-                              'asd',
+                              data.products[e].units.abbreviation,
                               '<a href="javascript:void(0);" onclick="removeRow(this);">remover</a>',
                               data.products[e].package_to_product.product_id
                             ];
@@ -299,7 +299,7 @@ var nt = jQuery('#newtable'),
             
                 } else {
                     for(e = 0; e < nt.dataTable().fnGetData().length; e++) {
-                        if(nt.dataTable().fnGetData(e)[3] == newrow[6]) {
+                        if(nt.dataTable().fnGetData(e)[4] == newrow[7]) {
                             resp = parseFloat(nt.dataTable().fnGetData(e)[1]) + parseFloat(resp);
                             nt.dataTable().fnDeleteRow(e);   
                         }
@@ -337,7 +337,7 @@ var nt = jQuery('#newtable'),
             for(e = 0; e < nt.dataTable().fnGetData().length; e++) {
                 helper = parseFloat(nt.dataTable().fnGetData(e)[1]);
                 helper = (helper <= 0) ? 1 : helper;
-                products[e] = {"id": parseInt(nt.dataTable().fnGetData(e)[3]), "amount": helper }
+                products[e] = {"id": parseInt(nt.dataTable().fnGetData(e)[4]), "amount": helper }
             }
             
             jQuery.ajax({
