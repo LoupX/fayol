@@ -263,17 +263,21 @@
 				jPrompt('Contraseña:', '', '¿Quién recibió la mercancía?', function(pwd) {
 					if(pwd) {
 						 
-						 alert('You entered ' + usr + ' and ' + pwd);
 						 jQuery.ajax({
 			                url: "{{=URL(c='common', f='check_user')}}",
 			                data: { 
 			                    usr:usr,
 			                    pwd:pwd
 			                },
-			                type: 'POST'
-			             });
-					
-			             jQuery.ajax({
+			                type: 'POST',
+			                success:function(data){
+				                if(data != "")
+				                {	
+					                return false;
+				                }
+				                else
+				                {
+					                jQuery.ajax({
 			                url: "{{=URL(c='inventory_entry_ajax', f='create_entry')}}",
 			                data: { 
 			                    branch:(jQuery('#branch').val() != '') ? jQuery('#branch').val() : '',
@@ -320,6 +324,11 @@
 			                                                        1000);
 	                          }
 	                	});
+				                }
+			                }
+
+			             });
+			             
 	                }
 	            }); 
 	            return false;
