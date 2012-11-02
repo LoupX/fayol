@@ -118,7 +118,7 @@ def get_packages():
             row_price_list = db(pl.package_id==id).select(
                 pl.id, pl.name, pl.price, pl.is_default,
                 pl.status).as_list()
-            row['packge_price_lists'] = row_price_list
+            row['package_price_lists'] = row_price_list
     except:
         db.rollback()
 
