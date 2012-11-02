@@ -271,40 +271,40 @@
 			                },
 			                type: 'POST',
 			                success:function(data){
-				                if(data != "")
+				                if(data == "")
 				                {	
 					                return false;
 				                }
 				                else
 				                {
 					                jQuery.ajax({
-			                url: "{{=URL(c='inventory_entry_ajax', f='create_entry')}}",
-			                data: { 
-			                    branch:(jQuery('#branch').val() != '') ? jQuery('#branch').val() : '',
-			                    warehouse:(jQuery('#warehouse').val() != '') ? jQuery('#warehouse').val() : '',
-			                    reference:jQuery('#reference').val(),
-			                    description:jQuery('#description').val(),
-			                    concept_id:jQuery('#concept_id').val(),
-			                    date_receipt:jQuery('#date_receipt').val()
-			                },
-			                type: 'POST',
-			                success:function(data){
-			                    if(data != 0 && data){
-			                        
-			                        redirect({{=request.vars.id}});
-			                        
-			                    }
-			                    else if(data == 0) {
-			                        jQuery('.exists').fadeIn(1600);
-			                    }
-			                    else{
-			                        jQuery('.msgerror').fadeIn(1600);
-			                    }
-			                    jQuery('body','html',window).animate(
-			                                                        {scrollTop:0}, 
-			                                                        1000);
-	                          }
-	                	});
+            			                url: "{{=URL(c='inventory_entry_ajax', f='create_entry')}}",
+            			                data: { 
+            			                    branch:(jQuery('#branch').val() != '') ? jQuery('#branch').val() : '',
+            			                    warehouse:(jQuery('#warehouse').val() != '') ? jQuery('#warehouse').val() : '',
+            			                    reference:jQuery('#reference').val(),
+            			                    description:jQuery('#description').val(),
+            			                    concept_id:jQuery('#concept_id').val(),
+            			                    date_receipt:jQuery('#date_receipt').val()
+            			                },
+            			                type: 'POST',
+            			                success:function(data){
+            			                    if(data != 0 && data){
+            			                        
+            			                        redirect({{=request.vars.id}});
+            			                        
+            			                    }
+            			                    else if(data == 0) {
+            			                        jQuery('.exists').fadeIn(1600);
+            			                    }
+            			                    else{
+            			                        jQuery('.msgerror').fadeIn(1600);
+            			                    }
+            			                    jQuery('body','html',window).animate(
+            			                                                        {scrollTop:0}, 
+            			                                                        1000);
+            	                          }
+            	                	});
 				                }
 			                }
 
