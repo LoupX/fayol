@@ -118,7 +118,7 @@
 
 <script>
 
-	jQuery("#date_receipt").datepicker({ appendText: "(yyyy-mm-dd)" });
+	jQuery("#date_receipt").datepicker({ dateFormat: "yy-mm-dd" });
 	jQuery(".chzn-select").chosen();
 	jQuery("input:radio").uniform();
 	
@@ -283,7 +283,7 @@
 					if(pwd) {
 						 
 						 jQuery.ajax({
-			                url: "{{=URL(c='common', f='check_user')}}",
+			                url: "{{=URL(c='user', f='check_user')}}",
 			                data: { 
 			                    usr:usr,
 			                    pwd:pwd
