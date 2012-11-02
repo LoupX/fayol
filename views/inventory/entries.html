@@ -116,6 +116,7 @@
 	
 	var brands = jQuery('#radio_branch');
 	var ware = jQuery('#radio_warehouse');
+	var concept = jQuery('#concept_id');
 						
 	function changeradio(expose)
 	{
@@ -165,6 +166,22 @@
 	        	options += "<option value=\"" + results[k].id + "\">" + results[k].name + "</option>";
 	        }
             warehouse	
+                .html(options)
+                .prepend('<option value="">Selecccionar</option>')
+                .trigger("liszt:updated");
+            }
+    });
+    
+     jQuery.ajax({
+        type: "POST",
+        url: "{{=URL(c='branches_ajax', f='get_concept')}}",
+        dataType: "json",
+        success: function(results) {
+        	options = "";
+        	for(k in results){
+	        	options += "<option value=\"" + results[k].id + "\">" + results[k].name + "</option>";
+	        }
+            concept	
                 .html(options)
                 .prepend('<option value="">Selecccionar</option>')
                 .trigger("liszt:updated");

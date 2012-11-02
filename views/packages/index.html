@@ -4,6 +4,10 @@
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.dataTables.min.js')}}"></script>
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/chosen.jquery.min.js')}}"></script>
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.validate.min.js')}}"></script>
+<style type="text/css">
+	.red{ color: #ef4747; }
+	.black{ color: #000; }
+</style>
 {{end}}
 
 {{block sidebar_menu}}
@@ -35,8 +39,11 @@
                             <th width="20%" class="head0">Código</th>
                             <th width="20%" class="head1">Nombre</th>
                             <th width="15%" class="head0">Código alternativo</th>
-                            <th width="15%" class="head1">Estatus</th>
+                            <th width="15%" class="head1">Precio</th>
+                            <th width="15%" class="head0">Estatus</th>
+                            <th width="15%" class="head1">Lista de precios</th>
                             <th width="15%" class="head0"></th>
+                            <th width="15%" class="head1"></th>
                         </tr>
                     </thead>
                     <tfoot>
@@ -44,8 +51,11 @@
                             <th width="20%" class="head0">Código</th>
                             <th width="20%" class="head1">Nombre</th>
                             <th width="15%" class="head0">Código alternativo</th>
-                            <th width="15%" class="head1">Estatus</th>
+                            <th width="15%" class="head1">Precio</th>
+                            <th width="15%" class="head0">Estatus</th>
+                            <th width="15%" class="head1">Lista de precios</th>
                             <th width="15%" class="head0"></th>
+                            <th width="15%" class="head1"></th>
                         </tr>
                     </tfoot>
                 </table>
@@ -88,14 +98,54 @@
 
                 if(theresdata){
                     for(e = 0; e < data.length; e++) {
+                    	packages = data[e].packages;
+                        prices = (data[e].package_price_lists != undefined) ? data[e].package_price_lists : [];
+                    	price = 'No asignado';
                         checked = (data[e].packages.status == true) ? "checked=\"checked\"" : "";
                         checker_span = (data[e].packages.status == true) ?  "class=\"checked\"" : "";
+                        
+                        //Precio
+	                    if(prices.length > 0) {
+	                        for(k in prices) {
+	                            if(prices[k].is_default){
+	                                price = prices[k].price;
+	                                price = (Math.round(price*100)/100);
+	                                price = price.toString();
+	                                price = '$' + price;
+	                                addprice = "black";
+	                                console.log(addprice);
+	                            }
+	                        }
+	                    }
+	                    else{
+	                        addprice = "red";
+	                        if(packages.standard_cost != null && packages.markup != null){
+	                            try{
+	                                sc = parseFloat(packages.standard_cost);
+	                                m = (parseFloat(packages.markup)/100)+1;
+	                                price = sc*m;
+	                                price = (Math.round(price*100)/100)
+	                                price = price.toString();
+	                                price = '$' + price;   
+	                                addprice = "red"; 
+	                                console.log(addprice);
+	                            }
+	                            catch(error){
+	                                
+	                            }
+	                        }
+	                    }
+	                    //Fin Precio  
+                        
                         aaData[cont] = [
                             data[e].packages.code,
                             data[e].package_descriptions.name,
                             data[e].packages.alternative_code,
+                            price,
                             "<div class='checker' id='uniform-undefined'><span " + checker_span + "><input type=\"checkbox\" " + checked + " value=\"" + data[e].packages.id + "\" /></span></div>", 
-                            "<a href=\"{{=URL(c='packages', f='view_package')}}?id="+data[e].packages.id+"\" class=\"toggle\">Ver</a>"
+                            "<a href=\"{{=URL(c='packages', f='package_price_list')}}?id=" + data[e].packages.id + "\" class=" + addprice + ">Agregar</a>",
+                            "<a href=\"{{=URL(c='packages', f='view_package')}}?id=" + data[e].packages.id + "\" class=\"toggle\">Ver</a>",
+                            "<a href=\"{{=URL(c='packages', f='update_package')}}?id=" + data[e].packages.id + "\">Editar</a>"
                             
                         ];
                         cont++;
@@ -136,7 +186,17 @@
                 },
             },
             "sPaginationType": "full_numbers",
-            "aaData": aaData
+            "aaData": aaData,
+            "aoColumns": [
+                {"sTitle":"Código"},
+                {"sTitle":"Nombre"},
+                {"sTitle":"Código alternativo"},
+                {"sTitle":"Precio"},
+                {"sTitle":"Estatus", "sClass":"center", "bSortable": false},
+                {"sTitle":"Lista de<br/> precios", "sClass":"center", "bSortable": false},
+                {"sTitle":"", "sClass":"center", "bSortable": false},
+                {"sTitle":"", "sClass":"center", "bSortable": false}
+            ]
         });
         
         togglestatus();
