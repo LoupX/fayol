@@ -110,22 +110,5 @@ def get_entry_concepts():
     data = simplejson.dumps(data)
     return str(data)
 
-@auth.requires_login()
-def check_user():
-    usr = request.vars.usr
-    pwd = request.vars.pwd
-    user = None
-    try:
-        session.forget()
-        user = auth.login_bare(usr, pwd)
-    except:
-        db.rollback()
-        return ''
-    else:
-        if user:
-            return '{} {}'.format(user.first_name, user.last_name)
-        else:
-            return ''
-
 def echo():
     return str(request.vars)

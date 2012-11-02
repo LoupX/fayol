@@ -82,7 +82,7 @@ db.define_table('product_to_stock',
 if db(db.concepts).isempty():
     concept = db.concepts
     try:
-        concept.insert(name='Entrada de almacen')
+        concept.insert(name='Entrada de almacén')
         concept.insert(name='Incongruencia con inventario físico (Entrada)')
         concept.insert(name='Merma (Salida)')
         concept.insert(name='Devolución al proveedor (Salida)')

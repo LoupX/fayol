@@ -106,3 +106,24 @@ def ajax_token():
     tkn = web2py_uuid()
     session.tkn = tkn
     return tkn
+
+@auth.requires_login()
+def check_user():
+    usr = request.vars.usr
+    pwd = request.vars.pwd
+    user = None
+    try:
+        session.forget()
+        user = auth.login_bare(usr, pwd)
+        save_user(user)
+    except:
+        db.rollback()
+        return ''
+    else:
+        if user:
+            return '{} {}'.format(user.first_name, user.last_name)
+        else:
+            return ''
+
+def save_user(user):
+    session.user = user
