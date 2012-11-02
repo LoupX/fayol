@@ -140,10 +140,13 @@ def get_package_information():
         row = db(query).select().as_list()
         ptp = db.package_to_product
         query = ptp.package_id==id
-        query &= ptp.product_id==db.product_descriptions.product_id
+        query &= ptp.product_id==db.products.id
+        query &= db.products.id==db.product_descriptions.product_id
+        query &= db.units.id==db.products.unit_id
         row_products = db(query).select(
-        ptp.ALL, db.product_descriptions.name,
-        db.product_descriptions.description).as_list()
+            ptp.ALL, db.product_descriptions.name,
+            db.product_descriptions.description,
+            db.units.name, db.units.abbreviation).as_list()
         pl = db.package_price_lists
         row_price_list = db(pl.package_id==id).select(
             pl.id, pl.name, pl.price, pl.is_default,

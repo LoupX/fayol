@@ -20,9 +20,16 @@ def view_product():
     
 @auth.requires_login()
 def update_product():
-	title = 'Productos'
-	current = ['menu_catalogs', 'sidebar_products', 'sub_products_read']
-	return dict(title=title, current=current)
+    row = None
+    try:
+        row = db.products[request.vars.id]
+    except:
+        db.rollback()
+    if not row:
+        redirect(URL(c='products', f='index'))
+    title = 'Productos'
+    current = ['menu_catalogs', 'sidebar_products', 'sub_products_read']
+    return dict(title=title, current=current)
 
 @auth.requires_login()
 def prices_list():
