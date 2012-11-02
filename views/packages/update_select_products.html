@@ -45,9 +45,10 @@
                     <th width="20%" class="head1">Nombre</th>
                     <th width="15%" class="head0">Categoría</th>
                     <th width="15%" class="head1">Marca</th>
-                    <th width="14%" class="head0">Precio</th>
-                    <th width="8%" class="head0"></th>
-                    <th width="8%" class="head0" style="display: none;"></th>
+                    <th width="10%" class="head0">Precio</th>
+                    <th width="10%" class="head1">Unidad de Medida</th>
+                    <th width="10%" class="head0"></th>
+                    <th width="0%" class="head0" style="display: none;"></th>
                 </tr>
             </thead>
             <tfoot>
@@ -56,9 +57,10 @@
                     <th width="20%" class="head1">Nombre</th>
                     <th width="15%" class="head0">Categoría</th>
                     <th width="15%" class="head1">Marca</th>
-                    <th width="14%" class="head0">Precio</th>
-                    <th width="8%" class="head0"></th>
-                    <th width="8%" class="head0" style="display: none;"></th>
+                    <th width="10%" class="head0">Precio</th>
+                    <th width="10%" class="head1">Unidad de Medida</th>
+                    <th width="10%" class="head0"></th>
+                    <th width="0%" class="head0" style="display: none;"></th>
                 </tr>
             </tfoot>
         </table>  
@@ -75,6 +77,7 @@
                 <tr>
                     <th width="40%" class="head1">Nombre</th>
                     <th width="40%" class="head0">Cantidad</th>
+                    <th width="30%" class="head1">Unidad de Medida</th>
                     <th width="10%" class="head0"></th>
                     <th width="10%" class="head0" style="display: none;"></th>
                 </tr>
@@ -83,6 +86,7 @@
                 <tr>
                     <th width="40%" class="head1">Nombre</th>
                     <th width="40%" class="head0">Cantidad</th>
+                    <th width="30%" class="head1">Unidad de Medida</th>
                     <th width="10%" class="head0"></th>
                     <th width="10%" class="head0" style="display: none;"></th>
                 </tr>
@@ -126,6 +130,7 @@ var nt = jQuery('#newtable'),
                     category = data[row].category_descriptions;
                     brand = data[row].brand_descriptions;
                     price = 'No asignado';
+                    units = data[row].units;
                     
                     checked = (product.status) ? "checked=\"checked\"" : "";
                     
@@ -160,6 +165,7 @@ var nt = jQuery('#newtable'),
                             category.name,
                             brand.name,
                             price, 
+                            units.abbreviation,
                             '<a href="javascript:void(0);" onclick="addProducts(this);">Agregar</a>',
                             product.id
                         ];
@@ -200,7 +206,8 @@ var nt = jQuery('#newtable'),
                 {"sTitle":"Categoría"},
                 {"sTitle":"Marca"},
                 {"sTitle":"Precio"},
-                {"sTitle":"", "sClass":"center"}
+                {"sTitle":"Unidad de Medida"},
+                {"sTitle":"", "sClass":"center", "bSortable": false}
             ]
         });
         jQuery('#table_wrapper select').uniform();
@@ -222,6 +229,7 @@ var nt = jQuery('#newtable'),
                           aaData2[cont2] = [
                               data.products[e].product_descriptions.name, 
                               data.products[e].package_to_product.quantity,
+                              'asd',
                               '<a href="javascript:void(0);" onclick="removeRow(this);">remover</a>',
                               data.products[e].package_to_product.product_id
                             ];
@@ -265,6 +273,7 @@ var nt = jQuery('#newtable'),
             "aoColumns": [
                 {"sTitle":"Nombre"},
                 {"sTitle":"Cantidad"},
+                 {"sTitle":"Unidad de Medida"},
                 {"sTitle":"", "sClass":"center"}
             ]
         });
@@ -283,22 +292,24 @@ var nt = jQuery('#newtable'),
                     nt.dataTable().fnAddData([
                         newrow[1],
                         resp,
+                        newrow[5],
                         '<a href="javascript:void(0);" onclick="removeRow(this);">remover</a>',
-                        newrow[6]
+                        newrow[7],
                     ]); 
             
                 } else {
                     for(e = 0; e < nt.dataTable().fnGetData().length; e++) {
                         if(nt.dataTable().fnGetData(e)[3] == newrow[6]) {
-                            resp = parseInt(nt.dataTable().fnGetData(e)[1]) + parseInt(resp);
+                            resp = parseFloat(nt.dataTable().fnGetData(e)[1]) + parseFloat(resp);
                             nt.dataTable().fnDeleteRow(e);   
                         }
                     }
                     nt.dataTable().fnAddData([
                         newrow[1],
                         resp,
+                        newrow[5],
                         '<a href="javascript:void(0);" onclick="removeRow(this);">remover</a>',
-                        newrow[6]
+                        newrow[7],
                     ]);
                 };
 
@@ -324,7 +335,7 @@ var nt = jQuery('#newtable'),
             var products = [];
             var helper = 0;
             for(e = 0; e < nt.dataTable().fnGetData().length; e++) {
-                helper = parseInt(nt.dataTable().fnGetData(e)[1]);
+                helper = parseFloat(nt.dataTable().fnGetData(e)[1]);
                 helper = (helper <= 0) ? 1 : helper;
                 products[e] = {"id": parseInt(nt.dataTable().fnGetData(e)[3]), "amount": helper }
             }
