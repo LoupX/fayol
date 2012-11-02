@@ -23,7 +23,7 @@ db.define_table('package_descriptions',
 db.define_table('package_to_product',
     Field('package_id', 'reference packages'),
     Field('product_id', 'reference products'),
-    Field('quantity', 'integer', ),
+    Field('quantity', 'decimal(12, 2)', ),
     migrate=MIGRATE)
 
 db.define_table('package_price_lists',
