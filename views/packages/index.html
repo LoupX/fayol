@@ -103,7 +103,6 @@
                     	price = 'No asignado';
                         checked = (data[e].packages.status == true) ? "checked=\"checked\"" : "";
                         checker_span = (data[e].packages.status == true) ?  "class=\"checked\"" : "";
-                        
                         //Precio
 	                    if(prices.length > 0) {
 	                        for(k in prices) {
@@ -113,7 +112,6 @@
 	                                price = price.toString();
 	                                price = '$' + price;
 	                                addprice = "black";
-	                                console.log(addprice);
 	                            }
 	                        }
 	                    }
@@ -128,7 +126,6 @@
 	                                price = price.toString();
 	                                price = '$' + price;   
 	                                addprice = "red"; 
-	                                console.log(addprice);
 	                            }
 	                            catch(error){
 	                                
