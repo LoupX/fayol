@@ -113,7 +113,7 @@ def get_packages():
             p.standard_cost, p.markup, p.status, pd.name,
             pd.description).as_list()
         for row in data:
-            id = row['services']['id']
+            id = row['packages']['id']
             pl = db.package_price_lists
             row_price_list = db(pl.package_id==id).select(
                 pl.id, pl.name, pl.price, pl.is_default,
