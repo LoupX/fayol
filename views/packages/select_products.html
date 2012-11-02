@@ -144,8 +144,9 @@ newDataTable();
                                 sc = parseFloat(product.standard_cost);
                                 m = (parseFloat(product.markup)/100)+1;
                                 price = sc*m;
+                                price = (Math.round(price*100)/100)
                                 price = price.toString();
-                                price = '$' + price;
+                                price = '$' + price;  
                             }
                             catch(error){
                                 
