@@ -1,7 +1,7 @@
 {{extend 'base/layout.html'}}
 
 {{block scripts_extra}}
-<script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.alerts.js')}}"></script>
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.alerts.pass.js')}}"></script>
 
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.validate.min.js')}}"></script>
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/chosen.jquery.min.js')}}"></script>
@@ -262,7 +262,8 @@
 	      		.removeClass('error')
 	      		.siblings('label').css('display','none');
 	      		
-     })	     
+     })	  
+     
 
 //////////// send form //////////// 				
     jQuery('#submit').live('click', function(e) {
@@ -280,6 +281,7 @@
         	jPrompt('Nombre del usuario:', '', '¿Quién recibió la mercancía?', function(usr) {
 			if(usr) {
 				jPrompt('Contraseña:', '', '¿Quién recibió la mercancía?', function(pwd) {
+				//jQuery('#popup_prompt').prop('type','password');
 					if(pwd) {
 						 
 						 jQuery.ajax({
@@ -309,10 +311,9 @@
             			                },
             			                type: 'POST',
             			                success:function(data){
-            			                    if(data != 0 && data){
-            			                        
-            			                        redirect({{=request.vars.id}});
-            			                        
+            			                    if(data != 0 && data)
+            			                    {
+            			                        redirect(data); 
             			                    }
             			                    else if(data == 0) {
             			                        jQuery('.exists').fadeIn(1600);
@@ -410,33 +411,10 @@
 	
 ///// redirect  /////	
 
-function redirect(oldid) {
-        window.location.replace("{{=URL(c='inventory', f='products_entries')}}?id="+oldid);
+    function redirect(id) {
+        window.location.replace("{{=URL(c='inventory', f='select_products')}}?id="+id);
     }
-
-/*
-	function userpass()
-	{
-		var user;
-		var passw;
-		
-		var log1="demo";
-		var pass1="password";
-		
-		password = prompt('Usuario',' ');
-		login = prompt ('Contraseña:', ' ');
-		
-		if ((passw==pass1) && (user==log1))
-		alert('Password and Login Accepted: Click OK to enter'); //this allows page to continue loading
-		else
-		{
-		alert('Usuario o contraseña incorrectos: Presiona OK para intentarlo de nuevo');
-		window.location="entry.html"; //this reloads page lockout
-		}
-
-	}
-*/
-
+    
 </script>
 
 </body>
