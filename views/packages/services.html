@@ -36,27 +36,25 @@
                 <table cellpadding="0" cellspacing="0" border="0" class="stdtable" id="table">
                     <thead>
                         <tr>
-                            <th width="15%" class="head0">Código</th>
-                            <th width="15%" class="head1">Nombre</th>
-                            <th width="15%" class="head0">Código alternativo</th>
-                            <th width="10%" class="head1">Precio</th>
-                            <th width="15%" class="head0">Estatus</th>
-                            <th width="10%" class="head1">Lista de precios</th>
-                            <th width="10%" class="head0"></th>
-                            <th width="10%" class="head0"></th>
+                            <th width="16%" class="head0">Código</th>
+                            <th width="16%" class="head1">Nombre</th>
+                            <th width="16%" class="head0">Código alternativo</th>
+                            <th width="16%" class="head1">Precio</th>
+                            <th width="12%" class="head0">Estatus</th>
+                            <th width="12%" class="head1">Lista de precios</th>
+                            <th width="12%" class="head0">Opciones</th>
                         </tr>
                     </thead>
                     <tfoot>
                         <tr>
-                            <th width="15%" class="head0">Código</th>
-                            <th width="15%" class="head1">Nombre</th>
-                            <th width="15%" class="head0">Código alternativo</th>
-                            <th width="10%" class="head1">Precio</th>
-                            <th width="15%" class="head0">Estatus</th
+                            <th width="16%" class="head0">Código</th>
+                            <th width="16%" class="head1">Nombre</th>
+                            <th width="16%" class="head0">Código alternativo</th>
+                            <th width="16%" class="head1">Precio</th>
+                            <th width="12%" class="head0">Estatus</th
                             <th width="10%" class="head1"></th>
-                            <th width="10%" class="head1">Lista de precios</th>
-                            <th width="10%" class="head0"></th>
-                            <th width="10%" class="head0"></th>
+                            <th width="12%" class="head1">Lista de precios</th>
+                            <th width="12%" class="head0">Opciones</th>
                         </tr>
                     </tfoot>
                 </table>
@@ -140,8 +138,7 @@
                             price,
                             "<div class='checker' id='uniform-undefined'><span " + checker_span + "><input type=\"checkbox\" " + checked + " value=\"" + services.id + "\" /></span></div>", 
                             "<a href=\"{{=URL(c='packages', f='service_prices_list')}}?id=" + services.id + "\" class=" + addprice + ">Agregar</a>",
-                            "<a href=\"{{=URL(c='packages', f='view_service')}}?id=" + services.id + "\">Ver</a>",
-                            "<a href=\"{{=URL(c='packages', f='update_service')}}?id=" + services.id + "\">Editar</a>"
+                            "<a href=\"{{=URL(c='packages', f='view_service')}}?id=" + services.id + "\">Ver</a> | <a href=\"{{=URL(c='packages', f='update_service')}}?id=" + services.id + "\">Editar</a>"
                         ];
                    cont++;
                 }
@@ -181,8 +178,7 @@
                 {"sTitle":"Precio"},
                 {"sTitle":"Estatus", "sClass":"center", "bSortable": false},
                 {"sTitle":"Lista de<br/> precios", "sClass":"center", "bSortable": false},
-                {"sTitle":"", "sClass":"center", "bSortable": false},
-                {"sTitle":"", "sClass":"center", "bSortable": false}
+                {"sTitle":"Opciones", "sClass":"center", "bSortable": false}
             ]
         });
         

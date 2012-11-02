@@ -1,7 +1,7 @@
 {{extend 'base/layout.html'}}
 
 {{block scripts_extra}}
-<script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.maskedinput.js')}}"></script>
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.alerts.js')}}"></script>
 
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.validate.min.js')}}"></script>
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/chosen.jquery.min.js')}}"></script>
@@ -127,15 +127,27 @@
 		if(expose == 'branches'){
 			jQuery('#selectbranch').removeClass('nover');
 			jQuery('#selectware').addClass('nover');
+			jQuery('#selectware')
+            	.find('option')
+            	.first()
+            	.attr('selected',true)
+            	.trigger("liszt:updated");
+			
 		}
 		if(expose == 'warehouses'){
 			jQuery('#selectware').removeClass('nover');
 			jQuery('#selectbranch').addClass('nover');
+			jQuery('#selectbranch')
+            	.find('option')
+            	.first()
+            	.attr('selected',true)
+            	.trigger("liszt:updated");
 		}
 	}
 	
 	jQuery("input:radio[name='radios']").on("change", function(e){
 		changeradio(e.currentTarget.value);
+		
 	});
 	
 	changeradio(jQuery("input:radio[name='radios']").val());
@@ -214,7 +226,7 @@
     });
 
     
-//////////// validate form ////////////---------
+//////////// validate form ////////
 
     jQuery("#form_entries").validate({
         rules: {
@@ -243,12 +255,12 @@
         jQuery('.exists').hide();
         jQuery('.msgsuccess').hide();
 
-        if(jQuery("#form_entries").valid() && valbra(bid) && valwar(wid) && valcon(cid)) {
+        if(jQuery("#form_entries").valid() && valcon(cid) && (valbra(bid) || valwar(wid))) {
              jQuery.ajax({
                 url: "{{=URL(c='inventory_entry_ajax', f='create_entry')}}",
                 data: { 
-                    branch:jQuery('#branch').val(),
-                    warehouse:jQuery('#warehouse').val(),
+                    branch:(jQuery('#branch').val() != '') ? jQuery('#branch').val() : '',
+                    warehouse:(jQuery('#warehouse').val() != '') ? jQuery('#warehouse').val() : '',
                     reference:jQuery('#reference').val(),
                     description:jQuery('#description').val(),
                     concept_id:jQuery('#concept_id').val(),
@@ -349,23 +361,10 @@
 
 	function userpass()
 	{
-		var user;
-		var passw;
-		
-		var log1="demo";
-		var pass1="password";
-		
-		password = prompt('Usuario',' ');
-		login = prompt ('Contraseña:', ' ');
-		
-		if ((passw==pass1) && (user==log1))
-		alert('Password and Login Accepted: Click OK to enter'); //this allows page to continue loading
-		else
-		{
-		alert('Usuario o contraseña incorrectos: Presiona OK para intentarlo de nuevo');
-		window.location="entry.html"; //this reloads page lockout
-		}
-
+		jPrompt('Usuario:', '', 'Prompt Dialog', function(r) {
+			if( r ) alert('You entered ' + r);
+		});
+		return false;
 	}
 
 </script>

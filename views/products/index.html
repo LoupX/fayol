@@ -41,10 +41,9 @@
                             <th width="12%" class="head0">Categoría</th>
                             <th width="12%" class="head1">Marca</th>
                             <th width="12%" class="head0">Precio</th>
-                            <th width="10%" class="head1">Estatus</th>
-                            <th width="10%" class="head1">Lista de precios</th>
-                            <th width="8%" class="head0"></th>
-                            <th width="8%" class="head1"></th>
+                            <th width="12%" class="head1">Estatus</th>
+                            <th width="12%" class="head0">Lista de precios</th>
+                            <th width="12%" class="head1">Opciones</th>
                         </tr>
                     </thead>
                     <tfoot>
@@ -54,10 +53,9 @@
                             <th width="12%" class="head0">Categoría</th>
                             <th width="12%" class="head1">Marca</th>
                             <th width="12%" class="head0">Precio</th>
-                            <th width="10%" class="head1">Estatus</th>
-                            <th width="10%" class="head1">Lista de precios</th>
-                            <th width="8%" class="head0"></th>
-                            <th width="8%" class="head1"></th>
+                            <th width="12%" class="head1">Estatus</th>
+                            <th width="12%" class="head0">Lista de precios</th>
+                            <th width="12%" class="head1">Opciones</th>
                         </tr>
                     </tfoot>
                 </table>
@@ -143,8 +141,7 @@
                             price,
                             "<div class='checker' id='uniform-undefined'><span " + checker_span + "><input type=\"checkbox\" " + checked + " value=\"" + product.id + "\" /></span></div>", 
                             "<a href=\"{{=URL(c='products', f='prices_list')}}?id=" + product.id + "\" class=" + addprice + ">Agregar</a>",
-                            "<a href=\"{{=URL(c='products', f='view_product')}}?id=" + product.id + "\">Ver</a>",
-                            "<a href=\"{{=URL(c='products', f='update_product')}}?id=" + product.id + "\">Editar</a>"  
+                            "<a href=\"{{=URL(c='products', f='view_product')}}?id=" + product.id + "\">Ver</a> | <a href=\"{{=URL(c='products', f='update_product')}}?id=" + product.id + "\">Editar</a>"  
                         ];
                    cont++;
                 }
@@ -189,8 +186,7 @@
                 {"sTitle":"Precio"},
                 {"sTitle":"Estatus", "sClass":"center", "bSortable": false},
                 {"sTitle":"Lista de precios", "sClass":"center", "bSortable": false},
-                {"sTitle":"", "sClass":"center", "bSortable": false},
-                {"sTitle":"", "sClass":"center", "bSortable": false}
+                {"sTitle":"Opciones", "sClass":"center", "bSortable": false}
             ]
         });
         
