@@ -102,7 +102,7 @@ def get_banks():
 def get_entry_concepts():
     data = dict()
     try:
-        data = db(db.concepts).select().as_list()
+        data = db(db.concepts.id.belongs((1,2))).select().as_list()
     except:
         db.rollback()
 
