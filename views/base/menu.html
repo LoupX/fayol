@@ -23,7 +23,8 @@
         	</div>
             <div class="userinfo">
             	<img src="{{=URL('static','images/thumbs/avatar.png')}}" alt="" />
-                <span>Juan Dela Cruz</span>
+                {{name = '{} {}'.format(auth.user.first_name, auth.user.last_name)}}
+                <span>{{=name}}</span>
             </div><!--userinfo-->
             
             <div class="userinfodrop">
@@ -39,8 +40,8 @@
                     </div>
                 </div><!--avatar-->
                 <div class="userdata">
-                	<h4>Juan Dela Cruz</h4>
-                    <span class="email">youremail@yourdomain.com</span>
+                	<h4>{{=name}}</h4>
+                    <span class="email">{{=auth.user.email}}</span>
                     <ul>
                     	<li><a href="editprofile.html">Edit Profile</a></li>
                         <li><a href="accountsettings.html">Account Settings</a></li>
