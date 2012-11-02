@@ -29,6 +29,7 @@ def select_products():
 def update_select_products():
     valid = [URL(c='packages', f='index'), URL(c='packages', f='view_package')]
     if session.prev not in valid:
+        session.prev = None
         redirect(URL(c='packages', f='index'))
     session.prev = None
     title = 'Actualizar productos del paquete.'

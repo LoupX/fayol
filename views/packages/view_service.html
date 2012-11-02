@@ -274,7 +274,7 @@ function loadTable(aaData) {
     function togglestatus() {
         jQuery('.stdtable input:radio').on("change", function(e){
             jQuery.ajax({
-                url: "{{=URL(c='products_ajax', f='update_default_price')}}",
+                url: "{{=URL(c='services_ajax', f='update_default_price')}}",
                 type: "POST",
                 data: { id: e.currentTarget.value }
             });
