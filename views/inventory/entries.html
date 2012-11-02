@@ -49,8 +49,8 @@
                         
                         <p style="height:52px; padding-top:20px;">
 				              <span class="formwrapper" style="margin-left:20px;">
-				                    <input type="radio" id="radio_branch" name="radios" value="true" checked="checked"/> Sucursal &nbsp; &nbsp;
-				                    <input type="radio" id="radio_warehouse" name="radios"  value="false" /> Almacén &nbsp; &nbsp;
+				                    <input type="radio" id="radio_branch" name="radios" value="branches" checked="checked"/> Sucursal &nbsp; &nbsp;
+				                    <input type="radio" id="radio_warehouse" name="radios"  value="warehouses" /> Almacén &nbsp; &nbsp;
 				              </span>
 				        </p>
 				        
@@ -74,8 +74,8 @@
 	                            <span class="field"><input type="text" name="reference" id="reference" class="smallinput" tabindex="2"/></span>
 	                    </p>
 	                    <p style="margin-top: 1px;">
-	                        	<label>Notas</label>
-	                            <span class="field"><input type="text" name="notes" id="notes" class="smallinput" tabindex="3"/></span>
+	                        	<label>Descripción</label>
+	                            <span class="field"><input type="text" name="description" id="description" class="smallinput" tabindex="3"/></span>
 	                    </p>
 	                    <p style="margin-top: 1px;">
                             <label>Concepto</label>
@@ -89,14 +89,7 @@
 	                        	<label>Fecha de recepción</label>
 	                            <span class="field"><input type="text" id="date_receipt" name="date_receipt" tabindex="5"/></span>
 	                    </p>
-	                    
-	                    <p style="margin-top: 1px;">
-	                        	<label>Recibido por</label>
-	                            <span class="field">
-                                <select id="received_by" name="received_by" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="6">
-                                  </select>
-                            </span>
-	                    </p>	                    
+	                                       
                         <p class="stdformbutton">
                         	<button id="submit" class="submit radius2" tabindex="14">Guardar</button>
                         </p>
@@ -124,24 +117,23 @@
 	var brands = jQuery('#radio_branch');
 	var ware = jQuery('#radio_warehouse');
 						
-	function changeradio()
+	function changeradio(expose)
 	{
-		if(ware.parent().hasClass("checked"))
-		{
+		if(expose == 'branches'){
 			jQuery('#selectbranch').removeClass('nover');
 			jQuery('#selectware').addClass('nover');
 		}
-		else if(brands.parent().hasClass("checked"))
-		{
+		if(expose == 'warehouses'){
 			jQuery('#selectware').removeClass('nover');
 			jQuery('#selectbranch').addClass('nover');
 		}
 	}
 	
-	jQuery("input:radio[name='radios']").on("change", function(){
-		changeradio();
+	jQuery("input:radio[name='radios']").on("change", function(e){
+		changeradio(e.currentTarget.value);
 	});
 	
+	changeradio(jQuery("input:radio[name='radios']").val());
 	///// Get branches & warehouses /////
 	
 	var branch = jQuery('#branch');
