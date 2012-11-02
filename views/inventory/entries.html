@@ -118,7 +118,7 @@
 
 <script>
 
-	jQuery("#date_receipt").datepicker();
+	jQuery("#date_receipt").datepicker({ appendText: "(yyyy-mm-dd)" });
 	jQuery(".chzn-select").chosen();
 	jQuery("input:radio").uniform();
 	
@@ -176,7 +176,7 @@
 	        }
             branch	
                 .html(options)
-                .prepend('<option value="">Selecccionar</option>')
+                .prepend('<option value="">Seleccionar</option>')
                 .trigger("liszt:updated");
             }
     });
@@ -199,7 +199,7 @@
 	        }
             warehouse	
                 .html(options)
-                .prepend('<option value="">Selecccionar</option>')
+                .prepend('<option value="">Seleccionar</option>')
                 .trigger("liszt:updated");
             }
     });
@@ -222,7 +222,7 @@
 	        }
             concept	
                 .html(options)
-                .prepend('<option value="">Selecccionar</option>')
+                .prepend('<option value="">Seleccionar</option>')
                 .trigger("liszt:updated");
             }
     });

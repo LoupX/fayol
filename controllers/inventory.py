@@ -23,3 +23,9 @@ def tranfers():
     title = 'Traspasos'
     current = ['menu_inventory', 'sidebar_tranfers']
     return dict(title=title, current=current)
+
+@auth.requires_login()
+def products_entries():
+    title = 'Traspasos'
+    current = ['menu_inventory', 'sidebar_tranfers']
+    return dict(title=title, current=current)  
