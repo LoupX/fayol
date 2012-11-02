@@ -166,13 +166,13 @@ def update_package():
     data_description = dict()
 
     package_id = vars.package_id
-    data['alternative_code'] = vars.alternative_code
+    data['alternative_code'] = vars.alternative_code.decode('utf-8').upper()
     data['standard_cost'] = vars.standard_cost
     data['markup'] = vars.markup
 
     package_description_id = vars.package_description_id
-    data_description['name'] = vars.name
-    data_description['description'] = vars.description
+    data_description['name'] = vars.name.decode('utf-8').upper()
+    data_description['description'] = vars.description.decode('utf-8').upper()
 
     try:
         result1 = db(db.packages.id==package_id).update(**data)

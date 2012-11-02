@@ -98,5 +98,17 @@ def get_banks():
         options += '\n'
     return options
 
+@auth.requires_login()
+def get_entry_concepts():
+    data = dict()
+    try:
+        data = db(db.concepts).select().as_list()
+    except:
+        db.rollback()
+
+    from gluon.contrib import simplejson
+    data = simplejson.dumps(data)
+    return str(data)
+
 def echo():
     return str(request.vars)
