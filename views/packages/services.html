@@ -191,23 +191,30 @@
     function togglestatus() {
         jQuery('.stdtable input:checkbox').unbind('change');
         jQuery('.stdtable input:checkbox').on("change", function(e){
-        	jQuery.uniform.update(e.currentTarget);
-            jQuery.ajax({
-                url: "{{=URL(c='services_ajax', f='toggle_service')}}",
-                type: "POST",
-                data: {
-                    id:e.currentTarget.value
-                },
-                success: function(data){
-                    if(!jQuery('#c').is(':checked')) {
-                        oTable = jQuery('#table').dataTable();
-                        var row = jQuery(e.currentTarget).closest('tr').get(0);
-                        oTable.fnDeleteRow(oTable.fnGetPosition(row));
-                        togglestatus();
-                        /*jQuery('input:checkbox, input:radio').uniform();*/
+        	var ans = confirm('¿Estas Seguro?');
+            if (ans) {
+                if(jQuery(e.currentTarget).closest('span').hasClass('checked')) {
+                    jQuery(e.currentTarget).closest('span').removeClass('checked');
+                } else {
+                    jQuery(e.currentTarget).closest('span').addClass('checked');
+                };
+                jQuery.ajax({
+                    url: "{{=URL(c='services_ajax', f='toggle_service')}}",
+                    type: "POST",
+                    data: {
+                        id:e.currentTarget.value
+                    },
+                    success: function(data){
+                        if(!jQuery('#c').is(':checked')) {
+                            oTable = jQuery('#table').dataTable();
+                            var row = jQuery(e.currentTarget).closest('tr').get(0);
+                            oTable.fnDeleteRow(oTable.fnGetPosition(row));
+                            togglestatus();
+                            /*jQuery('input:checkbox, input:radio').uniform();*/
+                        }
                     }
-                }
-            });
+                });
+            }
         });
         
         if(contador == "1")
