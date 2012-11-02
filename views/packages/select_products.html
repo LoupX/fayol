@@ -238,7 +238,7 @@ newDataTable();
                 {"sTitle":"Nombre"},
                 {"sTitle":"Cantidad"},
                  {"sTitle":"Unidad de Medida"},
-                {"sTitle":"", "sClass":"center"}
+                {"sTitle":"", "sClass":"center", "bSortable": false}
             ]
         });
         jQuery('#newtable_wrapper select').uniform();
@@ -257,7 +257,7 @@ newDataTable();
                         newrow[1],
                         resp,
                         newrow[5],
-                        '<a href="javascript:void(0);" onclick="removeRow(this);">remover</a>',
+                        '<a href="javascript:void(0);" onclick="removeRow(this);">Remover</a>',
                         newrow[7],
                     ]); 
             
@@ -272,7 +272,7 @@ newDataTable();
                         newrow[1],
                         resp,
                         newrow[5],
-                        '<a href="javascript:void(0);" onclick="removeRow(this);">remover</a>',
+                        '<a href="javascript:void(0);" onclick="removeRow(this);">Remover</a>',
                         newrow[7]
                     ]);
                 };
