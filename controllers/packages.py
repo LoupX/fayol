@@ -5,34 +5,41 @@
 def index():
     title = 'Paquetes'
     current = ['menu_catalogs', 'sidebar_packages', 'sub_packages_read']
+    session.prev = URL(c='packages', f='index')
     return dict(title=title,  current=current)
 
 @auth.requires_login()
 def new_package():
     title = 'Nuevo Paquete'
     current = ['menu_catalogs', 'sidebar_packages', 'sub_packages_new']
+    session.prev = URL(c='packages', f='new_package')
     return dict(title=title,  current=current)
 
 @auth.requires_login()
 def select_products():
+    if session.prev != URL(c='packages', f='new_package'):
+        session.prev = None
+        redirect(URL(c='packages', f='new_package'))
+    session.prev = None
     title = 'Seleccionar productos para agregar al paquete.'
     current = ['menu_catalogs', 'sidebar_packages', 'sub_packages_new']
     return dict(title=title,  current=current)
 
+@auth.requires_login()
 def update_select_products():
+    valid = [URL(c='packages', f='index'), URL(c='packages', f='view_package')]
+    if session.prev not in valid:
+        redirect(URL(c='packages', f='index'))
+    session.prev = None
     title = 'Actualizar productos del paquete.'
     current = ['menu_catalogs', 'sidebar_packages', 'sub_packages_read']
     return dict(title=title,  current=current)
 
+@auth.requires_login()
 def view_package():
     title = 'Paquetes'
     current = ['menu_catalogs', 'sidebar_packages', 'sub_packages_read']
-    return dict(title=title,  current=current)
-
-@auth.requires_login()
-def new_package():
-    title = 'Paquetes'
-    current = ['menu_catalogs', 'sidebar_packages', 'sub_packages_new']
+    session.prev = URL(c='packages', f='view_package')
     return dict(title=title,  current=current)
 
 @auth.requires_login()

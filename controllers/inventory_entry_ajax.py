@@ -4,7 +4,8 @@
 def create_entry():
     data = dict()
     v = request.vars
-
+    if v.branch_id and  v. warehouse_id:
+        return ''
     if v.branch_id:
         data['branch_id'] = v.branch_id
         data['warehouse_id'] = None
