@@ -122,7 +122,10 @@ def check_user():
         db.rollback()
         return ''
     else:
-        return '{} {}'.format(user.first_name, user.last_name)
+        if user:
+            return '{} {}'.format(user.first_name, user.last_name)
+        else:
+            return ''
 
 def echo():
     return str(request.vars)

@@ -273,76 +273,69 @@ function cleanFields() {
 
 ////// edit buttons //////
 function chk(id, s) {
-    var status = jQuery('input[name=status]'),
+    var status = jQuery('input[name=status]'),
         resp = jQuery('span#resp');
 
     if(s == 'True') {
-       	var ans = confirm('¿Está seguro?.');
+        var ans = confirm('¿Está seguro que quiere deshabilitar este proveedor?.');
 
         if(ans) {
-        	jQuery.ajax({
-         		url: "{{=URL(c='branches_ajax', f='toggle_branch_status')}}",
-         	    type: 'POST',
-         		data: { id: id, status: s }
-        	});
-       		status.parent().removeClass('checked');
-       		status.attr('onclick','chk('+id+',"False")');
-        	resp.html('Desactivado.');
-			//jQuery('#vendors_select_chzn').remove();
-			//jQuery('#vendors_select').val('').removeClass('chzn-done').chosen();
-			////ajaxFilter('TRUE');
-			//jQuery('#a','#c').parent('span').removeClass('checked');
-			//jQuery('#b').parent('span').addClass('checked');
-			//jQuery('#vendors_select').find('option[value='+id+']').remove();
-			cleanFields();
-			jQuery('#branches_select_chzn').remove();
-			jQuery('#branches_select').val('').removeClass('chzn-done').chosen();
-        
-			if(jQuery('#a').parent('span').hasClass('checked')) {
+            jQuery.ajax({
+                url: "{{=URL(c='branches_ajax', f='toggle_branch_status')}}",
+                type: 'POST',
+                data: { id: id, status: s }
+            });
+            status.parent().removeClass('checked');
+            status.attr('onclick','chk('+id+',"False")');
+            resp.html('Desactivado.');
+            cleanFields();
+            //jQuery('#vendors_select_chzn').remove();
+            //jQuery('#vendors_select').val('').removeClass('chzn-done').chosen();
+
+            if(jQuery('#a').parent('span').hasClass('checked')) {
                 ajaxFilter('TRUE');
             } else if(jQuery('#b').parent('span').hasClass('checked')) {
                 ajaxFilter('FALSE');
             } else {
                 ajaxFilter('ANY');
             }
-            
-            //ajaxFilter('TRUE'); 
-            //jQuery('#vendors_select_chzn').remove();
-            //jQuery('#vendors_select').val('').removeClass('chzn-done').chosen();
+
       } else {
         resp.html('Activado.');
         status.parent().addClass('checked');
-        //jQuery('#b','#c').parent('span').removeClass('checked');
-        //jQuery('#a').parent('span').addClass('checked');
       }        
     }
     else {
-        jQuery.ajax({
-          url: "{{=URL(c='branches_ajax', f='toggle_branch_status')}}",
-          type: 'POST',
-          data: { id: id, status: s }
-        });
-        status.parent().addClass('checked');
-        status.attr('onclick','chk('+id+',"True")');
-        resp.html('Activado.');
-		//ajaxFilter('FALSE');
-        //jQuery('#vendors_select').find('option[value='+id+']').remove();
-        cleanFields();
-        jQuery('#branches_select_chzn').remove();
-        jQuery('#branches_select').val('').removeClass('chzn-done').chosen();
+        var ans = confirm('¿Está seguro que quiere habilitar este proveedor?.');
 
-        if(jQuery('#a').parent('span').hasClass('checked')) {
-            ajaxFilter('TRUE');
-        } else if(jQuery('#b').parent('span').hasClass('checked')) {
-            ajaxFilter('FALSE');
+        if(ans) {
+            jQuery.ajax({
+              url: "{{=URL(c='branches_ajax', f='toggle_branch_status')}}",
+              type: 'POST',
+              data: { id: id, status: s }
+            });
+            status.parent().addClass('checked');
+            status.attr('onclick','chk('+id+',"True")');
+            resp.html('Activado.');
+            cleanFields();
+            //jQuery('#vendors_select_chzn').remove();
+            //jQuery('#vendors_select').val('').removeClass('chzn-done').chosen();
+
+            if(jQuery('#a').parent('span').hasClass('checked')) {
+                ajaxFilter('TRUE');
+            } else if(jQuery('#b').parent('span').hasClass('checked')) {
+                ajaxFilter('FALSE');
+            } else {
+                ajaxFilter('ANY');
+            }
         } else {
-            ajaxFilter('ANY');
+            resp.html('Desactivado.');
+            status.parent().removeClass('checked');
         }
-        //jQuery('#vendors_select_chzn').remove();
-        //jQuery('#vendors_select').val('').removeClass('chzn-done').chosen();
     }
-
+  
 }
+
 
 </script>
 

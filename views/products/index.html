@@ -36,26 +36,26 @@
                 <table cellpadding="0" cellspacing="0" border="0" class="stdtable" id="table">
                     <thead>
                         <tr>
-                            <th class="head0">Código</th>
-                            <th class="head1">Nombre</th>
-                            <th class="head0">Categoría</th>
-                            <th class="head1">Marca</th>
-                            <th class="head0">Precio</th>
-                            <th class="head1">Estatus</th>
-                            <th class="head0">Lista de precios</th>
-                            <th class="head1">Opciones</th>
+                            <th width="14%" class="head0">Código</th>
+                            <th width="14%" class="head1">Nombre</th>
+                            <th width="12%" class="head0">Categoría</th>
+                            <th width="12%" class="head1">Marca</th>
+                            <th width="12%" class="head0">Precio</th>
+                            <th width="12%" class="head1">Estatus</th>
+                            <th width="12%" class="head0">Lista de precios</th>
+                            <th width="12%" class="head1">Opciones</th>
                         </tr>
                     </thead>
                     <tfoot>
                         <tr>
-                            <th class="head0">Código</th>
-                            <th class="head1">Nombre</th>
-                            <th class="head0">Categoría</th>
-                            <th class="head1">Marca</th>
-                            <th class="head0">Precio</th>
-                            <th class="head1"><center>Estatus</center></th>
-                            <th class="head0"><center>Lista de precios</center></th>
-                            <th class="head1"><center>Opciones</center></th>
+                            <th width="14%" class="head0">Código</th>
+                            <th width="14%" class="head1">Nombre</th>
+                            <th width="12%" class="head0">Categoría</th>
+                            <th width="12%" class="head1">Marca</th>
+                            <th width="12%" class="head0">Precio</th>
+                            <th width="12%" class="head1">Estatus</th>
+                            <th width="12%" class="head0">Lista de precios</th>
+                            <th width="12%" class="head1">Opciones</th>
                         </tr>
                     </tfoot>
                 </table>
@@ -199,32 +199,23 @@
     function togglestatus() {
         jQuery('.stdtable input:checkbox').unbind('change');
         jQuery('.stdtable input:checkbox').on("change", function(e){
-        	//
-            var ans = confirm('¿Estas Seguro?');
-            if (ans) {
-                if(jQuery(e.currentTarget).closest('span').hasClass('checked')) {
-                    jQuery(e.currentTarget).closest('span').removeClass('checked');
-                } else {
-                    jQuery(e.currentTarget).closest('span').addClass('checked');
-                };
-                jQuery.ajax({
-                    url: "{{=URL(c='products_ajax', f='toggle_product')}}",
-                    type: "POST",
-                    data: {
-                        id:e.currentTarget.value
-                    },
-                    success: function(data){
-                        if(!jQuery('#c').is(':checked')) {
-                            oTable = jQuery('#table').dataTable();
-                            var row = jQuery(e.currentTarget).closest('tr').get(0);
-                            oTable.fnDeleteRow(oTable.fnGetPosition(row));
-                            togglestatus();
-                            /*jQuery('input:checkbox, input:radio').uniform();*/
-                        }
+        	jQuery.uniform.update(e.currentTarget);
+            jQuery.ajax({
+                url: "{{=URL(c='products_ajax', f='toggle_product')}}",
+                type: "POST",
+                data: {
+                    id:e.currentTarget.value
+                },
+                success: function(data){
+                    if(!jQuery('#c').is(':checked')) {
+                        oTable = jQuery('#table').dataTable();
+                        var row = jQuery(e.currentTarget).closest('tr').get(0);
+                        oTable.fnDeleteRow(oTable.fnGetPosition(row));
+                        togglestatus();
+                        /*jQuery('input:checkbox, input:radio').uniform();*/
                     }
-                });
-            }
-            
+                }
+            });
         });
         
         if(contador == "1")
