@@ -18,4 +18,4 @@ def create_entry():
     data['concept_id'] = v.concept_id
     data['date_receipt'] = v.date_receipt
     data['received_by'] = session.received_id
-    return session.user
+    return str(session)

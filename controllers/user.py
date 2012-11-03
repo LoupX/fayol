@@ -111,19 +111,9 @@ def ajax_token():
 def check_user():
     usr = request.vars.usr
     pwd = request.vars.pwd
-    user = None
-    try:
-        session.forget()
-        user = auth.login_bare(usr, pwd)
-        save_user(user)
-    except:
-        db.rollback()
-        return ''
+    session.forget(response)
+    user = auth.login_bare(usr, pwd)
+    if user:
+        return '{} {}'.format(user.first_name, user.last_name)
     else:
-        if user:
-            return '{} {}'.format(user.first_name, user.last_name)
-        else:
-            return ''
-
-def save_user(user):
-    session.user = user
+        return ''
