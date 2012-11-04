@@ -1,6 +1,8 @@
 {{extend 'base/layout.html'}}
 
 {{block scripts_extra}}
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.alerts.js')}}"></script>
+
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.maskedinput.js')}}"></script>
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.validate.min.js')}}"></script>
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.dataTables.min.js')}}"></script>
@@ -18,24 +20,68 @@
         
     <div id="contentwrapper" class="contentwrapper">
 
-                    <div class="notibar msgerror" style="display:none;">
-                        <a class="close"></a>
-                        <!-- Ocurrió un error con los datos del formulario. -->
-                        <p>Agregue almenos un produto.</p>
-                    </div>
+        <div class="notibar msgerror" style="display:none;">
+            <a class="close"></a>
+            <!-- Ocurrió un error con los datos del formulario. -->
+            <p>Agregue almenos un produto.</p>
+        </div>
 
-                    <div class="notibar msgsuccess" style="display:none;">
-                        <a class="close"></a>
-                        <p>Se han guardado los datos del formulario.</p>
-                    </div>
+        <div class="notibar msgsuccess" style="display:none;">
+            <a class="close"></a>
+            <p>Se han guardado los datos del formulario.</p>
+        </div>
 
-                    <div class="notibar exists" style="display:none;">
-                        <a class="close"></a>
-                        <p>Ocurrrió un error. </p>
-                    </div>
+        <div class="notibar exists" style="display:none;">
+            <a class="close"></a>
+            <p>Ocurrrió un error. </p>
+        </div>
 
+        <br clear="all"/> 
+        
+        <div class="one_half" style="margin-bottom:40px;">
+              
+          <table cellpadding="0" cellspacing="0" class="table invoice">
+           	  <tr>
+               	  <td width="30%">Nombre:</td>
+                  <td width="70%"><strong id="name"></strong></td>
+              </tr>
+              <tr>
+               	  <td>Sucursal/almacén:</td>
+                  <td><strong id="branch"></strong></td>
+              </tr>
+           	  <tr>
+           	      <td>Proveedor:</td>
+           	      <td><strong id="vendor"></strong></td>
+       	      </tr>
+       	      <tr>
+           	      <td>Concepto:</td>
+           	      <td><strong id="concept"></strong></td>
+       	      </tr>   
+          </table>
+        </div><!--one_half-->
+        
+		<div class="one_half last" style="margin-bottom:40px;">
+       
+          <table cellpadding="0" cellspacing="0" class="table invoice">
+          	  <tr>
+            	  <td width="30%">Referencia:</td>
+            	  <td width="70%"><strong id="reference"></strong></td>
+          	  </tr>
+          	  <tr>
+            	  <td>Descripcion:</td>
+            	  <td><strong id="description"></strong></td>
+          	  </tr>
+          	  <tr>
+            	  <td>Fecha de recepcion:</td>
+            	  <td><strong id="date_receipt"></strong></td>
+          	  </tr>
+          </table>
+        </div><!--one_half-->           
+                    
+        <br clear="all"/>            
+                    
         <div class="contenttitle2">
-            <h3>Agregar productos al paquete.</h3>
+            <h3>Ingresar productos.</h3>
         </div><!--contenttitle-->
 
         <table cellpadding="0" cellspacing="0" border="0" class="stdtable" id="table">
@@ -69,7 +115,7 @@
         <br>
 
         <div class="contenttitle2">
-            <h3>Productos agregados.</h3>
+            <h3>Productos ingresados.</h3>
         </div><!--contenttitle-->
 
         <table cellpadding="0" cellspacing="0" border="0" class="stdtable" id="newtable" width="50%" >
@@ -166,7 +212,7 @@ newDataTable();
                             brand.name,
                             price, 
                             units.abbreviation,
-                            '<a href="javascript:void(0);" onclick="addProducts(this);">Agregar</a>',
+                            '<a href="javascript:void(0);" onclick="addProducts(this);">Ingresar</a>',
                             product.id
                         ];
                    cont++;
@@ -278,7 +324,7 @@ newDataTable();
                 };
 
             } else {
-                alert('Se requiere la cantidad.');
+                jAlert('Se requiere la cantidad.','Alerta');
             };
 
     }

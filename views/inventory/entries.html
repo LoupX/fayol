@@ -313,7 +313,7 @@
             			                success:function(data){
             			                    if(data != 0 && data)
             			                    {
-            			                        redirect(data); 
+            			                        redirect(data).delay(500); 
             			                    }
             			                    else if(data == 0) {
             			                        jQuery('.exists').fadeIn(1600);
@@ -412,7 +412,7 @@
 ///// redirect  /////	
 
     function redirect(id) {
-        window.location.replace("{{=URL(c='inventory', f='select_products')}}?id="+id);
+        window.location.replace("{{=URL(c='inventory', f='products_entries')}}?id="+id);
     }
     
 </script>
