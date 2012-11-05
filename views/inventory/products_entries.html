@@ -292,14 +292,15 @@ newDataTable();
 
     ///////// click event to add products to new package /////////
     function addProducts(tr)  {
-            var row = jQuery(tr).closest('tr').get(0);
-            var newrow = pt.dataTable().fnGetData(row);
+        var row = jQuery(tr).closest('tr').get(0);
+        var newrow = pt.dataTable().fnGetData(row);
 
-            var resp = prompt('¿Cuantos productos desea agregar?',1);
-
+        //var resp = prompt('¿Cuantos productos desea agregar?',1);
+        var resp = 0;
+        jPrompt('¿Cuantos productos desea agregar?', '1', 'Agregar productos', function(resp) {
             if(resp > 0) {
-                if(nt.dataTable().fnGetData().length == 0) {
-                    nt.dataTable().fnAddData([
+            	if(nt.dataTable().fnGetData().length == 0) {
+                	nt.dataTable().fnAddData([
                         newrow[1],
                         resp,
                         newrow[5],
@@ -326,7 +327,7 @@ newDataTable();
             } else {
                 jAlert('Se requiere la cantidad.','Alerta');
             };
-
+       });
     }
 
     function removeRow(tr) {
@@ -377,7 +378,7 @@ newDataTable();
     });
 
     function redirect() {
-        window.location.replace("{{=URL(c='packages', f='new_package')}}");
+        window.location.replace("{{=URL(c='inventory', f='index')}}");
     }
     
 </script>

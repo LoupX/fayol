@@ -63,8 +63,12 @@
               
               <table cellpadding="0" cellspacing="0" class="table invoice">
                	  <tr>
-                   	  <td width="30%">Nombre:</td>
-                      <td width="70%"><strong id="name"></strong></td>
+                   	  <td width="30%">Sucursal:</td>
+                      <td width="70%"><strong id="branch"></strong></td>
+                  </tr>
+                  <tr>
+                   	  <td>Nombre:</td>
+                      <td><strong id="name"></strong></td>
                   </tr>
                   <tr>
                    	  <td>Colonia:</td>
@@ -165,7 +169,8 @@ warehouses_select.change( function() {
   id = jQuery(this).find(':selected').val();
 
   if(id != '') {
-    var name = jQuery('#name'),	
+    var branches = jQuery('#branch'),
+    	name = jQuery('#name'),	
     	suburb = jQuery('#suburb'),
         address = jQuery('#address'),
         state = jQuery('#state'),
@@ -186,8 +191,9 @@ warehouses_select.change( function() {
       success: function (data) {
         //console.log(data);
         //receive something like data = {"name":"name","state":"state"}
+        branches.html(data.branches['name']);
         name.html(data.warehouses['name']);       
-        suburb.html(data.company_addresses['suburb'])
+        suburb.html(data.company_addresses['suburb']);
         address.html(data.company_addresses['address']);       
         state.html(data.states['name']);
         municipality.html(data.municipalities['name']);
@@ -236,7 +242,8 @@ warehouses_select.change( function() {
 function cleanFields() {
   jQuery('#edit_warehouse').removeAttr('href');
 
-  var name = jQuery('#name'),
+  var branches = jQuery('#branch'),
+  	  name = jQuery('#name'),
       address = jQuery('#address'),
       suburb = jQuery('#suburb'),
       state = jQuery('#state'),
@@ -254,7 +261,7 @@ function cleanFields() {
             .addClass('disabled');
       resp.html('');
 
-  var elements = [name, address, suburb, state, municipality, locality, zip_code];
+  var elements = [branches, name, address, suburb, state, municipality, locality, zip_code];
 
   for(var e in elements) {
     elements[e].html('');

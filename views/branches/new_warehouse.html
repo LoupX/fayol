@@ -41,7 +41,7 @@
 
                     <div class="notibar exists" style="display:none;">
                	     	<a class="close"></a>
-               	     	<p>Ese proveedor existe, para editarlo vaya a la sección de ver proveedor. </p>
+               	     	<p>Ese almacén existe, para editarlo vaya a la sección de ver proveedor. </p>
                	    </div>
                	    
                	    <div class="notibar msgsuccess" style="display:none;">
@@ -51,9 +51,16 @@
             						
                     <form id="form_warehouse" class="stdform stdform2" method="post" action="">
                     	
+                    	<p style="margin-top: 1px;">
+                            <label>Sucursal *</label>
+                            <span class="field">
+                                <select id="branches" name="branches" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="1">
+                                  </select>
+                            </span>
+                        </p>
 	                    <p>
 	                       	<label>Nombre *</label>
-	                        <span class="field"><input type="text" name="name" id="name" class="smallinput" tabindex="1"/></span>
+	                        <span class="field"><input type="text" name="name" id="name" class="smallinput" tabindex="2"/></span>
 	                    </p>
 	                    
 	                    <div class="contenttitle2">
@@ -62,18 +69,18 @@
 	                     
 	                    <p style="border-top: 1px #ddd solid;">
 	                       	<label>Dirección *</label>
-	                        <span class="field"><input type="text" name="address" id="address" class="smallinput" tabindex="2"/></span>
+	                        <span class="field"><input type="text" name="address" id="address" class="smallinput" tabindex="3"/></span>
 	                    </p>
 	                    <p>
 	                       	<label>Colonia *</label>
-	                        <span class="field"><input type="text" name="suburb" id="suburb" class="smallinput" tabindex="3"/></span>
+	                        <span class="field"><input type="text" name="suburb" id="suburb" class="smallinput" tabindex="4"/></span>
 	                    </p>
 	                    <p style="margin-top: 1px;">
                             <label>Estado *</label>
                             <span class="field">
                                 <!-- <select name="states" id="states">
                                 </select> -->
-                                <select id="states" name="states" data-placeholder="Seleccionar" class="chzn-select" tabindex="4" style="width:350px;">
+                                <select id="states" name="states" data-placeholder="Seleccionar" class="chzn-select" tabindex="5" style="width:350px;">
                                   </select>
                             </span>
                         </p>
@@ -81,7 +88,7 @@
                         <p style="margin-top: 1px;">
                             <label>Municipio *</label>
                             <span id="municipality_container"class="field">
-                            <select name="municipality" id="municipality" data-placeholder="Seleccionar" class="chzn-select" tabindex="5" style="width:350px;">
+                            <select name="municipality" id="municipality" data-placeholder="Seleccionar" class="chzn-select" tabindex="6" style="width:350px;">
                             </select>
                             </span>
                         </p>
@@ -89,13 +96,13 @@
                         <p style="margin-top: 1px;">
                             <label>Población *</label>
                             <span class="field" id="locality_container">
-                            <select name="locality" id="locality" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="6">
+                            <select name="locality" id="locality" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="7">
                             </select>
                             </span>
                         </p>
  	                    <p style="margin-top: 1px;">
                             <label>Código postal</label>
-                            <span class="field"><input type="text" name="zip_code" id="zip_code" class="smallinput" maxlength="5" tabindex="7"/></span>
+                            <span class="field"><input type="text" name="zip_code" id="zip_code" class="smallinput" maxlength="5" tabindex="8"/></span>
                         </p>
 	                                            
 	                    <p class="stdformbutton">
@@ -119,11 +126,13 @@
     
     var sid = '',
     	mid = '',
-    	lid = '';
+    	lid = '',
+    	bid = '';
     
     var states = jQuery('#states'),
         municipality = jQuery('#municipality'),
-        locality = jQuery('#locality');
+        locality = jQuery('#locality'),
+        sbranches = jQuery('#branches');
 
         jQuery.ajax({
             type: "POST",
@@ -199,6 +208,33 @@
         }
     });
     
+///// get branches /////    
+
+ jQuery.ajax({
+        type: "POST",
+        url: "{{=URL(c='branches_ajax', f='get_branches')}}",
+        dataType: "json",
+        success: function(results) {
+        	options = "";
+            for(k in results){
+	        	options += "<option value=\"" + results[k].id + "\">" + results[k].name + "</option>";
+	        }
+            sbranches	
+                .html(options)
+                .prepend('<option value="">Selecccionar</option>')
+                .trigger("liszt:updated");
+            }
+    });
+    
+    sbranches.change( function() {
+        bid = jQuery(this).find(':selected').val();
+        if(bid != '') {
+	        sbranches.siblings('div').removeClass('ellol');
+        }
+    });
+
+///// valadation /////
+    
     jQuery("#form_warehouse").validate({
             rules: {
                 name: "required",
@@ -225,16 +261,18 @@
         valState(sid);
         valLoc(lid);
         valMun(mid);
+        valBra(bid);
         
         jQuery('.msgerror').hide();
         jQuery('.exists').hide();
         jQuery('.msgsuccess').hide();
         
-        if(jQuery("#form_warehouse").valid() && valState(sid) && valLoc(lid) && valMun(mid)) {
+        if(jQuery("#form_warehouse").valid() && valState(sid) && valLoc(lid) && valMun(mid) && valBra(bid)) {
 
              jQuery.ajax({
                 url: "{{=URL(c='branches_ajax', f='create_warehouse')}}",
                 data: { 
+                	branch_id:jQuery('#branches').val(),
                     name:jQuery('#name').val(),
                     address:jQuery('#address').val(),
                     suburb:jQuery('#suburb').val(),
@@ -254,6 +292,9 @@
                         sid = 0;
                         mid = 0;
                         lid = 0;
+                        bid = 0;
+                        jQuery('#branches_chzn').remove();
+                        jQuery('#branches').val('').removeClass('chzn-done').chosen();
                         jQuery('#states_chzn').remove();
                         jQuery('#states').val('').removeClass('chzn-done').chosen();
                         jQuery('#municipality_chzn').remove();
@@ -279,6 +320,11 @@
     });
 
     function deleteFields() {
+    	jQuery('#branches')
+            .find('option')
+            .first()
+            .attr('selected',true)
+            .trigger("liszt:updated");
         jQuery('#name').val('');
         jQuery('#address').val('');
         jQuery('#suburb').val('');
@@ -339,6 +385,21 @@
     } else{
         bol = false;
         jQuery('#municipality').siblings('div').addClass('ellol');
+    };
+    return bol
+    }
+    
+     function valBra(s) {
+    var bol;
+    if (s != 0) {
+        bol = true;
+        jQuery('#branches').siblings('div').removeClass('ellol');
+    } else if(s != null){
+        bol = false;
+        jQuery('#branches').siblings('div').addClass('ellol');
+    } else{
+        bol = false;
+        jQuery('#branches').siblings('div').addClass('ellol');
     };
     return bol
     }
