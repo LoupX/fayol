@@ -111,9 +111,14 @@ def ajax_token():
 def check_user():
     usr = request.vars.usr
     pwd = request.vars.pwd
-    session.forget(response)
-    user = auth.login_bare(usr, pwd)
-    if user:
-        return '{} {}'.format(user.first_name, user.last_name)
-    else:
+    if not usr or not pwd:
         return ''
+    user = db(db.auth_user.username == usr).select().first()
+    if user and user.get('password', False):
+        password = db.auth_user.password.validate(pwd)[0]
+        if not user.registration_key and password == user['password']:
+            session.selected_user = user
+            return True
+        else:
+            return ''
+

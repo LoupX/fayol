@@ -82,20 +82,21 @@ def get_warehouse_information():
     data = dict()
     row = None
     try:
-        query = db.warehouses.id == id
+        query = db.warehouses.id==id
         left = []
         left.append(db.company_addresses.on(
-            db.warehouses.company_address_id == db.company_addresses.id))
+            db.warehouses.company_address_id==db.company_addresses.id))
         left.append(db.states.on(db.company_addresses.state_id == db.states.id))
         left.append(db.municipalities.on(
-            db.company_addresses.municipality_id == db.municipalities.id))
+            db.company_addresses.municipality_id==db.municipalities.id))
         left.append(
             db.localities.on(
-                db.company_addresses.locality_id == db.localities.id))
+                db.company_addresses.locality_id==db.localities.id))
+        left.append(db.branches.on(db.warehouses.branch_id==db.branches.id))
         row = db(query).select(
             db.warehouses.ALL, db.states.name,
             db.municipalities.name, db.localities.name,
-            db.company_addresses.ALL, left=left).as_list()
+            db.company_addresses.ALL, db.branches.name, left=left).as_list()
     except:
         db.rollback()
 
@@ -168,6 +169,7 @@ def create_warehouse():
     data_address['municipality_id'] = vars.municipality
     data_address['locality_id'] = vars.locality
     data_address['zip_code'] = vars.zip_code
+    data['branch_id'] = vars.branch_id
     data['name'] = vars.name.decode('utf-8').upper()
 
     try:
@@ -298,6 +300,7 @@ def update_warehouse():
     data_address['locality_id'] = vars.locality
     data_address['zip_code'] = vars.zip_code
 
+    data['branch_id'] = vars.branch_id
     data['name'] = vars.name.decode('utf-8').upper()
 
     try:
