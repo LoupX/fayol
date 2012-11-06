@@ -174,6 +174,25 @@ def update_user():
     data['zip_code'] = request.vars.zip_code
     data['phone'] = request.vars.phone
     data['mobile'] = request.vars.mobile
+    try:
+        result = db(db.auth_user.id==id).update(**data)
+    except SyntaxError as e:
+        db.rollback()
+        if 'duplicate field' in e:
+            return 0
+        else:
+            return ''
+    except Exception as e:
+        db.rollback()
+        return ''
+    else:
+        if result == 1:
+            db.commit()
+            return True
+        else:
+            db.rollback()
+            return ''
+
 
 @auth.requires_login()
 def get_groups():
@@ -185,3 +204,7 @@ def get_groups():
     from gluon.contrib import simplejson
     data = simplejson.dumps(data)
     return str(data)
+
+@auth.requires_login()
+def change_password():
+    pass
