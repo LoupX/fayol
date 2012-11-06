@@ -183,9 +183,15 @@
     jQuery.ajax({
         type: "POST",
         url: "{{=URL(c='user', f='get_groups')}}",
+        dataType: "json",
         success: function(results) {
+            options = "";
+        	for(k in results){
+	        	options += "<option value=\"" + results[k].id + "\">" + results[k].role + "</option>";
+	        	//console.log(k]);
+	        }
             groups	
-                .html(results)
+                .html(options)
                 .trigger("liszt:updated");
             }
     });    
@@ -299,7 +305,7 @@ jQuery('#submit').live('click', function(e) {
         if(jQuery("#form_users").valid() && valbra(bid)) {
 
              jQuery.ajax({
-                url: "{{=URL(c='common', f='echo')}}",
+                url: "{{=URL(c='user', f='create_user')}}",
                 data: { 
                     username:jQuery('#username').val(),
                     password:jQuery('#password').val(),
@@ -309,6 +315,7 @@ jQuery('#submit').live('click', function(e) {
                     state: sid,
                     municipality: mid,
                     locality: lid,
+                    group_id:jQuery('#group_id').val() ? (jQuery('#group_id').val()) : '',
                     birthday:jQuery('#birthday').val(),
                     social_secure_number:jQuery('#social_secure_number').val(),
                     salary:jQuery('#salary').val(),
@@ -322,6 +329,7 @@ jQuery('#submit').live('click', function(e) {
                             jQuery('.msgsuccess').fadeOut('slow');
                         });
                         deleteFields();
+                        recargargroups();
                         bid = 0;
                         jQuery('#branch').attr('tabindex','4');
                         jQuery('#branch_chzn').remove();
@@ -400,6 +408,28 @@ jQuery('#submit').live('click', function(e) {
     };
     return bol
     }  
+    
+////// Recargar ////////    
+         
+function recargargroups()
+    {
+    	jQuery.ajax({
+        type: "POST",
+        url: "{{=URL(c='user', f='get_groups')}}",
+        dataType: "json",
+        success: function(results) {
+            options = "";
+        	for(k in results){
+	        	options += "<option value=\"" + results[k].id + "\">" + results[k].role + "</option>";
+	        	//console.log(k]);
+	        }
+            groups	
+                .html(options)
+                .prepend('<option value="">Seleccionar</option>')
+                .trigger("liszt:updated");
+            }
+    });        
+    }         
          
 </script>
 

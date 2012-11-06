@@ -1,5 +1,6 @@
 # coding: utf8
 {
+'%Y-%m-%d': '%Y-%m-%d',
 '%Y-%m-%d %H:%M:%S': '%Y-%m-%d %H:%M:%S',
 'Cannot be empty': 'Cannot be empty',
 'Check to delete': 'Check to delete',
