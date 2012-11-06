@@ -64,11 +64,11 @@
 	                    </p>     
 	                    <p style="margin-top: 1px;">
 	                        	<label>Nombre(s) *</label>
-	                            <span class="field"><input type="text" name="firstname" id="firstname" class="smallinput" tabindex="4"/></span>
+	                            <span class="field"><input type="text" name="first_name" id="first_name" class="smallinput" tabindex="4"/></span>
 	                    </p>
 	                    <p style="margin-top: 1px;">
 	                        	<label>Apellidos *</label>
-	                            <span class="field"><input type="text" name="lastname" id="lastname" class="smallinput" tabindex="5"/></span>
+	                            <span class="field"><input type="text" name="last_name" id="last_name" class="smallinput" tabindex="5"/></span>
 	                    </p>
 	                    <p style="margin-top: 1px;">
 	                        	<label>Dirección</label>
@@ -289,8 +289,8 @@
             username: "required",
             'password': { required:true, minlength: 8, },
             'confirm_password': { required: '#password', minlength: 8, equalTo: "#password" },
-            firstname: "required",
-            lastname: "required",
+            first_name: "required",
+            last_name: "required",
             'email': { required:true, email: true },
             'social_secure_number': { required:false, number:true, maxlength: 11 }
         },
@@ -298,8 +298,8 @@
             username: "Ingrese un nombre de usuario.",
             'password': { required: 'Debe ingresar una contraseña', minlength: 'La contraseña debe tener mínimo 8 caracteres' },
             'confirm_password': { required: 'Debe ingresar una contraseña', minlength: 'La contraseña debe tener mínimo 8 caracteres', equalTo: 'Debe ingresar la misma contraseña del campo anterior' },
-            firstname: "Ingrese su(s) nombre(s).",
-            lastname: "Ingrese sus apellidos.",
+            first_name: "Ingrese su(s) nombre(s).",
+            last_name: "Ingrese sus apellidos.",
             'email': { required: 'Debe ingresar un correo electrónico', email: 'Debe ingresar el correo electrónico con el formato correcto.' },
             social_secure_number: { number: 'Debe ingresar solo números', maxlength: 'ingrese máximo 11 caracteres' }
         }
@@ -325,15 +325,15 @@ jQuery('#submit').live('click', function(e) {
                 data: { 
                     username:jQuery('#username').val(),
                     password:jQuery('#password').val(),
-                    firstname:jQuery('#firstname').val(),
-                    lastname:jQuery('#lastname').val(),
+                    first_name:jQuery('#first_name').val(),
+                    last_name:jQuery('#last_name').val(),
                     address:jQuery('#address').val(),
                     zip_code:jQuery('#zip_code').val(),
                     phone:jQuery('#phone').val(),
                     mobile:jQuery('#mobile').val(),
-                    state: sid,
-                    municipality: mid,
-                    locality: lid,
+                    state_id: sid,
+                    municipality_id: mid,
+                    locality_id: lid,
                     group_id:jQuery('#group_id').val() ? (jQuery('#group_id').val()) : '',
                     birthday:jQuery('#birthday').val(),
                     social_secure_number:jQuery('#social_secure_number').val(),
@@ -385,8 +385,8 @@ jQuery('#submit').live('click', function(e) {
     function deleteFields() {
         jQuery('#username').val('');
         jQuery('#password').val('');
-        jQuery('#firstname').val('');
-		jQuery('#lastname').val('');
+        jQuery('#first_name').val('');
+		jQuery('#last_name').val('');
 		jQuery('#address').val('');
 		jQuery('#zip_code').val();
 		jQuery('#phone').val();
