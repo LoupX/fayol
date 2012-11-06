@@ -1,0 +1,408 @@
+{{extend 'base/layout.html'}}
+
+{{block scripts_extra}}
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.alerts.pass.js')}}"></script>
+
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.validate.min.js')}}"></script>
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/chosen.jquery.min.js')}}"></script>
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.dataTables.min.js')}}"></script>
+<script type="text/javascript" src="{{=URL('static', 'js/custom/dualselector.js')}}"></script>
+<style type="text/css">
+    .ellol { border: 1px solid red; }
+</style>
+{{end}}
+
+{{block sidebar_menu}}
+{{include 'users/sidebar.html'}}
+{{end}}
+
+{{block content}}
+    <div class="centercontent">
+    
+        <div class="pageheader">
+        
+            <h1 class="pagetitle">{{=title}}</h1>
+            
+        </div><!--pageheader-->
+        
+        <div id="contentwrapper" class="contentwrapper">
+        
+        	<div id="validation" class="subcontent">
+         
+					<div class="notibar msgerror" style="display:none;">
+                    	<a class="close"></a>
+                    	<p>Ocurrió un error con los datos del formulario.</p>
+                    </div>
+
+                	<div class="notibar exists" style="display:none;">
+                   		<a class="close"></a>
+                    	<p>Este usuario ya existe, para editarlo vaya a la sección de ver usuarios. </p>
+                    </div>
+
+                	<div class="notibar msgsuccess" style="display:none;">
+                        <a class="close"></a>
+                        <p>Se han guardado los datos del formulario.</p>
+                    </div>
+                    
+                    <div class="contenttitle2">
+                        <h3>Nuevo usuario</h3>
+                    </div><!--contenttitle-->
+                    
+                    <form id="form_users" class="stdform stdform2" method="post" action="">           	                        
+                        
+                        <p style="margin-top: 1px;">
+	                        	<label>Nombre de usuario *</label>
+	                            <span class="field"><input type="text" name="username" id="username" class="smallinput" tabindex="1"/></span>
+	                    </p>
+	                    <p style="margin-top: 1px;">
+	                        	<label>Contraseña *</label>
+	                            <span class="field"><input type="password" type="text" name="password" id="password" class="smallinput" tabindex="2"/></span>
+	                    </p>
+	                    <p style="margin-top: 1px;">
+	                        	<label>Confirmar Contraseña *</label>
+	                            <span class="field"><input type="password" type="text" name="confirm_password" id="confirm_password" class="smallinput" tabindex="3"/></span>
+	                    </p>     
+	                    <p style="margin-top: 1px;">
+	                        	<label>Nombre(s) *</label>
+	                            <span class="field"><input type="text" name="firstname" id="firstname" class="smallinput" tabindex="4"/></span>
+	                    </p>
+	                    <p style="margin-top: 1px;">
+	                        	<label>Apellidos *</label>
+	                            <span class="field"><input type="text" name="lastname" id="lastname" class="smallinput" tabindex="5"/></span>
+	                    </p>
+	                    <p style="margin-top: 1px;">
+	                        	<label>Dirección</label>
+	                            <span class="field"><input type="text" name="address" id="address" class="smallinput" tabindex="6"/></span>
+	                    </p>   
+	                    <p style="margin-top: 1px;">
+                            <label>Estado</label>
+                            <span class="field">
+                                <select id="states" name="states" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="7">
+                                  </select>
+                            </span>
+                        </p> 
+                        <p style="margin-top: 1px;">
+                            <label>Municipio</label>
+                            <span id="municipality_container"class="field">
+                            <select name="municipality" id="municipality" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="8">
+                            </select>
+                            </span>
+                        </p>
+                        <p style="margin-top: 1px;">
+                            <label>Población</label>
+                            <span class="field" id="locality_container">
+                            <select name="locality" id="locality" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="9">
+                            </select>
+                            </span>
+                        </p>         
+	                    <p style="margin-top: 1px;">
+	                        	<label>Fecha de nacimiento</label>
+	                            <span class="field"><input type="text" id="birthday" name="birthday" tabindex="10"/></span>
+	                    </p>
+	                    <p style="margin-top: 1px;">
+	                        	<label>NSS</label>
+	                            <span class="field"><input type="text" name="social_secure_number" id="social_secure_number" class="smallinput" maxlength="11" tabindex="8"/></span>
+	                    </p>
+	                    <p style="margin-top:1px;">
+	                        	<label>Grupos</label>
+	                            <span class="field">
+                            	<select name="group_id" id="group_id" multiple="multiple" size="10" data-placeholder="Seleccionar" class="chzn-select" tabindex="10"></select>
+                                </span>
+	                    </p>
+	                    <p style="margin-top: 1px;">
+	                        	<label>Sueldo</label>
+	                            <span class="field"><input type="text" name="salary" id="salary" class="smallinput" tabindex="12"/></span>
+	                    </p>
+	                    <p style="margin-top: 1px;">
+	                        	<label>Correo Electrónico *</label>
+	                            <span class="field"><input type="text" name="email" id="email" class="smallinput" tabindex="13"/></span>
+	                    </p>
+	                    <p id="selectbranch" style="margin-top: 1px;">
+                            <label>Sucursal *</label>
+                            <span class="field">
+                                <select id="branch" name="branch" data-placeholder="Seleccionar" class="chzn-select" style="" tabindex="14">
+                                  </select>
+                            </span>
+                        </p>
+	                                      
+                        <p class="stdformbutton">
+                        	<button id="submit" class="submit radius2" tabindex="7">Guardar</button>
+                        </p>
+                        
+                        
+                    </form>
+                   
+
+            </div><!--subcontent-->     
+        
+        </div><!--contentwrapper-->
+        
+        <br clear="all" />
+        
+	</div><!-- centercontent -->
+        
+</div><!--bodywrapper-->
+
+
+<script>
+
+	jQuery("#birthday").datepicker({ dateFormat: "yy-mm-dd" });
+	jQuery(".chzn-select").chosen();
+        
+    var bid = '';
+    var branch = jQuery('#branch');  
+    var state = jQuery('#states'),
+        municipality = jQuery('#municipality'),
+        locality = jQuery('#locality'),
+        groups = jQuery('#group_id');
+    
+    jQuery.ajax({
+        type: "POST",
+        url: "{{=URL(c='branches_ajax', f='get_branches')}}",
+        dataType: "json",
+        success: function(results) {
+        	options = "";
+        	for(k in results){
+	        	options += "<option value=\"" + results[k].id + "\">" + results[k].name + "</option>";
+	        }
+            branch	
+                .html(options)
+                .prepend('<option value="">Seleccionar</option>')
+                .trigger("liszt:updated");
+            }
+    });
+    branch.change( function() {
+        bid = jQuery(this).find(':selected').val();
+        if(bid != '') {
+	        branch.siblings('div').removeClass('ellol');
+        }
+    });
+    
+//// get groups ////
+
+    jQuery.ajax({
+        type: "POST",
+        url: "{{=URL(c='user', f='get_groups')}}",
+        success: function(results) {
+            groups	
+                .html(results)
+                .trigger("liszt:updated");
+            }
+    });    
+       
+///// get states /////    
+    
+    var state = jQuery('#states'),
+        municipality = jQuery('#municipality'),
+        locality = jQuery('#locality');
+
+    jQuery.ajax({
+        type: "POST",
+        url: "{{=URL(c='common', f='get_states')}}",
+        success: function(results) {
+            state
+                .html(results)
+                .prepend('<option value="">Selecccionar</option>')
+                .trigger("liszt:updated");
+            }
+    });
+
+//////////// get municipalities ////////////
+    state.change( function() {
+        var id = jQuery(this).find(':selected').val();
+        if(id != '') {
+            jQuery.ajax({
+                type: "POST",
+                url: "{{=URL(c='common', f='get_municipalities')}}",
+                data: {id: id},
+                success: function(results) {
+                    municipality
+                        .html(results)
+                        .prepend('<option value="">Selecccionar</option>')
+                        .trigger("liszt:updated");
+                }
+            });
+        }
+        else {
+            municipality
+                .html('')
+                .prepend('<option value="">Selecccionar</option>')
+                .trigger("liszt:updated");
+            locality
+                .html('')
+                .prepend('<option value="">Selecccionar</option>')
+                .trigger("liszt:updated");
+        }
+    });
+
+//////////// get localities ////////////
+    municipality.change( function() {
+        var id = jQuery(this).find(':selected').val();
+        if(id != '') {
+            jQuery.ajax({
+                type: "POST",
+                data: {municipality_id: id},
+                url: "{{=URL(c='common', f='get_localities')}}",
+                success: function(results) {
+                    locality
+                        .html(results)
+                        .prepend('<option value="">Selecccionar</option>')
+                        .trigger("liszt:updated");
+                }
+            });
+        }
+        else {
+            locality
+                .html('')
+                .prepend('<option value="">Selecccionar</option>')
+                .trigger("liszt:updated");
+        }
+    });
+
+        
+//////////// validate form ////////
+
+    jQuery("#form_users").validate({
+        rules: {
+            username: "required",
+            'password': { required:true, minlength: 8, },
+            'confirm_password': { required: '#password', minlength: 8, equalTo: "#password" },
+            firstname: "required",
+            lastname: "required",
+            'email': { required:true, email: true },
+            'social_secure_number': { required:false, number:true, maxlength: 11 }
+        },
+        messages: {
+            username: "Ingrese un nombre de usuario.",
+            'password': { required: 'Debe ingresar una contraseña', minlength: 'La contraseña debe tener mínimo 8 caracteres' },
+            'confirm_password': { required: 'Debe ingresar una contraseña', minlength: 'La contraseña debe tener mínimo 8 caracteres', equalTo: 'Debe ingresar la misma contraseña del campo anterior' },
+            firstname: "Ingrese su(s) nombre(s).",
+            lastname: "Ingrese sus apellidos.",
+            'email': { required: 'Debe ingresar un correo electrónico', email: 'Debe ingresar el correo electrónico con el formato correcto.' },
+            social_secure_number: { number: 'Debe ingresar solo números', maxlength: 'ingrese máximo 11 caracteres' }
+        }
+     });
+     
+///// Submit form /////
+
+jQuery('#submit').live('click', function(e) {
+        e.preventDefault();
+        valbra(bid);
+        var sid = jQuery('#states').val(),
+            mid = (jQuery('#municipality').val() == null) ? '': jQuery('#municipality').val(),
+            lid = (jQuery('#locality').val() == null) ? '': jQuery('#locality').val();
+        
+        jQuery('.msgerror').hide();
+        jQuery('.exists').hide();
+        jQuery('.msgsuccess').hide();
+
+        if(jQuery("#form_users").valid() && valbra(bid)) {
+
+             jQuery.ajax({
+                url: "{{=URL(c='common', f='echo')}}",
+                data: { 
+                    username:jQuery('#username').val(),
+                    password:jQuery('#password').val(),
+                    firstname:jQuery('#firstname').val(),
+                    lastname:jQuery('#lastname').val(),
+                    address:jQuery('#address').val(),
+                    state: sid,
+                    municipality: mid,
+                    locality: lid,
+                    birthday:jQuery('#birthday').val(),
+                    social_secure_number:jQuery('#social_secure_number').val(),
+                    salary:jQuery('#salary').val(),
+                    email:jQuery('#email').val(),
+                    branch:jQuery('#branch').val(),
+                },
+                type: 'POST',
+                success:function(data){
+                    if(data != 0 && data){
+                        jQuery('.msgsuccess').fadeIn(1600, function() {
+                            jQuery('.msgsuccess').fadeOut('slow');
+                        });
+                        deleteFields();
+                        bid = 0;
+                        jQuery('#branch').attr('tabindex','4');
+                        jQuery('#branch_chzn').remove();
+                        jQuery('#branch').val('').removeClass('chzn-done').chosen();
+                        sid = 0;
+                        mid = 0;
+                        lid = 0;
+                        jQuery('#states_chzn').remove();
+                        jQuery('#states').val('').removeClass('chzn-done').chosen();
+                        jQuery('#municipality_chzn').remove();
+                        jQuery('#municipality').val('').removeClass('chzn-done').chosen();
+                        jQuery('#locality_chzn').remove();
+                        jQuery('#locality').val('').removeClass('chzn-done').chosen();
+                   }
+                    else if(data == 0) {
+                        jQuery('.exists').fadeIn(1600);
+                    }
+                    else{
+                        jQuery('.msgerror').fadeIn(1600);
+                    }
+                    jQuery('body','html',window).animate(
+                                                        {scrollTop:0}, 
+                                                        1000);
+                }
+            }); 
+        } else {
+            jQuery('.msgerror').fadeIn(1600);
+            jQuery('body','html',window, document).animate({scrollTop:0},1000);
+        }
+    });
+
+///// Delete fields /////
+
+    function deleteFields() {
+        jQuery('#username').val('');
+        jQuery('#password').val('');
+        jQuery('#firstname').val('');
+		jQuery('#lastname').val('');
+		jQuery('#address').val('');
+		jQuery('#birthday').val('');
+		jQuery('#social_secure_number').val('');
+		jQuery('#salary').val('');
+		jQuery('#email').val('');
+		jQuery('#branch')
+            .find('option')
+            .first()
+            .attr('selected',true)
+            .trigger("liszt:updated");
+        jQuery('#states option')
+            .first()
+            .attr('selected',true)
+            .trigger("liszt:updated");
+        jQuery('#municipality')
+            .html('')
+            .prepend('<option value="">Selecccionar</option>')
+            .trigger("liszt:updated");
+        jQuery('#locality')
+            .html('')
+            .prepend('<option value="">Selecccionar</option>')
+            .trigger("liszt:updated");
+    }
+     
+///// Validate selects /////
+
+    function valbra(s) {
+    var bol;
+    if (s != 0) {
+        bol = true;
+        jQuery('#branch').siblings('div').removeClass('ellol');
+    } else if(s != null){
+        bol = false;
+        jQuery('#branch').siblings('div').addClass('ellol');
+    } else{
+        bol = false;
+        jQuery('#branch').siblings('div').addClass('ellol');
+    };
+    return bol
+    }  
+         
+</script>
+
+</body>
+</html>
+{{end}}

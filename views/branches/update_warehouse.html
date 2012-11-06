@@ -38,7 +38,7 @@
 
                     <div class="notibar exists" style="display:none;">
                     	<a class="close"></a>
-                    	<p>Este almacén existe, para editarlo vaya a la sección de ver proveedor. </p>
+                    	<p>Este almacén existe, para editarlo vaya a la sección de ver almacén. </p>
                     </div>
 
                     <div class="notibar msgsuccess" style="display:none;">
@@ -47,7 +47,13 @@
                     </div>		
             						
                     <form id="form_warehouse" class="stdform stdform2" method="post" action="">
-                    	
+                    	<p style="margin-top: 1px;">
+                            <label>Sucursal *</label>
+                            <span class="field">
+                                <select id="branches" name="branches" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="1">
+                                  </select>
+                            </span>
+                        </p>
 	                    <p>
 	                       	<label>Nombre</label>
 	                        <span class="field"><input type="text" name="name" id="name" class="smallinput"/></span>
@@ -115,14 +121,19 @@
 
     var state = jQuery('#states'),
         municipality = jQuery('#municipality'),
-        locality = jQuery('#locality');
+        locality = jQuery('#locality'),
+        sbranch = jQuery('#branches');
+        
     var s = '',
         m = '',
-        l = '';
+        l = '',
+        b = '';
+        
         
     var sid,
         mid,
-        lid;
+        lid,
+        bid;
 
 //////////// get info ////////////
     jQuery.ajax({
@@ -131,7 +142,8 @@
         type: "POST",
         dataType:"json",
         success:function(data){
-            //console.log(data);
+            bid = (data.branches['name'] == null) ? '': data.branches['name'];
+            selectB(bid);
             jQuery('#name').val(data.warehouses['name']);
             jQuery('#address').val(data.company_addresses['address']);
             jQuery('#suburb').val(data.company_addresses['suburb']);
@@ -213,6 +225,15 @@
         }
     });
 
+///// valid branches /////
+
+    sbranch.change( function() {
+        bid = jQuery(this).find(':selected').val();
+        if(bid != '') {
+            sbranch.siblings('div').removeClass('ellol');
+        }
+    });
+
 //////////// validate form ////////////
     jQuery("#form_warehouse").validate({
             rules: {
@@ -239,6 +260,7 @@
         valState(sid);
         valLoc(lid);
         valMun(mid);
+        valBra(bid);
         
         var sendid = '{{=request.vars.id}}';
         
@@ -246,11 +268,11 @@
         jQuery('.exists').hide();
         jQuery('.msgsuccess').hide();
 
-        if(jQuery("#form_warehouse").valid() && sid != null && mid != null && lid != null && valState(sid) && valLoc(lid) && valMun(mid)) {
-        console.log('in');
+        if(jQuery("#form_warehouse").valid() && sid != null && mid != null && lid != null && bid != null && valState(sid) && valLoc(lid) && valMun(mid) && valBra(bid)) {
              jQuery.ajax({
                 url: "{{=URL(c='branches_ajax', f='update_warehouse')}}",
                 data: { 
+                	branch_id:bid,
                 	name:jQuery('#name').val(),
                     address:jQuery('#address').val(),
                     suburb:jQuery('#suburb').val(),
@@ -266,7 +288,7 @@
                         jQuery('.msgsuccess').fadeIn(1600, function() {
                             jQuery('.msgsuccess').fadeOut('slow');
                         });
-                        sid, mid, lid = 0;
+                        sid, mid, lid, bid = 0;
                         id = '';
                         setTimeout('redirect()', 1600);
                     }
@@ -286,6 +308,30 @@
             jQuery('body','html',window, document).animate({scrollTop:0},1000);
         }
     });
+
+    function selectB(id) {
+        jQuery.ajax({
+            type: "POST",
+            url: "{{=URL(c='branches_ajax', f='get_branches')}}",
+            dataType: "json",
+            success: function(data) {
+                options = '';
+                for(key in data){
+                    val = data[key];
+                    options += '<option value="' + val.id + '">' + val.name + '</option>\n';
+                }
+                sbranch
+                    .html(options)
+                    .prepend('<option value="">Selecccionar</option>')
+                    .trigger("liszt:updated");
+                },
+            complete: function() {
+                sbranch
+                    .find('option[value='+id+']').attr('selected',true)
+                    .trigger("liszt:updated");
+            }
+        });
+    }
 
     function selectS(id) {
         jQuery.ajax({
@@ -389,6 +435,21 @@
     } else{
         bol = false;
         jQuery('#municipality').siblings('div').addClass('ellol');
+    };
+    return bol
+    }
+
+    function valBra(ss) {
+    var bol;
+    if (ss != 0) {
+        bol = true;
+        jQuery('#branches').siblings('div').removeClass('ellol');
+    } else if(ss != null){
+        bol = false;
+        jQuery('#branches').siblings('div').addClass('ellol');
+    } else{
+        bol = false;
+        jQuery('#branches').siblings('div').addClass('ellol');
     };
     return bol
     }
