@@ -73,7 +73,23 @@
 	                    <p style="margin-top: 1px;">
 	                        	<label>Dirección</label>
 	                            <span class="field"><input type="text" name="address" id="address" class="smallinput" tabindex="6"/></span>
-	                    </p>   
+	                    </p>  
+	                    
+	                    
+	                    <p style="margin-top: 1px;">
+	                        	<label>Código postal</label>
+	                            <span class="field"><input type="text" name="zip_code" id="zip_code" class="smallinput" tabindex="6" maxlength="5"/></span>
+	                    </p>
+	                    <p style="margin-top: 1px;">
+	                        	<label>Teléfono</label>
+	                            <span class="field"><input type="text" name="phone" id="phone" class="smallinput" tabindex="6" maxlength="10"/></span>
+	                    </p>
+	                    <p style="margin-top: 1px;">
+	                        	<label>Celular</label>
+	                            <span class="field"><input type="text" name="mobile" id="mobile" class="smallinput" tabindex="6" maxlength="10"/></span>
+	                    </p>
+	                    
+	                     
 	                    <p style="margin-top: 1px;">
                             <label>Estado</label>
                             <span class="field">
@@ -120,8 +136,8 @@
 	                    <p id="selectbranch" style="margin-top: 1px;">
                             <label>Sucursal *</label>
                             <span class="field">
-                                <select id="branch" name="branch" data-placeholder="Seleccionar" class="chzn-select" style="" tabindex="14">
-                                  </select>
+                                 <select id="branch" name="branch" data-placeholder="Seleccionar" class="chzn-select" style="" tabindex="14">
+                                 </select>
                             </span>
                         </p>
 	                                      
@@ -312,6 +328,9 @@ jQuery('#submit').live('click', function(e) {
                     firstname:jQuery('#firstname').val(),
                     lastname:jQuery('#lastname').val(),
                     address:jQuery('#address').val(),
+                    zip_code:jQuery('#zip_code').val(),
+                    phone:jQuery('#phone').val(),
+                    mobile:jQuery('#mobile').val(),
                     state: sid,
                     municipality: mid,
                     locality: lid,
@@ -369,6 +388,9 @@ jQuery('#submit').live('click', function(e) {
         jQuery('#firstname').val('');
 		jQuery('#lastname').val('');
 		jQuery('#address').val('');
+		jQuery('#zip_code').val();
+		jQuery('#phone').val();
+		jQuery('#mobile').val();
 		jQuery('#birthday').val('');
 		jQuery('#social_secure_number').val('');
 		jQuery('#salary').val('');

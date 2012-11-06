@@ -37,7 +37,7 @@
                         <p>
                         	
                             <span class="formwrapper" style="margin-left:0px;">
-                            	  <select id="vendors_select" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="2">
+                            	  <select id="users_select" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="1">
                                 </select>
                             </span>
                         </p>
@@ -58,36 +58,40 @@
               
               <table cellpadding="0" cellspacing="0" class="table invoice" style="margin-bottom:4px;">
                	  <tr>
-                   	  <td width="30%">Nombre:</td>
-                      <td width="70%"><strong id="name"></strong></td>
+                   	  <td width="30%">Nombre de usuario:</td>
+                      <td width="70%"><strong id="username"></strong></td>
                   </tr>
                	  <tr>
-               	    <td>Dirección:</td>
-               	    <td><strong id="address"></strong></td>
+               	    <td>Nombre(s):</td>
+               	    <td><strong id="firstname"></strong></td>
            	      </tr>
                   <tr>
-                	  <td>Estado:</td>
-                	  <td><strong id="state"></strong></td>
+                	  <td>Apellidos:</td>
+                	  <td><strong id="lastname"></strong></td>
               	  </tr>
               	  <tr>
-                	  <td>Municipio:</td>
-                	  <td><strong id="municipality"></strong></td>
+                	  <td>Fecha de nacimiento:</td>
+                	  <td><strong id="birthday"></strong></td>
               	  </tr>
               	  <tr>
-                	  <td>Población:</td>
-                	  <td><strong id="locality"></strong></td>
+                	  <td>NSS:</td>
+                	  <td><strong id="social_secure_number"></strong></td>
               	  </tr>
               	  <tr>
-                	  <td>Estado:</td>
-                	  <td><strong id="state"></strong></td>
+                	  <td>Sueldo:</td>
+                	  <td><strong id="salary"></strong></td>
               	  </tr>
               	  <tr>
-                	  <td>Municipio:</td>
-                	  <td><strong id="municipality"></strong></td>
+                	  <td>Correo Electrónico:</td>
+                	  <td><strong id="email"></strong></td>
               	  </tr>
               	  <tr>
-                	  <td>Población:</td>
-                	  <td><strong id="locality"></strong></td>
+                	  <td>Teléfono:</td>
+                	  <td><strong id="phone"></strong></td>
+              	  </tr>
+              	  <tr>
+                	  <td>Teléfono celular:</td>
+                	  <td><strong id="mobile"></strong></td>
               	  </tr>
               </table>     
             </div><!--one_half-->
@@ -113,8 +117,16 @@
                 	  <td><strong id="address"></strong></td>
               	  </tr>
               	  <tr>
+                	  <td>Código postal:</td>
+                	  <td><strong id="zip_code"></strong></td>
+              	  </tr>
+              	  <tr>
                 	  <td>Sucursal:</td>
                 	  <td><strong id="branch"></strong></td>
+              	  </tr>
+              	  <tr>
+                	  <td>Grupos:</td>
+                	  <td><strong id="group_id"></strong></td>
               	  </tr>
               	  <tr>
                    	  <td  width="30%">Estatus:</td>
@@ -139,7 +151,7 @@
   
     
 <script>
-var vendors_select = jQuery('#vendors_select'),
+var users_select = jQuery('#users_select'),
     id = 0;
 
 ////// get active vendors //////
@@ -152,16 +164,16 @@ val = jQuery('.formwrapper input[name=filtervendors]:checked').val();
 
 function ajaxFilter(who) {
     //console.log(which);
-    jQuery('#vendors_select_chzn').remove();
-    jQuery('#vendors_select').val('').removeClass('chzn-done').chosen();
+    jQuery('#users_select_chzn').remove();
+    jQuery('#users_select').val('').removeClass('chzn-done').chosen();
     cleanFields();
 
     jQuery.ajax({ 
-        url: "{{=URL(c='vendors_ajax', f='get_vendors')}}",
+        url: "{{=URL(c='user', f='get_users')}}",
         type: 'POST',
         data: { query: who },          
         success: function (data) {
-          jQuery('#vendors_select')
+          jQuery('#users_select')
             .html('')
             .append(data)
             .prepend('<option value="">Seleccionar</option>')
@@ -170,7 +182,7 @@ function ajaxFilter(who) {
     });
   }
 
-vendors_select.change( function() {
+users_select.change( function() {
   ////clean fields
   cleanFields();
   id = jQuery(this).find(':selected').val();
