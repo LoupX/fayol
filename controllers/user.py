@@ -128,9 +128,11 @@ def create_user():
     id = None
 
     pwd = request.vars.password
+    data['first_name'] = request.vars.first_name.decode('utf-8').upper()
+    data['last_name'] = request.vars.last_name.decode('utf-8').upper()
     data['password'] = db.auth_user.password.validate(pwd)[0]
     data['username'] = request.vars.username
-    data['address'] = request.vars.address
+    data['address'] = request.vars.address.decode('utf-8').upper()
     if request.vars.state_id:
         data['state_id'] = request.vars.state_id
     if request.vars.municipality_id:
