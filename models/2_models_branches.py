@@ -55,3 +55,8 @@ db.define_table('warehouses',
       default=auth.user.id if auth.user else 0),
     Field('modified_by', 'reference auth_user',
       update=auth.user.id if auth.user else 0), migrate=MIGRATE)
+
+db.define_table('user_to_branch',
+    Field('user_id', 'reference auth_user', default=0),
+    Field('branch_id', 'reference branches', default=0),
+    migrate=MIGRATE)

@@ -122,3 +122,66 @@ def check_user():
         else:
             return ''
 
+@auth.requires_login()
+def create_user():
+    data = dict()
+    id = None
+
+    pwd = request.vars.password
+    data['password'] = db.auth_user.password.validate(pwd)[0]
+    data['username'] = request.vars.username
+    data['address'] = request.vars.address
+    if request.vars.state_id:
+        data['state_id'] = request.vars.state_id
+    if request.vars.municipality_id:
+        data['municipality_id'] = request.vars.municipality_id
+    if request.vars.locality_id:
+        data['locality_id'] = request.vars.locality_id
+    data['birthday'] = request.vars.birthday
+    data['social_secure_number'] = request.vars.social_secure_number
+    data['salary'] = request.vars.salary
+    data['zip_code'] = request.vars.zip_code
+    data['phone'] = request.vars.phone
+    data['mobile'] = request.vars.mobile
+
+    try:
+        id = db.auth_user.insert(**data)
+    except:
+        db.rollback()
+        return ''
+    else:
+        db.commit()
+        return id
+
+@auth.requires_login()
+def update_user():
+    data = dict()
+    id = request.vars.id
+
+    pwd = request.vars.password
+    data['password'] = db.auth_user.password.validate(pwd)[0]
+    data['username'] = request.vars.username
+    data['address'] = request.vars.address
+    if request.vars.state_id:
+        data['state_id'] = request.vars.state_id
+    if request.vars.municipality_id:
+        data['municipality_id'] = request.vars.municipality_id
+    if request.vars.locality_id:
+        data['locality_id'] = request.vars.locality_id
+    data['birthday'] = request.vars.birthday
+    data['social_secure_number'] = request.vars.social_secure_number
+    data['salary'] = request.vars.salary
+    data['zip_code'] = request.vars.zip_code
+    data['phone'] = request.vars.phone
+    data['mobile'] = request.vars.mobile
+
+@auth.requires_login()
+def get_groups():
+    data = dict()
+    try:
+        data = db(db.auth_group).select().as_list()
+    except:
+        db.rollback()
+    from gluon.contrib import simplejson
+    data = simplejson.dumps(data)
+    return str(data)
