@@ -16,6 +16,7 @@
 'Group %(group_id)s created': 'Group %(group_id)s created',
 'Group ID': 'Group ID',
 'Group uniquely assigned to user %(id)s': 'Group uniquely assigned to user %(id)s',
+'Insufficient privileges': 'Insufficient privileges',
 'Invalid captcha': 'Invalid captcha',
 'Invalid credentials': 'Invalid credentials',
 'Invalid email': 'Invalid email',
