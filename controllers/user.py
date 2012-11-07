@@ -182,6 +182,7 @@ def update_user():
     data['first_name'] = request.vars.first_name.decode('utf-8').upper()
     data['last_name'] = request.vars.last_name.decode('utf-8').upper()
     data['username'] = request.vars.username
+    data['email'] = request.vars.email
     data['address'] = request.vars.address.decode('utf-8').upper()
     if request.vars.state_id:
         data['state_id'] = request.vars.state_id
