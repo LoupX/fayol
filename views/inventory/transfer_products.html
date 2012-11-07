@@ -7,10 +7,11 @@
 <script type="text/javascript" src="{{=URL('static', 'js/custom/dualselector.js')}}"></script>
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/chosen.jquery.min.js')}}"></script>
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/scroll.js')}}"></script>    
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.alerts.js')}}"></script>
 {{end}}
 
 {{block sidebar_menu}}
-{{include 'packages/sidebar.html'}}
+{{include 'inventory/sidebar.html'}}
 {{end}}
 
 {{block content}}
@@ -18,11 +19,15 @@
 
     <div class="pageheader">
         
-            <h1 class="pagetitle">Nuevo Paquete: Paso 2 de 2</h1>
+            <h1 class="pagetitle">Traspasos: Paso 2 de 2</h1>
             
         </div><!--pageheader-->
         
     <div id="contentwrapper" class="contentwrapper">
+
+                    <div class="notibar msgalert">
+                        <p>Verifique los datos antes de guardar, posteriormente no se podran editar.</p>
+                    </div>
 
                     <div class="notibar msgerror" style="display:none;">
                         <a class="close"></a>
@@ -41,7 +46,7 @@
                     </div>
 
         <div class="contenttitle2">
-            <h3>Agregar productos al paquete.</h3>
+            <h3>Seleccionar productos.</h3>
         </div><!--contenttitle-->
 
         <table cellpadding="0" cellspacing="0" border="0" class="stdtable" id="table">
@@ -75,7 +80,7 @@
         <br>
 
         <div class="contenttitle2">
-            <h3>Productos agregados.</h3>
+            <h3>Productos a transferir.</h3>
         </div><!--contenttitle-->
 
         <table cellpadding="0" cellspacing="0" border="0" class="stdtable" id="newtable" width="50%" >

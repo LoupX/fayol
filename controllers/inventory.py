@@ -17,9 +17,21 @@ def discounts():
     title = 'Salidas'
     current = ['menu_inventory', 'sidebar_discounts']
     return dict(title=title, current=current)
+
+@auth.requires_login()
+def view_transfer():
+    title = 'Traspasos'
+    current = ['menu_inventory', 'sidebar_tranfers']
+    return dict(title=title, current=current)
     
 @auth.requires_login()
 def tranfers():
+    title = 'Traspasos'
+    current = ['menu_inventory', 'sidebar_tranfers']
+    return dict(title=title, current=current)
+
+@auth.requires_login()
+def transfer_products():
     title = 'Traspasos'
     current = ['menu_inventory', 'sidebar_tranfers']
     return dict(title=title, current=current)
