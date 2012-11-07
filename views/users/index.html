@@ -257,22 +257,26 @@ users_select.change( function() {
 });
 
 function cleanFields() {
-  jQuery('#eu').removeAttr('href');
+    jQuery('#eu').removeAttr('href');
   
-  var name = jQuery('#name'),
-      address = jQuery('#address'),
-      state = jQuery('#state'),
-      municipality = jQuery('#municipality'),
-      locality = jQuery('#locality'),
-      zip_code = jQuery('#zip_code'),
-      rfc = jQuery('#rfc'),
-      website = jQuery('#website'),
-      bank = jQuery('#bank'),
-      branch_number = jQuery('#branch_number'),
-      account_number = jQuery('#account_number'),
-      clabe = jQuery('#clabe'),
-      status = jQuery('input[name=status]'),
-      resp = jQuery('span#resp');
+    var username = jQuery('#username'),
+	    first_name = jQuery('#first_name'),
+	    last_name = jQuery('#last_name'),
+	    birthday = jQuery('#birthday'),
+	    social_secure_number = jQuery('#social_secure_number'),
+	    salary = jQuery('#salary'),
+	    phone = jQuery('#phone'),
+	    email = jQuery('#email'),
+	    mobile = jQuery('#mobile'),
+	    state = jQuery('#state'),
+	    municipality = jQuery('#municipality'),
+	    locality = jQuery('#locality'),
+	    zip_code = jQuery('#zip_code'),
+	    address = jQuery('#address'),
+	    branch = jQuery('#branch'),
+	    group_id = jQuery('#group_id'),
+	    status = jQuery('input[name=status]'),
+	    resp = jQuery('span#resp');
 
       status.val('').attr('disabled',true);
       status
@@ -282,8 +286,8 @@ function cleanFields() {
             .addClass('disabled');
       resp.html('');
 
-  var elements = [name, address, state, municipality, locality, zip_code, 
-                  rfc, website, bank, branch_number, account_number, clabe];
+  var elements = [username, last_name, last_name, birthday, social_secure_number, salary, phone, email, mobile, state, municipality, locality, zip_code, 
+                  address, branch, group_id];
 
   for(var e in elements) {
     elements[e].html('');
