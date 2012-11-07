@@ -361,7 +361,7 @@ jQuery('#submit').live('click', function(e) {
              jQuery.ajax({
                 url: "{{=URL(c='user', f='update_user')}}",
                 data: { 
-                	id:id,
+                	id:{{=request.vars.id}},
                     username:jQuery('#username').val(),
                     password:jQuery('#password').val() ? (jQuery('#password').val()) : '',
                     first_name:jQuery('#first_name').val(),
