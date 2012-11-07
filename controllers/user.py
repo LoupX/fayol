@@ -182,7 +182,6 @@ def update_user():
     data['first_name'] = request.vars.first_name.decode('utf-8').upper()
     data['last_name'] = request.vars.last_name.decode('utf-8').upper()
     data['username'] = request.vars.username
-    data['username'] = request.vars.username
     data['address'] = request.vars.address.decode('utf-8').upper()
     if request.vars.state_id:
         data['state_id'] = request.vars.state_id
@@ -199,10 +198,15 @@ def update_user():
     if not request.vars['group_id[]'] or not request.vars.branch_id:
         return ''
     try:
-        row = db(db.auth_user.username==data['username']).select()
-        if row:
-            return ''
-    except:
+        user = db(db.auth_user.id==id).select(db.auth_user.username).first()
+        user = user.username
+        if user != request.vars.username:
+            row = db(db.auth_user.username==data['username']).select()
+            if row:
+                return ''
+            else:
+                data['username'] = request.vars.username
+    except Exception as e:
         db.rollback()
         return ''
 
