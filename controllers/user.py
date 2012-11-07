@@ -201,10 +201,43 @@ def get_groups():
     data = dict()
     try:
         data = db(db.auth_group).select().as_list()
+        if data:
+            del data[0]
     except:
         db.rollback()
     from gluon.contrib import simplejson
     data = simplejson.dumps(data)
+    return str(data)
+
+@auth.requires_login()
+def get_user_information():
+    id = request.vars.id
+    data = dict()
+    try:
+        query = db.auth_user.id==id
+        query &= db.auth_user.id==db.auth_membership.user_id
+        query &= db.auth_membership.group_id==db.auth_group.id
+        data = db(query).select().as_list()
+    except:
+        db.rollback()
+    from gluon.contrib import simplejson
+    dthandler = lambda obj: obj.isoformat() if isinstance(obj,
+        datetime.datetime) else None
+    data = simplejson.dumps(data, default=dthandler)
+    return str(data)
+
+@auth.requires_login()
+def get_users():
+    data = dict()
+    try:
+        db(db.auth_user).select().as_list()
+    except:
+        db.rollback()
+    from gluon.contrib import simplejson
+
+    dthandler = lambda obj: obj.isoformat() if isinstance(obj,
+        datetime.datetime) else None
+    data = simplejson.dumps(data, default=dthandler)
     return str(data)
 
 @auth.requires_login()

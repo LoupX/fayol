@@ -25,7 +25,7 @@ auth.settings.login_after_registration = False
 if db(db.auth_user).isempty():
     god_group_id = auth.add_group('GOD', 'Administrador del sistema')
     auth.add_group('Administrador', 'Administrador local')
-    auth.add_group('Geremte', 'Gerente de sucursal')
+    auth.add_group('Gerente', 'Gerente de sucursal')
     auth.add_group('Vendedor de mostrador', 'Vendedor de mostrador'),
     auth.add_group('Almacenista', 'Encargado de almacen')
     auth.add_group('Cajero', '')
