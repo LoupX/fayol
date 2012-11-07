@@ -145,11 +145,13 @@ def create_user():
     data['zip_code'] = request.vars.zip_code
     data['phone'] = request.vars.phone
     data['mobile'] = request.vars.mobile
-    if not request.vars['group_id[]']:
+    if not request.vars['group_id[]'] or not request.vars.branch_id:
         return ''
     try:
         id = db.auth_user.insert(**data)
         if id:
+            db.user_to_branch.insert(user_id=id,
+                branch_id=request.vars.branch_id)
             for group_id in request.vars['group_id[]']:
                 auth.add_membership(group_id, id)
     except:
@@ -216,17 +218,36 @@ def get_groups():
 @auth.requires_login()
 def get_user_information():
     id = request.vars.id
-    data = dict()
+    data = []
     try:
         query = db.auth_user.id==id
-        query &= db.auth_user.id==db.auth_membership.user_id
+        left = []
+        left.append(db.states.on(db.auth_user.state_id==db.states.id))
+        left.append(db.municipalities.on(
+            db.auth_user.municipality_id==db.municipalities.id))
+        left.append(
+            db.localities.on(db.auth_user.locality_id==db.localities.id))
+        data = db(query).select(db.auth_user.ALL,
+            db.states.name, db.states.id, db.municipalities.name,
+            db.municipalities.id, db.localities.name,
+            db.localities.id, left=left).as_list()
+        query = db.auth_membership.user_id==id
         query &= db.auth_membership.group_id==db.auth_group.id
-        data = db(query).select().as_list()
-    except:
+        data_group = db(query).select().as_list()
+        query = db.user_to_branch.user_id==id
+        query &= db.branches.id==db.user_to_branch.branch_id
+        data_branch = db(query).select(db.branches.id,
+            db.branches.name).as_list()
+        if data_group:
+            data.append(data_group)
+        if data_branch:
+            data.append(data_branch)
+    except Exception as e:
         db.rollback()
+        return str(e)
     from gluon.contrib import simplejson
     import datetime
-    if data:
+    if data[0]['auth_user']:
         b = data[0]['auth_user']['birthday']
         data[0]['auth_user']['birthday'] = str(b) if b else None
     data = simplejson.dumps(data)
