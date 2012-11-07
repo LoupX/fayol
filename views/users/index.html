@@ -167,18 +167,22 @@ function ajaxFilter(who) {
     jQuery('#users_select_chzn').remove();
     jQuery('#users_select').val('').removeClass('chzn-done').chosen();
     cleanFields();
-
-    jQuery.ajax({ 
+    
+    jQuery.ajax({
+        type: "POST",
         url: "{{=URL(c='user', f='get_users')}}",
-        type: 'POST',
-        data: { query: who },          
-        success: function (data) {
-          jQuery('#users_select')
-            .html('')
-            .append(data)
-            .prepend('<option value="">Seleccionar</option>')
-            .trigger("liszt:updated");
-          }
+        dataType: "json",
+        data: {query: who},
+        success: function(results) {
+        	options = "";
+        	for(k in results){
+	        	options += "<option value=\"" + results[k].id + "\">" + results[k].first_name +" "+ results[k].last_name + "</option>";
+	        }
+            jQuery('#users_select')	
+                .html(options)
+                .prepend('<option value="">Selecccionar</option>')
+                .trigger("liszt:updated");
+            }
     });
   }
 
@@ -217,26 +221,28 @@ users_select.change( function() {
       dataType:"json",
       success: function (data) {
         //receive something like data = {"name":"name","state":"state"}
-        username.html(data.vendors['username']);
-        first_name.html(data.vendors['first_name']);
-        last_name.html(data.vendors['last_name']);
-        birthday.html(data.vendors['birthday']);
-        social_secure_number.html(data.banks['social_secure_number']);
-        salary.html(data.vendors['salary']);
-        phone.html(data.vendors['phone']);
-        email.html(data.vendors['email']);
-        mobile.html(data.vendors['mobile']);        
-        state.html(data.states['name']);
-        municipality.html(data.municipalities['name']);
-        locality.html(data.localities['name']);
-        zip_code.html(data.vendors['zip_code']);
-        address.html(data.vendors['address']);
-        branch.html(data.vendors['branch']);
-        group_id.html(data.vendors['group_id']);
+        console.log(data.auth_group);
+        /*username.html(data.auth_user['username']);
+        first_name.html(data.auth_user['first_name']);
+        last_name.html(data.auth_user['last_name']);
+        birthday.html(data.auth_user['birthday']);
+        social_secure_number.html(data.auth_user['social_secure_number']);
+        salary.html(data.auth_user['salary']);
+        phone.html(data.auth_user['phone']);
+        email.html(data.auth_user['email']);
+        mobile.html(data.auth_user['mobile']);        
+        state.html(data.auth_user['name']);
+        municipality.html(data.auth_user['name']);
+        locality.html(data.auth_user['name']);
+        zip_code.html(data.auth_user['zip_code']);
+        address.html(data.auth_user['address']);
+        branch.html(data.auth_user['branch']);
+        group_id.html(data.auth_membership['group_id']);
 
         jQuery('#eu')
-        .attr('href', "{{=URL(c='users', f='update_user')}}"+'?id='+data.users.id);
+        .attr('href', "{{=URL(c='users', f='update_user')}}"+'?id='+data.users.id);/*
        
+        /*
         status.val(id).removeAttr('disabled');
         status.parent().parent().removeClass('disabled'); 
 
@@ -249,6 +255,7 @@ users_select.change( function() {
           status.attr('onclick','chk('+id+',"False")');
           resp.html('Desactivado.');
         };
+        */
         
       }
     });     
