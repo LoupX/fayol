@@ -145,15 +145,19 @@ def create_user():
     data['zip_code'] = request.vars.zip_code
     data['phone'] = request.vars.phone
     data['mobile'] = request.vars.mobile
-
+    if not request.vars['group_id[]']:
+        return ''
     try:
         id = db.auth_user.insert(**data)
+        if id:
+            for group_id in request.vars['group_id[]']:
+                auth.add_membership(group_id, id)
     except:
         db.rollback()
         return ''
     else:
         db.commit()
-        return id
+        return str(id)
 
 @auth.requires_login()
 def update_user():
@@ -221,23 +225,23 @@ def get_user_information():
     except:
         db.rollback()
     from gluon.contrib import simplejson
-    dthandler = lambda obj: obj.isoformat() if isinstance(obj,
-        datetime.datetime) else None
-    data = simplejson.dumps(data, default=dthandler)
+    import datetime
+    if data:
+        b = data[0]['auth_user']['birthday']
+        data[0]['auth_user']['birthday'] = str(b) if b else None
+    data = simplejson.dumps(data)
     return str(data)
 
 @auth.requires_login()
 def get_users():
     data = dict()
     try:
-        query = db.auth_user>0
-        data = db(query).select().as_list()
+        data = db(db.auth_user).select(db.auth_user.id,
+            db.auth_user.first_name, db.auth_user.last_name).as_list()
     except:
         db.rollback()
     from gluon.contrib import simplejson
-    dthandler = lambda obj: obj.isoformat() if isinstance(obj,
-        datetime.datetime) else None
-    data = simplejson.dumps(data, default=dthandler)
+    data = simplejson.dumps(data)
     return str(data)
 
 @auth.requires_login()
