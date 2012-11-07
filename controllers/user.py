@@ -122,7 +122,7 @@ def check_user():
         else:
             return ''
 
-@auth.requires_login()
+@auth.requires_membership('GOD')
 def create_user():
     data = dict()
     id = None
@@ -161,15 +161,18 @@ def create_user():
         db.commit()
         return str(id)
 
-@auth.requires_login()
+@auth.requires_membership('GOD')
 def update_user():
     data = dict()
     id = request.vars.id
 
-    pwd = request.vars.password
-    data['password'] = db.auth_user.password.validate(pwd)[0]
+    if request.vars.password:
+        pwd = request.vars.password
+        data['password'] = db.auth_user.password.validate(pwd)[0]
+    data['first_name'] = request.vars.first_name.decode('utf-8').upper()
+    data['last_name'] = request.vars.last_name.decode('utf-8').upper()
     data['username'] = request.vars.username
-    data['address'] = request.vars.address
+    data['address'] = request.vars.address.decode('utf-8').upper()
     if request.vars.state_id:
         data['state_id'] = request.vars.state_id
     if request.vars.municipality_id:
@@ -182,8 +185,19 @@ def update_user():
     data['zip_code'] = request.vars.zip_code
     data['phone'] = request.vars.phone
     data['mobile'] = request.vars.mobile
+    if not request.vars['group_id[]'] or not request.vars.branch_id:
+        return ''
+
     try:
         result = db(db.auth_user.id==id).update(**data)
+        if result == 1:
+            db(db.user_to_branch.user_id==id).delete()
+            db(db.auth_membership.user_id==id).delete()
+            db.user_to_branch.insert(user_id=id,
+                branch_id=request.vars.branch_id)
+            for group_id in request.vars['group_id[]']:
+                auth.add_membership(group_id, id)
+
     except SyntaxError as e:
         db.rollback()
         if 'duplicate field' in e:
@@ -202,7 +216,7 @@ def update_user():
             return ''
 
 
-@auth.requires_login()
+@auth.requires_membership('GOD')
 def get_groups():
     data = dict()
     try:
@@ -215,7 +229,7 @@ def get_groups():
     data = simplejson.dumps(data)
     return str(data)
 
-@auth.requires_login()
+@auth.requires_membership('GOD')
 def get_user_information():
     id = request.vars.id
     data = []
@@ -253,7 +267,7 @@ def get_user_information():
     data = simplejson.dumps(data)
     return str(data)
 
-@auth.requires_login()
+@auth.requires_membership('GOD')
 def get_users():
     data = dict()
     try:
