@@ -245,6 +245,8 @@ def get_user_information():
             db.states.name, db.states.id, db.municipalities.name,
             db.municipalities.id, db.localities.name,
             db.localities.id, left=left).as_list()
+        if data:
+            data = data[0]
         query = db.auth_membership.user_id==id
         query &= db.auth_membership.group_id==db.auth_group.id
         data_group = db(query).select().as_list()
@@ -253,17 +255,17 @@ def get_user_information():
         data_branch = db(query).select(db.branches.id,
             db.branches.name).as_list()
         if data_group:
-            data.append(data_group)
+            data['groups'] = data_group
         if data_branch:
-            data.append(data_branch)
+            data['branch'] = data_branch
     except Exception as e:
         db.rollback()
         return str(e)
     from gluon.contrib import simplejson
     import datetime
-    if data[0]['auth_user']:
-        b = data[0]['auth_user']['birthday']
-        data[0]['auth_user']['birthday'] = str(b) if b else None
+    if data:
+        b = data['auth_user']['birthday']
+        data['auth_user']['birthday'] = str(b) if b else None
     data = simplejson.dumps(data)
     return str(data)
 
