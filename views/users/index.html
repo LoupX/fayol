@@ -238,9 +238,9 @@ users_select.change( function() {
         address.html(data.auth_user['address']);
         branch.html(data.auth_user['branch']);
         group_id.html(data.auth_membership['group_id']);
-
+        */
         jQuery('#eu')
-        .attr('href', "{{=URL(c='users', f='update_user')}}"+'?id='+data.users.id);/*
+        .attr('href', "{{=URL(c='users', f='update_user')}}"+'?id='+id);
        
         /*
         status.val(id).removeAttr('disabled');
