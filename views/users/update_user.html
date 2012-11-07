@@ -289,6 +289,50 @@
         }
     });
 
+//////////// get info ////////////
+
+    jQuery.ajax({
+        url: "{{=URL(c='user', f='get_user_information')}}",
+        data: { id: {{=request.vars.id}} },
+        type: "POST",
+        dataType:"json",
+        success:function(data){
+            jQuery('#username').val(data.auth_user['username']);
+            jQuery('#first_name').val(data.auth_user['first_name']);
+            jQuery('#last_name').val(data.auth_user['last_name']);
+            jQuery('#birthday').val(data.auth_user['birthday']);
+            jQuery('#social_secure_number').val(data.auth_user['social_secure_number']);
+            jQuery('#salary').val(data.auth_user['salary']);
+            jQuery('#phone').val(data.auth_user['phone']);
+            jQuery('#mobile').val(data.auth_user['mobile']);
+            jQuery('#email').val(data.auth_user['email']);
+            jQuery('#states').val(data.states['name']);
+            jQuery('#municipality').val(data.municipalities['name']);
+            jQuery('#locality').val(data.localities['name']);
+            jQuery('#zip_code').val(data.auth_user['zip_code']);
+            jQuery('#address').val(data.auth_user['address']);
+            
+
+        branch.html(data.branch['name']);
+            
+            jQuery('#alternative_name').val(data.product_descriptions['alternative_name']);
+            jQuery('#alternative_code').val(data.products['alternative_code']);
+            jQuery('#model').val(data.products['model']);
+            jQuery('#part_number').val(data.products['part_number']);
+            jQuery('#serial_number').val(data.products['serial_number']);
+            jQuery('#standard_cost').val(data.products['standard_cost']);
+            jQuery('#markup').val(data.products['markup']);
+            jQuery('#description').val(data.product_descriptions['description']);
+            bid = (data.brand_descriptions['brand_id'] == null) ? '': data.brand_descriptions['brand_id'];
+            uid = (data.units['id'] == null) ? '': data.units['id'];
+            cid = (data.category_descriptions['category_id'] == null) ? '': data.category_descriptions['category_id'];
+            selectBrands(bid);
+            selectUnit(uid);
+            selectCategory(cid);
+            selectVendor(data.vendors);
+        },
+    });
+
         
 //////////// validate form ////////
 
