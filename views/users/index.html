@@ -136,7 +136,7 @@
                       </td>
                   </tr>
               </table>
-              <a href="#" id="ev" data-id="">
+              <a href="#" id="eu" data-id="">
                 <span class="stdbtn btn_orange" style="float:right; margin-top:-4px;">Editar</span>
               </a>
             </div><!--one_half-->
@@ -188,18 +188,22 @@ users_select.change( function() {
   id = jQuery(this).find(':selected').val();
 
   if(id != '') {
-    var name = jQuery('#name'),
-        address = jQuery('#address'),
+    var username = jQuery('#username'),
+        first_name = jQuery('#first_name'),
+        last_name = jQuery('#last_name'),
+        birthday = jQuery('#birthday'),
+        social_secure_number = jQuery('#social_secure_number'),
+        salary = jQuery('#salary'),
+        phone = jQuery('#phone'),
+        email = jQuery('#email'),
+        mobile = jQuery('#mobile'),
         state = jQuery('#state'),
         municipality = jQuery('#municipality'),
         locality = jQuery('#locality'),
         zip_code = jQuery('#zip_code'),
-        rfc = jQuery('#rfc'),
-        website = jQuery('#website'),
-        bank = jQuery('#bank'),
-        branch_number = jQuery('#branch_number'),
-        account_number = jQuery('#account_number'),
-        clabe = jQuery('#clabe'),
+        address = jQuery('#address'),
+        branch = jQuery('#branch'),
+        group_id = jQuery('#group_id'),
         status = jQuery('input[name=status]'),
         resp = jQuery('span#resp');
         resp.html('');
@@ -207,31 +211,32 @@ users_select.change( function() {
     //console.log(id);
     //insert here an ajax function and shit
     jQuery.ajax({ 
-      url: "{{=URL(c='vendors_ajax', f='get_vendor_information')}}",
+      url: "{{=URL(c='user', f='get_user_information')}}",
       type: "POST",
       data: { id: id }, 
       dataType:"json",
       success: function (data) {
-        //console.log(data);
         //receive something like data = {"name":"name","state":"state"}
-        name.html(data.vendors['name']);
-        address.html(data.vendors['address']);
+        username.html(data.vendors['username']);
+        first_name.html(data.vendors['first_name']);
+        last_name.html(data.vendors['last_name']);
+        birthday.html(data.vendors['birthday']);
+        social_secure_number.html(data.banks['social_secure_number']);
+        salary.html(data.vendors['salary']);
+        phone.html(data.vendors['phone']);
+        email.html(data.vendors['email']);
+        mobile.html(data.vendors['mobile']);        
         state.html(data.states['name']);
         municipality.html(data.municipalities['name']);
         locality.html(data.localities['name']);
         zip_code.html(data.vendors['zip_code']);
-        rfc.html(data.vendors['rfc']);
-        website.html(data.vendors['website']);
-        bank.html(data.banks['short_name']);
-        branch_number.html(data.vendors['branch']);
-        account_number.html(data.vendors['bank_account_number']);
-        clabe.html(data.vendors['clabe']);
+        address.html(data.vendors['address']);
+        branch.html(data.vendors['branch']);
+        group_id.html(data.vendors['group_id']);
 
-        jQuery('#ev')
-        .attr('href', "{{=URL(c='vendors', f='update')}}"+'?id='+data.vendors.id);
-        jQuery('#ep')
-        .attr('href', "{{=URL(c='vendors', f='updatep')}}"+'?id='+data.vendors.id);
-
+        jQuery('#eu')
+        .attr('href', "{{=URL(c='users', f='update_user')}}"+'?id='+data.users.id);
+       
         status.val(id).removeAttr('disabled');
         status.parent().parent().removeClass('disabled'); 
 
@@ -252,8 +257,7 @@ users_select.change( function() {
 });
 
 function cleanFields() {
-  jQuery('#ev').removeAttr('href');
-  jQuery('#ep').removeAttr('href');
+  jQuery('#eu').removeAttr('href');
   
   var name = jQuery('#name'),
       address = jQuery('#address'),

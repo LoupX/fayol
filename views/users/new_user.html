@@ -166,6 +166,7 @@
 	jQuery(".chzn-select").chosen();
         
     var bid = '';
+    var gid = '';
     var branch = jQuery('#branch');  
     var state = jQuery('#states'),
         municipality = jQuery('#municipality'),
@@ -210,7 +211,14 @@
                 .html(options)
                 .trigger("liszt:updated");
             }
-    });    
+    });  
+    groups.change( function() {
+        gid = jQuery(this).find(':selected').val();
+        if(gid != '') {
+	        groups.siblings('div').removeClass('ellol');
+        }
+    });
+  
        
 ///// get states /////    
     
@@ -310,6 +318,7 @@
 jQuery('#submit').live('click', function(e) {
         e.preventDefault();
         valbra(bid);
+        valGru(gid);
         var sid = jQuery('#states').val(),
             mid = (jQuery('#municipality').val() == null) ? '': jQuery('#municipality').val(),
             lid = (jQuery('#locality').val() == null) ? '': jQuery('#locality').val();
@@ -318,7 +327,7 @@ jQuery('#submit').live('click', function(e) {
         jQuery('.exists').hide();
         jQuery('.msgsuccess').hide();
 
-        if(jQuery("#form_users").valid() && valbra(bid)) {
+        if(jQuery("#form_users").valid() && valbra(bid) && valGru(gid)) {
 
              jQuery.ajax({
                 url: "{{=URL(c='user', f='create_user')}}",
@@ -427,6 +436,21 @@ jQuery('#submit').live('click', function(e) {
     } else{
         bol = false;
         jQuery('#branch').siblings('div').addClass('ellol');
+    };
+    return bol
+    }
+    
+    function valGru(s) {
+    var bol;
+    if (s != 0) {
+        bol = true;
+        jQuery('#group_id').siblings('div').removeClass('ellol');
+    } else if(s != null){
+        bol = false;
+        jQuery('#group_id').siblings('div').addClass('ellol');
+    } else{
+        bol = false;
+        jQuery('#group_id').siblings('div').addClass('ellol');
     };
     return bol
     }  
