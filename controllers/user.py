@@ -204,12 +204,12 @@ def update_user():
         if user != request.vars.username:
             row = db(db.auth_user.username==data['username']).select()
             if row:
-                return 'mismo usuario'
+                return ''
             else:
                 data['username'] = request.vars.username
     except Exception as e:
         db.rollback()
-        return str(e)
+        return ''
 
     try:
         result = db(db.auth_user.id==id).update(**data)
