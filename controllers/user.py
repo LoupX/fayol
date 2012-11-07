@@ -148,6 +148,15 @@ def create_user():
     data['mobile'] = request.vars.mobile
     if not request.vars['group_id[]'] or not request.vars.branch_id:
         return ''
+
+    try:
+        row = db(db.auth_user.username==data['username']).select()
+        if row:
+            return ''
+    except:
+        db.rollback()
+        return ''
+
     try:
         id = db.auth_user.insert(**data)
         if id:
@@ -188,6 +197,13 @@ def update_user():
     data['phone'] = request.vars.phone
     data['mobile'] = request.vars.mobile
     if not request.vars['group_id[]'] or not request.vars.branch_id:
+        return ''
+    try:
+        row = db(db.auth_user.username==data['username']).select()
+        if row:
+            return ''
+    except:
+        db.rollback()
         return ''
 
     try:
