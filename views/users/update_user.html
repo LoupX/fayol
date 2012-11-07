@@ -55,11 +55,11 @@
 	                            <span class="field"><input type="text" name="username" id="username" class="smallinput" tabindex="1"/></span>
 	                    </p>
 	                    <p style="margin-top: 1px;">
-	                        	<label>Contraseña *</label>
+	                        	<label>Contraseña</label>
 	                            <span class="field"><input type="password" type="text" name="password" id="password" class="smallinput" tabindex="2"/></span>
 	                    </p>
 	                    <p style="margin-top: 1px;">
-	                        	<label>Confirmar Contraseña *</label>
+	                        	<label>Confirmar Contraseña</label>
 	                            <span class="field"><input type="password" type="text" name="confirm_password" id="confirm_password" class="smallinput" tabindex="3"/></span>
 	                    </p>     
 	                    <p style="margin-top: 1px;">
@@ -120,7 +120,7 @@
 	                            <span class="field"><input type="text" name="social_secure_number" id="social_secure_number" class="smallinput" maxlength="11" tabindex="8"/></span>
 	                    </p>
 	                    <p style="margin-top:1px;">
-	                        	<label>Grupos</label>
+	                        	<label>Grupos *</label>
 	                            <span class="field">
                             	<select name="group_id" id="group_id" multiple="multiple" size="10" data-placeholder="Seleccionar" class="chzn-select" tabindex="10"></select>
                                 </span>
@@ -144,11 +144,9 @@
                         <p class="stdformbutton">
                         	<button id="submit" class="submit radius2" tabindex="7">Guardar</button>
                         </p>
-                        
-                        
+                             
                     </form>
                    
-
             </div><!--subcontent-->     
         
         </div><!--contentwrapper-->
@@ -158,7 +156,6 @@
 	</div><!-- centercontent -->
         
 </div><!--bodywrapper-->
-
 
 <script>
 
@@ -306,30 +303,18 @@
             jQuery('#phone').val(data.auth_user['phone']);
             jQuery('#mobile').val(data.auth_user['mobile']);
             jQuery('#email').val(data.auth_user['email']);
-            jQuery('#states').val(data.states['name']);
-            jQuery('#municipality').val(data.municipalities['name']);
-            jQuery('#locality').val(data.localities['name']);
             jQuery('#zip_code').val(data.auth_user['zip_code']);
             jQuery('#address').val(data.auth_user['address']);
-            
-
-        branch.html(data.branch['name']);
-            
-            jQuery('#alternative_name').val(data.product_descriptions['alternative_name']);
-            jQuery('#alternative_code').val(data.products['alternative_code']);
-            jQuery('#model').val(data.products['model']);
-            jQuery('#part_number').val(data.products['part_number']);
-            jQuery('#serial_number').val(data.products['serial_number']);
-            jQuery('#standard_cost').val(data.products['standard_cost']);
-            jQuery('#markup').val(data.products['markup']);
-            jQuery('#description').val(data.product_descriptions['description']);
-            bid = (data.brand_descriptions['brand_id'] == null) ? '': data.brand_descriptions['brand_id'];
-            uid = (data.units['id'] == null) ? '': data.units['id'];
-            cid = (data.category_descriptions['category_id'] == null) ? '': data.category_descriptions['category_id'];
-            selectBrands(bid);
-            selectUnit(uid);
-            selectCategory(cid);
-            selectVendor(data.vendors);
+            gid = data.groups;
+            bid = data.branch['id'];
+            s = data.auth_user['state_id'];
+            m = data.auth_user['municipality_id'];
+            l = data.auth_user['locality_id'];
+            selectS(s);
+            selectM(s, m);
+            selectL(m, l);
+            selectBra(bid); 
+            selectGru(data.groups);
         },
     });
 
@@ -339,8 +324,8 @@
     jQuery("#form_users").validate({
         rules: {
             username: "required",
-            'password': { required:true, minlength: 8, },
-            'confirm_password': { required: '#password', minlength: 8, equalTo: "#password" },
+            'password': { required: false, minlength: 8, },
+            'confirm_password': { minlength: 8, equalTo: "#password" },
             first_name: "required",
             last_name: "required",
             'email': { required:true, email: true },
@@ -348,8 +333,8 @@
         },
         messages: {
             username: "Ingrese un nombre de usuario.",
-            'password': { required: 'Debe ingresar una contraseña', minlength: 'La contraseña debe tener mínimo 8 caracteres' },
-            'confirm_password': { required: 'Debe ingresar una contraseña', minlength: 'La contraseña debe tener mínimo 8 caracteres', equalTo: 'Debe ingresar la misma contraseña del campo anterior' },
+            'password': { minlength: 'La contraseña debe tener mínimo 8 caracteres' },
+            'confirm_password': { minlength: 'La contraseña debe tener mínimo 8 caracteres', equalTo: 'Debe ingresar la misma contraseña del campo anterior' },
             first_name: "Ingrese su(s) nombre(s).",
             last_name: "Ingrese sus apellidos.",
             'email': { required: 'Debe ingresar un correo electrónico', email: 'Debe ingresar el correo electrónico con el formato correcto.' },
@@ -374,10 +359,10 @@ jQuery('#submit').live('click', function(e) {
         if(jQuery("#form_users").valid() && valbra(bid) && valGru(gid)) {
 
              jQuery.ajax({
-                url: "{{=URL(c='user', f='create_user')}}",
+                url: "{{=URL(c='user', f='update_user')}}",
                 data: { 
                     username:jQuery('#username').val(),
-                    password:jQuery('#password').val(),
+                    password:jQuery('#password').val() ? (jQuery('#password').val()) : '',
                     first_name:jQuery('#first_name').val(),
                     last_name:jQuery('#last_name').val(),
                     address:jQuery('#address').val(),
@@ -392,7 +377,7 @@ jQuery('#submit').live('click', function(e) {
                     social_secure_number:jQuery('#social_secure_number').val(),
                     salary:jQuery('#salary').val(),
                     email:jQuery('#email').val(),
-                    branch:jQuery('#branch').val(),
+                    branch_id:jQuery('#branch').val(),
                 },
                 type: 'POST',
                 success:function(data){
@@ -438,6 +423,7 @@ jQuery('#submit').live('click', function(e) {
     function deleteFields() {
         jQuery('#username').val('');
         jQuery('#password').val('');
+        jQuery('#confirm_password').val('');
         jQuery('#first_name').val('');
 		jQuery('#last_name').val('');
 		jQuery('#address').val('');
@@ -467,6 +453,7 @@ jQuery('#submit').live('click', function(e) {
             .trigger("liszt:updated");
     }
      
+
 ///// Validate selects /////
 
     function valbra(s) {
@@ -511,7 +498,6 @@ function recargargroups()
             options = "";
         	for(k in results){
 	        	options += "<option value=\"" + results[k].id + "\">" + results[k].role + "</option>";
-	        	//console.log(k]);
 	        }
             groups	
                 .html(options)
@@ -519,6 +505,119 @@ function recargargroups()
                 .trigger("liszt:updated");
             }
     });        
+    }    
+
+////// Selects //////
+
+    function selectS(id) {
+        jQuery.ajax({
+            type: "POST",
+            url: "{{=URL(c='common', f='get_states')}}",
+            success: function(results) {
+                state
+                    .html(results)
+                    .prepend('<option value="">Selecccionar</option>')
+                    .trigger("liszt:updated");
+                },
+            complete: function() {
+                state
+                    .find('option[value='+id+']').attr('selected',true)
+                    .trigger("liszt:updated");
+            }
+        });
+
+    }
+
+    function selectM(v, id) {
+        jQuery.ajax({
+            type: "POST",
+            url: "{{=URL(c='common', f='get_municipalities')}}",
+            data: {id: v},
+            success: function(results) {
+                municipality
+                    .html(results)
+                    .prepend('<option value="">Selecccionar</option>')
+                    .trigger("liszt:updated");
+            },
+            complete: function() {
+                municipality
+                    .find('option[value='+id+']').attr('selected',true)
+                    .trigger("liszt:updated");
+            }
+        });
+    }
+
+    function selectL(v, id) {
+        jQuery.ajax({
+                type: "POST",
+                data: {municipality_id: v},
+                url: "{{=URL(c='common', f='get_localities')}}",
+                success: function(results) {
+                    locality
+                        .html(results)
+                        .prepend('<option value="">Selecccionar</option>')
+                        .trigger("liszt:updated");
+                },
+                complete: function() {
+                    locality
+                        .find('option[value='+id+']').attr('selected',true)
+                        .trigger("liszt:updated");
+            }
+        });
+    }
+
+    function selectGru(ids) {
+        jQuery.ajax({
+            type: "POST",
+            url: "{{=URL(c='user', f='get_groups')}}",
+            dataType: "json",
+            success: function(results) {
+	            options = "";
+	        	for(k in results){
+		        	options += "<option value=\"" + results[k].id + "\">" + results[k].role + "</option>";
+		        }
+	            groups	
+	                .html(options)
+	                .trigger("liszt:updated");
+            },
+            complete: function() {
+                for(k in ids) {
+                    id = ids[k]['auth_group']['id'];
+                    groups
+                        .find('option[value='+id+']').attr('selected',true)
+                        .trigger("liszt:updated");
+                }
+            }
+        });
+    }
+    
+    function selectBra(id) {
+        jQuery.ajax({
+        type: "POST",
+        url: "{{=URL(c='branches_ajax', f='get_branches')}}",
+        dataType: "json",
+        success: function(results) {
+        	options = "";
+        	for(k in results){
+	        	options += "<option value=\"" + results[k].id + "\">" + results[k].name + "</option>";
+	        }
+            branch	
+                .html(options)
+                .prepend('<option value="">Selecccionar</option>')
+                .trigger("liszt:updated"); 
+       },
+       complete: function() {
+            branch
+                .find('option[value='+id+']').attr('selected',true)
+                .trigger("liszt:updated");
+            }
+
+        });
+       
+    }
+
+    function redirect(oldid) {
+        window.location.replace("{{=URL(c='users', f='index')}}?id="+oldid);
     }         
          
 </script>

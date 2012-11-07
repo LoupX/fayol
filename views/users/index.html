@@ -213,7 +213,6 @@ users_select.change( function() {
         address.html(data.auth_user['address']);
         branch.html(data.branch['name']);
         g_name = '';
-        	console.log(data.groups);
             for(k in data.groups)
             {
 	            g_name += data.groups[k]['auth_group']['role'] + ', ';
