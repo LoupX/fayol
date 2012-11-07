@@ -41,15 +41,7 @@
                                 </select>
                             </span>
                         </p>
-                         <p>
-                        	
-                            <span class="formwrapper" style="margin-left:0px; margin-top:-20px;">
-                            	<input type="radio" id="a" name="filtervendors" value="TRUE" onclick="ajaxFilter(this.value)" checked="checked"/> Habilitados &nbsp; &nbsp;
-                            	<input type="radio" id="b" name="filtervendors"  value="FALSE" onclick="ajaxFilter(this.value)"/> Deshabilitados &nbsp; &nbsp;
-                                <input type="radio" id="c" name="filtervendors" value="ANY" onclick="ajaxFilter(this.value)"/> Todos &nbsp; &nbsp;
-                            </span>
-                        </p>
-                        
+                                                 
                     </form>
 
             </div><!--subcontent-->	   
@@ -128,13 +120,7 @@
                 	  <td>Grupos:</td>
                 	  <td><strong id="group_id"></strong></td>
               	  </tr>
-              	  <tr>
-                   	  <td  width="30%">Estatus:</td>
-                      <td  width="70%">
-                        <input type="checkbox" name="status" disabled>
-                        <span id="resp"></span>
-                      </td>
-                  </tr>
+              	  
               </table>
               <a href="#" id="eu" data-id="">
                 <span class="stdbtn btn_orange" style="float:right; margin-top:-4px;">Editar</span>
@@ -154,15 +140,6 @@
 var users_select = jQuery('#users_select'),
     id = 0;
 
-////// get active vendors //////
-val = jQuery('.formwrapper input[name=filtervendors]:checked').val();
-    ajaxFilter(val);
-
-    jQuery('.formwrapper input:radio').on('change', function(e) {
-        ajaxFilter(e.currentTarget.value);
-    });
-
-function ajaxFilter(who) {
     //console.log(which);
     jQuery('#users_select_chzn').remove();
     jQuery('#users_select').val('').removeClass('chzn-done').chosen();
@@ -172,7 +149,7 @@ function ajaxFilter(who) {
         type: "POST",
         url: "{{=URL(c='user', f='get_users')}}",
         dataType: "json",
-        data: {query: who},
+        data: {query: true},
         success: function(results) {
         	options = "";
         	for(k in results){
@@ -184,7 +161,6 @@ function ajaxFilter(who) {
                 .trigger("liszt:updated");
             }
     });
-  }
 
 users_select.change( function() {
   ////clean fields
@@ -230,32 +206,28 @@ users_select.change( function() {
         phone.html(data.auth_user['phone']);
         email.html(data.auth_user['email']);
         mobile.html(data.auth_user['mobile']);        
-        state.html(data.auth_user['name']);
-        municipality.html(data.auth_user['name']);
-        locality.html(data.auth_user['name']);
+        state.html(data.states['name']);
+        municipality.html(data.municipalities['name']);
+        locality.html(data.localities['name']);
         zip_code.html(data.auth_user['zip_code']);
         address.html(data.auth_user['address']);
-        branch.html(data.auth_user['branch']);
-        group_id.html(data.auth_membership['group_id']);
+        branch.html(data.branch['name']);
+        g_name = '';
+        	console.log(data.groups);
+            for(k in data.groups)
+            {
+	            g_name += data.groups[k]['auth_group']['role'] + ', ';
+            }
+            g_name = g_name.slice(0, (g_name.length-2));
+            if(g_name != ''){
+              g_name += '.';
+            }
+        group_id.html(g_name);
+        
         
         jQuery('#eu')
         .attr('href', "{{=URL(c='users', f='update_user')}}"+'?id='+id);
        
-        /*
-        status.val(id).removeAttr('disabled');
-        status.parent().parent().removeClass('disabled'); 
-
-        if (data.vendors['status'] == true) {
-          status.parent().addClass('checked');
-          status.attr('onclick','chk('+id+',"True")');
-          resp.html('Activado.');
-        } else{
-          status.parent().removeClass('checked');
-          status.attr('onclick','chk('+id+',"False")');
-          resp.html('Desactivado.');
-        };
-        */
-        
       }
     });     
   }
@@ -284,14 +256,6 @@ function cleanFields() {
 	    status = jQuery('input[name=status]'),
 	    resp = jQuery('span#resp');
 
-      status.val('').attr('disabled',true);
-      status
-        .parent()
-          .removeClass('checked')
-          .parent()
-            .addClass('disabled');
-      resp.html('');
-
   var elements = [username, last_name, last_name, birthday, social_secure_number, salary, phone, email, mobile, state, municipality, locality, zip_code, 
                   address, branch, group_id];
 
@@ -300,70 +264,6 @@ function cleanFields() {
   }
 }
 
-////// edit buttons //////
-function chk(id, s) {
-    var status = jQuery('input[name=status]'),
-        resp = jQuery('span#resp');
-
-    if(s == 'True') {
-        var ans = confirm('¿Está seguro que quiere deshabilitar este proveedor?.');
-
-        if(ans) {
-            jQuery.ajax({
-                url: "{{=URL(c='vendors_ajax', f='toggle_vendor_status')}}",
-                type: 'POST',
-                data: { id: id, status: s }
-            });
-            status.parent().removeClass('checked');
-            status.attr('onclick','chk('+id+',"False")');
-            resp.html('Desactivado.');
-            cleanFields();
-            //jQuery('#vendors_select_chzn').remove();
-            //jQuery('#vendors_select').val('').removeClass('chzn-done').chosen();
-
-            if(jQuery('#a').parent('span').hasClass('checked')) {
-                ajaxFilter('TRUE');
-            } else if(jQuery('#b').parent('span').hasClass('checked')) {
-                ajaxFilter('FALSE');
-            } else {
-                ajaxFilter('ANY');
-            }
-
-      } else {
-        resp.html('Activado.');
-        status.parent().addClass('checked');
-      }        
-    }
-    else {
-        var ans = confirm('¿Está seguro que quiere habilitar este usuario?.');
-
-        if(ans) {
-            jQuery.ajax({
-              url: "{{=URL(c='vendors_ajax', f='toggle_vendor_status')}}",
-              type: 'POST',
-              data: { id: id, status: s }
-            });
-            status.parent().addClass('checked');
-            status.attr('onclick','chk('+id+',"True")');
-            resp.html('Activado.');
-            cleanFields();
-            //jQuery('#vendors_select_chzn').remove();
-            //jQuery('#vendors_select').val('').removeClass('chzn-done').chosen();
-
-            if(jQuery('#a').parent('span').hasClass('checked')) {
-                ajaxFilter('TRUE');
-            } else if(jQuery('#b').parent('span').hasClass('checked')) {
-                ajaxFilter('FALSE');
-            } else {
-                ajaxFilter('ANY');
-            }
-        } else {
-            resp.html('Desactivado.');
-            status.parent().removeClass('checked');
-        }
-    }
-  
-}
 
 </script>
 </body>
