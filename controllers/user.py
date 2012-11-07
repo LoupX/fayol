@@ -259,7 +259,7 @@ def get_user_information():
         if data_group:
             data['groups'] = data_group
         if data_branch:
-            data['branch'] = data_branch
+            data['branch'] = data_branch[0]
     except Exception as e:
         db.rollback()
         return str(e)
