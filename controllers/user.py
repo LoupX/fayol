@@ -230,11 +230,11 @@ def get_user_information():
 def get_users():
     data = dict()
     try:
-        db(db.auth_user).select().as_list()
+        query = db.auth_user>0
+        data = db(query).select().as_list()
     except:
         db.rollback()
     from gluon.contrib import simplejson
-
     dthandler = lambda obj: obj.isoformat() if isinstance(obj,
         datetime.datetime) else None
     data = simplejson.dumps(data, default=dthandler)
