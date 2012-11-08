@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
-@auth.requires_membership('GOD', 'Administrador')
+@auth.requires(auth.has_membership(role='GOD') or
+               auth.has_membership(role='Administrador'))
 def get_branches():
     b = db.branches
     q = request.vars.query
@@ -18,7 +19,9 @@ def get_branches():
     data = simplejson.dumps(data)
     return str(data)
 
-@auth.requires_membership('GOD', 'Administrador')
+
+@auth.requires(auth.has_membership(role='GOD') or
+               auth.has_membership(role='Administrador'))
 def get_warehouses():
     w = db.warehouses
     q = request.vars.query
@@ -37,7 +40,9 @@ def get_warehouses():
     data = simplejson.dumps(data)
     return str(data)
 
-@auth.requires_membership('GOD', 'Administrador')
+
+@auth.requires(auth.has_membership(role='GOD') or
+               auth.has_membership(role='Administrador'))
 def get_branch_information():
     id = request.vars.id
     data = dict()
@@ -76,7 +81,9 @@ def get_branch_information():
     data = simplejson.dumps(data)
     return str(data)
 
-@auth.requires_membership('GOD', 'Administrador')
+
+@auth.requires(auth.has_membership(role='GOD') or
+               auth.has_membership(role='Administrador'))
 def get_warehouse_information():
     id = request.vars.id
     data = dict()
@@ -113,7 +120,9 @@ def get_warehouse_information():
     data = simplejson.dumps(data)
     return str(data)
 
-@auth.requires_membership('GOD', 'Administrador')
+
+@auth.requires(auth.has_membership(role='GOD') or
+               auth.has_membership(role='Administrador'))
 def create_branch():
     data = dict()
     data_address = dict()
@@ -157,7 +166,9 @@ def create_branch():
             db.commit()
             return str(id)
 
-@auth.requires_membership('GOD', 'Administrador')
+
+@auth.requires(auth.has_membership(role='GOD') or
+               auth.has_membership(role='Administrador'))
 def create_warehouse():
     data = dict()
     data_address = dict()
@@ -194,7 +205,9 @@ def create_warehouse():
             db.commit()
             return str(id)
 
-@auth.requires_membership('GOD', 'Administrador')
+
+@auth.requires(auth.has_membership(role='GOD') or
+               auth.has_membership(role='Administrador'))
 def toggle_branch_status():
     id = request.vars.id
     status = str(request.vars.status).upper()
@@ -212,7 +225,9 @@ def toggle_branch_status():
         else:
             return ''
 
-@auth.requires_membership('GOD', 'Administrador')
+
+@auth.requires(auth.has_membership(role='GOD') or
+               auth.has_membership(role='Administrador'))
 def toggle_warehouse_status():
     id = request.vars.id
     status = str(request.vars.status).upper()
@@ -230,7 +245,9 @@ def toggle_warehouse_status():
         else:
             return ''
 
-@auth.requires_membership('GOD', 'Administrador')
+
+@auth.requires(auth.has_membership(role='GOD') or
+               auth.has_membership(role='Administrador'))
 def update_branch():
     b = db.branches
     vars = request.vars
@@ -277,7 +294,9 @@ def update_branch():
         db.commit()
         return True
 
-@auth.requires_membership('GOD', 'Administrador')
+
+@auth.requires(auth.has_membership(role='GOD') or
+               auth.has_membership(role='Administrador'))
 def update_warehouse():
     b = db.branches
     vars = request.vars

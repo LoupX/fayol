@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
-@auth.requires_login()
+@auth.requires(auth.has_membership(role='GOD') or
+               auth.has_membership(role='Administrador'))
 def create_service():
     id = None
     data = dict()
@@ -43,7 +44,9 @@ def create_service():
                 db.rollback()
                 return ''
 
-@auth.requires_login()
+
+@auth.requires(auth.has_membership(role='GOD') or
+               auth.has_membership(role='Administrador'))
 def create_price():
     data = dict()
     v = request.vars
@@ -90,7 +93,9 @@ def create_price():
         db.commit()
         return str(id)
 
-@auth.requires_login()
+
+@auth.requires(auth.has_membership(role='GOD') or
+               auth.has_membership(role='Administrador'))
 def get_services():
     rows = None
     q = request.vars.query.upper() if request.vars.query else None
@@ -123,7 +128,9 @@ def get_services():
     rows = simplejson.dumps(rows)
     return str(rows)
 
-@auth.requires_login()
+
+@auth.requires(auth.has_membership(role='GOD') or
+               auth.has_membership(role='Administrador'))
 def get_service_information():
     id = request.vars.id
     data = dict()
@@ -153,7 +160,9 @@ def get_service_information():
     data = simplejson.dumps(data)
     return str(data)
 
-@auth.requires_login()
+
+@auth.requires(auth.has_membership(role='GOD') or
+               auth.has_membership(role='Administrador'))
 def get_price():
     id = request.vars.id
     data = dict()
@@ -169,7 +178,9 @@ def get_price():
     data = simplejson.dumps(data)
     return str(data)
 
-@auth.requires_login()
+
+@auth.requires(auth.has_membership(role='GOD') or
+               auth.has_membership(role='Administrador'))
 def update_service():
     id = request.vars.id
     data = dict()
@@ -199,7 +210,9 @@ def update_service():
         db.commit()
         return True
 
-@auth.requires_login()
+
+@auth.requires(auth.has_membership(role='GOD') or
+               auth.has_membership(role='Administrador'))
 def update_price():
     id = request.vars.id
     data = dict()
@@ -232,7 +245,9 @@ def update_price():
             db.rollback()
             return ''
 
-@auth.requires_login()
+
+@auth.requires(auth.has_membership(role='GOD') or
+               auth.has_membership(role='Administrador'))
 def update_default_price():
     id = request.vars.id
     try:
@@ -253,7 +268,9 @@ def update_default_price():
             db.rollback()
             return ''
 
-@auth.requires_login()
+
+@auth.requires(auth.has_membership(role='GOD') or
+               auth.has_membership(role='Administrador'))
 def toggle_service():
     id = request.vars.id
     try:
@@ -269,7 +286,9 @@ def toggle_service():
         else:
             return ''
 
-@auth.requires_login()
+
+@auth.requires(auth.has_membership(role='GOD') or
+               auth.has_membership(role='Administrador'))
 def toggle_price():
     id = request.vars.id
     pl = db.service_price_lists
