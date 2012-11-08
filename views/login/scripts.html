@@ -19,7 +19,6 @@ jQuery('#submit').live('click', function(e) {
                 window.location = "{{=URL(c='default')}}";
             }
             if (data == 'Invalid credentials') {
-                console.log('bad');
                 jQuery('.nousername').fadeIn();
                 jQuery('.nopassword').hide();
                 ajax_token()
