@@ -162,8 +162,11 @@ def create_user():
         if id:
             db.user_to_branch.insert(user_id=id,
                 branch_id=request.vars.branch_id)
-            for group_id in request.vars['group_id[]']:
-                auth.add_membership(group_id, id)
+            if isinstance(request.vars['group_id[]'], list):
+                for group_id in request.vars['group_id[]']:
+                    auth.add_membership(group_id, id)
+            else:
+                auth.add_membership(request.vars['group_id[]'], id)
     except:
         db.rollback()
         return ''
@@ -218,8 +221,11 @@ def update_user():
             db(db.auth_membership.user_id==id).delete()
             db.user_to_branch.insert(user_id=id,
                 branch_id=request.vars.branch_id)
-            for group_id in request.vars['group_id[]']:
-                auth.add_membership(group_id, id)
+            if isinstance(request.vars['group_id[]'], list):
+                for group_id in request.vars['group_id[]']:
+                    auth.add_membership(group_id, id)
+            else:
+                auth.add_membership(request.vars['group_id[]'], id)
 
     except SyntaxError as e:
         db.rollback()
