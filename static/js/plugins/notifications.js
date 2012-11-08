@@ -1,13 +1,13 @@
 var Messages = {
     merror: "Ocurrió un error con los datos del formulario.",
     msuccess: "Se han guardado los datos del formulario.",
-    mexists: "Ese proveedor existe, para editarlo vaya a la sección de ver proveedor.",
+    mexists: "Este proveedor existe, para editarlo vaya a la sección de ver proveedores.",
     malert: "Verifique los datos antes de guardar, posteriormente no se podrán editar.",
     nspeed: 600,
     sspeed: 1700,
     scroll: 1000,
     showM: function(which, phrase, speed) {
-            speed = (speed) ? speed: 600;
+            speed = (speed) ? speed: this.nspeed;
 
             phrase = this.whichMessage(which, phrase);
 
@@ -36,10 +36,11 @@ var Messages = {
     successWR: function(which, url, speed, phrase) {
         speed = (speed) ? speed: this.sspeed;
 
-        phrase = this.whichMessage(which, phrase);
+        //phrase = this.whichMessage(which, phrase);
+        phrase = (phrase) ? phrase: this.msuccess;
 
-        jQuery(which+' p').html(phrase);
-        jQuery(which).fadeIn(speed, function() {
+        jQuery('.msgsuccess p').html(phrase);
+        jQuery('.msgsuccess').fadeIn(speed, function() {
             window.location.replace(url);
         });
         this.scrollPage();
@@ -62,7 +63,31 @@ var Messages = {
 
         return phrase;
     },
-    version: 'v0.1.1'
+    success: function(phrase, speed) {
+        speed = (speed) ? speed: this.nspeed;
+        phrase = (phrase) ? phrase: this.msuccess;
+
+        jQuery('.msgsuccess p').html(phrase);
+        jQuery('.msgsuccess').fadeIn(speed);
+        this.scrollPage();
+    },
+    error: function(phrase, speed) {
+        speed = (speed) ? speed: this.nspeed;
+        phrase = (phrase) ? phrase: this.merror;
+
+        jQuery('.msgerror p').html(phrase);
+        jQuery('.msgerror').fadeIn(speed);
+        this.scrollPage();
+    },
+    exists: function(phrase, speed) {
+        speed = (speed) ? speed: this.nspeed;
+        phrase = (phrase) ? phrase: this.mexists;
+
+        jQuery('.exists p').html(phrase);
+        jQuery('.exists').fadeIn(speed);
+        this.scrollPage();
+    },
+    version: 'v0.1.2'
 }
 
 var msg = Messages;

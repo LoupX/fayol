@@ -6,6 +6,7 @@
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/charCount.js')}}"></script>
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/ui.spinner.min.js')}}"></script>
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/chosen.jquery.min.js')}}"></script>
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/notifications.js')}}"></script>
 <style type="text/css">
     .ellol {
         border: 1px solid red;
@@ -34,20 +35,7 @@
                         <h3>Nuevo almacén</h3>
                     </div><!--contenttitle-->
             				
-            		<div class="notibar msgerror" style="display:none;">
-                    	<a class="close"></a>
-                    	<p>Ocurrió un error con los datos del formulario.</p>
-                    </div>
-
-                    <div class="notibar exists" style="display:none;">
-               	     	<a class="close"></a>
-               	     	<p>Ese almacén existe, para editarlo vaya a la sección de ver almacén. </p>
-               	    </div>
-               	    
-               	    <div class="notibar msgsuccess" style="display:none;">
-                        <a class="close"></a>
-                        <p>Se han guardado los datos del formulario.</p>
-                    </div>		
+            		{{include 'base/notifications.html'}}		
             						
                     <form id="form_warehouse" class="stdform stdform2" method="post" action="">
                     	
@@ -247,9 +235,9 @@
                 }
             },
             messages: {
-                name: "Ingrese el nombre de la surcursal",
-                address: "Ingrese la dirección de la surcursal",
-                suburb: "Ingrese la colonia de la surcursal",
+                name: "Ingrese el nombre del almacen",
+                address: "Ingrese la dirección del almacen",
+                suburb: "Ingrese la colonia del almacen",
                 zip_code: "Este campo debe tener 5 números.",
             }
     });
@@ -263,9 +251,7 @@
         valMun(mid);
         valBra(bid);
         
-        jQuery('.msgerror').hide();
-        jQuery('.exists').hide();
-        jQuery('.msgsuccess').hide();
+        msg.hideAll();
         
         if(jQuery("#form_warehouse").valid() && valState(sid) && valLoc(lid) && valMun(mid) && valBra(bid)) {
 
@@ -284,10 +270,7 @@
                 type: 'POST',
                 success:function(data){
                     if(data != 0 && data){
-                        jQuery('.msgsuccess').fadeIn(1600, function() {
-                            jQuery('.msgsuccess').fadeOut('slow');
-                            
-                        });
+                        msg.success();
                         deleteFields();
                         sid = 0;
                         mid = 0;
@@ -303,19 +286,15 @@
                         jQuery('#locality').val('').removeClass('chzn-done').chosen();
                     }
                     else if(data == 0) {
-                        jQuery('.exists').fadeIn(1600);
+                        msg.exists("Este almacen existe, para editarlo vaya a la sección de ver almacenes.");
                     }
                     else{
-                        jQuery('.msgerror').fadeIn(1600);
+                        msg.error();
                     }
-                    jQuery('body','html',window).animate(
-                                                        {scrollTop:0}, 
-                                                        1000);
                 }
             }); 
         } else {
-            jQuery('.msgerror').fadeIn(1600);
-            jQuery('body','html',window, document).animate({scrollTop:0},1000);
+            msg.error();
         }
     });
 

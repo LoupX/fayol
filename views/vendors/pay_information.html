@@ -3,6 +3,7 @@
 {{block scripts_extra}}	
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.validate.min.js')}}"></script>
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/chosen.jquery.min.js')}}"></script>
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/notifications.js')}}"></script>
 <style type="text/css">
     .ellol {
         border: 1px solid red;
@@ -28,15 +29,9 @@
 	   		<div class="contenttitle2">
 	              <h3>Selecciona un proveedor</h3>
             </div><!--contenttitle--> 
-                <div class="notibar msgerror" style="display:none;">
-                        <a class="close"></a>
-                        <p>Ocurrió un error con los datos del formulario.</p>
-                </div>
+                
+                {{include 'base/notifications.html'}}
 
-                <div class="notibar msgsuccess" style="display:none;">
-                        <a class="close"></a>
-                        <p>Se han guardado los datos del formulario.</p>
-                    </div>           	
 				<div id="validation" class="subcontent">
 				
 				<form id="form1" class="stdform stdform2" method="post">
@@ -213,8 +208,7 @@ vendors.live('change', function() {
 
  jQuery('#submit').live('click', function(e){
         e.preventDefault();
-        jQuery('.msgerror').hide();
-        jQuery('.msgsuccess').hide();
+        msg.hideAll();
 
         var bank_id = jQuery('#bank').val(),
             branch = jQuery('#branch').val(),
@@ -235,25 +229,17 @@ vendors.live('change', function() {
                 type: "POST",
                 success:function(data){
                   if(data){
-                        jQuery('.msgsuccess').fadeIn(1600, function() {
-                            jQuery('.msgsuccess').fadeOut('slow');
-                        });
+                        msg.success();
                         deleteFields();
                         id = '';
                     }
                     else{
-                        jQuery('.msgerror').fadeIn(1600);
+                        msg.error();
                     }
-                    jQuery('body','html',window, document).animate(
-                                                        {scrollTop:0}, 
-                                                        1000);
                 }
             });  
         } else {
-            jQuery('.msgerror').fadeIn(1600);
-            jQuery('body','html',window, document).animate(
-                                                {scrollTop:0}, 
-                                                1000);
+            msg.error();
         }
 
 });
