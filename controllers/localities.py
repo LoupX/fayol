@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-@auth.requires_membership('GOD')
+@auth.requires(auth.has_membership(role='GOD'))
 def index():
     title = 'Localidades'
     current = ['menu_catalogs', 'sidebar_localities']
