@@ -2,6 +2,18 @@
   
 {{block scripts_extra}}
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.dataTables.min.js')}}"></script>
+<style type="text/css">
+@media print {
+
+    .centercontent {
+        display: none;
+    }
+
+    .printable { 
+        display: block;
+    }
+}
+</style>
 {{end}}
 
 {{block sidebar_menu}}
@@ -15,7 +27,7 @@
             <h1 class="pagetitle">{{=title}}</h1>
         </div><!--pageheader-->
         
-        <div id="contentwrapper" class="contentwrapper">
+        <div id="contentwrapper" class="contentwrapper printable">
 
             <div id="basicform" class="subcontent">
                 <div class="contenttitle2">
@@ -153,6 +165,10 @@
             "aaData": aaData
         });
     }
+
+    jQuery('#save').click(function(){
+        window.print();
+    });
 
 </script>    
     

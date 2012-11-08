@@ -1,3 +1,4 @@
+{{if auth.has_membership(role='GOD') or auth.has_membership(role='Administrador'):}}
 <li id="sidebar_packages"><a href="#packages" class="typo">Paquetes</a>
     <span class="arrow"></span>
     <ul id="packages">
@@ -13,3 +14,4 @@
         <li  id="sub_services_new"><a href="{{=URL(c='packages', f='new_service')}}">Nuevo Servicio</a></li>
     </ul>
 </li>
+{{pass}}

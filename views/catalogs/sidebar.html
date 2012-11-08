@@ -1,6 +1,8 @@
+{{if auth.has_membership(role='GOD') or auth.has_membership(role='Administrador'):}}
 <li><a href="{{=URL(c='vendors')}}" class="tables">Proveedores</a></li>
 <li><a href="{{=URL(c='clients')}}" class="tables">Clientes</a></li>
 <li><a href="{{=URL(c='products')}}" class="tables">Productos</a></li>
 <li><a href="{{=URL(c='branches')}}" class="tables">Sucursales / Almacenes</a></li>
 <li><a href="{{=URL(c='packages')}}" class="tables">Paquetes y Servicios</a></li>
 <li><a href="{{=URL(c='localities')}}" class="tables">Localidades</a></li>
+{{pass}}

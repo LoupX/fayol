@@ -1,3 +1,4 @@
+{{if auth.has_membership(role='GOD') or auth.has_membership(role='Administrador'):}}
 <li id="sidebar_branches"><a href="#branch_office" class="typo">Sucursales</a>
    <span class="arrow"></span>
        <ul id="branch_office">
@@ -13,3 +14,4 @@
            <li id="sub_warehouse_new"><a href="{{=URL(c='branches', f='new_warehouse')}}">Nuevo Almacén</a></li>
        </ul>
 </li>
+{{pass}}

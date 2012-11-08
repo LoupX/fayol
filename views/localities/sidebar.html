@@ -1,1 +1,3 @@
+{{if auth.has_membership(role='GOD') or auth.has_membership(role='Administrador'):}}
 <li id="sidebar_localities"><a href="#localities" class="typo">Localidades</a></li>
+{{pass}}

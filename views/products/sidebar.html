@@ -1,3 +1,4 @@
+{{if auth.has_membership(role='GOD') or auth.has_membership(role='Administrador'):}}
 <li id="sidebar_products"><a href="#products" class="typo">Productos</a>
    <span class="arrow"></span>
        <ul id="products">
@@ -30,3 +31,4 @@
            <li id="sub_units_new"><a href="{{=URL(c='products', f='new_unit')}}">Nueva unidad de medida</a></li>
        </ul>
 </li>
+{{pass}}

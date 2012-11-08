@@ -1,3 +1,4 @@
+{{if auth.has_membership(role='GOD') or auth.has_membership(role='Administrador'):}}
 <li id="sidebar_vendors"><a href="#vendors" class="editor">Proveedores</a>
    <span class="arrow"></span>
        <ul id="vendors">
@@ -7,6 +8,7 @@
            <li id="sub_vendors_pay"><a href="{{=URL(c='vendors', f='pay_information')}}">Información de pago</a></li>
        </ul>
 </li>
+{{pass}}
 
 
 
