@@ -87,7 +87,7 @@ var Messages = {
         jQuery('.exists').fadeIn(speed);
         this.scrollPage();
     },
-    version: 'v0.1.1'
+    version: 'v0.1.2'
 }
 
 var msg = Messages;
