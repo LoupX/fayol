@@ -34,13 +34,7 @@
                     </div><!--contenttitle-->
 
                     <form class="stdform" action="" method="post">
-                    	
-                    <!-- <ul class="buttonlist" style="float:right;">
-                        <li style="display:none;"><button class="stdbtn btn_blue">Form Button</button></li>
-                        <li><button id="edit" class="stdbtn btn_orange">Editar</button></li>
-                        <li><button id="btnenable" class="stdbtn btn_red" onclick='cambiarClase(); return false;'>Deshabilitar</button></li>
-                   </ul>	 	 -->
-                    	
+                    
                         <p>
                         	
                             <span class="formwrapper" style="margin-left:0px;">
@@ -48,15 +42,7 @@
                                 </select>
                             </span>
                         </p>
-                         <p>
-                        	
-                            <span class="formwrapper" style="margin-left:0px; margin-top:-20px;">
-                            	<input type="radio" id="a" name="filtervendors" value="TRUE" onclick="ajaxFilter(this.value)" checked="checked"/> Habilitados &nbsp; &nbsp;
-                            	<input type="radio" id="b" name="filtervendors"  value="FALSE" onclick="ajaxFilter(this.value)"/> Deshabilitados &nbsp; &nbsp;
-                                <input type="radio" id="c" name="filtervendors" value="ANY" onclick="ajaxFilter(this.value)"/> Todos &nbsp; &nbsp;
-                            </span>
-                        </p>
-                        
+                                                
                     </form>
 
             </div><!--subcontent-->	   
@@ -65,14 +51,22 @@
               
               <table cellpadding="0" cellspacing="0" class="table invoice" style="margin-bottom:4px;">
                	  <tr>
-                   	  <td width="30%">Nombre:</td>
-                      <td width="70%"><strong id="name"></strong></td>
+                   	<td width="30%">Nombre:</td>
+                    <td width="70%"><strong id="first_name"></strong></td>
                   </tr>
-               	  <tr>
-               	    <td>Dirección:</td>
-               	    <td><strong id="address"></strong></td>
-           	      </tr>
                   <tr>
+               	    <td>Apellidos:</td>
+               	    <td><strong id="last_name"></strong></td>
+           	      </tr>
+           	      <tr>
+                	  <td>Teléfono:</td>
+                	  <td><strong id="phone"></strong></td>
+              	  </tr>
+              	  <tr>
+                	  <td>Celular:</td>
+                	  <td><strong id="mobile"></strong></td>
+              	  </tr>
+               	  <tr>
                 	  <td>Estado:</td>
                 	  <td><strong id="state"></strong></td>
               	  </tr>
@@ -83,23 +77,8 @@
               	  <tr>
                 	  <td>Población:</td>
                 	  <td><strong id="locality"></strong></td>
-              	  </tr>
-              	  <tr>
-               	    <td>Código postal:</td>
-               	    <td><strong id="zip_code"></strong></td>
-           	      </tr>
-                  <tr>
-                	  <td>RFC:</td>
-                	  <td><strong id="rfc"></strong></td>
-              	  </tr>
-              	  <tr>
-                   	  <td>Sitio Web:</td>
-                      <td><strong id="website"></strong></td>
-                  </tr>
+              	  </tr> 
               </table>
-              <a href="#" id="ev" data-id="">
-                <span class="stdbtn btn_orange">Editar</span>
-              </a>
             </div><!--one_half-->
 
             
@@ -107,38 +86,25 @@
            
               <table cellpadding="0" cellspacing="0" class="table invoice" style="margin-bottom:4px;">
               	  <tr>
-                	  <td width="30%">Banco:</td>
-                	  <td width="70%"><strong id="bank"></strong></td>
-              	  </tr>
-              	  <tr>
-                	  <td>Número de sucursal:</td>
-                	  <td><strong id="branch_number"></strong></td>
-              	  </tr>
-              	  <tr>
-                	  <td>Número de cuenta:</td>
-                	  <td><strong id="account_number"></strong></td>
-              	  </tr>
-              	  <tr>
-                	  <td>CLABE:</td>
-                	  <td><strong id="clabe"></strong></td>
+               	    <td width="30%">Dirección:</td>
+               	    <td width="70%"><strong id="address"></strong></td>
+           	      </tr>
+           	      <tr>
+                   	  <td>Colonia:</td>
+                      <td><strong id="suburb"></strong></td>
+                  </tr>
+           	      <tr>
+               	    <td>Código postal:</td>
+               	    <td><strong id="zip_code"></strong></td>
+           	      </tr>
+                  <tr>
+                	  <td>RFC:</td>
+                	  <td><strong id="rfc"></strong></td>
               	  </tr>
               </table>
-              <a href="#" id="ep">
+              <a href="#" id="ec" style="float:right;">
                 <span  style="" class="stdbtn btn_orange">Editar</span>
               </a>
-            </div><!--one_half-->
-            
-            			<div class="one_half last" style="margin-bottom:40px;">
-           
-              <table cellpadding="0" cellspacing="0" class="table invoice" style="margin-top:-4px;">
-              	  <tr>
-                   	  <td  width="30%">Estatus:</td>
-                      <td  width="70%">
-                        <input type="checkbox" name="status" disabled>
-                        <span id="resp"></span>
-                      </td>
-                  </tr>
-              </table>
             </div><!--one_half-->
             
             <br clear="all"/> 
@@ -227,9 +193,7 @@ vendors_select.change( function() {
         account_number.html(data.vendors['bank_account_number']);
         clabe.html(data.vendors['clabe']);
 
-        jQuery('#ev')
-        .attr('href', "{{=URL(c='vendors', f='update')}}"+'?id='+data.vendors.id);
-        jQuery('#ep')
+        jQuery('#ec')
         .attr('href', "{{=URL(c='vendors', f='updatep')}}"+'?id='+data.vendors.id);
 
         status.val(id).removeAttr('disabled');

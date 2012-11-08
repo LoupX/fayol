@@ -28,39 +28,34 @@
                 </div><!--contenttitle-->
 
                 {{include 'base/notifications.html'}}
-
-                <!-- <div class="notibar msgerror" style="display:none;">
-                    <a class="close"></a>
-                    <p>Ocurrió un error con los datos del formulario.</p>
-                </div>
-
-                <div class="notibar exists" style="display:none;">
-                    <a class="close"></a>
-                    <p>Ese proveedor existe, para editarlo vaya a la sección de ver proveedor. </p>
-                </div>
-
-                <div class="notibar msgsuccess" style="display:none;">
-                        <a class="close"></a>
-                        <p>Se han guardado los datos del formulario.</p>
-                    </div> -->
                 
                     <form id="form" class="stdform stdform2" method="POST" action="">
                         <p>
-                            <label>Nombre de la empresa *</label>
-                            <span class="field"><input type="text" name="company" id="company" class="smallinput" tabindex="1" required/></span>
+                            <label>Nombre *</label>
+                            <span class="field"><input type="text" name="first_name" id="first_name" class="smallinput" tabindex="1" required/></span>
                         </p>
                         
                         <p>
-                            <label>Dirección</label>
-                            <span class="field"><input type="text" name="address" id="address" class="smallinput" tabindex="2" /></span>
+                            <label>Apellidos *</label>
+                            <span class="field"><input type="text" name="last_name" id="last_name" class="smallinput" tabindex="2" required/></span>
                         </p>
-
+                        
+                        <p>
+                            <label>Teléfono</label>
+                            <span class="field"><input type="text" name="phone" id="phone" class="smallinput" tabindex="3" required/></span>
+                        </p>
+                        
+                        <p>
+                            <label>Celular</label>
+                            <span class="field"><input type="text" name="mobile" id="mobile" class="smallinput" tabindex="4" required/></span>
+                        </p>
+                        
                         <p style="margin-top: 1px;">
                             <label>Estado</label>
                             <span class="field">
                                 <!-- <select name="states" id="states">
                                 </select> -->
-                                <select id="states" name="states" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="3">
+                                <select id="states" name="states" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="5">
                                   </select>
                             </span>
                         </p>
@@ -68,7 +63,7 @@
                         <p style="margin-top: 1px;">
                             <label>Municipio</label>
                             <span id="municipality_container"class="field">
-                            <select name="municipality" id="municipality" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="4">
+                            <select name="municipality" id="municipality" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="6">
                             </select>
                             </span>
                         </p>
@@ -76,30 +71,33 @@
                         <p style="margin-top: 1px;">
                             <label>Población</label>
                             <span class="field" id="locality_container">
-                            <select name="locality" id="locality" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="5">
+                            <select name="locality" id="locality" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="7">
                             </select>
                             </span>
+                        </p>
+                                                
+                        <p>
+                            <label>Dirección</label>
+                            <span class="field"><input type="text" name="address" id="address" class="smallinput" tabindex="8" /></span>
+                        </p>
+                        
+                        <p>
+                            <label>Colonia</label>
+                            <span class="field"><input type="text" name="suburb" id="suburb" class="smallinput" tabindex="9"/></span>
                         </p>
                         
                         <p style="margin-top: 1px;">
                             <label>Código postal</label>
-                            <span class="field"><input type="text" name="zip_code" id="zip_code" class="smallinput" maxlength="5" tabindex="6"/></span>
+                            <span class="field"><input type="text" name="zip_code" id="zip_code" class="smallinput" maxlength="5" tabindex="10"/></span>
                         </p>
                         
                         <p>
                             <label>R.F.C.</label>
-                            <span class="field"><input type="text" name="rfc" id="rfc" class="smallinput" maxlength="13" tabindex="7"/></span>
-                        </p>
-                        
-                        <p>
-                            <label>Sitio Web</label>
-                            <span class="field">
-                                <input type="text" name="website" id="website" class="smallinput" tabindex="8" 
-                                placeholder="http://ejemplo.com"/></span>
+                            <span class="field"><input type="text" name="rfc" id="rfc" class="smallinput" maxlength="13" tabindex="11"/></span>
                         </p>
                         
                         <p class="stdformbutton">
-                            <button id="submit" class="submit radius2" tabindex="9">Guardar </button>
+                            <button id="submit" class="submit radius2" tabindex="10">Guardar </button>
                         </p>
                     </form>
 
