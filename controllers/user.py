@@ -113,7 +113,7 @@ def check_user():
     pwd = request.vars.pwd
     if not usr or not pwd:
         return ''
-    user = db(db.auth_user.username == usr).select().first()
+    user = db(db.auth_user.username==usr).select().first()
     if user and user.get('password', False):
         password = db.auth_user.password.validate(pwd)[0]
         if not user.registration_key and password == user['password']:
@@ -306,4 +306,27 @@ def get_users():
 
 @auth.requires_login()
 def change_password():
-    pass
+    id = auth.user.id
+    pwd_old = request.vars.password_old
+    pwd_new = request.vars.password_new
+    try:
+        pwd_old = db.auth_user.password.validate(pwd_old)[0]
+        pwd_new = db.auth_user.password.validate(pwd_new)[0]
+        user = db(db.auth_user.id==id).select().first()
+        if user and user.get('password', False):
+            if not user.registration_key and pwd_old==user['password']:
+                user.update(password=pwd_new)
+            else:
+                return 0
+        else:
+            return ''
+    except:
+        db.rollback()
+        return ''
+    else:
+        if result == 1:
+            db.commit()
+            return True
+        else:
+            db.rollback()
+            return ''
