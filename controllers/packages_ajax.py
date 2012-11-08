@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-@auth.requires_login()
+@auth.requires_membership('GOD', 'Administrador')
 def create_package():
     data = dict()
     data_description = dict()
@@ -32,7 +32,7 @@ def create_package():
         db.commit()
         return str(id)
 
-@auth.requires_login()
+@auth.requires_membership('GOD', 'Administrador')
 def create_package_product():
     id = request.vars.id
     products = request.vars.products
@@ -51,7 +51,7 @@ def create_package_product():
         db.commit()
         return True
 
-@auth.requires_login()
+@auth.requires_membership('GOD', 'Administrador')
 def create_price():
     data = dict()
     v = request.vars
@@ -95,7 +95,7 @@ def create_price():
         db.commit()
         return str(id)
 
-@auth.requires_login()
+@auth.requires_membership('GOD', 'Administrador')
 def get_packages():
     data = None
     q = request.vars.query.upper() if request.vars.query else None
@@ -127,7 +127,7 @@ def get_packages():
     return str(data)
 
 
-@auth.requires_login()
+@auth.requires_membership('GOD', 'Administrador')
 def get_package_information():
     id = request.vars.id
     data = dict()
@@ -169,7 +169,7 @@ def get_package_information():
     data = simplejson.dumps(data)
     return str(data)
 
-@auth.requires_login()
+@auth.requires_membership('GOD', 'Administrador')
 def update_package():
     vars = request.vars
     data = dict()
@@ -205,7 +205,7 @@ def update_package():
             db.rollback()
             return ''
 
-@auth.requires_login()
+@auth.requires_membership('GOD', 'Administrador')
 def update_price():
     id = request.vars.id
     data = dict()
@@ -238,7 +238,7 @@ def update_price():
             db.rollback()
             return ''
 
-@auth.requires_login()
+@auth.requires_membership('GOD', 'Administrador')
 def update_default_price():
     id = request.vars.id
     try:
@@ -259,7 +259,7 @@ def update_default_price():
             db.rollback()
             return ''
 
-@auth.requires_login()
+@auth.requires_membership('GOD', 'Administrador')
 def toggle_package():
     id = request.vars.id
     try:

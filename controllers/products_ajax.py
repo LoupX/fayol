@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-@auth.requires_login()
+@auth.requires_membership('GOD', 'Administrador')
 def create_brand():
     data = dict()
     if request.vars.name:
@@ -22,7 +22,7 @@ def create_brand():
         db.commit()
         return str(dict(brand_id=b_id, brand_description_id=bd_id))
 
-@auth.requires_login()
+@auth.requires_membership('GOD', 'Administrador')
 def create_category():
     data = dict()
     if request.vars.name:
@@ -44,7 +44,7 @@ def create_category():
         db.commit()
         return str(dict(category_id=c_id, category_description_id=cd_id))
 
-@auth.requires_login()
+@auth.requires_membership('GOD', 'Administrador')
 def create_unit():
     data = dict()
     if request.vars.measuring_unit and request.vars.abbreviation:
@@ -65,7 +65,7 @@ def create_unit():
         db.commit()
         return str(id)
 
-@auth.requires_login()
+@auth.requires_membership('GOD', 'Administrador')
 def create_price():
     data = dict()
     v = request.vars
@@ -111,7 +111,7 @@ def create_price():
         db.commit()
         return str(id)
 
-@auth.requires_login()
+@auth.requires_membership('GOD', 'Administrador')
 def create_product():
     id = None
     data = dict()
@@ -171,7 +171,7 @@ def create_product():
                 db.rollback()
                 return ''
 
-@auth.requires_login()
+@auth.requires_membership('GOD', 'Administrador')
 def get_brands():
     data = []
     q = request.vars.query.upper() if request.vars.query else None
@@ -198,7 +198,7 @@ def get_brands():
     data = simplejson.dumps(data)
     return str(data)
 
-@auth.requires_login()
+@auth.requires_membership('GOD', 'Administrador')
 def get_categories():
     data = []
     q = request.vars.query.upper() if request.vars.query else None
@@ -225,7 +225,7 @@ def get_categories():
     data = simplejson.dumps(data)
     return str(data)
 
-@auth.requires_login()
+@auth.requires_membership('GOD', 'Administrador')
 def get_units():
     data = []
     q = request.vars.query.upper() if request.vars.query else None
@@ -249,7 +249,7 @@ def get_units():
     data = simplejson.dumps(data)
     return str(data)
 
-@auth.requires_login()
+@auth.requires_membership('GOD', 'Administrador')
 def get_products():
     rows = None
     q = request.vars.query.upper() if request.vars.query else None
@@ -291,7 +291,7 @@ def get_products():
     rows = simplejson.dumps(rows)
     return str(rows)
 
-@auth.requires_login()
+@auth.requires_membership('GOD', 'Administrador')
 def get_product_information():
     id = request.vars.id
     data = dict()
@@ -333,7 +333,7 @@ def get_product_information():
     return str(data)
 
 
-@auth.requires_login()
+@auth.requires_membership('GOD', 'Administrador')
 def update_brand():
     data = dict()
     id = request.vars.id
@@ -358,7 +358,7 @@ def update_brand():
         else:
             return ''
 
-@auth.requires_login()
+@auth.requires_membership('GOD', 'Administrador')
 def update_category():
     data = dict()
     id = request.vars.id
@@ -384,7 +384,7 @@ def update_category():
             return ''
 
 
-@auth.requires_login()
+@auth.requires_membership('GOD', 'Administrador')
 def update_unit():
     data = dict()
     id = request.vars.id
@@ -409,7 +409,7 @@ def update_unit():
         else:
             return ''
 
-@auth.requires_login()
+@auth.requires_membership('GOD', 'Administrador')
 def update_default_price():
     id = request.vars.id
     try:
@@ -430,7 +430,7 @@ def update_default_price():
             db.rollback()
             return ''
 
-@auth.requires_login()
+@auth.requires_membership('GOD', 'Administrador')
 def update_price():
     id = request.vars.id
     data = dict()
@@ -463,7 +463,7 @@ def update_price():
             db.rollback()
             return ''
 
-@auth.requires_login()
+@auth.requires_membership('GOD', 'Administrador')
 def update_product():
     id = request.vars.id
     data = dict()
@@ -515,7 +515,7 @@ def update_product():
         db.commit()
         return True
 
-@auth.requires_login()
+@auth.requires_membership('GOD', 'Administrador')
 def toggle_brand():
     id = request.vars.id
     try:
@@ -531,7 +531,7 @@ def toggle_brand():
         else:
             return ''
 
-@auth.requires_login()
+@auth.requires_membership('GOD', 'Administrador')
 def toggle_category():
     id = request.vars.id
     try:
@@ -547,7 +547,7 @@ def toggle_category():
         else:
             return ''
 
-@auth.requires_login()
+@auth.requires_membership('GOD', 'Administrador')
 def toggle_unit():
     id = request.vars.id
     try:
@@ -563,7 +563,7 @@ def toggle_unit():
         else:
             return ''
 
-@auth.requires_login()
+@auth.requires_membership('GOD', 'Administrador')
 def toggle_product():
     id = request.vars.id
     try:
