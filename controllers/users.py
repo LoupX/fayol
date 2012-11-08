@@ -18,8 +18,8 @@ def update_user():
     current = ['menu_users', 'sidebar_users', 'sub_users_read']
     return dict(title=title, current=current)
 
+@auth.requires_login()
 def update_password():
     title = 'Contraseña'
-    current = ['menu_users', 'sidebar_users', 'sub_users_read']
-    return dict(title=title, current=current)
+    return dict(title=title)
 
