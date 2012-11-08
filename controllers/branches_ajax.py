@@ -275,7 +275,7 @@ def update_branch():
     data_tax['rfc'] = vars.rfc.decode('utf-8').upper()
     data_tax['tax'] = vars.tax.decode('utf-8').upper()
 
-    data['name'] = vars.name
+    data['name'] = vars.name.decode('utf-8').upper()
 
     try:
         db(db.branches.id==id).update(**data)
