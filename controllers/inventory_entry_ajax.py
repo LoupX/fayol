@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-@auth.requires_login()
+@auth.requires_membership('GOD', 'Almacenista')
 def create_entry():
     data = dict()
     v = request.vars

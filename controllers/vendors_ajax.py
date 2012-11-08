@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
-@auth.requires_membership('GOD', 'Administrador')
+@auth.requires(auth.has_membership(role='GOD') or
+               auth.has_membership(role='Administrador'))
 def get_vendors():
     v = db.vendors
     q = request.vars.query
@@ -20,7 +21,9 @@ def get_vendors():
         options += '\n'
     return options
 
-@auth.requires_membership('GOD', 'Administrador')
+
+@auth.requires(auth.has_membership(role='GOD') or
+               auth.has_membership(role='Administrador'))
 def get_vendor_information():
     id = request.vars.id
     data = dict()
@@ -51,7 +54,9 @@ def get_vendor_information():
     data = simplejson.dumps(data)
     return str(data)
 
-@auth.requires_membership('GOD', 'Administrador')
+
+@auth.requires(auth.has_membership(role='GOD') or
+               auth.has_membership(role='Administrador'))
 def create_vendor():
     data = dict()
     insert = dict()
@@ -82,7 +87,9 @@ def create_vendor():
         db.commit()
         return str(id)
 
-@auth.requires_membership('GOD', 'Administrador')
+
+@auth.requires(auth.has_membership(role='GOD') or
+               auth.has_membership(role='Administrador'))
 def update_vendor():
     vars = request.vars
     data = dict()
@@ -98,7 +105,9 @@ def update_vendor():
     result = _update_vendor(id, **data)
     return result
 
-@auth.requires_membership('GOD', 'Administrador')
+
+@auth.requires(auth.has_membership(role='GOD') or
+               auth.has_membership(role='Administrador'))
 def update_pay_information():
     data = dict()
     vars = request.vars
@@ -110,7 +119,9 @@ def update_pay_information():
     result = _update_vendor(id, **data)
     return result
 
-@auth.requires_membership('GOD', 'Administrador')
+
+@auth.requires(auth.has_membership(role='GOD') or
+               auth.has_membership(role='Administrador'))
 def toggle_vendor_status():
     id = request.vars.id
     status = str(request.vars.status).upper()
@@ -119,7 +130,9 @@ def toggle_vendor_status():
     result = _update_vendor(id, **data)
     return result
 
-@auth.requires_membership('GOD', 'Administrador')
+
+@auth.requires(auth.has_membership(role='GOD') or
+               auth.has_membership(role='Administrador'))
 def _update_vendor(id, **data):
     v = db.vendors
     query = v.id==id
