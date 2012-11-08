@@ -130,7 +130,7 @@
         type: "POST",
         dataType:"json",
         success:function(data){
-            bid = (data.branches['name'] == null) ? '': data.branches['name'];
+            bid = (data.branches['id'] == null) ? '': data.branches['id'];
             selectB(bid);
             jQuery('#name').val(data.warehouses['name']);
             jQuery('#address').val(data.company_addresses['address']);
