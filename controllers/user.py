@@ -336,4 +336,4 @@ def change_password():
             return True
         else:
             db.rollback()
-            return 'wut?'
+            return ''

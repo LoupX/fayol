@@ -22,14 +22,31 @@ auth.settings.login_next = URL('default', 'index')
 auth.settings.logout_next = URL('login', 'index')
 auth.settings.login_after_registration = False
 
-if db(db.auth_user).isempty():
-    god_group_id = auth.add_group('GOD', 'Administrador del sistema')
-    auth.add_group('Administrador', 'Administrador local')
-    auth.add_group('Gerente', 'Gerente de sucursal')
-    auth.add_group('Vendedor de mostrador', 'Vendedor de mostrador'),
-    auth.add_group('Almacenista', 'Encargado de almacen')
-    auth.add_group('Cajero', '')
-    password = db.auth_user.password.validate('qazWSX11')[0]
-    god_user_id = db.auth_user.insert(first_name='Juan D.',
-        last_name='Romero González', username='root', password=password)
-    auth.add_membership(god_group_id, god_user_id)
+
+try:
+    if db(db.auth_group).isempty():
+        god_group_id = auth.add_group('GOD', 'Administrador del sistema')
+        auth.add_group('Administrador', 'Administrador local')
+        auth.add_group('Gerente', 'Gerente de sucursal')
+        auth.add_group('Vendedor de mostrador', 'Vendedor de mostrador'),
+        auth.add_group('Almacenista', 'Encargado de almacen')
+        auth.add_group('Cajero', '')
+    else:
+        god_group_id = db(db.auth_group.role=='GOD').select().first()
+        god_group_id = god_group_id.id
+
+    if db(db.auth_user).isempty():
+        password = db.auth_user.password.validate('qazWSX11')[0]
+        data = dict()
+        data['first_name'] = 'Yisus'
+        data['last_name'] = 'Craist'
+        data['username'] = 'god'
+        data['password'] = password
+        data['email'] = 'jd@beardcode.mx'
+        god_user_id = db.auth_user.insert(**data)
+        auth.add_membership(god_group_id, god_user_id)
+except:
+    db.rollback()
+    raise HTTP(503)
+else:
+    db.commit()
