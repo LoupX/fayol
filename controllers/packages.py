@@ -1,21 +1,21 @@
 # -*- coding: utf-8 -*-
 
 #Views for Packages
-@auth.requires_login()
+@auth.requires_membership('GOD', 'Administrador')
 def index():
     title = 'Paquetes'
     current = ['menu_catalogs', 'sidebar_packages', 'sub_packages_read']
     session.prev = URL(c='packages', f='index')
     return dict(title=title,  current=current)
 
-@auth.requires_login()
+@auth.requires_membership('GOD', 'Administrador')
 def new_package():
     title = 'Nuevo Paquete'
     current = ['menu_catalogs', 'sidebar_packages', 'sub_packages_new']
     session.prev = URL(c='packages', f='new_package')
     return dict(title=title,  current=current)
 
-@auth.requires_login()
+@auth.requires_membership('GOD', 'Administrador')
 def select_products():
     if session.prev != URL(c='packages', f='new_package'):
         session.prev = None
@@ -25,7 +25,7 @@ def select_products():
     current = ['menu_catalogs', 'sidebar_packages', 'sub_packages_new']
     return dict(title=title,  current=current)
 
-@auth.requires_login()
+@auth.requires_membership('GOD', 'Administrador')
 def update_select_products():
     valid = [URL(c='packages', f='index'), URL(c='packages', f='view_package')]
     if session.prev not in valid:
@@ -36,26 +36,26 @@ def update_select_products():
     current = ['menu_catalogs', 'sidebar_packages', 'sub_packages_read']
     return dict(title=title,  current=current)
 
-@auth.requires_login()
+@auth.requires_membership('GOD', 'Administrador')
 def view_package():
     title = 'Paquetes'
     current = ['menu_catalogs', 'sidebar_packages', 'sub_packages_read']
     session.prev = URL(c='packages', f='view_package')
     return dict(title=title,  current=current)
 
-@auth.requires_login()
+@auth.requires_membership('GOD', 'Administrador')
 def update_package():
     title = 'Paquetes'
     current = ['menu_catalogs', 'sidebar_packages', 'sub_packages_read']
     return dict(title=title,  current=current)
     
-@auth.requires_login()
+@auth.requires_membership('GOD', 'Administrador')
 def package_price_list():
     title = 'Listas de Precios'
     current = ['menu_catalogs', 'sidebar_packages', 'sub_packages_read']
     return dict(title=title,  current=current)
     
-@auth.requires_login()
+@auth.requires_membership('GOD', 'Administrador')
 def package_list_quickedit():
     title = 'Paquetes'
     id = request.vars.id
@@ -71,37 +71,37 @@ def package_list_quickedit():
     return dict(title=title, name=name, price=price,  current=current)
 
 #Views for Services
-@auth.requires_login()
+@auth.requires_membership('GOD', 'Administrador')
 def services():
     title = 'Servicios'
     current = ['menu_catalogs', 'sidebar_services', 'sub_services_read']
     return dict(title=title,  current=current)
 
-@auth.requires_login()
+@auth.requires_membership('GOD', 'Administrador')
 def view_service():
     title = 'Servicios'
     current = ['menu_catalogs', 'sidebar_services', 'sub_services_read']
     return dict(title=title,  current=current)
 
-@auth.requires_login()
+@auth.requires_membership('GOD', 'Administrador')
 def new_service():
     title = 'Servicios'
     current = ['menu_catalogs', 'sidebar_services', 'sub_services_new']
     return dict(title=title,  current=current)
 
-@auth.requires_login()
+@auth.requires_membership('GOD', 'Administrador')
 def update_service():
     title = 'Servicios'
     current = ['menu_catalogs', 'sidebar_services', 'sub_services_read']
     return dict(title=title,  current=current)
     
-@auth.requires_login()
+@auth.requires_membership('GOD', 'Administrador')
 def service_prices_list():
     title = 'Servicios'
     current = ['menu_catalogs', 'sidebar_services', 'sub_services_read']
     return dict(title=title,  current=current)
     
-@auth.requires_login()
+@auth.requires_membership('GOD', 'Administrador')
 def service_list_quickedit():
     title = 'Servicios'
     id = request.vars.id
