@@ -1,0 +1,358 @@
+{{extend 'base/layout.html'}}
+  
+{{block scripts_extra}}
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.dataTables.min.js')}}"></script>
+<script type="text/javascript" src="{{=URL('static', 'js/custom/tables.js')}}"></script>
+
+<script type="text/javascript" src="{{=URL('static', 'js/custom/forms.js')}}"></script>
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.tagsinput.min.js')}}"></script>
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/charCount.js')}}"></script>
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/ui.spinner.min.js')}}"></script>
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/chosen.jquery.min.js')}}"></script>
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.validate.min.js')}}"></script>
+{{end}}
+
+{{block sidebar_menu}}
+{{include 'clients/sidebar.html'}}
+{{end}}
+
+{{block content}}
+    <div class="centercontent">
+    
+        <div class="pageheader">
+        
+            <h1 class="pagetitle">{{=title}}</h1>
+            
+        </div><!--pageheader-->
+        
+        <div id="contentwrapper" class="contentwrapper">
+        
+                <div id="basicform" class="subcontent">
+                                
+                    <div class="contenttitle2">
+                        <h3>Selecciona un cliente</h3>
+                    </div><!--contenttitle-->
+
+                    <form class="stdform" action="" method="post">
+                    	
+                    <!-- <ul class="buttonlist" style="float:right;">
+                        <li style="display:none;"><button class="stdbtn btn_blue">Form Button</button></li>
+                        <li><button id="edit" class="stdbtn btn_orange">Editar</button></li>
+                        <li><button id="btnenable" class="stdbtn btn_red" onclick='cambiarClase(); return false;'>Deshabilitar</button></li>
+                   </ul>	 	 -->
+                    	
+                        <p>
+                        	
+                            <span class="formwrapper" style="margin-left:0px;">
+                            	  <select id="vendors_select" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="2">
+                                </select>
+                            </span>
+                        </p>
+                         <p>
+                        	
+                            <span class="formwrapper" style="margin-left:0px; margin-top:-20px;">
+                            	<input type="radio" id="a" name="filtervendors" value="TRUE" onclick="ajaxFilter(this.value)" checked="checked"/> Habilitados &nbsp; &nbsp;
+                            	<input type="radio" id="b" name="filtervendors"  value="FALSE" onclick="ajaxFilter(this.value)"/> Deshabilitados &nbsp; &nbsp;
+                                <input type="radio" id="c" name="filtervendors" value="ANY" onclick="ajaxFilter(this.value)"/> Todos &nbsp; &nbsp;
+                            </span>
+                        </p>
+                        
+                    </form>
+
+            </div><!--subcontent-->	   
+            
+            <div class="one_half" style="margin-bottom:40px;">
+              
+              <table cellpadding="0" cellspacing="0" class="table invoice" style="margin-bottom:4px;">
+               	  <tr>
+                   	  <td width="30%">Nombre:</td>
+                      <td width="70%"><strong id="name"></strong></td>
+                  </tr>
+               	  <tr>
+               	    <td>Dirección:</td>
+               	    <td><strong id="address"></strong></td>
+           	      </tr>
+                  <tr>
+                	  <td>Estado:</td>
+                	  <td><strong id="state"></strong></td>
+              	  </tr>
+              	  <tr>
+                	  <td>Municipio:</td>
+                	  <td><strong id="municipality"></strong></td>
+              	  </tr>
+              	  <tr>
+                	  <td>Población:</td>
+                	  <td><strong id="locality"></strong></td>
+              	  </tr>
+              	  <tr>
+               	    <td>Código postal:</td>
+               	    <td><strong id="zip_code"></strong></td>
+           	      </tr>
+                  <tr>
+                	  <td>RFC:</td>
+                	  <td><strong id="rfc"></strong></td>
+              	  </tr>
+              	  <tr>
+                   	  <td>Sitio Web:</td>
+                      <td><strong id="website"></strong></td>
+                  </tr>
+              </table>
+              <a href="#" id="ev" data-id="">
+                <span class="stdbtn btn_orange">Editar</span>
+              </a>
+            </div><!--one_half-->
+
+            
+			<div class="one_half last" style="margin-bottom:40px;">
+           
+              <table cellpadding="0" cellspacing="0" class="table invoice" style="margin-bottom:4px;">
+              	  <tr>
+                	  <td width="30%">Banco:</td>
+                	  <td width="70%"><strong id="bank"></strong></td>
+              	  </tr>
+              	  <tr>
+                	  <td>Número de sucursal:</td>
+                	  <td><strong id="branch_number"></strong></td>
+              	  </tr>
+              	  <tr>
+                	  <td>Número de cuenta:</td>
+                	  <td><strong id="account_number"></strong></td>
+              	  </tr>
+              	  <tr>
+                	  <td>CLABE:</td>
+                	  <td><strong id="clabe"></strong></td>
+              	  </tr>
+              </table>
+              <a href="#" id="ep">
+                <span  style="" class="stdbtn btn_orange">Editar</span>
+              </a>
+            </div><!--one_half-->
+            
+            			<div class="one_half last" style="margin-bottom:40px;">
+           
+              <table cellpadding="0" cellspacing="0" class="table invoice" style="margin-top:-4px;">
+              	  <tr>
+                   	  <td  width="30%">Estatus:</td>
+                      <td  width="70%">
+                        <input type="checkbox" name="status" disabled>
+                        <span id="resp"></span>
+                      </td>
+                  </tr>
+              </table>
+            </div><!--one_half-->
+            
+            <br clear="all"/> 
+        </div><!--contentwrapper-->
+        
+        <br clear="all" />
+        
+	</div><!-- centercontent -->   
+</div><!--bodywrapper-->
+  
+    
+<script>
+var vendors_select = jQuery('#vendors_select'),
+    id = 0;
+
+////// get active vendors //////
+val = jQuery('.formwrapper input[name=filtervendors]:checked').val();
+    ajaxFilter(val);
+
+    jQuery('.formwrapper input:radio').on('change', function(e) {
+        ajaxFilter(e.currentTarget.value);
+    });
+
+function ajaxFilter(who) {
+    //console.log(which);
+    jQuery('#vendors_select_chzn').remove();
+    jQuery('#vendors_select').val('').removeClass('chzn-done').chosen();
+    cleanFields();
+
+    jQuery.ajax({ 
+        url: "{{=URL(c='vendors_ajax', f='get_vendors')}}",
+        type: 'POST',
+        data: { query: who },          
+        success: function (data) {
+          jQuery('#vendors_select')
+            .html('')
+            .append(data)
+            .prepend('<option value="">Seleccionar</option>')
+            .trigger("liszt:updated");
+          }
+    });
+  }
+
+vendors_select.change( function() {
+  ////clean fields
+  cleanFields();
+  id = jQuery(this).find(':selected').val();
+
+  if(id != '') {
+    var name = jQuery('#name'),
+        address = jQuery('#address'),
+        state = jQuery('#state'),
+        municipality = jQuery('#municipality'),
+        locality = jQuery('#locality'),
+        zip_code = jQuery('#zip_code'),
+        rfc = jQuery('#rfc'),
+        website = jQuery('#website'),
+        bank = jQuery('#bank'),
+        branch_number = jQuery('#branch_number'),
+        account_number = jQuery('#account_number'),
+        clabe = jQuery('#clabe'),
+        status = jQuery('input[name=status]'),
+        resp = jQuery('span#resp');
+        resp.html('');
+
+    //console.log(id);
+    //insert here an ajax function and shit
+    jQuery.ajax({ 
+      url: "{{=URL(c='vendors_ajax', f='get_vendor_information')}}",
+      type: "POST",
+      data: { id: id }, 
+      dataType:"json",
+      success: function (data) {
+        //console.log(data);
+        //receive something like data = {"name":"name","state":"state"}
+        name.html(data.vendors['name']);
+        address.html(data.vendors['address']);
+        state.html(data.states['name']);
+        municipality.html(data.municipalities['name']);
+        locality.html(data.localities['name']);
+        zip_code.html(data.vendors['zip_code']);
+        rfc.html(data.vendors['rfc']);
+        website.html(data.vendors['website']);
+        bank.html(data.banks['short_name']);
+        branch_number.html(data.vendors['branch']);
+        account_number.html(data.vendors['bank_account_number']);
+        clabe.html(data.vendors['clabe']);
+
+        jQuery('#ev')
+        .attr('href', "{{=URL(c='vendors', f='update')}}"+'?id='+data.vendors.id);
+        jQuery('#ep')
+        .attr('href', "{{=URL(c='vendors', f='updatep')}}"+'?id='+data.vendors.id);
+
+        status.val(id).removeAttr('disabled');
+        status.parent().parent().removeClass('disabled'); 
+
+        if (data.vendors['status'] == true) {
+          status.parent().addClass('checked');
+          status.attr('onclick','chk('+id+',"True")');
+          resp.html('Activado.');
+        } else{
+          status.parent().removeClass('checked');
+          status.attr('onclick','chk('+id+',"False")');
+          resp.html('Desactivado.');
+        };
+        
+      }
+    });     
+  }
+
+});
+
+function cleanFields() {
+  jQuery('#ev').removeAttr('href');
+  jQuery('#ep').removeAttr('href');
+  
+  var name = jQuery('#name'),
+      address = jQuery('#address'),
+      state = jQuery('#state'),
+      municipality = jQuery('#municipality'),
+      locality = jQuery('#locality'),
+      zip_code = jQuery('#zip_code'),
+      rfc = jQuery('#rfc'),
+      website = jQuery('#website'),
+      bank = jQuery('#bank'),
+      branch_number = jQuery('#branch_number'),
+      account_number = jQuery('#account_number'),
+      clabe = jQuery('#clabe'),
+      status = jQuery('input[name=status]'),
+      resp = jQuery('span#resp');
+
+      status.val('').attr('disabled',true);
+      status
+        .parent()
+          .removeClass('checked')
+          .parent()
+            .addClass('disabled');
+      resp.html('');
+
+  var elements = [name, address, state, municipality, locality, zip_code, 
+                  rfc, website, bank, branch_number, account_number, clabe];
+
+  for(var e in elements) {
+    elements[e].html('');
+  }
+}
+
+////// edit buttons //////
+function chk(id, s) {
+    var status = jQuery('input[name=status]'),
+        resp = jQuery('span#resp');
+
+    if(s == 'True') {
+        var ans = confirm('¿Está seguro que quiere deshabilitar este proveedor?.');
+
+        if(ans) {
+            jQuery.ajax({
+                url: "{{=URL(c='vendors_ajax', f='toggle_vendor_status')}}",
+                type: 'POST',
+                data: { id: id, status: s }
+            });
+            status.parent().removeClass('checked');
+            status.attr('onclick','chk('+id+',"False")');
+            resp.html('Desactivado.');
+            cleanFields();
+            //jQuery('#vendors_select_chzn').remove();
+            //jQuery('#vendors_select').val('').removeClass('chzn-done').chosen();
+
+            if(jQuery('#a').parent('span').hasClass('checked')) {
+                ajaxFilter('TRUE');
+            } else if(jQuery('#b').parent('span').hasClass('checked')) {
+                ajaxFilter('FALSE');
+            } else {
+                ajaxFilter('ANY');
+            }
+
+      } else {
+        resp.html('Activado.');
+        status.parent().addClass('checked');
+      }        
+    }
+    else {
+        var ans = confirm('¿Está seguro que quiere habilitar este proveedor?.');
+
+        if(ans) {
+            jQuery.ajax({
+              url: "{{=URL(c='vendors_ajax', f='toggle_vendor_status')}}",
+              type: 'POST',
+              data: { id: id, status: s }
+            });
+            status.parent().addClass('checked');
+            status.attr('onclick','chk('+id+',"True")');
+            resp.html('Activado.');
+            cleanFields();
+            //jQuery('#vendors_select_chzn').remove();
+            //jQuery('#vendors_select').val('').removeClass('chzn-done').chosen();
+
+            if(jQuery('#a').parent('span').hasClass('checked')) {
+                ajaxFilter('TRUE');
+            } else if(jQuery('#b').parent('span').hasClass('checked')) {
+                ajaxFilter('FALSE');
+            } else {
+                ajaxFilter('ANY');
+            }
+        } else {
+            resp.html('Desactivado.');
+            status.parent().removeClass('checked');
+        }
+    }
+  
+}
+
+</script>
+</body>
+
+</html>
+{{end}}

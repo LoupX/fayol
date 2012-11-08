@@ -1,0 +1,292 @@
+{{extend 'base/layout.html'}}
+
+{{block scripts_extra}}	
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.validate.min.js')}}"></script>
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/chosen.jquery.min.js')}}"></script>
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/notifications.js')}}"></script>
+{{end}}
+
+{{block sidebar_menu}}
+{{include 'clients/sidebar.html'}}
+{{end}}
+
+{{block content}}
+    <div class="centercontent">
+    
+        <div class="pageheader">
+        
+            <h1 class="pagetitle">{{=title}}</h1>
+            
+        </div><!--pageheader-->
+        
+        <div id="contentwrapper" class="contentwrapper">
+            
+                <div id="validation" class="subcontent">
+                
+                <div class="contenttitle2">
+                        <h3>Datos generales</h3>
+                </div><!--contenttitle-->
+
+                {{include 'base/notifications.html'}}
+
+                <!-- <div class="notibar msgerror" style="display:none;">
+                    <a class="close"></a>
+                    <p>Ocurrió un error con los datos del formulario.</p>
+                </div>
+
+                <div class="notibar exists" style="display:none;">
+                    <a class="close"></a>
+                    <p>Ese proveedor existe, para editarlo vaya a la sección de ver proveedor. </p>
+                </div>
+
+                <div class="notibar msgsuccess" style="display:none;">
+                        <a class="close"></a>
+                        <p>Se han guardado los datos del formulario.</p>
+                    </div> -->
+                
+                    <form id="form" class="stdform stdform2" method="POST" action="">
+                        <p>
+                            <label>Nombre de la empresa *</label>
+                            <span class="field"><input type="text" name="company" id="company" class="smallinput" tabindex="1" required/></span>
+                        </p>
+                        
+                        <p>
+                            <label>Dirección</label>
+                            <span class="field"><input type="text" name="address" id="address" class="smallinput" tabindex="2" /></span>
+                        </p>
+
+                        <p style="margin-top: 1px;">
+                            <label>Estado</label>
+                            <span class="field">
+                                <!-- <select name="states" id="states">
+                                </select> -->
+                                <select id="states" name="states" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="3">
+                                  </select>
+                            </span>
+                        </p>
+                        
+                        <p style="margin-top: 1px;">
+                            <label>Municipio</label>
+                            <span id="municipality_container"class="field">
+                            <select name="municipality" id="municipality" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="4">
+                            </select>
+                            </span>
+                        </p>
+
+                        <p style="margin-top: 1px;">
+                            <label>Población</label>
+                            <span class="field" id="locality_container">
+                            <select name="locality" id="locality" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="5">
+                            </select>
+                            </span>
+                        </p>
+                        
+                        <p style="margin-top: 1px;">
+                            <label>Código postal</label>
+                            <span class="field"><input type="text" name="zip_code" id="zip_code" class="smallinput" maxlength="5" tabindex="6"/></span>
+                        </p>
+                        
+                        <p>
+                            <label>R.F.C.</label>
+                            <span class="field"><input type="text" name="rfc" id="rfc" class="smallinput" maxlength="13" tabindex="7"/></span>
+                        </p>
+                        
+                        <p>
+                            <label>Sitio Web</label>
+                            <span class="field">
+                                <input type="text" name="website" id="website" class="smallinput" tabindex="8" 
+                                placeholder="http://ejemplo.com"/></span>
+                        </p>
+                        
+                        <p class="stdformbutton">
+                            <button id="submit" class="submit radius2" tabindex="9">Guardar </button>
+                        </p>
+                    </form>
+
+            </div><!--subcontent-->      
+        
+        </div><!--contentwrapper-->
+        
+        <br clear="all" />
+        
+    </div><!-- centercontent -->
+    
+    
+</div><!--bodywrapper-->
+
+<script type="text/javascript">
+
+//////////// Ajax for selects ////////////
+    jQuery(".chzn-select").chosen();
+
+    var state = jQuery('#states'),
+        municipality = jQuery('#municipality'),
+        locality = jQuery('#locality');
+
+    jQuery.ajax({
+        type: "POST",
+        url: "{{=URL(c='common', f='get_states')}}",
+        success: function(results) {
+            state
+                .html(results)
+                .prepend('<option value="">Selecccionar</option>')
+                .trigger("liszt:updated");
+            }
+    });
+
+//////////// get municipalities ////////////
+    state.change( function() {
+        var id = jQuery(this).find(':selected').val();
+        if(id != '') {
+            jQuery.ajax({
+                type: "POST",
+                url: "{{=URL(c='common', f='get_municipalities')}}",
+                data: {id: id},
+                success: function(results) {
+                    municipality
+                        .html(results)
+                        .prepend('<option value="">Selecccionar</option>')
+                        .trigger("liszt:updated");
+                }
+            });
+        }
+        else {
+            municipality
+                .html('')
+                .prepend('<option value="">Selecccionar</option>')
+                .trigger("liszt:updated");
+            locality
+                .html('')
+                .prepend('<option value="">Selecccionar</option>')
+                .trigger("liszt:updated");
+        }
+    });
+
+//////////// get localities ////////////
+    municipality.change( function() {
+        var id = jQuery(this).find(':selected').val();
+        if(id != '') {
+            jQuery.ajax({
+                type: "POST",
+                data: {municipality_id: id},
+                url: "{{=URL(c='common', f='get_localities')}}",
+                success: function(results) {
+                    locality
+                        .html(results)
+                        .prepend('<option value="">Selecccionar</option>')
+                        .trigger("liszt:updated");
+                }
+            });
+        }
+        else {
+            locality
+                .html('')
+                .prepend('<option value="">Selecccionar</option>')
+                .trigger("liszt:updated");
+        }
+    });
+
+//////////// validate form ////////////
+    jQuery("#form").validate({
+            rules: {
+                company: "required",
+                zip_code: {
+                    required: false,
+                    digits: true,
+                    minlength: 5
+                },
+                website: {
+                    url: true,
+                    required: false
+                },
+                rfc: {
+                    minlength: 10,
+                    maxlength:13,
+                    required: false
+                }
+            },
+            messages: {
+                company: "Ingrese el nombre de la empresa",
+                zip_code: "Este campo debe tener 5 números.",
+                website: "El sitio web debe tener el siguiente formato: http://ejemplo.com ",
+                rfc: "R.F.C. inválido."
+            }
+        });
+
+//////////// send form ////////////
+    jQuery('#submit').live('click', function(e) {
+        e.preventDefault();
+        var sid = jQuery('#states').val(),
+            mid = (jQuery('#municipality').val() == null) ? '': jQuery('#municipality').val(),
+            lid = (jQuery('#locality').val() == null) ? '': jQuery('#locality').val(),
+            com = jQuery('#company').val();
+
+        Messages.hideAll();
+
+        if(jQuery("#form").valid() && com != null) {
+             jQuery.ajax({
+                url: "{{=URL(c='vendors_ajax', f='create_vendor')}}",
+                data: { 
+                    company:com,
+                    address:jQuery('#address').val(),
+                    state: sid,
+                    municipality: mid,
+                    locality: lid,
+                    zip_code:jQuery('#zip_code').val(),
+                    rfc:jQuery('#rfc').val(),
+                    website:jQuery('#website').val()
+                },
+                type: 'POST',
+                success:function(data){
+                    if(data != 0 && data){
+                        Messages.showM('.msgsuccess', 'Se han guardado los datos del formulario.');
+                        deleteFields();
+                        sid = 0;
+                        mid = 0;
+                        lid = 0;
+                        jQuery('#states_chzn').remove();
+                        jQuery('#states').val('').removeClass('chzn-done').chosen();
+                        jQuery('#municipality_chzn').remove();
+                        jQuery('#municipality').val('').removeClass('chzn-done').chosen();
+                        jQuery('#locality_chzn').remove();
+                        jQuery('#locality').val('').removeClass('chzn-done').chosen();
+                    }
+                    else if(data == 0) {
+                        Messages.showM('.exists', 'Ese proveedor existe, para editarlo vaya a la sección de ver proveedor.');
+                    }
+                    else{
+                        Messages.showM('.msgerror', 'Ocurrió un error con los datos del formulario.');
+                    }
+                }
+            }); 
+        } else {
+            Messages.showM('.msgerror', 'Ocurrió un error con los datos del formulario.');
+        }
+    });
+
+    function deleteFields() {
+        jQuery('#company').val('');
+        jQuery('#address').val('');
+        jQuery('#states option')
+            .first()
+            .attr('selected',true)
+            .trigger("liszt:updated");
+        jQuery('#municipality')
+            .html('')
+            .prepend('<option value="">Selecccionar</option>')
+            .trigger("liszt:updated");
+        jQuery('#locality')
+            .html('')
+            .prepend('<option value="">Selecccionar</option>')
+            .trigger("liszt:updated");
+        jQuery('#zip_code').val('');
+        jQuery('#rfc').val('');
+        jQuery('#website').val('');
+    }
+
+    
+</script>
+
+</body>
+</html>
+{{end}}
