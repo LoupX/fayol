@@ -315,24 +315,25 @@ def change_password():
     id = auth.user.id
     pwd_old = request.vars.password_old
     pwd_new = request.vars.password_new
+    result = None
     try:
         pwd_old = db.auth_user.password.validate(pwd_old)[0]
         pwd_new = db.auth_user.password.validate(pwd_new)[0]
         user = db(db.auth_user.id==id).select().first()
         if user and user.get('password', False):
             if not user.registration_key and pwd_old==user['password']:
-                user.update(password=pwd_new)
+               result = db(db.auth_user.id==id).update(password=pwd_new)
             else:
                 return 0
         else:
             return ''
-    except:
+    except Exception as e:
         db.rollback()
-        return ''
+        return str(e)
     else:
         if result == 1:
             db.commit()
             return True
         else:
             db.rollback()
-            return ''
+            return 'wut?'
