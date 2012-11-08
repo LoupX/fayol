@@ -1,7 +1,7 @@
 var Messages = {
     merror: "Ocurrió un error con los datos del formulario.",
     msuccess: "Se han guardado los datos del formulario.",
-    mexists: "Ese proveedor existe, para editarlo vaya a la sección de ver proveedor.",
+    mexists: "Este proveedor existe, para editarlo vaya a la sección de ver proveedores.",
     malert: "Verifique los datos antes de guardar, posteriormente no se podrán editar.",
     nspeed: 600,
     sspeed: 1700,
