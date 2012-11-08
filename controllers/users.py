@@ -17,3 +17,9 @@ def update_user():
     title = 'Usuarios'
     current = ['menu_users', 'sidebar_users', 'sub_users_read']
     return dict(title=title, current=current)
+
+def update_password():
+    title = 'Contraseña'
+    current = ['menu_users', 'sidebar_users', 'sub_users_read']
+    return dict(title=title, current=current)
+
