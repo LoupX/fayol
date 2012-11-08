@@ -64,3 +64,5 @@ var Messages = {
     },
     version: 'v0.1.1'
 }
+
+var msg = Messages;

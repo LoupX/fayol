@@ -5,7 +5,8 @@
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.tagsinput.min.js')}}"></script>
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/charCount.js')}}"></script>
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/ui.spinner.min.js')}}"></script>
-<script type="text/javascript" src="{{=URL('static', 'js/plugins/chosen.jquery.min.js')}}"></script>
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/chosen.jquery.min.js')}}"></script> 
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/notifications.js')}}"></script>
 <style type="text/css">
     .ellol {
         border: 1px solid red;
@@ -34,20 +35,7 @@
                         <h3>Nueva sucursal</h3>
                     </div><!--contenttitle-->
             				
-            		<div class="notibar msgerror" style="display:none;">
-                    	<a class="close"></a>
-                    	<p>Ocurrió un error con los datos del formulario.</p>
-                    </div>
-
-                    <div class="notibar exists" style="display:none;">
-               	     	<a class="close"></a>
-               	     	<p>Ese proveedor existe, para editarlo vaya a la sección de ver proveedor. </p>
-               	    </div>
-               	    
-               	    <div class="notibar msgsuccess" style="display:none;">
-                        <a class="close"></a>
-                        <p>Se han guardado los datos del formulario.</p>
-                    </div>		
+            		{{include 'base/notifications.html'}}		
             						
                     <form id="form_branch_office" class="stdform stdform2" method="post" action="">
                     	
@@ -132,7 +120,7 @@
 
 <script type="text/javascript">
 //////////// Ajax for selects ////////////
-    jQuery(".chzn-select").chosen({allow_single_deselect:true});
+    jQuery(".chzn-select").chosen();
     
     var sid = '',
     	mid = '',
@@ -249,9 +237,7 @@
         valLoc(lid);
         valMun(mid);
 
-        jQuery('.msgerror').hide();
-        jQuery('.exists').hide();
-        jQuery('.msgsuccess').hide();
+        msg.hideAll();
 
         if(jQuery("#form_branch_office").valid() && valState(sid) && valLoc(lid) && valMun(mid)) {
 
@@ -272,10 +258,7 @@
                 type: 'POST',
                 success:function(data){
                     if(data != 0 && data){
-                        jQuery('.msgsuccess').fadeIn(1600, function() {
-                            jQuery('.msgsuccess').fadeOut('slow');
-                            
-                        });
+                        msg.showM('.msgsuccess');
                         deleteFields();
                         sid = 0;
                         mid = 0;
@@ -288,19 +271,15 @@
                         jQuery('#locality').val('').removeClass('chzn-done').chosen();
                     }
                     else if(data == 0) {
-                        jQuery('.exists').fadeIn(1600);
+                        msg.showM('.exists', 'Esta sucursal existe, para editarla vaya a la sección de ver sucursales.');
                     }
                     else{
-                        jQuery('.msgerror').fadeIn(1600);
+                        msg.showM('.msgerror');
                     }
-                    jQuery('body','html',window).animate(
-                                                        {scrollTop:0}, 
-                                                        1000);
                 }
             }); 
         } else {
-            jQuery('.msgerror').fadeIn(1600);
-            jQuery('body','html',window, document).animate({scrollTop:0},1000);
+            msg.showM('.msgerror');
         }
     });
 
