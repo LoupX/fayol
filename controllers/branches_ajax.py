@@ -103,7 +103,8 @@ def get_warehouse_information():
         row = db(query).select(
             db.warehouses.ALL, db.states.name,
             db.municipalities.name, db.localities.name,
-            db.company_addresses.ALL, db.branches.name, left=left).as_list()
+            db.company_addresses.ALL, db.branches.name, db.branches.id,
+            left=left).as_list()
     except:
         db.rollback()
 
