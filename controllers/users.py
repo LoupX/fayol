@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-@auth.requires_login()
+@auth.requires_membership('GOD')
 def index():
     title = 'Usuarios'
     current = ['menu_users', 'sidebar_users', 'sub_users_read']
