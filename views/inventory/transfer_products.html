@@ -5,9 +5,9 @@
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.validate.min.js')}}"></script>
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.dataTables.min.js')}}"></script>
 <script type="text/javascript" src="{{=URL('static', 'js/custom/dualselector.js')}}"></script>
-<script type="text/javascript" src="{{=URL('static', 'js/plugins/chosen.jquery.min.js')}}"></script>
-<script type="text/javascript" src="{{=URL('static', 'js/plugins/scroll.js')}}"></script>    
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/chosen.jquery.min.js')}}"></script> 
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.alerts.js')}}"></script>
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/notifications.js')}}"></script>
 {{end}}
 
 {{block sidebar_menu}}
@@ -25,25 +25,7 @@
         
     <div id="contentwrapper" class="contentwrapper">
 
-                    <div class="notibar msgalert">
-                        <p>Verifique los datos antes de guardar, posteriormente no se podran editar.</p>
-                    </div>
-
-                    <div class="notibar msgerror" style="display:none;">
-                        <a class="close"></a>
-                        <!-- Ocurrió un error con los datos del formulario. -->
-                        <p>Agregue almenos un produto.</p>
-                    </div>
-
-                    <div class="notibar msgsuccess" style="display:none;">
-                        <a class="close"></a>
-                        <p>Se han guardado los datos del formulario.</p>
-                    </div>
-
-                    <div class="notibar exists" style="display:none;">
-                        <a class="close"></a>
-                        <p>Ocurrrió un error. </p>
-                    </div>
+                    {{include 'base/notifications.html'}}
 
         <div class="contenttitle2">
             <h3>Seleccionar productos.</h3>
@@ -118,6 +100,8 @@
 </div><!--bodywrapper-->
 
 <script type="text/javascript">
+
+Messages.showM('.msgalert');
 
 var nt = jQuery('#newtable'),
     pt = jQuery('#table');

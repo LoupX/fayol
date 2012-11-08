@@ -239,7 +239,7 @@
                 type: 'POST',
                 success:function(data){
                     if(data != 0 && data){
-                        Messages.showM('.msgsuccess', 'Se han guardado los datos del formulario.');
+                        Messages.showM('.msgsuccess');
                         deleteFields();
                         sid = 0;
                         mid = 0;
@@ -252,15 +252,15 @@
                         jQuery('#locality').val('').removeClass('chzn-done').chosen();
                     }
                     else if(data == 0) {
-                        Messages.showM('.exists', 'Ese proveedor existe, para editarlo vaya a la sección de ver proveedor.');
+                        Messages.showM('.exists');
                     }
                     else{
-                        Messages.showM('.msgerror', 'Ocurrió un error con los datos del formulario.');
+                        Messages.showM('.msgerror');
                     }
                 }
             }); 
         } else {
-            Messages.showM('.msgerror', 'Ocurrió un error con los datos del formulario.');
+            Messages.showM('.msgerror');
         }
     });
 

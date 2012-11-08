@@ -104,7 +104,8 @@
         
 </div><!--bodywrapper-->
 <script type="text/javascript">
-    Messages.showM('.msgalert', 'Verifique los datos antes de guardar, posteriormente no se podran editar.');
+    Messages.showM('.msgalert');
+
     jQuery(".chzn-select").chosen();
     jQuery("input:radio").uniform();
     
@@ -288,9 +289,7 @@
                         //     redirect();
                         // });
                         Messages.successWR(
-                            '.msgsuccess', 
-                            'Se han guardado los datos del formulario.', 
-                            1700, 
+                            '.msgsuccess',
                             "{{=URL(c='inventory', f='transfer_products')}}");
 
                         console.log(data);
