@@ -285,30 +285,24 @@
                 type: 'POST',
                 success:function(data){
                     if(data != 0 && data){
-                        // jQuery('.msgsuccess').fadeIn(1600, function() {
-                        //     redirect();
-                        // });
                         Messages.successWR(
                             '.msgsuccess',
-                            "{{=URL(c='inventory', f='transfer_products')}}");
+                            "{{=URL(c='inventory', f='transfer_products')}}"
+                            );
 
                         console.log(data);
                         deleteFields();
                         val1 = '';
                         val2 = '';
                         cid = '';
-                    }
-                    else if(data == 0) {
-                        Messages.showM('.msgerror', 'Existe');
-                    }
-                    else{
-                        Messages.showM('.msgerror', 'Ocurrió un error con los datos del formulario.');
+                    } else{
+                        Messages.showM('.msgerror');
                     }
                 }
             });                           
         }
        else {
-            Messages.showM('.msgerror', 'Ocurrió un error con los datos del formulario.',2000);
+            Messages.showM('.msgerror');
         }
     });
 
@@ -385,10 +379,6 @@
             .attr('selected', true)
             .trigger("liszt:updated");
     }
-
-    // function redirect() {
-    //     window.location.replace("{{=URL(c='inventory', f='transfer_products')}}");
-    // }
     
 </script>
 
