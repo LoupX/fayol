@@ -34,5 +34,5 @@ def create_client():
         return ''
     else:
         db.commit()
-        return id
+        return str(id)
 
