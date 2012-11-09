@@ -117,27 +117,31 @@
   
     
 <script>
-var clients_select = jQuery('#clients_select'),
+var clients_select = jQuery('#clients_select');
+	cleanFields();
     id = 0;
 
     jQuery('#clients_select_chzn').remove();
     jQuery('#clients_select').val('').removeClass('chzn-done').chosen();
-    cleanFields();
-
-    jQuery.ajax({ 
+    
+    jQuery.ajax({
+        type: "POST",
         url: "{{=URL(c='clients_ajax', f='get_clients')}}",
-        type: 'POST',
-        data: { query: true },          
-        success: function (data) {
-          jQuery('#clients_select')
-            .html('')
-            .append(data)
-            .prepend('<option value="">Seleccionar</option>')
-            .trigger("liszt:updated");
-          }
+        dataType: "json",
+        data: {query: true},
+        success: function(results) {
+        	options = "";
+        	for(k in results){
+	        	options += "<option value=\"" + results[k].id + "\">" + results[k].first_name + " " + results[k].last_name + "</option>";
+	        }
+            clients_select	
+                .html(options)
+                .prepend('<option value="">Selecccionar</option>')
+                .trigger("liszt:updated");
+            }
     });
 
-
+//Empieza el pedo
 clients_select.change( function() {
   ////clean fields
   cleanFields();
@@ -154,7 +158,7 @@ clients_select.change( function() {
         address = jQuery('#address'),
         suburb = jQuery('#suburb'),
         zip_code = jQuery('#zip_code'),
-        rfc = jQuery('#rfc'),
+        rfc = jQuery('#rfc');
        
     jQuery.ajax({ 
       url: "{{=URL(c='clients_ajax', f='get_client_information')}}",
@@ -162,7 +166,6 @@ clients_select.change( function() {
       data: { id: id }, 
       dataType:"json",
       success: function (data) {
-
         //receive something like data = {"name":"name","state":"state"}
         first_name.html(data.clients['first_name']);
         last_name.html(data.clients['last_name']);
@@ -201,7 +204,7 @@ function cleanFields() {
       address = jQuery('#address'),
       suburb = jQuery('#suburb'),
       zip_code = jQuery('#zip_code'),
-      rfc = jQuery('#rfc'),
+      rfc = jQuery('#rfc');
       
   var elements = [first_name, last_name, phone, mobile, state, municipality, locality, 
   				  address, zip_code, rfc];
