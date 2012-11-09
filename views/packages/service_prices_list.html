@@ -4,8 +4,8 @@
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.dataTables.min.js')}}"></script>
 <script type="text/javascript" src="{{=URL('static', 'js/custom/tables.js')}}"></script>
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/chosen.jquery.min.js')}}"></script>	
-<script type="text/javascript" src="{{=URL('static', 'js/plugins/scroll.js')}}"></script>
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.validate.min.js')}}"></script>
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/notifications.js')}}"></script> 
 
 <style type="text/css">
     .ellol {
@@ -28,20 +28,8 @@
         </div><!--pageheader-->
         
         <div id="contentwrapper" class="contentwrapper">
-            	<div class="notibar msgerror" style="display:none;">
-                        <a class="close"></a>
-                        <!-- Ocurrió un error con los datos del formulario. -->
-                        <p>Ocurrió un error con los datos del formulario.</p>
-                </div>
-
-                <div class="notibar msgsuccess" style="display:none;">
-                        <a class="close"></a>
-                        <p>Se han guardado los datos del formulario.</p>
-                    </div>
-                <div class="notibar exists" style="display:none;">
-                        <a class="close"></a>
-                        <p>No se puede agregar más de 10 listas por servicio.</p>
-                    </div>
+            	
+                {{include 'base/notifications.html'}}
         
         	<div id="validation" class="subcontent">
             	
@@ -142,9 +130,8 @@ var globalid = '';
 
     jQuery('#submit').on('click', function(e) {
         e.preventDefault();
-        jQuery('.msgsuccess').hide();
-        jQuery('.msgerror').hide();
-        jQuery('.exists').hide();
+        msg.hideAll();
+
         var listid = '';
 
         // Validate form and shit as usual....
@@ -154,11 +141,8 @@ var globalid = '';
                 price.val('');
             
         } else{
-            jQuery('.msgerror').fadeIn(600);
+            msg.error();
         };
-
-         scrollThis();
-                
 
     });
 
@@ -173,13 +157,11 @@ var globalid = '';
                 },
             success: function(data){
                 if (data != 0) {
-                    jQuery('.msgsuccess').fadeIn(900, function() {
-                        jQuery(this).fadeOut(200);
-                    });
+                    msg.success();
                 } else if( data == 0) {
-                    jQuery('.exists').fadeIn(600);
+                    msg.exists("No se puede agregar mas de 10 listas por servicio.");
                 } else{
-                    jQuery('.msgerror').fadeIn(600);
+                    msg.error();
                 };
             },
             complete: function() {

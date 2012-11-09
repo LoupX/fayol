@@ -6,7 +6,7 @@
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.dataTables.min.js')}}"></script>
 <script type="text/javascript" src="{{=URL('static', 'js/custom/dualselector.js')}}"></script>
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/chosen.jquery.min.js')}}"></script>
-<script type="text/javascript" src="{{=URL('static', 'js/plugins/scroll.js')}}"></script>    
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/notifications.js')}}"></script>    
 {{end}}
 
 {{block sidebar_menu}}
@@ -18,21 +18,7 @@
         
     <div id="contentwrapper" class="contentwrapper">
 
-                    <div class="notibar msgerror" style="display:none;">
-                        <a class="close"></a>
-                        <!-- Ocurrió un error con los datos del formulario. -->
-                        <p>Agregue almenos un produto.</p>
-                    </div>
-
-                    <div class="notibar msgsuccess" style="display:none;">
-                        <a class="close"></a>
-                        <p>Se han guardado los datos del formulario.</p>
-                    </div>
-
-                    <div class="notibar exists" style="display:none;">
-                        <a class="close"></a>
-                        <p>Ocurrrió un error. </p>
-                    </div>
+        {{include 'base/notifications.html'}}
 
         <div class="contenttitle2">
             <h3>Actualizar productos al paquete.</h3>
@@ -327,9 +313,7 @@ var nt = jQuery('#newtable'),
 
     jQuery('#submit').click(function(e) {
         e.preventDefault();
-        jQuery('.msgerror').hide();
-        jQuery('.msgsuccess').hide();
-        jQuery('.exists').hide();
+        msg.hideAll();
 
         if(nt.dataTable().fnGetData().length > 0) {
             var products = [];
@@ -349,26 +333,18 @@ var nt = jQuery('#newtable'),
                 },
                 success: function(data) {
                     if (data) {
-                        jQuery('.msgsuccess').fadeIn(1600, function() {
-                            jQuery('.msgsuccess').fadeOut('slow');
-                            redirect({{=request.vars.id}});
-                        });
+                        msg.successWR("", "{{=URL(c='packages', f='view_package')}}?id="+{{=request.vars.id}});
 
                     } else{
-                        jQuery('.exists').show();
+                        msg.error("Ocurrio un error.");
                     };
                 }
             });
 
         } else {
-            jQuery('.msgerror').show();
+            msg.exists('Agregue almenos 1 producto.');
         };
-        scrollThis();
     });
-
-    function redirect(id) {
-        window.location.replace("{{=URL(c='packages', f='view_package')}}?id="+id);
-    }
     
 </script>
 </body>

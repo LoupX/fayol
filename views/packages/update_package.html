@@ -6,7 +6,8 @@
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/chosen.jquery.min.js')}}"></script>
 <script type="text/javascript" src="{{=URL('static', 'js/plugins/jquery.dataTables.min.js')}}"></script>
 <script type="text/javascript" src="{{=URL('static', 'js/custom/dualselector.js')}}"></script>
-<script type="text/javascript" src="{{=URL('static', 'js/plugins/chosen.jquery.min.js')}}"></script>    
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/chosen.jquery.min.js')}}"></script>   
+<script type="text/javascript" src="{{=URL('static', 'js/plugins/notifications.js')}}"></script>   
 <style type="text/css">
     .ellol {
         border: 1px solid red;
@@ -30,21 +31,8 @@
         <div id="contentwrapper" class="contentwrapper">
         
             <div id="validation" class="subcontent">
-         
-                    <div class="notibar msgerror" style="display:none;">
-                        <a class="close"></a>
-                        <p>Ocurrió un error con los datos del formulario.</p>
-                    </div>
 
-                    <div class="notibar exists" style="display:none;">
-                        <a class="close"></a>
-                        <p>Este paquete ya existe, para editarlo vaya a la sección de ver paquetes. </p>
-                    </div>
-
-                    <div class="notibar msgsuccess" style="display:none;">
-                        <a class="close"></a>
-                        <p>Se han guardado los datos del formulario.</p>
-                    </div>
+                {{include 'base/notifications.html'}}
                 
                     <form id="form_package" class="stdform stdform2" method="post" action="">                                       
                         <p>
@@ -137,9 +125,7 @@ jQuery.ajax({
     jQuery('#submit').live('click', function(e) {
         e.preventDefault();
         
-        jQuery('.msgerror').hide();
-        jQuery('.exists').hide();
-        jQuery('.msgsuccess').hide();
+        msg.hideAll();
 
         if(jQuery("#form_package").valid()) {
              jQuery.ajax({
@@ -156,26 +142,18 @@ jQuery.ajax({
                 type: 'POST',
                 success:function(data){
                     if(data != 0 && data){
-                        jQuery('.msgsuccess').fadeIn(1600, function() {
-                            jQuery('.msgsuccess').fadeOut('slow');
-                            redirect({{=request.vars.id}})
-                        });
-
+                        msg.successWR("", "{{=URL(c='packages', f='view_package')}}?id="+{{=request.vars.id}});
                     }
                     else if(data == 0) {
-                        jQuery('.exists').fadeIn(1600);
+                       msg.exists("Este paquete existe, para editarlo vaya a la sección de ver paquetes.");
                     }
                     else{
-                        jQuery('.msgerror').fadeIn(1600);
+                        msg.error();
                     }
-                    jQuery('body','html',window).animate(
-                                                        {scrollTop:0}, 
-                                                        1000);
                 }
             }); 
         } else {
-            jQuery('.msgerror').fadeIn(1600);
-            jQuery('body','html',window, document).animate({scrollTop:0},1000);
+            msg.error();
         }
     });
 
@@ -192,11 +170,6 @@ jQuery.ajax({
         jQuery('#markup').val('');
         jQuery('#description').val('');
     }
-
-    function redirect(id) {
-        window.location.replace("{{=URL(c='packages', f='view_package')}}?id="+id);
-    }
- 
     
 
 
