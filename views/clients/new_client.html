@@ -56,7 +56,7 @@
                         </p>
                         
                         <p style="margin-top: 1px;">
-                            <label>Estado *</label>
+                            <label>Estado</label>
                             <span class="field">
                                 <!-- <select name="states" id="states">
                                 </select> -->
@@ -66,7 +66,7 @@
                         </p>
                         
                         <p style="margin-top: 1px;">
-                            <label>Municipio *</label>
+                            <label>Municipio</label>
                             <span id="municipality_container"class="field">
                             <select name="municipality" id="municipality" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="6">
                             </select>
@@ -74,7 +74,7 @@
                         </p>
 
                         <p style="margin-top: 1px;">
-                            <label>Población *</label>
+                            <label>Población</label>
                             <span class="field" id="locality_container">
                             <select name="locality" id="locality" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="7">
                             </select>
@@ -82,17 +82,17 @@
                         </p>
                                                 
                         <p>
-                            <label>Dirección *</label>
+                            <label>Dirección</label>
                             <span class="field"><input type="text" name="address" id="address" class="smallinput" tabindex="8" /></span>
                         </p>
                         
                         <p>
-                            <label>Colonia *</label>
+                            <label>Colonia</label>
                             <span class="field"><input type="text" name="suburb" id="suburb" class="smallinput" tabindex="9"/></span>
                         </p>
                         
                         <p style="margin-top: 1px;">
-                            <label>Código postal *</label>
+                            <label>Código postal</label>
                             <span class="field"><input type="text" name="zip_code" id="zip_code" class="smallinput" maxlength="5" tabindex="10"/></span>
                         </p>
                         
@@ -255,7 +255,7 @@
                         jQuery('#locality').val('').removeClass('chzn-done').chosen();
                     }
                     else if(data == 0) {
-                        Messages.showM('.exists', 'Ese proveedor existe, para editarlo vaya a la sección de ver proveedor.');
+                        Messages.showM('.exists', 'Este RFC ya esta esta asignado a otro cliente.');
                     }
                     else{
                         Messages.showM('.msgerror', 'Ocurrió un error con los datos del formulario.');
