@@ -66,22 +66,23 @@ def get_client_information():
     try:
         query = db.clients.id==id
         left = []
-        left.append(db.states.on(db.states.id==db.clients.state_id))
+        left.append(db.states.on(db.clients.state_id==db.states.id))
         left.append(db.municipalities.on(
-            db.municipalities.id==db.clients.municipality_id))
-        left.append(db.localities.on(db.localities.id==db.clients.locality_id))
-        row = db(db.clients.id==id).select(
+            db.clients.municipality_id==db.municipalities.id))
+        left.append(db.localities.on(db.clients.locality_id==db.localities.id))
+        row = db(query).select(
             db.clients.ALL, db.states.id, db.states.name,
             db.municipalities.id, db.municipalities.name,
-            db.localities.id, db.localities.name).as_list()
+            db.localities.id, db.localities.name, left=left).as_list()
         if row:
             data = row[0]
     except:
         db.rollback()
 
     if data:
-        data['date_added'] = str(data['date_added'])
-        data['date_modified'] = str(data['date_modified'])
+        client = data['clients']
+        client['date_added'] = str(client['date_added'])
+        client['date_modified'] = str(client['date_modified'])
 
     from gluon.contrib import simplejson
     data = simplejson.dumps(data)
