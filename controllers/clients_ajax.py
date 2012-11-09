@@ -64,7 +64,16 @@ def get_client_information():
     data = dict()
 
     try:
-        row = db(db.clients.id==id).select().as_list()
+        query = db.clients.id==id
+        left = []
+        left.append(db.states.on(db.states.id==db.clients.state_id))
+        left.append(db.municipalities.on(
+            db.municipalities.id==db.clients.municipality_id))
+        left.append(db.localities.on(db.localities.id==db.clients.locality_id))
+        row = db(db.clients.id==id).select(
+            db.clients.ALL, db.states.id, db.states.name,
+            db.municipalities.id, db.municipalities.name,
+            db.localities.id, db.localities.name).as_list()
         if row:
             data = row[0]
     except:
