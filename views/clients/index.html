@@ -157,42 +157,31 @@ clients_select.change( function() {
         rfc = jQuery('#rfc'),
        
     jQuery.ajax({ 
-      url: "{{=URL(c='vendors_ajax', f='get_vendor_information')}}",
+      url: "{{=URL(c='clients_ajax', f='get_client_information')}}",
       type: "POST",
       data: { id: id }, 
       dataType:"json",
       success: function (data) {
-        //console.log(data);
+
         //receive something like data = {"name":"name","state":"state"}
-        name.html(data.vendors['name']);
-        address.html(data.vendors['address']);
+        first_name.html(data.clients['first_name']);
+        last_name.html(data.clients['last_name']);
+        phone.html(data.clients['phone']);
+        mobile.html(data.clients['mobile']);
         state.html(data.states['name']);
         municipality.html(data.municipalities['name']);
         locality.html(data.localities['name']);
-        zip_code.html(data.vendors['zip_code']);
-        rfc.html(data.vendors['rfc']);
-        website.html(data.vendors['website']);
-        bank.html(data.banks['short_name']);
-        branch_number.html(data.vendors['branch']);
-        account_number.html(data.vendors['bank_account_number']);
-        clabe.html(data.vendors['clabe']);
-
+        address.html(data.clients['address']);
+        suburb.html(data.clients['suburb']);
+        zip_code.html(data.clients['zip_code']);
+        rfc.html(data.clients['rfc']);
+        
         jQuery('#ec')
         .attr('href', "{{=URL(c='clients', f='update_client')}}"+'?id='+data.clients.id);
 
         status.val(id).removeAttr('disabled');
         status.parent().parent().removeClass('disabled'); 
 
-        if (data.vendors['status'] == true) {
-          status.parent().addClass('checked');
-          status.attr('onclick','chk('+id+',"True")');
-          resp.html('Activado.');
-        } else{
-          status.parent().removeClass('checked');
-          status.attr('onclick','chk('+id+',"False")');
-          resp.html('Desactivado.');
-        };
-        
       }
     });     
   }
@@ -200,34 +189,22 @@ clients_select.change( function() {
 });
 
 function cleanFields() {
-  jQuery('#ev').removeAttr('href');
-  jQuery('#ep').removeAttr('href');
+  jQuery('#ec').removeAttr('href');
   
-  var name = jQuery('#name'),
-      address = jQuery('#address'),
+  var first_name = jQuery('#first_name'),
+      last_name = jQuery('#last_name'),
+      phone = jQuery('#phone'),
+      mobile = jQuery('#mobile'),
       state = jQuery('#state'),
       municipality = jQuery('#municipality'),
       locality = jQuery('#locality'),
+      address = jQuery('#address'),
+      suburb = jQuery('#suburb'),
       zip_code = jQuery('#zip_code'),
       rfc = jQuery('#rfc'),
-      website = jQuery('#website'),
-      bank = jQuery('#bank'),
-      branch_number = jQuery('#branch_number'),
-      account_number = jQuery('#account_number'),
-      clabe = jQuery('#clabe'),
-      status = jQuery('input[name=status]'),
-      resp = jQuery('span#resp');
-
-      status.val('').attr('disabled',true);
-      status
-        .parent()
-          .removeClass('checked')
-          .parent()
-            .addClass('disabled');
-      resp.html('');
-
-  var elements = [name, address, state, municipality, locality, zip_code, 
-                  rfc, website, bank, branch_number, account_number, clabe];
+      
+  var elements = [first_name, last_name, phone, mobile, state, municipality, locality, 
+  				  address, zip_code, rfc];
 
   for(var e in elements) {
     elements[e].html('');
