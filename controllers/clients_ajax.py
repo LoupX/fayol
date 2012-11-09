@@ -36,3 +36,21 @@ def create_client():
         db.commit()
         return str(id)
 
+
+@auth.requires(auth.has_membership(role='GOD') or
+               auth.has_membership(role='Administrador'))
+def get_clients():
+    id = request.vars.id
+    data = []
+
+    try:
+        data = db(db.clients).select().as_list()
+    except:
+        db.rollback()
+
+    if data:
+        for k in data:
+            return str(k)
+    from gluon.contrib import simplejson
+    data = simplejson.dumps(data)
+    return str(data)
