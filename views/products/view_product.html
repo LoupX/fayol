@@ -26,7 +26,7 @@
                 <div id="basicform" class="subcontent">
                                 
                     <div class="contenttitle2">
-                        <h3 id="name">Producto: ""</h3>
+                        <h3 id="name_product">Producto: ""</h3>
                     </div><!--contenttitle-->
                     
             </div><!--subcontent-->	   
@@ -40,7 +40,7 @@
                   </tr>
                	  <!--<tr>
                    	  <td width="30%">Nombre:</td>
-                      <td width="70%"><strong id="name"></strong></td>
+                      <td width="70%"><strong id="name_product"></strong></td>
                   </tr>-->
                   <tr>
                    	  <td>Nombre alternativo:</td>
@@ -156,7 +156,7 @@ var id = {{=request.vars.id}}
 	jQuery('input:checkbox').uniform();
 
     var code = jQuery('#code'),	
-    	name_product = jQuery('#name'),
+    	name_product = jQuery('#name_product'),
         alternative_name = jQuery('#alternative_name'),
         alternative_code = jQuery('#alternative_code'),
         brand_id = jQuery('#brand_id'),
@@ -282,8 +282,8 @@ function loadTable(aaData) {
             "aoColumns": [
                 {"sTitle": "Nombre"},
                 {"sTitle": "Precio"},
-                {"sTitle": "Predeterminado", "sClass":"center"},
-                {"sTitle": "", "sClass":"center"}
+                {"sTitle": "Predeterminado", "sClass":"center", "bSortable": false},
+                {"sTitle": "", "sClass":"center", "bSortable": false}
             ]
         });
         
