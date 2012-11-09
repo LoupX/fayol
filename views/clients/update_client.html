@@ -56,17 +56,15 @@
                         </p>
                         
                         <p style="margin-top: 1px;">
-                            <label>Estado *</label>
+                            <label>Estado</label>
                             <span class="field">
-                                <!-- <select name="states" id="states">
-                                </select> -->
                                 <select id="states" name="states" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="5">
                                   </select>
                             </span>
                         </p>
                         
                         <p style="margin-top: 1px;">
-                            <label>Municipio *</label>
+                            <label>Municipio</label>
                             <span id="municipality_container"class="field">
                             <select name="municipality" id="municipality" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="6">
                             </select>
@@ -74,7 +72,7 @@
                         </p>
 
                         <p style="margin-top: 1px;">
-                            <label>Población *</label>
+                            <label>Población</label>
                             <span class="field" id="locality_container">
                             <select name="locality" id="locality" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="7">
                             </select>
@@ -82,17 +80,17 @@
                         </p>
                                                 
                         <p>
-                            <label>Dirección *</label>
+                            <label>Dirección</label>
                             <span class="field"><input type="text" name="address" id="address" class="smallinput" tabindex="8" /></span>
                         </p>
                         
                         <p>
-                            <label>Colonia *</label>
+                            <label>Colonia</label>
                             <span class="field"><input type="text" name="suburb" id="suburb" class="smallinput" tabindex="9"/></span>
                         </p>
                         
                         <p style="margin-top: 1px;">
-                            <label>Código postal *</label>
+                            <label>Código postal</label>
                             <span class="field"><input type="text" name="zip_code" id="zip_code" class="smallinput" maxlength="5" tabindex="10"/></span>
                         </p>
                         
@@ -119,11 +117,21 @@
 
 <script type="text/javascript">
 
+//////////// Ajax for selects ////////////
+    jQuery(".chzn-select").chosen();
+
+    var state = jQuery('#states'),
+        municipality = jQuery('#municipality'),
+        locality = jQuery('#locality');
+        s = '',
+        m = '',
+        l = '';
+
 //////////// get info ////////////
     
-    jQuery.ajax({
+      jQuery.ajax({
         url: "{{=URL(c='clients_ajax', f='get_client_information')}}",
-        data: { id: "{{=id}}" },
+        data: { id: {{=request.vars.id}} },
         type: "POST",
         dataType:"json",
         success:function(data){
@@ -145,24 +153,6 @@
         }
     });
 
-//////////// Ajax for selects ////////////
-    jQuery(".chzn-select").chosen();
-
-    var state = jQuery('#states'),
-        municipality = jQuery('#municipality'),
-        locality = jQuery('#locality');
-
-    jQuery.ajax({
-        type: "POST",
-        url: "{{=URL(c='common', f='get_states')}}",
-        success: function(results) {
-            state
-                .html(results)
-                .prepend('<option value="">Selecccionar</option>')
-                .trigger("liszt:updated");
-            }
-    });
-
 //////////// get municipalities ////////////
     state.change( function() {
         var id = jQuery(this).find(':selected').val();
@@ -174,7 +164,11 @@
                 success: function(results) {
                     municipality
                         .html(results)
-                        .prepend('<option value="">Selecccionar</option>')
+                        .prepend('<option value="">Seleccionar</option>')
+                        .trigger("liszt:updated");
+                    locality
+                        .html('')
+                        .prepend('<option value="">Seleccionar</option>')
                         .trigger("liszt:updated");
                 }
             });
@@ -182,11 +176,11 @@
         else {
             municipality
                 .html('')
-                .prepend('<option value="">Selecccionar</option>')
+                .prepend('<option value="">Seleccionar</option>')
                 .trigger("liszt:updated");
             locality
                 .html('')
-                .prepend('<option value="">Selecccionar</option>')
+                .prepend('<option value="">Seleccionar</option>')
                 .trigger("liszt:updated");
         }
     });
@@ -202,7 +196,7 @@
                 success: function(results) {
                     locality
                         .html(results)
-                        .prepend('<option value="">Selecccionar</option>')
+                        .prepend('<option value="">Seleccionar</option>')
                         .trigger("liszt:updated");
                 }
             });
@@ -210,7 +204,7 @@
         else {
             locality
                 .html('')
-                .prepend('<option value="">Selecccionar</option>')
+                .prepend('<option value="">Seleccionar</option>')
                 .trigger("liszt:updated");
         }
     });
@@ -251,15 +245,15 @@
 
         if(jQuery("#form_cliente").valid()) {
              jQuery.ajax({
-                url: "{{=URL(c='clients_ajax', f='create_client')}}",
+                url: "{{=URL(c='clients_ajax', f='update_client')}}",
                 data: { 
                     first_name:jQuery('#first_name').val(),
                     last_name:jQuery('#last_name').val(),
                     phone:jQuery('#phone').val(),
                     mobile:jQuery('#mobile').val(),
-                    state: sid,
-                    municipality: mid,
-                    locality: lid,
+                    state_id: sid,
+                    municipality_id: mid,
+                    locality_id: lid,
                     address:jQuery('#address').val(),
                     suburb:jQuery('#suburb').val(),
                     zip_code:jQuery('#zip_code').val(),
@@ -268,20 +262,14 @@
                 type: 'POST',
                 success:function(data){
                     if(data != 0 && data){
-                        Messages.showM('.msgsuccess', 'Se han guardado los datos del formulario.');
-                        deleteFields();
+                        msg.successWR("", "{{=URL(c='clients', f='index')}}");
                         sid = 0;
                         mid = 0;
                         lid = 0;
-                        jQuery('#states_chzn').remove();
-                        jQuery('#states').val('').removeClass('chzn-done').chosen();
-                        jQuery('#municipality_chzn').remove();
-                        jQuery('#municipality').val('').removeClass('chzn-done').chosen();
-                        jQuery('#locality_chzn').remove();
-                        jQuery('#locality').val('').removeClass('chzn-done').chosen();
+                       
                     }
                     else if(data == 0) {
-                        Messages.showM('.exists', 'Ese proveedor existe, para editarlo vaya a la sección de ver proveedor.');
+                        Messages.showM('.exists', 'Este cliente ya existe, para editarlo vaya a la sección de ver cliente.');
                     }
                     else{
                         Messages.showM('.msgerror', 'Ocurrió un error con los datos del formulario.');
@@ -293,30 +281,6 @@
         }
     });
 
-    function deleteFields() {
-        
-        jQuery('#first_name').val('');
-        jQuery('#last_name').val('');
-        jQuery('#phone').val('');
-        jQuery('#mobile').val('');
-        jQuery('#states option')
-            .first()
-            .attr('selected',true)
-            .trigger("liszt:updated");
-        jQuery('#municipality')
-            .html('')
-            .prepend('<option value="">Selecccionar</option>')
-            .trigger("liszt:updated");
-        jQuery('#locality')
-            .html('')
-            .prepend('<option value="">Selecccionar</option>')
-            .trigger("liszt:updated");
-        jQuery('#address').val('');
-        jQuery('#suburb').val('');    
-        jQuery('#zip_code').val('');
-        jQuery('#rfc').val('');
-    }
-
     function selectS(id) {
         jQuery.ajax({
             type: "POST",
@@ -324,7 +288,7 @@
             success: function(results) {
                 state
                     .html(results)
-                    .prepend('<option value="">Selecccionar</option>')
+                    .prepend('<option value="">Seleccionar</option>')
                     .trigger("liszt:updated");
                 },
             complete: function() {
@@ -344,7 +308,7 @@
             success: function(results) {
                 municipality
                     .html(results)
-                    .prepend('<option value="">Selecccionar</option>')
+                    .prepend('<option value="">Seleccionar</option>')
                     .trigger("liszt:updated");
             },
             complete: function() {
@@ -363,7 +327,7 @@
                 success: function(results) {
                     locality
                         .html(results)
-                        .prepend('<option value="">Selecccionar</option>')
+                        .prepend('<option value="">Seleccionar</option>')
                         .trigger("liszt:updated");
                 },
                 complete: function() {

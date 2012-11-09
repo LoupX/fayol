@@ -136,7 +136,7 @@ var clients_select = jQuery('#clients_select');
 	        }
             clients_select	
                 .html(options)
-                .prepend('<option value="">Selecccionar</option>')
+                .prepend('<option value="">Seleccionar</option>')
                 .trigger("liszt:updated");
             }
     });
@@ -181,10 +181,6 @@ clients_select.change( function() {
         
         jQuery('#ec')
         .attr('href', "{{=URL(c='clients', f='update_client')}}"+'?id='+data.clients.id);
-
-        status.val(id).removeAttr('disabled');
-        status.parent().parent().removeClass('disabled'); 
-
       }
     });     
   }

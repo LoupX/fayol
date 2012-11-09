@@ -58,8 +58,6 @@
                         <p style="margin-top: 1px;">
                             <label>Estado</label>
                             <span class="field">
-                                <!-- <select name="states" id="states">
-                                </select> -->
                                 <select id="states" name="states" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="5">
                                   </select>
                             </span>
@@ -132,7 +130,7 @@
         success: function(results) {
             state
                 .html(results)
-                .prepend('<option value="">Selecccionar</option>')
+                .prepend('<option value="">Seleccionar</option>')
                 .trigger("liszt:updated");
             }
     });
@@ -148,7 +146,7 @@
                 success: function(results) {
                     municipality
                         .html(results)
-                        .prepend('<option value="">Selecccionar</option>')
+                        .prepend('<option value="">Seleccionar</option>')
                         .trigger("liszt:updated");
                 }
             });
@@ -156,11 +154,11 @@
         else {
             municipality
                 .html('')
-                .prepend('<option value="">Selecccionar</option>')
+                .prepend('<option value="">Seleccionar</option>')
                 .trigger("liszt:updated");
             locality
                 .html('')
-                .prepend('<option value="">Selecccionar</option>')
+                .prepend('<option value="">Seleccionar</option>')
                 .trigger("liszt:updated");
         }
     });
@@ -176,7 +174,7 @@
                 success: function(results) {
                     locality
                         .html(results)
-                        .prepend('<option value="">Selecccionar</option>')
+                        .prepend('<option value="">Seleccionar</option>')
                         .trigger("liszt:updated");
                 }
             });
@@ -184,7 +182,7 @@
         else {
             locality
                 .html('')
-                .prepend('<option value="">Selecccionar</option>')
+                .prepend('<option value="">Seleccionar</option>')
                 .trigger("liszt:updated");
         }
     });
@@ -279,11 +277,11 @@
             .trigger("liszt:updated");
         jQuery('#municipality')
             .html('')
-            .prepend('<option value="">Selecccionar</option>')
+            .prepend('<option value="">Seleccionar</option>')
             .trigger("liszt:updated");
         jQuery('#locality')
             .html('')
-            .prepend('<option value="">Selecccionar</option>')
+            .prepend('<option value="">Seleccionar</option>')
             .trigger("liszt:updated");
         jQuery('#address').val('');
         jQuery('#suburb').val('');    
