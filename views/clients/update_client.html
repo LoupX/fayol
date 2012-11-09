@@ -119,6 +119,32 @@
 
 <script type="text/javascript">
 
+//////////// get info ////////////
+    
+    jQuery.ajax({
+        url: "{{=URL(c='clients_ajax', f='get_client_information')}}",
+        data: { id: "{{=id}}" },
+        type: "POST",
+        dataType:"json",
+        success:function(data){
+            //console.log(data);
+            jQuery('#first_name').val(data.clients['first_name']);
+            jQuery('#last_name').val(data.clients['last_name']);
+            jQuery('#phone').val(data.clients['phone']);
+            jQuery('#mobile').val(data.clients['mobile']);
+            jQuery('#address').val(data.clients['address']);
+            jQuery('#suburb').val(data.clients['suburb']);
+            jQuery('#zip_code').val(data.clients['zip_code']);
+            jQuery('#rfc').val(data.clients['rfc']);
+            s = data.clients['state_id'];
+            m = data.clients['municipality_id'];
+            l = data.clients['locality_id'];
+            selectS(s);
+            selectM(s, m);
+            selectL(m, l); 
+        }
+    });
+
 //////////// Ajax for selects ////////////
     jQuery(".chzn-select").chosen();
 
@@ -291,49 +317,61 @@
         jQuery('#rfc').val('');
     }
 
-    function valState(s) {
-    var bol;
-    if (s != 0) {
-        bol = true;
-        jQuery('#states').siblings('div').removeClass('ellol');
-    } else if(s != null){
-        bol = false;
-        jQuery('#states').siblings('div').addClass('ellol');
-    } else{
-        bol = false;
-        jQuery('#states').siblings('div').addClass('ellol');
-    };
-    return bol
+    function selectS(id) {
+        jQuery.ajax({
+            type: "POST",
+            url: "{{=URL(c='common', f='get_states')}}",
+            success: function(results) {
+                state
+                    .html(results)
+                    .prepend('<option value="">Selecccionar</option>')
+                    .trigger("liszt:updated");
+                },
+            complete: function() {
+                state
+                    .find('option[value='+id+']').attr('selected',true)
+                    .trigger("liszt:updated");
+            }
+        });
+
     }
-    
-    function valLoc(s) {
-    var bol;
-    if (s != 0) {
-        bol = true;
-        jQuery('#locality').siblings('div').removeClass('ellol');
-    } else if(s != null){
-        bol = false;
-        jQuery('#locality').siblings('div').addClass('ellol');
-    } else{
-        bol = false;
-        jQuery('#locality').siblings('div').addClass('ellol');
-    };
-    return bol
+
+    function selectM(v, id) {
+        jQuery.ajax({
+            type: "POST",
+            url: "{{=URL(c='common', f='get_municipalities')}}",
+            data: {id: v},
+            success: function(results) {
+                municipality
+                    .html(results)
+                    .prepend('<option value="">Selecccionar</option>')
+                    .trigger("liszt:updated");
+            },
+            complete: function() {
+                municipality
+                    .find('option[value='+id+']').attr('selected',true)
+                    .trigger("liszt:updated");
+            }
+        });
     }
-    
-    function valMun(s) {
-    var bol;
-    if (s != 0) {
-        bol = true;
-        jQuery('#municipality').siblings('div').removeClass('ellol');
-    } else if(s != null){
-        bol = false;
-        jQuery('#municipality').siblings('div').addClass('ellol');
-    } else{
-        bol = false;
-        jQuery('#municipality').siblings('div').addClass('ellol');
-    };
-    return bol
+
+    function selectL(v, id) {
+        jQuery.ajax({
+                type: "POST",
+                data: {municipality_id: v},
+                url: "{{=URL(c='common', f='get_localities')}}",
+                success: function(results) {
+                    locality
+                        .html(results)
+                        .prepend('<option value="">Selecccionar</option>')
+                        .trigger("liszt:updated");
+                },
+                complete: function() {
+                    locality
+                        .find('option[value='+id+']').attr('selected',true)
+                        .trigger("liszt:updated");
+            }
+        });
     }
     
 </script>
