@@ -60,7 +60,9 @@
             {{if auth.has_membership(role='GOD') or auth.has_membership(role='Administrador'):}}
             <li id="menu_dashboard" class=""><a href="{{=URL(c='default', f='index')}}"><span class="icon icon-flatscreen"></span>Dashboard</a></li>
             {{pass}}
+            {{if auth.has_membership(role='GOD') or auth.has_membership(role='Administrador'):}}
             <li id="menu_catalogs" class=""><a href="{{=URL(c='catalogs', f='index')}}"><span class="icon icon-pencil"></span>Catálogos</a></li>
+            {{pass}}
             {{if auth.has_membership(role='GOD') or auth.has_membership(role='Almacenista'):}}
             <li id="menu_inventory" class=""><a href="{{=URL(c='inventory', f='index')}}"><span class="icon icon-chart"></span>Inventarios</a></li>
             {{pass}}
