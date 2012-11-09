@@ -38,7 +38,7 @@
                         <p>
                         	
                             <span class="formwrapper" style="margin-left:0px;">
-                            	  <select id="vendors_select" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="2">
+                            	  <select id="clients_select" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="2">
                                 </select>
                             </span>
                         </p>
@@ -117,61 +117,45 @@
   
     
 <script>
-var vendors_select = jQuery('#vendors_select'),
+var clients_select = jQuery('#clients_select'),
     id = 0;
 
-////// get active vendors //////
-val = jQuery('.formwrapper input[name=filtervendors]:checked').val();
-    ajaxFilter(val);
-
-    jQuery('.formwrapper input:radio').on('change', function(e) {
-        ajaxFilter(e.currentTarget.value);
-    });
-
-function ajaxFilter(who) {
-    //console.log(which);
-    jQuery('#vendors_select_chzn').remove();
-    jQuery('#vendors_select').val('').removeClass('chzn-done').chosen();
+    jQuery('#clients_select_chzn').remove();
+    jQuery('#clients_select').val('').removeClass('chzn-done').chosen();
     cleanFields();
 
     jQuery.ajax({ 
-        url: "{{=URL(c='vendors_ajax', f='get_vendors')}}",
+        url: "{{=URL(c='clients_ajax', f='get_clients')}}",
         type: 'POST',
-        data: { query: who },          
+        data: { query: true },          
         success: function (data) {
-          jQuery('#vendors_select')
+          jQuery('#clients_select')
             .html('')
             .append(data)
             .prepend('<option value="">Seleccionar</option>')
             .trigger("liszt:updated");
           }
     });
-  }
 
-vendors_select.change( function() {
+
+clients_select.change( function() {
   ////clean fields
   cleanFields();
   id = jQuery(this).find(':selected').val();
 
   if(id != '') {
-    var name = jQuery('#name'),
-        address = jQuery('#address'),
+    var first_name = jQuery('#first_name'),
+    	last_name = jQuery('#last_name'),
+        phone = jQuery('#phone'),
+        mobile = jQuery('#mobile'),
         state = jQuery('#state'),
         municipality = jQuery('#municipality'),
         locality = jQuery('#locality'),
+        address = jQuery('#address'),
+        suburb = jQuery('#suburb'),
         zip_code = jQuery('#zip_code'),
         rfc = jQuery('#rfc'),
-        website = jQuery('#website'),
-        bank = jQuery('#bank'),
-        branch_number = jQuery('#branch_number'),
-        account_number = jQuery('#account_number'),
-        clabe = jQuery('#clabe'),
-        status = jQuery('input[name=status]'),
-        resp = jQuery('span#resp');
-        resp.html('');
-
-    //console.log(id);
-    //insert here an ajax function and shit
+       
     jQuery.ajax({ 
       url: "{{=URL(c='vendors_ajax', f='get_vendor_information')}}",
       type: "POST",
@@ -194,7 +178,7 @@ vendors_select.change( function() {
         clabe.html(data.vendors['clabe']);
 
         jQuery('#ec')
-        .attr('href', "{{=URL(c='vendors', f='updatep')}}"+'?id='+data.vendors.id);
+        .attr('href', "{{=URL(c='clients', f='update_client')}}"+'?id='+data.clients.id);
 
         status.val(id).removeAttr('disabled');
         status.parent().parent().removeClass('disabled'); 
@@ -248,71 +232,6 @@ function cleanFields() {
   for(var e in elements) {
     elements[e].html('');
   }
-}
-
-////// edit buttons //////
-function chk(id, s) {
-    var status = jQuery('input[name=status]'),
-        resp = jQuery('span#resp');
-
-    if(s == 'True') {
-        var ans = confirm('¿Está seguro que quiere deshabilitar este proveedor?.');
-
-        if(ans) {
-            jQuery.ajax({
-                url: "{{=URL(c='vendors_ajax', f='toggle_vendor_status')}}",
-                type: 'POST',
-                data: { id: id, status: s }
-            });
-            status.parent().removeClass('checked');
-            status.attr('onclick','chk('+id+',"False")');
-            resp.html('Desactivado.');
-            cleanFields();
-            //jQuery('#vendors_select_chzn').remove();
-            //jQuery('#vendors_select').val('').removeClass('chzn-done').chosen();
-
-            if(jQuery('#a').parent('span').hasClass('checked')) {
-                ajaxFilter('TRUE');
-            } else if(jQuery('#b').parent('span').hasClass('checked')) {
-                ajaxFilter('FALSE');
-            } else {
-                ajaxFilter('ANY');
-            }
-
-      } else {
-        resp.html('Activado.');
-        status.parent().addClass('checked');
-      }        
-    }
-    else {
-        var ans = confirm('¿Está seguro que quiere habilitar este proveedor?.');
-
-        if(ans) {
-            jQuery.ajax({
-              url: "{{=URL(c='vendors_ajax', f='toggle_vendor_status')}}",
-              type: 'POST',
-              data: { id: id, status: s }
-            });
-            status.parent().addClass('checked');
-            status.attr('onclick','chk('+id+',"True")');
-            resp.html('Activado.');
-            cleanFields();
-            //jQuery('#vendors_select_chzn').remove();
-            //jQuery('#vendors_select').val('').removeClass('chzn-done').chosen();
-
-            if(jQuery('#a').parent('span').hasClass('checked')) {
-                ajaxFilter('TRUE');
-            } else if(jQuery('#b').parent('span').hasClass('checked')) {
-                ajaxFilter('FALSE');
-            } else {
-                ajaxFilter('ANY');
-            }
-        } else {
-            resp.html('Desactivado.');
-            status.parent().removeClass('checked');
-        }
-    }
-  
 }
 
 </script>
