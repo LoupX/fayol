@@ -115,7 +115,7 @@ def update_client():
     except SyntaxError as e:
         db.rollback()
         if 'duplicate field' in e:
-            return 0
+            return '0'
         else:
             return ''
     except:
