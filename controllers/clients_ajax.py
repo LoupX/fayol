@@ -50,7 +50,8 @@ def get_clients():
 
     if data:
         for k in data:
-            return str(k)
+            k['date_added'] = str(k['date_added'])
+            k['date_modified'] = str(k['date_modified'])
     from gluon.contrib import simplejson
     data = simplejson.dumps(data)
     return str(data)
