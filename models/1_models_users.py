@@ -21,6 +21,7 @@ auth.settings.login_url = URL('login', 'index')
 auth.settings.login_next = URL('default', 'index')
 auth.settings.logout_next = URL('login', 'index')
 auth.settings.login_after_registration = False
+auth.settings.expiration = 18000
 
 
 try:
