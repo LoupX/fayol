@@ -37,8 +37,8 @@
                     <form id="form_branch_office" class="stdform stdform2" method="post" action="">
                     	
 	                    <p>
-	                       	<label>Nombre</label>
-	                        <span class="field"><input type="text" name="name" id="name" class="smallinput"/></span>
+	                       	<label>Nombre *</label>
+	                        <span class="field"><input type="text" name="name" id="name" class="smallinput" tabindex="1"/></span>
 	                    </p>
 	                    
 	                    <div class="contenttitle2">
@@ -46,41 +46,41 @@
                         </div>  
 	                     
 	                    <p style="border-top: 1px #ddd solid;">
-	                       	<label>Dirección</label>
-	                        <span class="field"><input type="text" name="address" id="address" class="smallinput"/></span>
+	                       	<label>Dirección *</label>
+	                        <span class="field"><input type="text" name="address" id="address" class="smallinput" tabindex="2"/></span>
 	                    </p>
 	                    <p>
-	                       	<label>Colonia</label>
-	                        <span class="field"><input type="text" name="suburb" id="suburb" class="smallinput"/></span>
+	                       	<label>Colonia *</label>
+	                        <span class="field"><input type="text" name="suburb" id="suburb" class="smallinput" tabindex="3"/></span>
 	                    </p>
 	                    <p style="margin-top: 1px;">
-                            <label>Estado</label>
+                            <label>Estado *</label>
                             <span class="field">
                                 <!-- <select name="states" id="states">
                                 </select> -->
-                                <select id="states" name="states" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="3">
+                                <select id="states" name="states" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="4">
                                   </select>
                             </span>
                         </p>
                         
                         <p style="margin-top: 1px;">
-                            <label>Municipio</label>
+                            <label>Municipio *</label>
                             <span id="municipality_container"class="field">
-                            <select name="municipality" id="municipality" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="4">
+                            <select name="municipality" id="municipality" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="5">
                             </select>
                             </span>
                         </p>
 
                         <p style="margin-top: 1px;">
-                            <label>Población</label>
+                            <label>Población *</label>
                             <span class="field" id="locality_container">
-                            <select name="locality" id="locality" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="5">
+                            <select name="locality" id="locality" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="6">
                             </select>
                             </span>
                         </p>
  	                    <p style="margin-top: 1px;">
                             <label>Código postal</label>
-                            <span class="field"><input type="text" name="zip_code" id="zip_code" class="smallinput" maxlength="5" tabindex="6"/></span>
+                            <span class="field"><input type="text" name="zip_code" id="zip_code" class="smallinput" maxlength="5" tabindex="7"/></span>
                         </p>
 	                    
 	                    <div class="contenttitle2">
@@ -89,19 +89,19 @@
                         
                         <p  style="border-top: 1px #ddd solid;">
 	                       	<label>Razón social</label>
-	                        <span class="field"><input type="text" name="business_name" id="business_name" class="smallinput"/></span>
+	                        <span class="field"><input type="text" name="business_name" id="business_name" class="smallinput" tabindex="8"/></span>
 	                    </p>
 	                    <p>
 	                       	<label>R.F.C.</label>
-	                        <span class="field"><input type="text" name="rfc" id="rfc" class="smallinput" maxlength="13"/></span>
+	                        <span class="field"><input type="text" name="rfc" id="rfc" class="smallinput" maxlength="13" tabindex="9"/></span>
 	                    </p>
 	                    <p>
 	                       	<label>Regimen fiscal</label>
-	                        <span class="field"><input type="text" name="tax" id="tax" class="smallinput"/></span>
+	                        <span class="field"><input type="text" name="tax" id="tax" class="smallinput" tabindex="10"/></span>
 	                    </p>
                         
 	                    <p class="stdformbutton">
-                        	<button id="submit" class="submit radius2">Guardar</button>
+                        	<button id="submit" class="submit radius2" tabindex="11">Guardar</button>
                         </p>
                     </form>
 
