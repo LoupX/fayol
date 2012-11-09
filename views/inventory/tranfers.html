@@ -79,13 +79,13 @@
                         		<span class="field"><textarea cols="80" rows="5" name="description" id="description" class="smallinput" tabindex="13"></textarea></span>
                         </p>
 
-                        <p style="margin-top: 1px;">
+                        <!-- <p style="margin-top: 1px;">
                             <label>Concepto *</label>
                             <span class="field">
                                 <select id="concept_id" name="concept_id" data-placeholder="Seleccionar" class="chzn-select" style="width:350px;" tabindex="5">
                                   </select>
                             </span>
-                        </p>
+                        </p> -->
 	                    
                         <p class="stdformbutton">
                         	<button id="submit" class="submit radius2" tabindex="14">Guardar</button>
@@ -266,11 +266,10 @@
         e.preventDefault();  
         var s1 = valsource(val1);
         var s2 = valdestination(val2);
-        var s3 = valcon(cid);
         
         Messages.hideAll();
 
-        if(jQuery("#form_entries").valid() && s1 && s2 && s3 ) {
+        if(jQuery("#form_entries").valid() && s1 && s2 ) {
             jQuery.ajax({
                 url: "{{=URL(c='common', f='echo')}}",
                 data: { 
@@ -279,8 +278,7 @@
                     source_type: valo,      // SB = source branch ----  SW = source warehouse
                     desination_type: vald,  // DB = destination branch ----  DW = destination warehouse
                     reference: jQuery('#reference').val(),
-                    description: jQuery('#description').val(),
-                    concept_id: jQuery('#concept_id').val(),
+                    description: jQuery('#description').val()
                 },
                 type: 'POST',
                 success:function(data){
@@ -294,7 +292,7 @@
                         deleteFields();
                         val1 = '';
                         val2 = '';
-                        cid = '';
+                        // cid = '';
                     } else{
                         Messages.showM('.msgerror');
                     }
@@ -370,14 +368,14 @@
             .prepend('<option value="">Seleccionar</option>')
             .trigger("liszt:updated");
 
-        jQuery('#concept_id_chzn').remove();
-        jQuery('#concept_id').val('').removeClass('chzn-done').chosen();
+        // jQuery('#concept_id_chzn').remove();
+        // jQuery('#concept_id').val('').removeClass('chzn-done').chosen();
 
-        jQuery('#concept_id')  
-            .find('option')
-            .first()
-            .attr('selected', true)
-            .trigger("liszt:updated");
+        // jQuery('#concept_id')  
+        //     .find('option')
+        //     .first()
+        //     .attr('selected', true)
+        //     .trigger("liszt:updated");
     }
     
 </script>

@@ -5,13 +5,19 @@
 <style type="text/css">
 @media print {
 
-    .centercontent {
-        display: none;
+    .topheader, .header, .vernav2, #save {
+        display: none !important;
     }
 
-    .printable { 
-        display: block;
+    .centercontent {
+        margin-left: 0px !important;
     }
+
+    /*#see {
+        display: block !important;
+    }*/
+
+
 }
 </style>
 {{end}}
@@ -95,8 +101,11 @@
 
             <br><br>
 
-            <a href="#" id="save" data-id="" style="float:right;">
+            <a href="#" id="save" data-id="" style="float: right;">
                 <span class="stdbtn btn_orange">Guardar como PDF</span>
+            </a>
+            <a href="#" id="see" data-id="" style="float: right; display: none;">
+                <span class="stdbtn btn_orange">Ver en el sitio</span>
             </a>
             <br clear="all">
         </div><!--contentwrapper-->
