@@ -247,6 +247,7 @@
              jQuery.ajax({
                 url: "{{=URL(c='clients_ajax', f='update_client')}}",
                 data: { 
+                	id:{{=request.vars.id}},
                     first_name:jQuery('#first_name').val(),
                     last_name:jQuery('#last_name').val(),
                     phone:jQuery('#phone').val(),
