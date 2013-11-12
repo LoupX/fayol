@@ -513,9 +513,8 @@ def update_product():
     row_brand = db(db.brand_descriptions.brand_id==
                    vars.brand_id).select().first()
     code = '{}{}{}'.format(
-        row_category.name[0:2].decode('utf-8').upper(),
-        row_brand.name[0:2].decode('utf-8').upper(), id)
-
+                row_category.id, row_brand.id, id)
+    
     data['code'] = code
 
     data_description['name'] = vars.name.decode('utf-8').upper()
